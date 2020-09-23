@@ -9,11 +9,12 @@ const Signup = ({ history }) => {
 
     const onFinish = async ({ email, username, password }) => {
         const emailCorrect = (/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/).test(String(email).toLowerCase())
-        const signedup = await signup({ email, username, password })
-
         if (!emailCorrect) openNotification(`Je crois qu'il y a une faute de frappe dans ton email...`)
-        else if (signedup.status === 'OK') history.push('/login')
-        else openNotification(signedup.message.fr)
+        else {
+            const signedup = await signup({ email, username, password })
+            if (signedup.status === 'OK') history.push('/login')
+            else openNotification(signedup.message.fr)
+        }
     }
 
     const openNotification = message => {
