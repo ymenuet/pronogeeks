@@ -1,4 +1,5 @@
-import React, { useState, createContext } from 'react'
+import React, { useState, useEffect, createContext } from 'react'
+import { getProfile } from '../services/auth'
 
 export const Context = createContext()
 
@@ -6,13 +7,18 @@ const CtxProvider = ({ children }) => {
 
     const [user, setUser] = useState(null)
 
-    function loginUser(user) {
-        setUser(user)
+    const getSession = async () => {
+        const user = await getProfile()
+        if (user.email) loginUser(user)
     }
 
-    function logoutUser() {
-        setUser(null)
-    }
+    useEffect(() => {
+        getSession()
+    }, [])
+
+    const loginUser = user => setUser(user)
+
+    const logoutUser = () => setUser(null)
 
     return (
         <Context.Provider

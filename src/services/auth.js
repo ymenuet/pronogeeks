@@ -19,3 +19,19 @@ export const login = async userData => {
     } = await authService.post('/login', userData)
     return data
 }
+
+export const getProfile = async() => {
+    const {
+        data: {
+            user
+        }
+    } = await authService.get('/profile')
+    return user
+}
+
+export const logout = async() => {
+    const {
+        data
+    } = await authService.get('/logout')
+    return data
+}

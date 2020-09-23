@@ -1,6 +1,24 @@
+:root {
+    --color-indigo: #440381;
+    --color-red: #FB3640;
+    --color-emerald: #23CE6B;
+    --color-saffron: #F8C630;
+    --color-yellow: #FEE334;
+    --color-cream: #F0F7F4;
+    --color-white: #FFF;
+    --navbar-height: 80px
+}
+
+html {
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+}
+
 body {
     margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    padding: 0;
+    font-family: 'Sawarabi Gothic', BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif !important;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
@@ -9,15 +27,178 @@ code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
-span.ant-layout-sider-zero-width-trigger {
-    background-color: rgb(0, 37, 0);
-    top: 0px;
+h2 {
+    font-size: 2.8rem;
 }
 
-li.ant-menu-item-selected,
-li.ant-menu.ant-menu-dark,
-li.ant-menu.ant-menu-dark,
-li.ant-menu-dark.ant-menu-dark:not(.ant-menu-horizontal),
-span.ant-layout-sider-zero-width-trigger:hover {
-    background-color: rgb(105, 153, 93) !important;
+@media(max-width: 576px) {
+    h2 {
+        font-size: 2.4rem;
+    }
+}
+
+
+/* APPLAYOUT */
+
+nav.my-navbar {
+    height: var(--navbar-height);
+    display: flex;
+    justify-content: space-between !important;
+    align-items: center;
+    padding: 0;
+    background-color: var(--color-indigo) !important;
+}
+
+.my-brand {
+    padding: 0;
+    height: 100%;
+}
+
+.my-brand>h1 {
+    color: white;
+    margin: 0;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding-left: 20px;
+}
+
+.my-brand>h1>img {
+    height: 50px;
+}
+
+button.my-navbar-btn {
+    border: none;
+    margin-right: 10px;
+    width: 50px;
+    height: 50px;
+    padding: 0;
+    transition: all 0.3s;
+    outline: none;
+}
+
+button.my-navbar-btn:hover {
+    transform: scale(1.1);
+}
+
+.navbar-dark .navbar-toggler-icon {
+    background: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28240, 247, 244, 1%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") no-repeat center center;
+    background-size: 100% 100%;
+}
+
+button.my-navbar-btn>span {
+    width: 80%;
+    height: 80%;
+}
+
+#my-navbar-toggle {
+    height: fit-content;
+    background-color: var(--color-indigo);
+    transition: all 0s;
+}
+
+#my-navbar-toggle {
+    border-top: 2px solid rgba(240, 247, 244, 0.2)
+}
+
+#my-navbar-toggle>ul {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    margin: 0 !important;
+}
+
+#my-navbar-toggle>ul>li {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+#my-navbar-toggle>ul>li>a {
+    height: 100%;
+    width: 100%;
+    padding: 0;
+    text-align: center;
+    line-height: var(--navbar-height);
+    font-size: 1.5rem;
+    color: var(--color-cream);
+    box-sizing: border-box;
+    padding: 0 20px;
+    transition: all 0.2s
+}
+
+#my-navbar-toggle>ul>li>a:hover {
+    background-color: var(--color-emerald);
+    color: var(--color-indigo)
+}
+
+.my-home-icon {
+    position: relative;
+    bottom: 4px;
+}
+
+div.my-content {
+    padding: var(--navbar-height) 30px;
+    box-sizing: border-box;
+    text-align: center;
+    background-color: var(--color-emerald);
+    min-height: 100vh;
+    text-align: center;
+}
+
+@media (min-width: 992px) {
+    #my-navbar-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        height: 100%;
+        border: none;
+    }
+    #my-navbar-toggle>ul>li {
+        width: unset;
+    }
+    #my-navbar-toggle>ul>li>a {
+        width: 100%;
+        font-size: 1.3rem;
+    }
+}
+
+@media (max-width: 500px) {
+    .my-brand>h1>img {
+        width: 250px;
+        object-fit: contain;
+    }
+}
+
+@media (max-width: 380px) {
+    .my-brand>h1>img {
+        width: 200px;
+        object-fit: contain;
+    }
+    button.my-navbar-btn {
+        width: 35px;
+        height: 35px;
+    }
+}
+
+
+/* HOMEPAGE */
+
+.home-div {
+    color: var(--color-cream);
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    min-height: calc(100vh - 2*var(--navbar-height));
+}
+
+.home-div h2 {
+    color: var(--color-cream)
+}
+
+.home-div>p {
+    font-size: 1.2rem;
 }
