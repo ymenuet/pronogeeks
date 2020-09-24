@@ -1,6 +1,7 @@
 import React from 'react'
 import { Form, Input, Button, Col, Row, Typography, notification } from 'antd'
 import { signup } from '../services/auth'
+import useInput from '../customHooks/useInput'
 
 const { Title } = Typography
 
@@ -26,63 +27,65 @@ const Signup = ({ history }) => {
     }
 
     return (
-        <Row>
-            <Col xs={{ span: 20, offset: 2 }} sm={{ span: 16, offset: 4 }} md={{ span: 14, offset: 5 }} lg={{ span: 12, offset: 6 }} >
-                <Title level={1} style={{ textAlign: 'center', color: 'rgb(0,37,0)', marginBottom: 20 }}>Créer un compte</Title>
-                <Form
-                    form={form}
-                    layout='vertical'
-                    name="basic"
-                    initialValues={{
-                        remember: true,
-                    }}
-                    onFinish={onFinish}
-                >
-                    <Form.Item
-                        type='email'
-                        label="Email :"
-                        name="email"
-                        rules={[
-                            {
-                                required: true,
-                                message: `L'email est nécessaire pour créer un compte`,
-                            },
-                        ]}
+        <div className='my-content register-pages'>
+            <div className='row signup-form'>
+                <div className='col-10 offset-1 col-sm-8 offset-sm-2 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4'>
+                    <h2>Créer un compte</h2>
+                    <Form
+                        form={form}
+                        layout='vertical'
+                        name="basic"
+                        initialValues={{
+                            remember: true,
+                        }}
+                        onFinish={onFinish}
                     >
-                        <Input />
-                    </Form.Item>
-                    <Form.Item
-                        label="Pseudo :"
-                        name="username"
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Le pseudo est obligatoire et doit être unique.',
-                            },
-                        ]}
-                    >
-                        <Input />
-                    </Form.Item>
+                        <Form.Item
+                            type='email'
+                            label="Email :"
+                            name="email"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: `L'email est nécessaire pour créer un compte`,
+                                },
+                            ]}
+                        >
+                            <Input style={{ borderRadius: 15.8 }} placeholder='roi.geek@pronogeeks.fr' />
+                        </Form.Item>
+                        <Form.Item
+                            label="Pseudo :"
+                            name="username"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Le pseudo est obligatoire et doit être unique.',
+                                },
+                            ]}
+                        >
+                            <Input style={{ borderRadius: 15.8 }} placeholder='RoiGeek' />
+                        </Form.Item>
 
-                    <Form.Item
-                        label="Mot de passe :"
-                        name="password"
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Tu auras besoin d\'un mot de passe pour te connecter !',
-                            },
-                        ]}
-                    >
-                        <Input.Password />
-                    </Form.Item>
+                        <Form.Item
+                            label="Mot de passe :"
+                            name="password"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Tu auras besoin d\'un mot de passe pour te connecter !',
+                                },
+                            ]}
+                        >
+                            <Input.Password style={{ borderRadius: 15.8 }} placeholder='********' />
+                        </Form.Item>
 
-                    <div style={{ display: 'flex', justifyContent: 'center' }}>
-                        <Button type='primary' style={{ backgroundColor: 'rgb(73,56,67)', border: 'none', margin: '10px 0 20px 0' }} htmlType="submit">Créer un compte</Button>
-                    </div>
-                </Form>
-            </Col>
-        </Row>
+                        <div style={{ display: 'flex', justifyContent: 'center' }}>
+                            <button type='submit' className='btn my-btn submit-btn register-btn' style={{ marginTop: 10 }}>Créer mon compte</button>
+                        </div>
+                    </Form>
+                </div>
+            </div>
+        </div>
     );
 }
 

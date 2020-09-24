@@ -1,12 +1,16 @@
 :root {
-    --color-indigo: #440381;
-    --color-red: #FB3640;
-    --color-emerald: #23CE6B;
-    --color-saffron: #F8C630;
-    --color-yellow: #FEE334;
-    --color-cream: #F0F7F4;
-    --color-white: #FFF;
-    --navbar-height: 80px
+    --color-white-cream: #F0F7F4;
+    --color-dark-blue-bp: rgb(4, 78, 199);
+    --color-light-blue-bp: rgb(37, 138, 230);
+    --color-light-purple-bp: rgb(151, 2, 182);
+    --color-dark-purple-bp: rgb(101, 6, 124);
+    --color-dark-green-gb: rgb(16, 128, 0);
+    --color-light-green-gb: rgb(59, 181, 21);
+    --color-light-blue-gb: rgb(2, 88, 211);
+    --color-purple-rp: rgb(156, 0, 99);
+    --color-red-rp: rgb(253, 0, 7);
+    --color-yellow: rgb(255, 217, 0);
+    --navbar-height: 80px;
 }
 
 html {
@@ -18,7 +22,7 @@ html {
 body {
     margin: 0;
     padding: 0;
-    font-family: 'Sawarabi Gothic', BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif !important;
+    font-family: 'Audiowide', 'Sawarabi Gothic', BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif !important;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
@@ -27,8 +31,37 @@ code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
+.my-btn {
+    background-color: var(--color-purple-rp);
+    color: var(--color-white-cream);
+    min-width: 180px;
+    height: 42px;
+    line-height: 42px;
+    padding: 0 25px;
+    font-size: 1.2rem;
+    margin: 30px 20px 0;
+    transition: all 0.3s;
+    border: none;
+    border-radius: 21px;
+    box-sizing: border-box;
+}
+
+.my-btn:hover {
+    transform: scale(1.02);
+    color: var(--color-white-cream);
+}
+
+div.my-content {
+    padding: calc(var(--navbar-height) + 50px) 30px 0 30px;
+    box-sizing: border-box;
+    text-align: center;
+    min-height: 100vh;
+    text-align: center;
+}
+
 h2 {
-    font-size: 2.8rem;
+    font-size: 2.5rem;
+    color: var(--color-white-cream) !important;
 }
 
 @media(max-width: 576px) {
@@ -46,7 +79,7 @@ nav.my-navbar {
     justify-content: space-between !important;
     align-items: center;
     padding: 0;
-    background-color: var(--color-indigo) !important;
+    background-color: var(--color-dark-blue-bp) !important;
 }
 
 .my-brand {
@@ -93,7 +126,7 @@ button.my-navbar-btn>span {
 
 #my-navbar-toggle {
     height: fit-content;
-    background-color: var(--color-indigo);
+    background-color: var(--color-dark-blue-bp);
     transition: all 0s;
 }
 
@@ -122,29 +155,20 @@ button.my-navbar-btn>span {
     text-align: center;
     line-height: var(--navbar-height);
     font-size: 1.5rem;
-    color: var(--color-cream);
+    color: var(--color-white-cream);
     box-sizing: border-box;
     padding: 0 20px;
     transition: all 0.2s
 }
 
 #my-navbar-toggle>ul>li>a:hover {
-    background-color: var(--color-emerald);
-    color: var(--color-indigo)
+    background-color: var(--color-light-purple-bp);
+    /* color: var(--color-dark-blue-bp) */
 }
 
 .my-home-icon {
     position: relative;
     bottom: 4px;
-}
-
-div.my-content {
-    padding: var(--navbar-height) 30px;
-    box-sizing: border-box;
-    text-align: center;
-    background-color: var(--color-emerald);
-    min-height: 100vh;
-    text-align: center;
 }
 
 @media (min-width: 992px) {
@@ -185,20 +209,152 @@ div.my-content {
 
 /* HOMEPAGE */
 
+.my-content-homepage::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    opacity: 0.83;
+    z-index: -1;
+    background: url('/images/bg-stadium.jpg') center;
+    background-size: cover;
+}
+
+.my-content-homepage {
+    padding: calc(var(--navbar-height) + 30px) 30px 0 30px;
+    box-sizing: border-box;
+    text-align: center;
+    min-height: 100vh;
+    text-align: center;
+}
+
 .home-div {
-    color: var(--color-cream);
+    padding: 80px 0;
+    color: var(--color-white-cream);
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-evenly;
-    min-height: calc(100vh - 2*var(--navbar-height));
+    min-height: calc(100vh - 2*var(--navbar-height) - 30px);
 }
 
 .home-div h2 {
-    color: var(--color-cream)
+    color: var(--color-dark-blue-bp) !important;
+    font-size: 4rem;
+    /* text-shadow: 4px 4px 8px var(--color-dark-blue-bp); */
 }
 
-.home-div>p {
-    font-size: 1.2rem;
+.home-div p {
+    font-size: 1.29rem;
+    color: var(--color-white-cream);
+    background-color: var(--color-light-blue-gb);
+    padding: 10px 20px;
+    border-radius: 10px;
+    box-sizing: border-box;
+    max-width: 600px;
+}
+
+.logo-homepage {
+    width: 600px;
+}
+
+@media (max-width: 768px) {
+    .home-div {
+        padding: 30px 0;
+    }
+    .home-div h2 {
+        font-size: 2rem;
+    }
+    .logo-homepage {
+        max-width: 70vw;
+    }
+    .home-div p {
+        max-width: 70vw;
+    }
+    .my-content-homepage {
+        padding-right: 10px;
+        padding-left: 10px;
+    }
+}
+
+
+/* SIGNUP & LOGIN */
+
+.register-pages::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    opacity: 0.83;
+    z-index: -1;
+    background: url('/images/bg-stadium.jpg') center;
+    background-size: cover;
+}
+
+.register-pages {
+    padding-top: calc(var(--navbar-height) + 50px) !important;
+    margin: 0 10vw;
+}
+
+div.signup-form {
+    min-height: calc(100vh - 2*var(--navbar-height) - 30px);
+    display: flex;
+    align-items: center;
+    background-color: rgba(2, 88, 211, 0.8);
+    border-radius: 10px;
+}
+
+.ant-form-item-explain>div {
+    color: var(--color-yellow);
+    font-size: 0.9rem;
+}
+
+label {
+    color: var(--color-white-cream) !important;
+}
+
+label::before {
+    color: var(--color-purple-rp) !important;
+}
+
+@media (max-width: 576px) {
+    .register-btn {
+        font-size: 1rem;
+        max-width: 100%;
+        margin: 0;
+    }
+}
+
+
+/* PROFILE */
+
+.my-profile-page {
+    background: url('/images/bg-bp.jpg') center/contain repeat-x border-box;
+}
+
+div.my-profile {
+    display: flex;
+    min-height: calc(100vh - 2*var(--navbar-height) - 30px);
+}
+
+section.about-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 50%;
+    box-sizing: border-box;
+    padding: 40px;
+}
+
+img.profile-pic {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    margin: 0 auto;
 }
