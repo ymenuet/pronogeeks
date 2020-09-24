@@ -52,16 +52,20 @@ code {
 }
 
 div.my-content {
-    padding: calc(var(--navbar-height) + 50px) 30px 0 30px;
+    padding-top: calc(var(--navbar-height));
     box-sizing: border-box;
     text-align: center;
     min-height: 100vh;
     text-align: center;
 }
 
+.row {
+    max-width: 100vw;
+}
+
 h2 {
     font-size: 2.5rem;
-    color: var(--color-white-cream) !important;
+    /* color: var(--color-white-cream) !important; */
 }
 
 @media(max-width: 576px) {
@@ -162,8 +166,8 @@ button.my-navbar-btn>span {
 }
 
 #my-navbar-toggle>ul>li>a:hover {
-    background-color: var(--color-light-purple-bp);
-    /* color: var(--color-dark-blue-bp) */
+    background-color: var(--color-light-blue-bp);
+    /* color: var(--color-purple-rp) */
 }
 
 .my-home-icon {
@@ -223,10 +227,9 @@ button.my-navbar-btn>span {
 }
 
 .my-content-homepage {
-    padding: calc(var(--navbar-height) + 30px) 30px 0 30px;
     box-sizing: border-box;
     text-align: center;
-    min-height: 100vh;
+    min-height: calc(100vh- - var(--navbar-height));
     text-align: center;
 }
 
@@ -297,7 +300,6 @@ button.my-navbar-btn>span {
 }
 
 .register-pages {
-    padding-top: calc(var(--navbar-height) + 50px) !important;
     margin: 0 10vw;
 }
 
@@ -334,7 +336,7 @@ label::before {
 /* PROFILE */
 
 .my-profile-page {
-    background: url('/images/bg-bp.jpg') center/contain repeat-x border-box;
+    background: url('/images/bg-rp.jpg') center/contain repeat-x border-box;
 }
 
 div.my-profile {
@@ -357,4 +359,26 @@ img.profile-pic {
     height: 200px;
     border-radius: 50%;
     margin: 0 auto;
+}
+
+
+/* PRONOGEEKS */
+
+.pronogeeks-bg::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    opacity: 0.3;
+    z-index: -1;
+    background: url('/images/bg-gb.jpg') center/contain repeat-x border-box;
+}
+
+.pronogeeks-bg {
+    height: calc(100vh - var(--navbar-height));
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

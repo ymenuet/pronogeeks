@@ -7,10 +7,8 @@ const authService = axios.create({
 })
 
 export const signup = async user => {
-    const {
-        data
-    } = await authService.post('/signup', user)
-    return data
+    await authService.post('/signup', user)
+    return true
 }
 
 export const login = async userData => {

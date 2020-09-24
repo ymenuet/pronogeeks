@@ -1,19 +1,17 @@
-import React, { useState, useContext } from 'react'
-import { Form, Input, Button, Col, Row, Typography, notification } from 'antd'
+import React, { useContext } from 'react'
+import { Form, Input, notification } from 'antd'
 import { login } from '../services/auth'
 import { Context } from '../context'
 import { Redirect } from 'react-router-dom'
-import useInput from '../customHooks/useInput'
 
-const { Title } = Typography
-
-const Login = () => {
+const Login = ({ history }) => {
     const [form] = Form.useForm()
     const { loginUser, user } = useContext(Context)
 
     const onFinish = async (values) => {
         const user = await login(values).catch(err => openNotification(err.response.data.message))
         loginUser(user)
+        history.push('/profile')
     }
 
     const openNotification = message => {
@@ -24,8 +22,8 @@ const Login = () => {
         })
     }
 
-    return !user ? (
-        <div className='my-content register-pages'>
+    return (
+        <div className='register-pages'>
             <div className='row signup-form'>
                 <div className='col-10 offset-1 col-sm-8 offset-sm-2 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4'>
                     <h2>Se connecter</h2>
@@ -72,9 +70,7 @@ const Login = () => {
                 </div>
             </div>
         </div>
-    ) : (
-            <Redirect to='/profile' />
-        )
+    )
 }
 
 export default Login
