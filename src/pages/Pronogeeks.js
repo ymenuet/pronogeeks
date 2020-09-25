@@ -27,7 +27,15 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } } }) => {
         </div>
     ) : (
             <div className='pronogeeks-bg'>
-                <ul className="list-group list-group-flush">
+                <ul className="list-group list-group-flush list-fixtures col-10 offset-1 col-md-8 offset-md-2 col-xl-6 offset-xl-3">
+                    <br />
+                    <h2>Ligue 1 saison 20-21 :<br />
+                    journée {matchweekNumber}</h2>
+                    <div className='list-fixtures-header'>
+                        <div>Domicile</div>
+                        <div></div>
+                        <div>Extérieur</div>
+                    </div>
                     {fixtures.map(fixture => (
                         <li className="list-group-item" key={fixture._id} style={{ background: 'none' }}>
                             <Fixture fixtureID={fixture._id} />

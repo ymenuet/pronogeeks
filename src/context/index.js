@@ -10,7 +10,7 @@ const CtxProvider = ({ children }) => {
     useEffect(() => {
         const getSession = async () => {
             const user = await getProfile()
-            if (user) loginUser(user)
+            loginUser(user ? user : null)
         }
         getSession()
     }, [])

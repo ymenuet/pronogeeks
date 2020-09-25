@@ -2,7 +2,6 @@ import React, { useContext } from 'react'
 import { Form, Input, notification } from 'antd'
 import { login } from '../services/auth'
 import { Context } from '../context'
-import { Redirect } from 'react-router-dom'
 
 const Login = ({ history }) => {
     const [form] = Form.useForm()
@@ -10,6 +9,7 @@ const Login = ({ history }) => {
 
     const onFinish = async (values) => {
         const user = await login(values).catch(err => openNotification(err.response.data.message))
+        console.log(user)
         loginUser(user)
         history.push('/profile')
     }

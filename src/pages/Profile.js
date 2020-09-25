@@ -5,18 +5,13 @@ import { Context } from '../context'
 
 const Profile = () => {
     const { user } = useContext(Context)
-    // const [myUser, setMyUser] = useState(user)
 
-    useEffect(() => {
-        console.log(user)
-        // console.log(myUser)
-    }, [user])
-
-    return user == null ? <Space size='large'>
+    return !user ? <div className='pronogeeks-bg'><Space size='large'>
         <Spin size='large' />
-    </Space> :
+    </Space>
+    </div> :
         (
-            <div className='my-content my-profile-page'>
+            <div className='my-profile-page'>
                 <div className='my-profile'>
                     <section className='about-section'>
                         <img src={user.photo} alt="Profile pic" className='profile-pic' />

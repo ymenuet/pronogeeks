@@ -5,11 +5,11 @@ import { signup } from '../services/auth'
 const Signup = ({ history }) => {
     const [form] = Form.useForm()
 
-    const onFinish = async ({ email, username, password }) => {
-        const emailCorrect = (/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/).test(String(email).toLowerCase())
+    const onFinish = async (values) => {
+        const emailCorrect = (/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/).test(String(values.email).toLowerCase())
         if (!emailCorrect) openNotification(`Je crois qu'il y a une faute de frappe dans ton email...`)
         else {
-            await signup({ email, username, password }).catch(err => {
+            await signup(values).catch(err => {
                 openNotification(err.response.data.message.fr)
             })
             history.push('login')
