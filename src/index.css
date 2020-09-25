@@ -470,15 +470,15 @@ img.profile-pic {
 }
 
 .save-prono {
-    background-color: var(--color-dark-blue-bp);
+    background-color: rgb(0, 65, 170);
     font-size: 1rem;
     margin: 0;
     min-width: unset;
     width: 44px;
     padding: 0 10px;
     height: 43px;
-    border-right: 1px solid rgb(0, 0, 255);
-    border-bottom: 2px solid rgb(0, 0, 255);
+    border-right: 1px solid rgb(0, 0, 187);
+    border-bottom: 2px solid rgb(0, 0, 187);
 }
 
 .saved-prono {
@@ -489,6 +489,11 @@ img.profile-pic {
 
 .save-prono:hover {
     transform: scale(1.1);
+}
+
+.save-prono:disabled {
+    transform: none;
+    opacity: 0.5;
 }
 
 .save-prono>svg {

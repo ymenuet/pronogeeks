@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { getMatchweekFixtures, getAllFixtures } from '../services/seasons'
 import { updateProfileWithMatchweek } from '../services/user'
+import { getProfile } from '../services/auth'
 import { Fixture } from '../components'
 import { Spin, Space } from 'antd'
 import { Context } from '../context'
@@ -9,13 +10,18 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } } }) => {
     const [season, setSeason] = useState(null)
     const [fixtures, setFixtures] = useState(null)
 
-    const { user } = useContext(Context)
+    const { loginUser } = useContext(Context)
 
     useEffect(() => {
         const updateProfile = async (season, matchweek) => {
             await updateProfileWithMatchweek(season, matchweek)
         }
-        updateProfile(seasonID, matchweekNumber)
+        const setNewUser = async () => {
+            await updateProfile(seasonID, matchweekNumber)
+            const user = await getProfile()
+            loginUser(user)
+        }
+        setNewUser()
 
         const fetchSeason = async seasonID => {
             const season = await getAllFixtures(seasonID)

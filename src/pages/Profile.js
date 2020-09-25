@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react'
+import React, { useContext } from 'react'
 // import { Redirect } from 'react-router-dom'
 import { Spin, Space } from 'antd'
 import { Context } from '../context'

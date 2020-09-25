@@ -22,13 +22,13 @@ const Fixture = ({ fixtureID }) => {
             let season = user.seasons.filter(season => season.season._id === seasonID)
             if (season.length > 0) season = season[0]
             let pronogeek = { homeProno: '', awayProno: '' };
-            let pronogeekFound;
+            let pronogeekFound = [];
             let matchweekIndex;
             if (season.matchweeks.length > 0) {
                 season.matchweeks.forEach((matchweek, i) => {
-                    if (matchweek.number.toString() === matchweekNumber) matchweekIndex = i
+                    if (matchweek.number.toString() === matchweekNumber.toString()) matchweekIndex = i
                 })
-                if (season.matchweeks[matchweekIndex].pronogeeks.length > 0) pronogeekFound = season.pronogeeks.filter(pronogeek => pronogeek.fixture === fixtureID)
+                if (season.matchweeks[matchweekIndex].pronogeeks.length > 0) pronogeekFound = season.matchweeks[matchweekIndex].pronogeeks.filter(pronogeek => pronogeek.fixture === fixtureID)
             }
             if (pronogeekFound.length > 0) pronogeek = pronogeekFound[0]
             setHomeScore(pronogeek.homeProno)
@@ -126,12 +126,12 @@ const Fixture = ({ fixtureID }) => {
                             <td>{fixture.oddsWinAway}</td>
                         </tr>
                         <tr className='prono-section'>
-                            <td className='prono-input-col'><label>Buts domicile :</label><input className='prono-input' type="number" name='homeProno' value={homeScore} onChange={e => setHomeScore(e.target.value)} placeholder='Prono' disabled={matchStarted} /></td>
+                            <td className='prono-input-col'><label>Buts domicile :</label><input className='prono-input' type="number" name='homeProno' value={homeScore} min={0} onChange={e => setHomeScore(e.target.value)} placeholder='Prono' disabled={matchStarted} /></td>
                             <td className='prono-input-col'>
-                                {!saveSuccess && <><small className='legend-save-btn'>Enregistrer prono</small><button className='btn my-btn save-prono' onClick={savePronos}><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="24px" height="24px"><path d="M0 0h24v24H0z" fill="none" /><path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z" /></svg></button></>}
-                                {saveSuccess && <><small className='legend-save-btn'>Prono enregistré</small><button className='btn my-btn save-prono saved-prono' onClick={savePronos}><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="24px" height="24px"><path d="M0 0h24v24H0z" fill="none" /><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" /></svg></button></>}
+                                {!saveSuccess && <><small className='legend-save-btn'>Enregistrer prono</small><button className='btn my-btn save-prono' disabled={matchStarted} onClick={savePronos}><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="24px" height="24px"><path d="M0 0h24v24H0z" fill="none" /><path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z" /></svg></button></>}
+                                {saveSuccess && <><small className='legend-save-btn'>Prono enregistré</small><button className='btn my-btn save-prono saved-prono' disabled={matchStarted} onClick={savePronos}><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="24px" height="24px"><path d="M0 0h24v24H0z" fill="none" /><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" /></svg></button></>}
                             </td>
-                            <td className='prono-input-col'><label>Buts extérieur :</label><input className='prono-input' type="number" name='awayProno' value={awayScore} onChange={e => setAwayScore(e.target.value)} placeholder='Prono' disabled={matchStarted} /></td>
+                            <td className='prono-input-col'><label>Buts extérieur :</label><input className='prono-input' type="number" name='awayProno' value={awayScore} min={0} onChange={e => setAwayScore(e.target.value)} placeholder='Prono' disabled={matchStarted} /></td>
                         </tr>
                     </tbody>
                 </table>

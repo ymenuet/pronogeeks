@@ -1,10 +1,14 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { Redirect } from 'react-router-dom'
 import { getAllFixtures } from '../services/seasons'
 import { updateProfileWithSeason } from '../services/user'
+import { getProfile } from '../services/auth'
 import { Space, Spin } from 'antd'
+import { Context } from '../context'
 
 const PronogeeksSearch = ({ match: { params: { seasonID } } }) => {
+
+    const { loginUser } = useContext(Context)
 
     const [matchweek, setMatchweek] = useState(null)
 
@@ -12,7 +16,12 @@ const PronogeeksSearch = ({ match: { params: { seasonID } } }) => {
         const updateProfile = async (seasonID) => {
             await updateProfileWithSeason(seasonID)
         }
-        updateProfile(seasonID)
+        const setNewUser = async () => {
+            await updateProfile(seasonID)
+            const user = await getProfile()
+            loginUser(user)
+        }
+        setNewUser()
 
         const fetchSeason = async (seasonID) => {
             const season = await getAllFixtures(seasonID)

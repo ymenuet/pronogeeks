@@ -5,11 +5,10 @@ import { Context } from '../context'
 
 const Login = ({ history }) => {
     const [form] = Form.useForm()
-    const { loginUser, user } = useContext(Context)
+    const { loginUser } = useContext(Context)
 
     const onFinish = async (values) => {
         const user = await login(values).catch(err => openNotification(err.response.data.message))
-        console.log(user)
         loginUser(user)
         history.push('/profile')
     }
