@@ -470,14 +470,21 @@ img.profile-pic {
 }
 
 .save-prono {
-    background-color: var(--color-light-green-gb);
-    color: var(--color-light-blue-gb);
+    background-color: var(--color-dark-blue-bp);
     font-size: 1rem;
     margin: 0;
     min-width: unset;
-    width: fit-content !important;
+    width: 44px;
     padding: 0 10px;
-    height: 42px;
+    height: 43px;
+    border-right: 1px solid rgb(0, 0, 255);
+    border-bottom: 2px solid rgb(0, 0, 255);
+}
+
+.saved-prono {
+    background-color: var(--color-light-green-gb);
+    border-right: 1px solid rgb(0, 109, 0);
+    border-bottom: 2px solid rgb(0, 109, 0);
 }
 
 .save-prono:hover {
@@ -505,4 +512,8 @@ img.profile-pic {
     height: 30px;
     margin-bottom: 10px;
     font-weight: bold;
+}
+
+.legend-save-btn {
+    margin-bottom: 5px;
 }

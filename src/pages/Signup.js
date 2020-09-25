@@ -20,7 +20,7 @@ const Signup = ({ history }) => {
         notification.warning({
             message: "Erreur",
             description: message,
-            placement: 'bottomLeft'
+            placement: 'bottomRight'
         })
     }
 
