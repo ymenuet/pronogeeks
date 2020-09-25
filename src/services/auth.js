@@ -12,10 +12,8 @@ export const signup = async user => {
 }
 
 export const login = async userData => {
-    const {
-        data
-    } = await authService.post('/login', userData)
-    return data
+    await authService.post('/login', userData)
+    return getProfile()
 }
 
 export const getProfile = async() => {

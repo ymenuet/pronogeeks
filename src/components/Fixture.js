@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { getFixture } from '../services/fixtures'
+import { savePronogeeks } from '../services/pronogeeks'
 import { Skeleton } from 'antd'
 import { Context } from '../context'
 
@@ -8,6 +9,7 @@ const Fixture = ({ fixtureID }) => {
     const [matchStarted, setMatchStarted] = useState(false)
     const [homeScore, setHomeScore] = useState(null)
     const [awayScore, setAwayScore] = useState(null)
+    const [saveMessage, setSaveMessage] = useState(null)
     const { user } = useContext(Context)
 
     useEffect(() => {
@@ -18,15 +20,19 @@ const Fixture = ({ fixtureID }) => {
             setFixture(fixture)
             const season = user.seasons.filter(season => season.season._id === seasonID)[0]
             let pronogeek = { homeProno: '', awayProno: '' };
-            if (season.pronogeeks.length > 0) pronogeek = season.pronogeeks.filter(pronogeek => pronogeek.fixture === fixtureID)[0]
+            let pronogeekFound;
+            if (season.pronogeeks.length > 0) pronogeekFound = season.pronogeeks.filter(pronogeek => pronogeek.fixture === fixtureID)[0]
+            if (pronogeekFound) pronogeek = pronogeekFound
             setHomeScore(pronogeek.homeProno)
             setAwayScore(pronogeek.awayProno)
         }
         fetchFixturesAndOdds(fixtureID)
     }, [])
 
-    const savePronos = async (homeScore, awayScore, fixtureID) => {
-
+    const savePronos = async () => {
+        await savePronogeeks(homeScore, awayScore, fixtureID)
+        setSaveMessage('Prono enregistré')
+        setTimeout(() => { setSaveMessage(null) }, 3000)
     }
 
     const dateTransform = (date) => {
@@ -90,9 +96,10 @@ const Fixture = ({ fixtureID }) => {
                             <td>{fixture.oddsWinAway}</td>
                         </tr>
                         <tr className='prono-section'>
-                            <td className='prono-input-col'><label>Buts domicile :</label><input className='prono-input' type="number" name='homeProno' value={homeScore} onChange={e => setHomeScore(e.target.value)} placeholder={0} disabled={matchStarted} /></td>
-                            <td className='prono-input-col'><button className='btn my-btn save-prono' onClick={savePronos}><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="24px" height="24px"><path d="M0 0h24v24H0z" fill="none" /><path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z" /></svg></button></td>
-                            <td className='prono-input-col'><label>Buts extérieur :</label><input className='prono-input' type="number" name='homeProno' value={awayScore} onChange={e => setAwayScore(e.target.value)} placeholder={0} disabled={matchStarted} /></td>
+                            <td className='prono-input-col'><label>Buts domicile :</label><input className='prono-input' type="number" name='homeProno' value={homeScore} onChange={e => setHomeScore(e.target.value)} placeholder='Prono' disabled={matchStarted} /></td>
+                            <td className='prono-input-col'><button className='btn my-btn save-prono' onClick={savePronos}><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="24px" height="24px"><path d="M0 0h24v24H0z" fill="none" /><path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z" /></svg></button>
+                                {saveMessage && <small>{saveMessage}</small>}</td>
+                            <td className='prono-input-col'><label>Buts extérieur :</label><input className='prono-input' type="number" name='awayProno' value={awayScore} onChange={e => setAwayScore(e.target.value)} placeholder='Prono' disabled={matchStarted} /></td>
                         </tr>
                     </tbody>
                 </table>

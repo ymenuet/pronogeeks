@@ -55,7 +55,6 @@
     <script>
         window.onload = () => {
             const $menuItems = document.querySelectorAll('#my-navbar-toggle .nav-link')
-            console.log($menuItems)
             $menuItems.forEach(menuItem => menuItem.addEventListener('click', () => {
                 document.querySelector('#my-navbar-toggle').classList.remove('show')
             }))

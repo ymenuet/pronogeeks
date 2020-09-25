@@ -480,6 +480,10 @@ img.profile-pic {
     height: 42px;
 }
 
+.save-prono:hover {
+    transform: scale(1.1);
+}
+
 .save-prono>svg {
     position: relative;
     bottom: 2px;
@@ -494,10 +498,11 @@ img.profile-pic {
 
 .prono-input {
     color: var(--color-light-blue-gb);
-    width: 50px;
+    max-width: 80px;
     text-align: center;
     border: none;
     border-radius: 10px;
     height: 30px;
     margin-bottom: 10px;
+    font-weight: bold;
 }

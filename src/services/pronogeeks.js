@@ -7,5 +7,30 @@ const pronogeekService = axios.create({
 })
 
 export const savePronogeeks = async(homeScore, awayScore, fixtureID) => {
-    //TODO: server-side controllers for POST and PUT pronogeeks
+    const {
+        data: {
+            pronogeek: pronogeekExists
+        }
+    } = await pronogeekService.get(`/${fixtureID}`)
+    if (!pronogeekExists) {
+        const {
+            data: {
+                pronogeek
+            }
+        } = await pronogeekService.post(`/${fixtureID}`, {
+            homeProno: homeScore,
+            awayProno: awayScore
+        })
+        return pronogeek
+    } else {
+        const {
+            data: {
+                pronogeek
+            }
+        } = await pronogeekService.put(`/${pronogeekExists._id}`, {
+            homeProno: homeScore,
+            awayProno: awayScore
+        })
+        return pronogeek
+    }
 }
