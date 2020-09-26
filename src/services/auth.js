@@ -16,6 +16,16 @@ export const login = async userData => {
     return getProfile()
 }
 
+export const updateProfile = async(userData) => {
+    await authService.put('/edit', userData)
+    return getProfile()
+}
+
+export const updatePhoto = async(userData) => {
+    await authService.put('/editPic', userData)
+    return getProfile()
+}
+
 export const getProfile = async() => {
     const {
         data: {

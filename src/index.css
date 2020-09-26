@@ -129,6 +129,14 @@ button.my-navbar-btn>span {
     height: 80%;
 }
 
+.profile-pic-navbar {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin: 0 10px;
+}
+
 #my-navbar-toggle {
     height: fit-content;
     background-color: var(--color-dark-blue-bp);
@@ -174,6 +182,7 @@ button.my-navbar-btn>span {
 .my-home-icon {
     position: relative;
     bottom: 4px;
+    margin: 0 10px;
 }
 
 @media (min-width: 992px) {
@@ -369,6 +378,7 @@ img.profile-pic {
     height: 200px;
     border-radius: 50%;
     margin: 0 auto;
+    object-fit: cover;
 }
 
 

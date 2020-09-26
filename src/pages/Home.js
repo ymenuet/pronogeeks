@@ -9,7 +9,7 @@ const Home = () => {
     return user ? <Redirect to='/profile' /> : (
         <div className='my-content-homepage'>
             <div className='row'>
-                <div className='col-10 offset-1 col-sm-8 offset-sm-2 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4'>
+                <div className='col-10 offset-1 col-sm-8 offset-sm-2 col-lg-6 offset-lg-3'>
                     <div className='home-div'>
                         <div>
                             <h2>Bienvenue sur<br />
