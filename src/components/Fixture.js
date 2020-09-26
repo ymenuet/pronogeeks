@@ -6,6 +6,7 @@ import { Context } from '../context'
 
 const Fixture = ({ fixtureID }) => {
     const [fixture, setFixture] = useState(null)
+    const [pronogeek, setPronogeek] = useState(null)
     const [matchStarted, setMatchStarted] = useState(false)
     const [homeScore, setHomeScore] = useState(null)
     const [awayScore, setAwayScore] = useState(null)
@@ -23,7 +24,7 @@ const Fixture = ({ fixtureID }) => {
             if (season.length > 0) season = season[0]
             let pronogeek = { homeProno: '', awayProno: '' };
             let pronogeekFound = [];
-            let matchweekIndex;
+            let matchweekIndex = 0;
             if (season.matchweeks.length > 0) {
                 season.matchweeks.forEach((matchweek, i) => {
                     if (matchweek.number.toString() === matchweekNumber.toString()) matchweekIndex = i
@@ -31,6 +32,7 @@ const Fixture = ({ fixtureID }) => {
                 if (season.matchweeks[matchweekIndex].pronogeeks.length > 0) pronogeekFound = season.matchweeks[matchweekIndex].pronogeeks.filter(pronogeek => pronogeek.fixture === fixtureID)
             }
             if (pronogeekFound.length > 0) pronogeek = pronogeekFound[0]
+            setPronogeek(pronogeek)
             setHomeScore(pronogeek.homeProno)
             setAwayScore(pronogeek.awayProno)
         }
@@ -43,7 +45,7 @@ const Fixture = ({ fixtureID }) => {
         if (new Date(fixture.date).getTime() - Date.now() < 0) return openNotification('error', 'Erreur', 'Ce match est déjà commencé ou fini. Tu ne peux plus changer ton prono.')
 
         // Warning message if one of the inputs doesn't have a number
-        if (!homeScore || !awayScore) return openNotification('warning', 'Attention', `Tu n'as pas défini de score pour le match ${fixture.homeTeam.name} - ${fixture.awayTeam.name}. Prono non enregistré.`)
+        if ((!homeScore || !awayScore) && (homeScore != 0 || awayScore != 0)) return openNotification('warning', 'Attention', `Tu n'as pas défini de score pour le match ${fixture.homeTeam.name} - ${fixture.awayTeam.name}. Prono non enregistré.`)
 
         let error = false
         await savePronogeeks(homeScore, awayScore, fixtureID).catch(err => {
@@ -98,7 +100,9 @@ const Fixture = ({ fixtureID }) => {
 
 
     return !fixture || homeScore == null || awayScore == null ? (
-        <Skeleton />
+        <div style={{ padding: 20, paddingTop: 0 }}>
+            <Skeleton active />
+        </div>
     ) : (
             <div className='fixture-line'>
                 <table>
@@ -128,13 +132,24 @@ const Fixture = ({ fixtureID }) => {
                         <tr className='prono-section'>
                             <td className='prono-input-col'><label>Buts domicile :</label><input className='prono-input' type="number" name='homeProno' value={homeScore} min={0} onChange={e => setHomeScore(e.target.value)} placeholder='Prono' disabled={matchStarted} /></td>
                             <td className='prono-input-col'>
-                                {!saveSuccess && <><small className='legend-save-btn'>Enregistrer prono</small><button className='btn my-btn save-prono' disabled={matchStarted} onClick={savePronos}><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="24px" height="24px"><path d="M0 0h24v24H0z" fill="none" /><path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z" /></svg></button></>}
-                                {saveSuccess && <><small className='legend-save-btn'>Prono enregistré</small><button className='btn my-btn save-prono saved-prono' disabled={matchStarted} onClick={savePronos}><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="24px" height="24px"><path d="M0 0h24v24H0z" fill="none" /><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" /></svg></button></>}
+                                {!saveSuccess && <>{!matchStarted && <small className='legend-save-btn'>Enregistrer prono</small>}<button className='btn my-btn save-prono' disabled={matchStarted} onClick={savePronos}><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="24px" height="24px"><path d="M0 0h24v24H0z" fill="none" /><path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z" /></svg></button></>}
+                                {saveSuccess && <>{!matchStarted && <small className='legend-save-btn'>Prono enregistré</small>}<button className='btn my-btn save-prono saved-prono' disabled={matchStarted} onClick={savePronos}><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="24px" height="24px"><path d="M0 0h24v24H0z" fill="none" /><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" /></svg></button></>}
                             </td>
                             <td className='prono-input-col'><label>Buts extérieur :</label><input className='prono-input' type="number" name='awayProno' value={awayScore} min={0} onChange={e => setAwayScore(e.target.value)} placeholder='Prono' disabled={matchStarted} /></td>
                         </tr>
                     </tbody>
                 </table>
+                {pronogeek && pronogeek.points != 0 && pronogeek.bonusFavTeam && (
+                    <div className='points-cell'>
+                        Tu as scoré {pronogeek.points} pts<br />
+                        dont 30 pts bonus pour ton équipe de <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill=" rgb(253, 0, 7)" width="24px" height="24px"><path d="M0 0h24v24H0z" fill="none" /><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" /></svg>
+                    </div>
+                )}
+                {pronogeek && pronogeek.points != 0 && !pronogeek.bonusFavTeam && (
+                    <div className='points-cell'>
+                        Tu as scoré {pronogeek.points} pts
+                    </div>
+                )}
             </div>
         )
 }

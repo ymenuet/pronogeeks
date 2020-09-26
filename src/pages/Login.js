@@ -8,7 +8,8 @@ const Login = ({ history }) => {
     const { loginUser } = useContext(Context)
 
     const onFinish = async (values) => {
-        const user = await login(values).catch(err => openNotification(err.response.data.message))
+        //openNotification(err.response.data.message)
+        const user = await login(values).catch(err => console.log(err.response))
         loginUser(user)
         history.push('/profile')
     }

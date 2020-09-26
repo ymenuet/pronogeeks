@@ -84,7 +84,7 @@ nav.my-navbar {
     align-items: center;
     padding: 0;
     background-color: var(--color-dark-blue-bp) !important;
-    font-family: 'Audiowide',
+    font-family: 'Audiowide' !important;
 }
 
 .my-brand {
@@ -248,6 +248,7 @@ button.my-navbar-btn>span {
 .home-div h2 {
     color: var(--color-dark-blue-bp) !important;
     font-size: 4rem;
+    font-family: 'Audiowide';
     /* text-shadow: 4px 4px 8px var(--color-dark-blue-bp); */
 }
 
@@ -382,7 +383,7 @@ img.profile-pic {
     height: 100vh;
     opacity: 0.5;
     z-index: -1;
-    background: url('/images/bg-gb.jpg') center/cover repeat-x border-box;
+    background: url('/images/bg-gb-mirror.jpg') center/cover repeat border-box;
 }
 
 .pronogeeks-bg {
@@ -393,22 +394,63 @@ img.profile-pic {
     justify-content: center;
 }
 
+.pronogeeks-bg h2 {
+    color: var(--color-dark-blue-bp) !important;
+    margin-top: 10px;
+    margin-bottom: 0;
+    font-family: 'Audiowide';
+}
+
+.previous-next-btns {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+    margin-bottom: 10px;
+}
+
+.previous-next-btns>button>svg {
+    position: relative;
+    bottom: 2px;
+}
+
 .list-fixtures {
-    background-color: rgba(2, 88, 211, 0.8);
     margin: 0;
     color: var(--color-white-cream);
+    border-radius: 10px;
+    padding: 0;
 }
 
 .list-fixtures-header {
     display: flex;
     justify-content: space-between;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
     height: 50px;
+    margin-bottom: 16px;
+    background-color: rgba(2, 88, 211, 0.8) !important;
+    border: 2px solid var(--color-white-cream) !important;
 }
 
 .list-fixtures-header div {
     width: calc(100% / 3);
-    padding-top: 10px;
+    padding-top: 7px;
     font-size: 1.4rem;
+    font-family: 'Audiowide' !important;
+}
+
+.list-fixtures-header div:first-child {
+    padding-left: 20px;
+}
+
+.list-fixtures-header div:nth-child(3) {
+    padding-right: 20px;
+}
+
+.list-fixtures>li {
+    margin-bottom: 16px;
+    background-color: rgba(2, 88, 211, 0.8) !important;
+    border: 2px solid var(--color-white-cream) !important;
 }
 
 .team-logo {
@@ -469,7 +511,8 @@ img.profile-pic {
     margin-top: 20px;
 }
 
-.save-prono {
+.save-prono,
+.previous-next-btns>div>button {
     background-color: rgb(0, 65, 170);
     font-size: 1rem;
     margin: 0;
@@ -521,4 +564,15 @@ img.profile-pic {
 
 .legend-save-btn {
     margin-bottom: 5px;
+}
+
+.points-cell {
+    font-size: 1.3rem;
+    width: 100%;
+    text-align: center !important;
+}
+
+.points-cell>svg {
+    position: relative;
+    bottom: 3px;
 }
