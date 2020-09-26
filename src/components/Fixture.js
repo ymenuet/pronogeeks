@@ -98,6 +98,25 @@ const Fixture = ({ fixtureID }) => {
         return { fullDate: `${weekDay} ${date.getDate()}/${month}/${date.getFullYear()}`, fullTime: `${date.getHours()}h${minutes}` }
     }
 
+    const statusTranform = (statusShort, minutes) => {
+        if (statusShort !== 'TBD' &&
+            statusShort !== 'NS' &&
+            statusShort !== '1H' &&
+            statusShort !== 'HT' &&
+            statusShort !== '2H' &&
+            statusShort !== 'ET' &&
+            statusShort !== 'P' &&
+            statusShort !== 'BT' &&
+            statusShort !== 'SUSP' &&
+            statusShort !== 'INT' &&
+            statusShort !== 'PST') {
+            return 'Match terminé'
+        } else if (statusShort === 'HT') {
+            return 'Mi-temps'
+        } else return `${minutes}'`
+
+    }
+
 
     return !fixture || homeScore == null || awayScore == null ? (
         <div style={{ padding: 20, paddingTop: 0 }}>
@@ -114,11 +133,16 @@ const Fixture = ({ fixtureID }) => {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr className='pb-3'>
+                        <tr>
                             <td className='team-name'>{fixture.homeTeam.name}</td>
                             <td className='score-fixture'>{fixture.goalsHomeTeam} - {fixture.goalsAwayTeam}</td>
                             <td className='team-name'>{fixture.awayTeam.name}</td>
                         </tr>
+                        {fixture.timeElapsed && <tr className='pb-1'>
+                            <td></td>
+                            <td className='fixture-status'>{statusTranform(fixture.statusShort, fixture.timeElapsed)}</td>
+                            <td></td>
+                        </tr>}
                         <tr className='odds-section odds-top'>
                             <td>Cote domicile :</td>
                             <td>Cote nul :</td>
@@ -139,15 +163,15 @@ const Fixture = ({ fixtureID }) => {
                         </tr>
                     </tbody>
                 </table>
-                {pronogeek && pronogeek.points != 0 && pronogeek.bonusFavTeam && (
+                {pronogeek.points > 0 && pronogeek.bonusFavTeam && (
                     <div className='points-cell'>
-                        Tu as scoré {pronogeek.points} pts<br />
+                        Tu as scoré <i>{pronogeek.points} pts</i><br />
                         dont 30 pts bonus pour ton équipe de <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill=" rgb(253, 0, 7)" width="24px" height="24px"><path d="M0 0h24v24H0z" fill="none" /><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" /></svg>
                     </div>
                 )}
-                {pronogeek && pronogeek.points != 0 && !pronogeek.bonusFavTeam && (
+                {pronogeek.points > 0 && !pronogeek.bonusFavTeam && (
                     <div className='points-cell'>
-                        Tu as scoré {pronogeek.points} pts
+                        Tu as scoré <i>{pronogeek.points} pts</i>
                     </div>
                 )}
             </div>

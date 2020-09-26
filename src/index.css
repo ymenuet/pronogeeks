@@ -407,6 +407,17 @@ img.profile-pic {
     align-items: center;
     height: 100%;
     margin-bottom: 10px;
+    color: var(--color-dark-blue-bp);
+}
+
+.previous-next-btns .score-top {
+    font-size: 1.4rem;
+    margin-top: 10px;
+}
+
+.previous-next-btns .score-bottom {
+    font-size: 1.4rem;
+    margin-top: 0px;
 }
 
 .previous-next-btns>button>svg {
@@ -575,4 +586,26 @@ img.profile-pic {
 .points-cell>svg {
     position: relative;
     bottom: 3px;
+}
+
+.admin-btn {
+    margin-bottom: 30px;
+    margin-top: 5px;
+    background-color: unset;
+    border: 3px solid var(--color-dark-blue-bp);
+    color: var(--color-dark-blue-bp);
+    line-height: 100%;
+}
+
+.admin-btn.top {
+    margin-top: 20px;
+    margin-bottom: 5px;
+    background-color: unset;
+    border: 3px solid var(--color-dark-blue-bp);
+    color: var(--color-dark-blue-bp);
+}
+
+.admin-btn:hover {
+    color: var(--color-white-cream);
+    background-color: var(--color-dark-blue-bp);
 }
