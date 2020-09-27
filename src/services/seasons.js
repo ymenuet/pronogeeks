@@ -6,7 +6,7 @@ const seasonService = axios.create({
     withCredentials: true
 })
 
-export const getAllFixtures = async(seasonID) => {
+export const getSeasonData = async(seasonID) => {
     const {
         data: {
             season
@@ -22,4 +22,13 @@ export const getMatchweekFixtures = async(seasonID, matchweekNum) => {
         }
     } = await seasonService.get(`/${seasonID}/${matchweekNum}`)
     return fixtures
+}
+
+export const getSeasonTeams = async(seasonID) => {
+    const {
+        data: {
+            teams
+        }
+    } = await seasonService.get(`/teams/${seasonID}`)
+    return teams
 }

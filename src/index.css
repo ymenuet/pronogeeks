@@ -363,25 +363,87 @@ label::before {
     left: 0;
     width: 100vw;
     height: calc(100vh - var(--navbar-height));
-    opacity: 0.5;
+    opacity: 0.8;
     z-index: -1;
-    background: url('/images/bg-bp-mirror.jpg') center/contain repeat-x border-box;
+    background: url('/images/bg-bp-mirror.jpg') center/contain repeat border-box;
+}
+
+.my-profile-page.row {
+    padding-top: 30px;
+    margin: 0;
+    position: relative;
+}
+
+.my-profile {
+    background-color: rgba(101, 6, 124, 0.8);
+    border-radius: 10px;
+}
+
+.profile-details {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
 }
 
 section.about-section {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
     box-sizing: border-box;
-    padding: 40px;
 }
 
-img.profile-pic {
+.about-section h2 {
+    font-family: 'Audiowide';
+    margin-top: 20px;
+    width: 100%;
+    text-align: center;
+}
+
+.about-section button {
+    background: none;
+    border: none;
+    outline: none;
+    margin-left: 4px;
+}
+
+.about-section button>svg {
+    position: relative;
+    bottom: 3px;
+}
+
+.favteam-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    margin-bottom: 20px;
+}
+
+.favteam-info h5 {
+    color: var(--color-white-cream);
+    padding: 0 10px;
+}
+
+.favteam-info>div>img {
+    width: 70%;
+}
+
+.profile-picture-container {
+    margin-bottom: 20px;
+}
+
+img.profile-pic,
+div.profile-pic {
     width: 200px;
     height: 200px;
     border-radius: 50%;
     object-fit: cover;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--color-white-cream);
 }
 
 .custom-file {
@@ -399,6 +461,88 @@ img.profile-pic {
 .custom-file-label {
     color: black !important;
     text-align: left;
+    padding-left: 5px;
+}
+
+#update-username-modal {
+    position: absolute;
+    z-index: 2;
+    width: 340px;
+    height: 200px;
+    top: calc(50% - 100px + var(--navbar-height) / 2);
+    left: calc(50% - 170px);
+}
+
+#update-username-modal .modal-content {
+    width: 100%;
+    height: 100%;
+    background-color: var(--color-white-cream);
+    color: var(--color-dark-blue-bp);
+}
+
+#update-username-modal h5,
+#update-username-modal label {
+    color: var(--color-dark-blue-bp)!important;
+    text-align: left;
+    width: 100%;
+}
+
+#update-username-modal input {
+    width: 100%;
+    height: 40px;
+    border-radius: 20px;
+    font-size: 1.2rem;
+    padding-left: 10px;
+    border: 1px solid rgb(0, 0, 0, 0.3);
+    outline: none;
+}
+
+#update-username-modal .modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 15px;
+}
+
+#update-username-modal .modal-footer .my-btn {
+    min-width: unset;
+    margin: 0;
+    padding: 0 25px;
+    background-color: var(--color-dark-blue-bp);
+    border: 3px solid var(--color-dark-blue-bp);
+    color: var(--color-white-cream);
+    line-height: 100%;
+    outline: none;
+}
+
+#update-username-modal .my-btn.close {
+    background: unset;
+    color: var(--color-dark-blue-bp);
+    opacity: 1;
+    margin-right: 20px;
+}
+
+@media (max-width: 340px) {
+    .about-section h2 {
+        font-size: 1.8rem;
+    }
+    img.profile-pic,
+    div.profile-pic {
+        width: 140px;
+        height: 140px;
+        margin-right: 0!important;
+    }
+    .profile-picture-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    #update-username-modal {
+        width: 280px;
+        left: calc(50% - 140px);
+    }
+    #update-username-modal .my-btn.close {
+        display: none;
+    }
 }
 
 
@@ -422,6 +566,46 @@ img.profile-pic {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+}
+
+.choose-favteam {
+    background-color: rgb(240, 247, 244, 0.8);
+    padding: 40px;
+    border-radius: 10px;
+    margin: 20px;
+    max-width: 540px;
+}
+
+.choose-favteam label {
+    color: var(--color-dark-blue-bp)!important;
+    margin-bottom: 20px;
+    font-size: 1.2rem;
+}
+
+.choose-favteam label svg {
+    position: relative;
+    bottom: 2px;
+}
+
+.choose-favteam select {
+    height: 30px;
+    padding: 0 15px;
+    border-radius: 15px;
+    outline: none;
+}
+
+.save-favteam-btn {
+    background: none;
+    color: var(--color-dark-blue-bp);
+    border: 3px solid var(--color-dark-blue-bp);
+    line-height: 100%;
+    margin-top: 20px;
+}
+
+.save-favteam-btn:hover {
+    background-color: var(--color-dark-blue-bp);
+    color: var(--color-white-cream);
+    transform: none;
 }
 
 .pronogeeks-bg h2 {

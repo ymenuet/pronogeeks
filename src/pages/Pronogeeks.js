@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { Redirect } from 'react-router-dom'
-import { getMatchweekFixtures, getAllFixtures } from '../services/seasons'
+import { getMatchweekFixtures, getSeasonData } from '../services/seasons'
 import { updateProfileWithMatchweek, updateProfileWithSeason } from '../services/user'
 import { updateFixturesStatus, updateOdds } from '../services/apiFootball'
 import { getProfile } from '../services/auth'
 import { Fixture } from '../components'
 import { Spin, Space, notification } from 'antd'
+import { LoadingOutlined } from '@ant-design/icons'
 import { Context } from '../context'
 
 const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history }) => {
@@ -35,7 +36,7 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history 
         setNewUser()
 
         const fetchSeason = async seasonID => {
-            const season = await getAllFixtures(seasonID)
+            const season = await getSeasonData(seasonID)
             setSeason(season)
         }
         fetchSeason(seasonID)
@@ -51,13 +52,21 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history 
 
     const fetchStatus = async () => {
         const fixtures = await updateFixturesStatus(seasonID, matchweekNumber)
+        setFixtures(null)
         setFixtures(fixtures)
-        openNotification('success', 'Scores actualisés', 'Rafraîchir la page.')
+        openNotification('success', 'Scores actualisés')
     }
 
     const fetchOdds = async () => {
         await updateOdds(seasonID, matchweekNumber)
-        openNotification('success', 'Cotes actualisées', 'Rafraîchir la page.')
+        const fetchFixtures = async (season, matchweek) => {
+            const fixtures = await getMatchweekFixtures(season, matchweek)
+            fixtures.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+            setFixtures(null)
+            setFixtures(fixtures)
+            openNotification('success', 'Cotes actualisées')
+        }
+        fetchFixtures(seasonID, matchweekNumber)
     }
 
     const openNotification = (type, title, message) => {
@@ -82,7 +91,7 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history 
         <div className='pronogeeks-bg'>
             <div className='loader-container'>
                 <Space size='large'>
-                    <Spin size='large' tip='Chargement de la page...' style={{ color: 'rgb(26, 145, 254)', fontSize: '1.2rem' }} />
+                    <Spin size='large' tip='Chargement de la page...' style={{ color: 'rgb(4, 78, 199)', fontSize: '1.2rem' }} indicator={<LoadingOutlined spin style={{ color: 'rgb(4, 78, 199)', fontSize: '3rem', marginBottom: 8 }} />} />
                 </Space>
             </div>
         </div>

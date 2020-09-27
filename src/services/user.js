@@ -9,10 +9,10 @@ const userService = axios.create({
 export const updateProfileWithSeason = async seasonID => {
     const {
         data: {
-            season
+            newSeason
         }
     } = await userService.get(`/${seasonID}`)
-    return season
+    return newSeason
 }
 
 export const updateProfileWithMatchweek = async(seasonID, matchweekNumber) => {
@@ -22,4 +22,9 @@ export const updateProfileWithMatchweek = async(seasonID, matchweekNumber) => {
         }
     } = await userService.get(`/${seasonID}/${matchweekNumber}`)
     return matchweek
+}
+
+export const updateFavTeam = async(seasonID, favTeam) => {
+    await userService.put(`/${seasonID}/favTeam`, favTeam)
+    return true
 }
