@@ -68,6 +68,16 @@ h2 {
     color: var(--color-white-cream) !important;
 }
 
+div.loader-container {
+    position: absolute;
+    top: var(--navbar-height);
+    width: 100vw;
+    height: calc(100vh - var(--navbar-height));
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 @media(max-width: 576px) {
     h2 {
         font-size: 2.4rem;
@@ -349,18 +359,13 @@ label::before {
 .my-profile-page::before {
     content: '';
     position: fixed;
-    top: 0;
+    top: var(--navbar-height);
     left: 0;
     width: 100vw;
-    height: 100vh;
+    height: calc(100vh - var(--navbar-height));
     opacity: 0.5;
     z-index: -1;
-    background: url('/images/bg-gb.jpg') center/contain repeat-x border-box;
-}
-
-div.my-profile {
-    display: flex;
-    min-height: calc(100vh - var(--navbar-height));
+    background: url('/images/bg-bp-mirror.jpg') center/contain repeat-x border-box;
 }
 
 section.about-section {
@@ -368,7 +373,6 @@ section.about-section {
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    max-width: 50%;
     box-sizing: border-box;
     padding: 40px;
 }
@@ -377,8 +381,24 @@ img.profile-pic {
     width: 200px;
     height: 200px;
     border-radius: 50%;
-    margin: 0 auto;
     object-fit: cover;
+}
+
+.custom-file {
+    max-width: 250px;
+}
+
+.profile-image {
+    max-width: 250px;
+}
+
+.first-file-label {
+    text-align: left !important;
+}
+
+.custom-file-label {
+    color: black !important;
+    text-align: left;
 }
 
 

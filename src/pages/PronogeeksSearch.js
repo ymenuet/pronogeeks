@@ -8,7 +8,7 @@ import { Context } from '../context'
 
 const PronogeeksSearch = ({ match: { params: { seasonID } } }) => {
 
-    const { loginUser } = useContext(Context)
+    const { loginUser, user } = useContext(Context)
 
     const [matchweek, setMatchweek] = useState(null)
 
@@ -35,17 +35,21 @@ const PronogeeksSearch = ({ match: { params: { seasonID } } }) => {
 
     }, [seasonID])
 
-    return !matchweek ? (
+    return !user ? (
+        <Redirect to='/login' />
+    ) : !matchweek ? (
         <div className='pronogeeks-bg'>
-            <Space size='large'>
-                <Spin size='large' />
-            </Space>
+            <div className='loader-container'>
+                <Space size='large'>
+                    <Spin size='large' tip='Chargement de la page...' style={{ color: 'rgb(26, 145, 254)', fontSize: '1.2rem' }} />
+                </Space>
+            </div>
         </div>
     ) : (
-            <div className='pronogeeks-bg'>
-                <Redirect to={`/pronogeeks/${seasonID}/matchweek/${matchweek}`} />
-            </div>
-        )
+                <div className='pronogeeks-bg'>
+                    <Redirect to={`/pronogeeks/${seasonID}/matchweek/${matchweek}`} />
+                </div>
+            )
 }
 
 export default PronogeeksSearch

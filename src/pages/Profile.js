@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 // import { Redirect } from 'react-router-dom'
 import { updateProfile, getProfile, updatePhoto } from '../services/auth'
 import axios from 'axios'
@@ -28,17 +28,26 @@ const Profile = () => {
         })
     }
 
-    return !user ? <div className='pronogeeks-bg'><Space size='large'>
-        <Spin size='large' />
-    </Space>
-    </div> :
-        (
-            <div className='my-profile-page'>
-                <div className='my-profile'>
+    return !user ? (<div className='my-profile-page'>
+        <div className='loader-container'>
+            <Space size='large'>
+                <Spin size='large' tip='Chargement de la page...' style={{ color: 'rgb(26, 145, 254)', fontSize: '1.2rem' }} />
+            </Space>
+        </div>
+    </div>
+    ) : (
+            <div className='my-profile-page row'>
+                <div className='my-profile col-10 offset-1 col-lg-4'>
                     <section className='about-section'>
                         <img src={user.photo} alt="Profile pic" className='profile-pic' />
                         <p>{user.username}</p>
-                        <input type="file" className='profile-pic-input' onChange={uploadPhoto} />
+                        <label className='first-file-label' htmlFor="profile-pic-input">Changer de photo de profil :</label>
+                        <div className="custom-file">
+                            <label className="profile-image custom-file-label" htmlFor="profile-pic-input">
+                                Charger une photo
+                            <input id="profile-pic-input" type="file" name="image" className="custom-file-input" onChange={uploadPhoto} />
+                            </label>
+                        </div>
                     </section>
                     <section className='geek-section'></section>
                 </div>

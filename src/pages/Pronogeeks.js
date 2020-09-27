@@ -5,7 +5,7 @@ import { updateProfileWithMatchweek, updateProfileWithSeason } from '../services
 import { updateFixturesStatus, updateOdds } from '../services/apiFootball'
 import { getProfile } from '../services/auth'
 import { Fixture } from '../components'
-import { Spin, Space } from 'antd'
+import { Spin, Space, notification } from 'antd'
 import { Context } from '../context'
 
 const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history }) => {
@@ -52,10 +52,20 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history 
     const fetchStatus = async () => {
         const fixtures = await updateFixturesStatus(seasonID, matchweekNumber)
         setFixtures(fixtures)
+        openNotification('success', 'Scores actualisés', 'Rafraîchir la page.')
     }
 
     const fetchOdds = async () => {
         await updateOdds(seasonID, matchweekNumber)
+        openNotification('success', 'Cotes actualisées', 'Rafraîchir la page.')
+    }
+
+    const openNotification = (type, title, message) => {
+        notification[type]({
+            message: title,
+            description: message,
+            placement: 'bottomRight'
+        })
     }
 
     const previousPage = () => {
@@ -68,14 +78,16 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history 
         history.push(`/pronogeeks/${seasonID}/matchweek/${parseInt(matchweekNumber) + 1}`)
     }
 
-    return !user ? (
-        <Redirect to='/' />
-    ) : !fixtures || !season ? (
+    return !fixtures || !season ? (
         <div className='pronogeeks-bg'>
-            <Space size='large'>
-                <Spin size='large' />
-            </Space>
+            <div className='loader-container'>
+                <Space size='large'>
+                    <Spin size='large' tip='Chargement de la page...' style={{ color: 'rgb(26, 145, 254)', fontSize: '1.2rem' }} />
+                </Space>
+            </div>
         </div>
+    ) : !user ? (
+        <Redirect to='/login' />
     ) : (
                 <div className='pronogeeks-bg matchweek-page'>
                     {user.role === 'SUPER GEEK' && <div>
@@ -86,10 +98,14 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history 
                     journée {matchweekNumber}</h2>
                     <ul className="list-group list-group-flush list-fixtures col-10 offset-1 col-md-8 offset-md-2 col-xl-6 offset-xl-3">
                         <div className='previous-next-btns'>
-                            <div><button className='btn my-btn' onClick={previousPage}><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="24px" height="24px"><path d="M0 0h24v24H0z" fill="none" /><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" /></svg></button></div>
+
+                            {matchweekNumber != 1 && <div><button className='btn my-btn' onClick={previousPage}><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="24px" height="24px"><path d="M0 0h24v24H0z" fill="none" /><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" /></svg></button></div>}
+
                             {matchweekBonus > 0 && <div className='score-top'>Ton total J{matchweekNumber} : {matchweekPoints} pts<br />dont {matchweekBonus} pts bonus ({matchweekCorrects}/10)</div>}
                             {!matchweekBonus && <div className='score-top'>Ton total J{matchweekNumber} : {matchweekPoints} pts</div>}
-                            <div><button className='btn my-btn' onClick={nextPage}><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="24px" height="24px"><path d="M0 0h24v24H0z" fill="none" /><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z" /></svg></button></div>
+
+                            {matchweekNumber != 38 && <div><button className='btn my-btn' onClick={nextPage}><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="24px" height="24px"><path d="M0 0h24v24H0z" fill="none" /><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z" /></svg></button></div>}
+
                         </div>
                         <div className='list-fixtures-header'>
                             <div className='header-title'>Domicile</div>
