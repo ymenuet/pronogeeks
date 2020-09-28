@@ -28,3 +28,12 @@ export const updateFavTeam = async(seasonID, favTeam) => {
     await userService.put(`/${seasonID}/favTeam`, favTeam)
     return true
 }
+
+export const fetchPlayers = async(seasonID) => {
+    const {
+        data: {
+            users
+        }
+    } = await userService.get(`/players/${seasonID}`)
+    return users
+}

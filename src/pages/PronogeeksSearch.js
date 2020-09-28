@@ -40,7 +40,7 @@ const PronogeeksSearch = ({ match: { params: { seasonID } } }) => {
         }
         fetchSeason(seasonID)
 
-    }, [seasonID])
+    }, [seasonID, loginUser])
 
     const saveFavTeam = async () => {
         if (favTeam.value === '') return openNotification('warning', 'Attention', 'Tu dois choisir une équipe de coeur avant de continuer.')

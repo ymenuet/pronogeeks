@@ -37,7 +37,7 @@ const Fixture = ({ fixtureID }) => {
             setAwayScore(pronogeek.awayProno)
         }
         fetchFixturesAndOdds(fixtureID)
-    }, [])
+    }, [fixtureID, user.seasons])
 
     const savePronos = async () => {
 
@@ -45,7 +45,7 @@ const Fixture = ({ fixtureID }) => {
         if (new Date(fixture.date).getTime() - Date.now() < 0) return openNotification('error', 'Erreur', 'Ce match est déjà commencé ou fini. Tu ne peux plus changer ton prono.')
 
         // Warning message if one of the inputs doesn't have a number
-        if ((!homeScore || !awayScore) && (homeScore != 0 || awayScore != 0)) return openNotification('warning', 'Attention', `Tu n'as pas défini de score pour le match ${fixture.homeTeam.name} - ${fixture.awayTeam.name}. Prono non enregistré.`)
+        if ((!homeScore || !awayScore) && (parseInt(homeScore) !== 0 || parseInt(awayScore) !== 0)) return openNotification('warning', 'Attention', `Tu n'as pas défini de score pour le match ${fixture.homeTeam.name} - ${fixture.awayTeam.name}. Prono non enregistré.`)
 
         let error = false
         await savePronogeeks(homeScore, awayScore, fixtureID).catch(err => {
@@ -94,6 +94,8 @@ const Fixture = ({ fixtureID }) => {
             case 6:
                 weekDay = 'samedi'
                 break;
+            default:
+                weekDay = ''
         }
         return { fullDate: `${weekDay} ${date.getDate()}/${month}/${date.getFullYear()}`, fullTime: `${date.getHours()}h${minutes}` }
     }

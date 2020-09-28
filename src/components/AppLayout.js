@@ -17,7 +17,7 @@ const AppLayout = ({ children }) => {
     return (
         <>
             <nav className="navbar navbar-expand-lg fixed-top navbar-dark bg-dark my-navbar">
-                <Link className="navbar-brand my-brand" to='/'><h1><img src={'/images/pronogeeks-logo.png'} alt='Logo pronogeeks' /></h1></Link>
+                <Link className="navbar-brand my-brand" to='/'><h1>pronogeeks</h1></Link>
                 <button className="navbar-toggler my-navbar-btn" type="button" data-toggle="collapse" data-target="#my-navbar-toggle" aria-controls="my-navbar-toggle" aria-expanded="false" aria-label="Toggle navigation"><span className="navbar-toggler-icon" /></button>
 
                 <div className="collapse navbar-collapse" id="my-navbar-toggle">
@@ -25,7 +25,7 @@ const AppLayout = ({ children }) => {
                         {user ? (
                             <>
                                 <li className="nav-item">
-                                    <a href='#' className="nav-link" onClick={logoutButton}>Déconnexion</a>
+                                    <Link to='/' className="nav-link" onClick={logoutButton}>Déconnexion</Link>
                                 </li>
                                 <li className="nav-item">
                                     <Link className="nav-link" to='/pronogeeks/5f67f525d7b14148997ee3eb'>Mes pronogeeks</Link>

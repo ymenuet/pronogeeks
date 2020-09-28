@@ -41,32 +41,39 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history 
         }
         fetchSeason(seasonID)
 
-        const fetchFixtures = async (season, matchweek) => {
-            const fixtures = await getMatchweekFixtures(season, matchweek)
-            fixtures.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
-            setFixtures(fixtures)
-        }
         fetchFixtures(seasonID, matchweekNumber)
 
     }, [matchweekNumber, seasonID])
 
     const fetchStatus = async () => {
-        const fixtures = await updateFixturesStatus(seasonID, matchweekNumber)
-        setFixtures(null)
-        setFixtures(fixtures)
-        openNotification('success', 'Scores actualisés')
+        const data = await updateFixturesStatus(seasonID, matchweekNumber)
+        if (data.message) return openNotification('warning', 'Actualisation abortée', data.message.fr)
+        else {
+            setFixtures(null)
+            setFixtures(fixtures)
+            openNotification('success', 'Scores actualisés')
+            const user = await getProfile()
+            loginUser(user)
+        }
     }
 
     const fetchOdds = async () => {
-        await updateOdds(seasonID, matchweekNumber)
-        const fetchFixtures = async (season, matchweek) => {
-            const fixtures = await getMatchweekFixtures(season, matchweek)
-            fixtures.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
-            setFixtures(null)
-            setFixtures(fixtures)
-            openNotification('success', 'Cotes actualisées')
+        const message = await updateOdds(seasonID, matchweekNumber)
+        if (message) return openNotification('warning', 'Actualisation abortée', message.fr)
+        else {
+            const updated = fetchFixtures(seasonID, matchweekNumber)
+            if (updated) {
+                openNotification('success', 'Cotes actualisées')
+            }
         }
-        fetchFixtures(seasonID, matchweekNumber)
+    }
+
+    const fetchFixtures = async (season, matchweek) => {
+        const fixtures = await getMatchweekFixtures(season, matchweek)
+        fixtures.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+        setFixtures(null)
+        setFixtures(fixtures)
+        return true
     }
 
     const openNotification = (type, title, message) => {
@@ -108,12 +115,12 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history 
                     <ul className="list-group list-group-flush list-fixtures col-10 offset-1 col-md-8 offset-md-2 col-xl-6 offset-xl-3">
                         <div className='previous-next-btns'>
 
-                            {matchweekNumber != 1 && <div><button className='btn my-btn' onClick={previousPage}><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="24px" height="24px"><path d="M0 0h24v24H0z" fill="none" /><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" /></svg></button></div>}
+                            {parseInt(matchweekNumber) !== 1 && <div><button className='btn my-btn' onClick={previousPage}><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="24px" height="24px"><path d="M0 0h24v24H0z" fill="none" /><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" /></svg></button></div>}
 
                             {matchweekBonus > 0 && <div className='score-top'>Ton total J{matchweekNumber} : {matchweekPoints} pts<br />dont {matchweekBonus} pts bonus ({matchweekCorrects}/10)</div>}
                             {!matchweekBonus && <div className='score-top'>Ton total J{matchweekNumber} : {matchweekPoints} pts</div>}
 
-                            {matchweekNumber != 38 && <div><button className='btn my-btn' onClick={nextPage}><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="24px" height="24px"><path d="M0 0h24v24H0z" fill="none" /><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z" /></svg></button></div>}
+                            {parseInt(matchweekNumber) !== 38 && <div><button className='btn my-btn' onClick={nextPage}><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="24px" height="24px"><path d="M0 0h24v24H0z" fill="none" /><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z" /></svg></button></div>}
 
                         </div>
                         <div className='list-fixtures-header'>

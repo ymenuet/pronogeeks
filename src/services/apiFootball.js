@@ -8,14 +8,16 @@ const apiFootballService = axios.create({
 
 export const updateFixturesStatus = async(seasonID, matchweekNum) => {
     const {
-        data: {
-            fixtures
-        }
+        data
     } = await apiFootballService.get(`/fixtures/season/${seasonID}/matchweek/${matchweekNum}`)
-    return fixtures
+    return data
 }
 
 export const updateOdds = async(seasonID, matchweekNum) => {
-    await apiFootballService.get(`/odds/season/${seasonID}/matchweek/${matchweekNum}`)
-    return true
+    const {
+        data: {
+            message
+        }
+    } = await apiFootballService.get(`/odds/season/${seasonID}/matchweek/${matchweekNum}`)
+    return message
 }

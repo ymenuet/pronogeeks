@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react'
-// import { Redirect } from 'react-router-dom'
 import { updateProfile, getProfile, updatePhoto } from '../services/auth'
+import { fetchPlayers } from '../services/user'
 import axios from 'axios'
 import { Spin, Space, notification } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons'
@@ -13,12 +13,15 @@ const Profile = () => {
     const [showModal, setShowModal] = useState(false)
     const [usernameInput, setUsernameInput] = useState('')
     const [usernameChanged, setUsernameChanged] = useState(false)
+    const [seasonID, setSeasonID] = useState(null)
+    const [seasonRanking, setSeasonRanking] = useState(null)
+    const [userRanking, setUserRanking] = useState(null)
 
     const uploadPhoto = async e => {
-        setPhotoLoading(true)
         const file = e.target.files[0]
         if (file.size > 1000000) return openNotification('warning', 'Attention', 'La taille du fichier ne peux pas excéder 1Mo. La photo de profil reste inchangée.')
         if (file.type !== 'image/jpeg' && file.type !== 'image/png' && file.type !== 'image/jpg') return openNotification('warning', 'Attention', 'Le fichier doit être au format JPG ou PNG. La photo de profil reste inchangée.')
+        setPhotoLoading(true)
         const data = new FormData()
         data.append('file', e.target.files[0])
         data.append('upload_preset', 'pronogeeks')
@@ -46,6 +49,20 @@ const Profile = () => {
 
     useEffect(() => {
         setUsernameInput(user?.username)
+        const getPlayers = async () => {
+            if (user) {
+                const seasonID = user?.seasons[user.seasons.length - 1].season._id.toString()
+                setSeasonID(user?.seasons[user.seasons.length - 1].season._id.toString())
+                const players = await fetchPlayers(seasonID)
+                const rankedPlayers = players.sort((a, b) => {
+                    return b.seasons.filter(season => season.season.toString() === seasonID)[0].totalPoints - a.seasons.filter(season => season.season.toString() === seasonID)[0].totalPoints
+                }).slice(0, 20)
+                const userRanking = rankedPlayers.map(player => player.username).indexOf(user.username) + 1
+                setUserRanking(userRanking)
+                setSeasonRanking(rankedPlayers)
+            }
+        }
+        getPlayers()
     }, [user])
 
     const openNotification = (type, title, message) => {
@@ -54,6 +71,11 @@ const Profile = () => {
             description: message,
             placement: 'bottomRight'
         })
+    }
+
+    const setRank = (num) => {
+        if (num == 1) return '1er'
+        else return `${num}ème`
     }
 
     return !user || usernameChanged ? (<div className='my-profile-page'>
@@ -96,9 +118,14 @@ const Profile = () => {
                     </section>
                     <section className='geek-section'></section>
                 </div>
-                <div className='my-profile-ranking col-10 offset-1 col-lg-4 offset-lg-2'>
-                    <h2>Saluuuuuuuuuut</h2>
-                </div>
+                {seasonRanking && <div className='my-profile-ranking col-10 offset-1 col-lg-4 offset-lg-2'>
+                    <p>Ton classement : {setRank(userRanking)}</p>
+                    <ul>
+                        {seasonRanking.map((player, index) => <li key={player._id}>{index + 1}. {player.username} - {player.seasons.filter(seas => seas.season.toString() === seasonID.toString())[0].totalPoints} pts</li>
+
+                        )}
+                    </ul>
+                </div>}
                 {showModal && <div id="update-username-modal" tabIndex="-1" role="dialog" aria-labelledby="update-username-modal-title" aria-hidden="true">
                     <div className="modal-dialog modal-dialog-centered" role="document">
                         <div className="modal-content">
