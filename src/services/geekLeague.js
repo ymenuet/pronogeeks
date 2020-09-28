@@ -6,6 +6,11 @@ const geekLeagueService = axios.create({
     withCredentials: true
 })
 
-export const createLeague = async(values) => {
-
+export const createLeague = async values => {
+    const {
+        data: {
+            geekLeague
+        }
+    } = await geekLeagueService.post('/', values)
+    return geekLeague
 }

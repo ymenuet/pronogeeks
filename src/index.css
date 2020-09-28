@@ -986,6 +986,14 @@ ul.season-ranking>li {
     height: 100%;
 }
 
+img.profile-pic-preview {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    object-fit: cover;
+    position: relative;
+}
+
 
 /* .geekleague-input-group {
     width: 50%;

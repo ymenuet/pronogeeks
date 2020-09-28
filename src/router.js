@@ -1,10 +1,9 @@
 import React from 'react'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { AppLayout } from './components'
-import { Login, Signup, Home, Profile, PronogeeksSearch, Pronogeeks, NewGeekLeague } from './pages'
+import { Login, Signup, Home, Profile, PronogeeksSearch, Pronogeeks, NewGeekLeague, GeekLeague } from './pages'
 
 const ProvRanking = () => <h1>Provisional Ranking</h1>
-const GeekLeague = () => <h1>GeekLeague</h1>
 const NotFound = () => <h2>Cette page n'existe pas...<br />Retourne faire tes pronos au lieu de papilloner !</h2>
 
 const router = () => {
