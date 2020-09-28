@@ -1,4 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { updateProfile, getProfile, updatePhoto } from '../services/auth'
 import { fetchPlayers } from '../services/user'
 import axios from 'axios'
@@ -25,7 +26,7 @@ const Profile = () => {
         const data = new FormData()
         data.append('file', e.target.files[0])
         data.append('upload_preset', 'pronogeeks')
-        const { data: { secure_url } } = await axios.post('https://api.cloudinary.com/v1_1/dlyw9xi3k/image/upload', data)
+        const { data: { secure_url } } = await axios.post(process.env.REACT_APP_CLOUDINARY_URL, data)
         const user = await updatePhoto({ photo: secure_url })
         loginUser(user)
         setPhotoLoading(false)
@@ -50,16 +51,17 @@ const Profile = () => {
     useEffect(() => {
         setUsernameInput(user?.username)
         const getPlayers = async () => {
-            if (user) {
+            if (user && user.seasons.length > 0) {
                 const seasonID = user?.seasons[user.seasons.length - 1].season._id.toString()
                 setSeasonID(user?.seasons[user.seasons.length - 1].season._id.toString())
                 const players = await fetchPlayers(seasonID)
                 const rankedPlayers = players.sort((a, b) => {
                     return b.seasons.filter(season => season.season.toString() === seasonID)[0].totalPoints - a.seasons.filter(season => season.season.toString() === seasonID)[0].totalPoints
-                }).slice(0, 20)
+                })
                 const userRanking = rankedPlayers.map(player => player.username).indexOf(user.username) + 1
+                const rankedPlayers20 = rankedPlayers.slice(0, 20)
                 setUserRanking(userRanking)
-                setSeasonRanking(rankedPlayers)
+                setSeasonRanking(rankedPlayers20)
             }
         }
         getPlayers()
@@ -74,7 +76,7 @@ const Profile = () => {
     }
 
     const setRank = (num) => {
-        if (num == 1) return '1er'
+        if (parseInt(num) === 1) return '1er'
         else return `${num}ème`
     }
 
@@ -109,23 +111,40 @@ const Profile = () => {
                                 </div>
                             </div>
                             {user.seasons.length > 0 && user.seasons[user.seasons.length - 1].favTeam && <div className='favteam-info'>
-                                <h5>Ton équipe de coeur<br />pour la saison {user.seasons[user.seasons.length - 1].season.year} de {user.seasons[user.seasons.length - 1].season.leagueName} :</h5>
                                 <div>
                                     <img src={user.seasons[user.seasons.length - 1].favTeam.logo} alt="Logo équipe de coeur" />
                                 </div>
+                                <h5>{user.seasons[user.seasons.length - 1].favTeam.name} est ton équipe de coeur<br />pour la saison {user.seasons[user.seasons.length - 1].season.year} de {user.seasons[user.seasons.length - 1].season.leagueName}.</h5>
                             </div>}
                         </div>
                     </section>
-                    <section className='geek-section'></section>
+                    <section className='geekleagues-section'>
+                        <h2>Ligues Geek</h2>
+                        <Link to='/myGeekLeagues/new' className='btn my-btn new-league'>Nouvelle ligue</Link>
+                        {user.geekLeagues.length > 0 && <ul>
+                            {user.geekLeagues.map(league => <li>{league.name}</li>)}
+                        </ul>}
+                    </section>
                 </div>
-                {seasonRanking && <div className='my-profile-ranking col-10 offset-1 col-lg-4 offset-lg-2'>
-                    <p>Ton classement : {setRank(userRanking)}</p>
-                    <ul>
-                        {seasonRanking.map((player, index) => <li key={player._id}>{index + 1}. {player.username} - {player.seasons.filter(seas => seas.season.toString() === seasonID.toString())[0].totalPoints} pts</li>
+                <section className='my-profile-ranking col-10 offset-1 col-lg-4 offset-lg-2'>
+                    {!seasonRanking && <div className='pt-4'>
+                        <Space size='large'>
+                            <Spin size='large' tip='Chargement du classement...' style={{ color: 'white', fontSize: '1.2rem' }} indicator={<LoadingOutlined spin style={{ color: 'white', fontSize: '3rem', marginBottom: 8 }} />} />
+                        </Space>
+                    </div>}
+                    {seasonRanking && <>
+                        <h2>{user.seasons[user.seasons.length - 1].season.leagueName} saison {user.seasons[user.seasons.length - 1].season.year}
+                            <br />
+                    Classement général
+                    </h2>
+                        <ul className='list-group list-group-flush season-ranking'>
+                            <li className='list-group-item d-flex justify-content-between align-items-center mb-2'><span><b>{setRank(userRanking)} : {user.username}</b></span><span className='badge badge-success badge-pill my-badge'>{user.seasons[user.seasons.length - 1].totalPoints} pts</span></li>
+                            {seasonRanking.map((player, index) => <li key={player._id} className='list-group-item d-flex justify-content-between align-items-center'><span>{setRank(index + 1)} : {player.username}</span><span className='badge badge-success badge-pill my-badge'>{player.seasons.filter(seas => seas.season.toString() === seasonID.toString())[0].totalPoints} pts</span></li>
 
-                        )}
-                    </ul>
-                </div>}
+                            )}
+                        </ul>
+                    </>}
+                </section>
                 {showModal && <div id="update-username-modal" tabIndex="-1" role="dialog" aria-labelledby="update-username-modal-title" aria-hidden="true">
                     <div className="modal-dialog modal-dialog-centered" role="document">
                         <div className="modal-content">

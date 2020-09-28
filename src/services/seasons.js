@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const baseURL = `http://localhost:3000/api/seasons`
+const baseURL = `${process.env.REACT_APP_BACKENDPOINT}/api/seasons`
 const seasonService = axios.create({
     baseURL,
     withCredentials: true

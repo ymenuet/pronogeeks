@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const baseURL = `http://localhost:3000/api/pronogeeks`
+const baseURL = `${process.env.REACT_APP_BACKENDPOINT}/api/pronogeeks`
 const pronogeekService = axios.create({
     baseURL,
     withCredentials: true

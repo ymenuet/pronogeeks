@@ -34,7 +34,7 @@ code {
 .my-btn {
     background-color: var(--color-purple-rp);
     color: var(--color-white-cream);
-    min-width: 180px;
+    /* min-width: 180px; */
     height: 42px;
     line-height: 42px;
     padding: 0 25px;
@@ -187,7 +187,6 @@ button.my-navbar-btn>span {
 
 #my-navbar-toggle>ul>li>a:hover {
     background-color: var(--color-light-blue-bp);
-    /* color: var(--color-purple-rp) */
 }
 
 .my-home-icon {
@@ -323,6 +322,11 @@ button.my-navbar-btn>span {
 
 .register-pages {
     margin: 0 10vw;
+    min-height: calc(100vh - var(--navbar-height));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 0;
 }
 
 div.signup-form {
@@ -331,6 +335,8 @@ div.signup-form {
     align-items: center;
     background-color: rgba(2, 88, 211, 0.8);
     border-radius: 10px;
+    width: 100%;
+    padding: 20px 10px;
 }
 
 .ant-form-item-explain>div {
@@ -347,9 +353,9 @@ label::before {
 }
 
 .custom-file-signup {
-    max-width: unset!important;
+    max-width: unset !important;
     width: 100%;
-    text-align: left!important;
+    text-align: left !important;
     margin-bottom: 20px;
 }
 
@@ -359,7 +365,7 @@ label::before {
 
 .custom-file-signup .profile-image {
     padding-left: 10px;
-    max-width: unset!important;
+    max-width: unset !important;
     border-radius: 20px;
     cursor: pointer;
 }
@@ -380,16 +386,16 @@ label::before {
 
 /* PROFILE */
 
-.pronogeeks-bg::before {
+.my-profile-page::before {
     content: '';
     position: fixed;
     top: var(--navbar-height);
     left: 0;
     width: 100vw;
     height: calc(100vh - var(--navbar-height));
-    opacity: 0.5;
+    opacity: 0.8;
     z-index: -1;
-    background: url('/images/bg-gb-mirror.jpg') center/contain repeat border-box;
+    background: url('/images/bg-bp-mirror.jpg') center/contain repeat border-box;
 }
 
 .my-profile-page.row {
@@ -399,8 +405,9 @@ label::before {
 }
 
 .my-profile {
-    background-color: rgba(101, 6, 124, 0.8);
-    border-radius: 10px;
+    margin-bottom: 20px;
+    height: fit-content;
+    padding: 0;
 }
 
 .profile-details {
@@ -411,6 +418,9 @@ label::before {
 }
 
 section.about-section {
+    background-color: rgba(101, 6, 124, 0.8);
+    border-radius: 10px;
+    padding: 0 20px 20px 20px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -418,7 +428,7 @@ section.about-section {
     box-sizing: border-box;
 }
 
-.about-section h2 {
+.my-profile-page h2 {
     font-family: 'Audiowide';
     margin-top: 20px;
     width: 100%;
@@ -441,12 +451,16 @@ section.about-section {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    margin-bottom: 20px;
+    margin: 0 0 20px 20px;
+    padding: 20px;
+    background: var(--color-white-cream);
+    border-radius: 10px;
 }
 
 .favteam-info h5 {
-    color: var(--color-white-cream);
-    padding: 0 10px;
+    color: var(--color-dark-purple-bp);
+    margin-top: 20px;
+    width: 200px;
 }
 
 .favteam-info>div>img {
@@ -508,7 +522,7 @@ div.profile-pic {
 
 #update-username-modal h5,
 #update-username-modal label {
-    color: var(--color-dark-blue-bp)!important;
+    color: var(--color-dark-blue-bp) !important;
     text-align: left;
     width: 100%;
 }
@@ -547,15 +561,50 @@ div.profile-pic {
     margin-right: 20px;
 }
 
+section.geekleagues-section {
+    background: rgba(4, 78, 199, 0.8);
+    padding: 0.1px 20px 20px 20px;
+    margin-top: 20px;
+    border-radius: 10px;
+}
+
+a.new-league {
+    margin: 0;
+    background: none;
+    border: 2px solid var(--color-white-cream);
+    color: var(--color-white-cream);
+    line-height: 100%;
+    padding-top: 10px;
+}
+
+.my-profile-ranking {
+    margin: 0px auto 20px auto;
+    background-color: rgba(37, 138, 230, 0.8);
+    border-radius: 10px;
+    padding: 0 20px 20px 20px;
+    height: fit-content;
+}
+
+ul.season-ranking>li {
+    background-color: var(--color-white-cream);
+}
+
+.my-badge {
+    font-size: 0.9rem;
+    height: 20px;
+    line-height: 100%;
+    padding-top: 4px;
+}
+
 @media (max-width: 340px) {
-    .about-section h2 {
+    .my-profile-page h2 {
         font-size: 1.8rem;
     }
     img.profile-pic,
     div.profile-pic {
         width: 140px;
         height: 140px;
-        margin-right: 0!important;
+        margin-right: 0 !important;
     }
     .profile-picture-container {
         display: flex;
@@ -574,16 +623,16 @@ div.profile-pic {
 
 /* PRONOGEEKS */
 
-.my-profile-page::before {
+.pronogeeks-bg::before {
     content: '';
     position: fixed;
     top: var(--navbar-height);
     left: 0;
     width: 100vw;
     height: calc(100vh - var(--navbar-height));
-    opacity: 0.8;
+    opacity: 0.55;
     z-index: -1;
-    background: url('/images/bg-bp-mirror.jpg') center/contain repeat border-box;
+    background: url('/images/bg-gb-mirror.jpg') center/contain repeat border-box;
 }
 
 .pronogeeks-bg {
@@ -603,7 +652,7 @@ div.profile-pic {
 }
 
 .choose-favteam label {
-    color: var(--color-dark-blue-bp)!important;
+    color: var(--color-dark-blue-bp) !important;
     margin-bottom: 20px;
     font-size: 1.2rem;
 }
@@ -636,8 +685,7 @@ div.profile-pic {
 
 .pronogeeks-bg h2 {
     color: var(--color-dark-blue-bp) !important;
-    margin-top: 10px;
-    margin-bottom: 0;
+    margin: 10px 20px 0 20px;
     font-family: 'Audiowide';
 }
 
@@ -650,20 +698,18 @@ div.profile-pic {
     color: var(--color-dark-blue-bp);
 }
 
-.previous-next-btns .score-top {
+.previous-next-btns .score-top,
+.previous-next-btns .score-bottom {
     font-size: 1.4rem;
-    margin-top: 10px;
-    background-color: var(--color-white-cream);
+    background-color: rgba(240, 247, 244, 0.8);
     padding: 5px 20px;
     border-radius: 10px;
+    margin: 10px 20px;
+    font-family: 'Audiowide';
 }
 
 .previous-next-btns .score-bottom {
-    font-size: 1.4rem;
-    margin-top: 0px;
-    background-color: var(--color-white-cream);
-    padding: 5px 20px;
-    border-radius: 10px;
+    margin: 0 20px 10px 20px;
 }
 
 .previous-next-btns>button>svg {
@@ -697,11 +743,15 @@ div.profile-pic {
 }
 
 .list-fixtures-header div:first-child {
-    padding-left: 20px;
+    width: 49%;
+}
+
+.list-fixtures-header div:nth-child(2) {
+    width: 2%;
 }
 
 .list-fixtures-header div:nth-child(3) {
-    padding-right: 20px;
+    width: 49%;
 }
 
 .list-fixtures>li {
@@ -855,3 +905,122 @@ div.profile-pic {
     color: var(--color-white-cream);
     background-color: var(--color-dark-blue-bp);
 }
+
+@media (max-width: 576px) {
+    .list-fixtures-header div {
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 340px) {
+    .prono-input {
+        width: 45px;
+    }
+}
+
+
+/* NEW GEEKLEAGUE */
+
+.geekleague-bg::before {
+    content: '';
+    position: fixed;
+    top: var(--navbar-height);
+    left: 0;
+    width: 100vw;
+    height: calc(100vh - var(--navbar-height));
+    opacity: 0.7;
+    z-index: -1;
+    background: url('/images/bg-rp-mirror.jpg') center/contain repeat border-box;
+}
+
+.geekleague-bg {
+    height: calc(100vh - var(--navbar-height));
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 10vh 20vw;
+    color: var(--color-white-cream);
+    margin: 0;
+}
+
+.geekleague-bg h2 {
+    font-family: 'Audiowide';
+    color: var(--color-white-cream);
+}
+
+.geekleague-form {
+    padding: 20px;
+    width: 100%;
+    height: 100%;
+    margin-bottom: 10vh;
+    background-color: rgba(156, 0, 99, 0.8);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.create-league-btn {
+    margin: 0;
+    background: none;
+    border: 2px solid var(--color-white-cream);
+    color: var(--color-white-cream);
+    line-height: 100%;
+    outline: none !important;
+}
+
+.create-league-btn:hover {
+    background: var(--color-white-cream);
+    color: var(--color-purple-rp);
+    font-weight: 500;
+}
+
+.geekleague-form>div {
+    height: 100% !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.geekleague-form form {
+    height: 100%;
+}
+
+
+/* .geekleague-input-group {
+    width: 50%;
+    text-align: left;
+    margin: 20px auto;
+} */
+
+
+/* .geekleague-input-group label {
+    padding-left: 5px;
+}
+
+.geekleague-input-group input {
+    width: 100%;
+    border: none;
+    height: 36px;
+    border-radius: 18px;
+    padding-left: 10px;
+    outline: none;
+    color: black;
+} */
+
+@media (max-width: 768px) {
+    /* .geekleague-input-group {
+        width: 70%;
+    } */
+    .geekleague-bg {
+        padding: 10vh 10vw;
+    }
+}
+
+
+/*
+@media (max-width: 576px) {
+    .geekleague-input-group {
+        width: 90%;
+    }
+} */

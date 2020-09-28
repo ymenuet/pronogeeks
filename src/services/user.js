@@ -1,10 +1,19 @@
 import axios from 'axios'
 
-const baseURL = `http://localhost:3000/api/user`
+const baseURL = `${process.env.REACT_APP_BACKENDPOINT}/api/user`
 const userService = axios.create({
     baseURL,
     withCredentials: true
 })
+
+export const getUsers = async() => {
+    const {
+        data: {
+            users
+        }
+    } = await userService.get('/users')
+    return users
+}
 
 export const updateProfileWithSeason = async seasonID => {
     const {
