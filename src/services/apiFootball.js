@@ -1,6 +1,9 @@
 import axios from 'axios'
 
-const baseURL = `${process.env.REACT_APP_BACKENDPOINT}/api/fetch`
+const baseURL = process.env.NODE_ENV === 'production' ?
+    `/api/fetch` :
+    `${process.env.REACT_APP_BACKENDPOINT}/api/fetch`
+
 const apiFootballService = axios.create({
     baseURL,
     withCredentials: true

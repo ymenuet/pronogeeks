@@ -1,6 +1,9 @@
 import axios from 'axios'
 
-const baseURL = `${process.env.REACT_APP_BACKENDPOINT}/api/pronogeeks`
+const baseURL = process.env.NODE_ENV === 'production' ?
+    `/api/pronogeeks` :
+    `${process.env.REACT_APP_BACKENDPOINT}/api/pronogeeks`
+
 const pronogeekService = axios.create({
     baseURL,
     withCredentials: true

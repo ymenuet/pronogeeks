@@ -1,6 +1,9 @@
 import axios from 'axios'
 
-const baseURL = `${process.env.REACT_APP_BACKENDPOINT}/api/seasons`
+const baseURL = process.env.NODE_ENV === 'production' ?
+    `/api/seasons` :
+    `${process.env.REACT_APP_BACKENDPOINT}/api/seasons`
+
 const seasonService = axios.create({
     baseURL,
     withCredentials: true
@@ -13,6 +16,15 @@ export const getSeasonData = async(seasonID) => {
         }
     } = await seasonService.get(`/${seasonID}`)
     return season
+}
+
+export const getUndergoingSeasons = async() => {
+    const {
+        data: {
+            seasons
+        }
+    } = await seasonService.get('/current')
+    return seasons
 }
 
 export const getMatchweekFixtures = async(seasonID, matchweekNum) => {

@@ -1,6 +1,9 @@
 import axios from 'axios'
 
-const baseURL = `${process.env.REACT_APP_BACKENDPOINT}/api/fixtures`
+const baseURL = process.env.NODE_ENV === 'production' ?
+    `/api/fixtures` :
+    `${process.env.REACT_APP_BACKENDPOINT}/api/fixtures`
+
 const fixtureService = axios.create({
     baseURL,
     withCredentials: true

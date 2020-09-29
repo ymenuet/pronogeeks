@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useContext } from 'react'
 import { Spin, Space, Form, Input, notification, Select } from 'antd'
+import { LoadingOutlined } from '@ant-design/icons'
 import { createLeague } from '../services/geekLeague'
 import { getUsers } from '../services/user'
-import { LoadingOutlined } from '@ant-design/icons'
 import { Context } from '../context'
 
 const { Option } = Select

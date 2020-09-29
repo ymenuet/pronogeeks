@@ -1,6 +1,9 @@
 import axios from 'axios'
 
-const baseURL = `${process.env.REACT_APP_BACKENDPOINT}/api/user`
+const baseURL = process.env.NODE_ENV === 'production' ?
+    `/api/user` :
+    `${process.env.REACT_APP_BACKENDPOINT}/api/user`
+
 const userService = axios.create({
     baseURL,
     withCredentials: true

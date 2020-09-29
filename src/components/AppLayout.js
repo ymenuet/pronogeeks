@@ -28,6 +28,9 @@ const AppLayout = ({ children }) => {
                                     <Link to='/' className="nav-link" onClick={logoutButton}>Déconnexion</Link>
                                 </li>
                                 <li className="nav-item">
+                                    <Link className="nav-link" to='/myGeekLeagues'>Mes ligues Geek</Link>
+                                </li>
+                                <li className="nav-item">
                                     <Link className="nav-link" to='/pronogeeks/5f67f525d7b14148997ee3eb'>Mes pronogeeks</Link>
                                 </li>
                                 <li className="nav-item">

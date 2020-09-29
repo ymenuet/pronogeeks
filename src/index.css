@@ -34,7 +34,6 @@ code {
 .my-btn {
     background-color: var(--color-purple-rp);
     color: var(--color-white-cream);
-    /* min-width: 180px; */
     height: 42px;
     line-height: 42px;
     padding: 0 25px;
@@ -52,7 +51,7 @@ code {
 }
 
 div.my-content {
-    padding-top: calc(var(--navbar-height));
+    padding-top: var(--navbar-height);
     box-sizing: border-box;
     text-align: center;
     min-height: 100vh;
@@ -66,6 +65,10 @@ div.my-content {
 h2 {
     font-size: 2.5rem;
     color: var(--color-white-cream) !important;
+}
+
+.page-404-heading {
+    color: black !important;
 }
 
 div.loader-container {
@@ -195,6 +198,13 @@ button.my-navbar-btn>span {
     margin: 0 10px;
 }
 
+@media (min-width: 992px) and (max-width: 1080px) {
+    #my-navbar-toggle>ul>li>a {
+        padding: 0 10px;
+        font-size: 1.2rem !important;
+    }
+}
+
 @media (min-width: 992px) {
     #my-navbar-toggle {
         display: flex;
@@ -249,7 +259,7 @@ button.my-navbar-btn>span {
 .my-content-homepage {
     box-sizing: border-box;
     text-align: center;
-    min-height: calc(100vh- - var(--navbar-height));
+    min-height: calc(100vh - var(--navbar-height));
     text-align: center;
 }
 
@@ -451,8 +461,8 @@ section.about-section {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    margin: 0 0 20px 20px;
-    padding: 20px;
+    margin: 0 10px 20px 10px;
+    padding: 15px;
     background: var(--color-white-cream);
     border-radius: 10px;
 }
@@ -468,7 +478,7 @@ section.about-section {
 }
 
 .profile-picture-container {
-    margin-bottom: 20px;
+    margin: 0 10px 20px 10px;
 }
 
 img.profile-pic,
@@ -994,41 +1004,8 @@ img.profile-pic-preview {
     position: relative;
 }
 
-
-/* .geekleague-input-group {
-    width: 50%;
-    text-align: left;
-    margin: 20px auto;
-} */
-
-
-/* .geekleague-input-group label {
-    padding-left: 5px;
-}
-
-.geekleague-input-group input {
-    width: 100%;
-    border: none;
-    height: 36px;
-    border-radius: 18px;
-    padding-left: 10px;
-    outline: none;
-    color: black;
-} */
-
 @media (max-width: 768px) {
-    /* .geekleague-input-group {
-        width: 70%;
-    } */
     .geekleague-bg {
         padding: 10vh 10vw;
     }
 }
-
-
-/*
-@media (max-width: 576px) {
-    .geekleague-input-group {
-        width: 90%;
-    }
-} */
