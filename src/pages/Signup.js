@@ -1,10 +1,13 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
+import { Redirect } from 'react-router-dom'
 import { Spin, Space, Form, Input, notification } from 'antd'
 import { signup } from '../services/auth'
 import { LoadingOutlined } from '@ant-design/icons'
 import axios from 'axios'
+import { Context } from '../context'
 
 const Signup = ({ history }) => {
+    const { user } = useContext(Context)
     const [form] = Form.useForm()
     const [photo, setPhoto] = useState(null)
     const [fileName, setFileName] = useState('Charger une photo')
@@ -56,75 +59,77 @@ const Signup = ({ history }) => {
                     <Spin size='large' tip='Enregistrement du compte...' style={{ color: ' rgb(4, 78, 199)', fontSize: '1.2rem' }} indicator={<LoadingOutlined spin style={{ color: ' rgb(4, 78, 199)', fontSize: '3rem', marginBottom: 8 }} />} />
                 </Space>
             </div>
+        ) : user ? (
+            <Redirect to='/profile' />
         ) : (
 
-                <div className='row signup-form'>
-                    <div className='col-10 offset-1 col-sm-8 offset-sm-2 col-xl-6 offset-xl-3'>
-                        <h2>Créer un compte</h2>
-                        <Form
-                            form={form}
-                            layout='vertical'
-                            name="basic"
-                            initialValues={{
-                                remember: true,
-                            }}
-                            onFinish={onFinish}
-                        >
-                            <Form.Item
-                                type='email'
-                                label="Email :"
-                                name="email"
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: `L'email est nécessaire pour créer un compte.`,
-                                    },
-                                ]}
+                    <div className='row signup-form'>
+                        <div className='col-10 offset-1 col-sm-8 offset-sm-2 col-xl-6 offset-xl-3'>
+                            <h2>Créer un compte</h2>
+                            <Form
+                                form={form}
+                                layout='vertical'
+                                name="basic"
+                                initialValues={{
+                                    remember: true,
+                                }}
+                                onFinish={onFinish}
                             >
-                                <Input style={{ borderRadius: 15.8 }} placeholder='roi.geek@pronogeeks.fr' />
-                            </Form.Item>
-                            <Form.Item
-                                label="Pseudo :"
-                                name="username"
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: 'Le pseudo est obligatoire et doit être unique.',
-                                    },
-                                ]}
-                            >
-                                <Input style={{ borderRadius: 15.8 }} placeholder='RoiGeek' />
-                            </Form.Item>
+                                <Form.Item
+                                    type='email'
+                                    label="Email :"
+                                    name="email"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: `L'email est nécessaire pour créer un compte.`,
+                                        },
+                                    ]}
+                                >
+                                    <Input style={{ borderRadius: 15.8 }} placeholder='roi.geek@pronogeeks.fr' />
+                                </Form.Item>
+                                <Form.Item
+                                    label="Pseudo :"
+                                    name="username"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: 'Le pseudo est obligatoire et doit être unique.',
+                                        },
+                                    ]}
+                                >
+                                    <Input style={{ borderRadius: 15.8 }} placeholder='RoiGeek' />
+                                </Form.Item>
 
-                            <Form.Item
-                                label="Mot de passe :"
-                                name="password"
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: 'Tu auras besoin d\'un mot de passe pour te connecter !',
-                                    },
-                                ]}
-                            >
-                                <Input.Password style={{ borderRadius: 15.8 }} placeholder='********' />
-                            </Form.Item>
+                                <Form.Item
+                                    label="Mot de passe :"
+                                    name="password"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: 'Tu auras besoin d\'un mot de passe pour te connecter !',
+                                        },
+                                    ]}
+                                >
+                                    <Input.Password style={{ borderRadius: 15.8 }} placeholder='********' />
+                                </Form.Item>
 
-                            <label className='first-file-label signup-file-label' htmlFor="profile-pic-input-signup">Photo de profil :</label>
-                            <br />
-                            <div className="custom-file custom-file-signup">
-                                <label className="profile-image custom-file-label" htmlFor="profile-pic-input-signup">
-                                    {fileName}
-                                    <input id="profile-pic-input-signup" type="file" name="image" className="custom-file-input" onChange={uploadPhoto} />
-                                </label>
-                            </div>
+                                <label className='first-file-label signup-file-label' htmlFor="profile-pic-input-signup">Photo de profil :</label>
+                                <br />
+                                <div className="custom-file custom-file-signup">
+                                    <label className="profile-image custom-file-label" htmlFor="profile-pic-input-signup">
+                                        {fileName}
+                                        <input id="profile-pic-input-signup" type="file" name="image" className="custom-file-input" onChange={uploadPhoto} />
+                                    </label>
+                                </div>
 
-                            <div style={{ display: 'flex', justifyContent: 'center' }}>
-                                <button type='submit' className='btn my-btn submit-btn register-btn' style={{ marginTop: 10 }}>Créer mon compte</button>
-                            </div>
-                        </Form>
+                                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                    <button type='submit' className='btn my-btn submit-btn register-btn' style={{ marginTop: 10 }}>Créer mon compte</button>
+                                </div>
+                            </Form>
+                        </div>
                     </div>
-                </div>
-            )
+                )
         }
     </div>
 }

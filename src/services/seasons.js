@@ -18,12 +18,12 @@ export const getSeasonData = async(seasonID) => {
     return season
 }
 
-export const getUndergoingSeasons = async() => {
+export const getSeasons = async() => {
     const {
         data: {
             seasons
         }
-    } = await seasonService.get('/current')
+    } = await seasonService.get('/')
     return seasons
 }
 

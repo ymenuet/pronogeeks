@@ -2,10 +2,11 @@ import React, { useContext } from 'react'
 import { Form, Input, notification } from 'antd'
 import { login } from '../services/auth'
 import { Context } from '../context'
+import { Redirect } from 'react-router-dom'
 
 const Login = ({ history }) => {
     const [form] = Form.useForm()
-    const { loginUser } = useContext(Context)
+    const { loginUser, user } = useContext(Context)
 
     const onFinish = async (values) => {
         const user = await login(values).catch(err => openNotification(err.response.data.message))
@@ -21,7 +22,7 @@ const Login = ({ history }) => {
         })
     }
 
-    return (
+    return user ? <Redirect to='/profile' /> : (
         <div className='register-pages'>
             <div className='row signup-form'>
                 <div className='col-10 offset-1 col-sm-8 offset-sm-2 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4'>

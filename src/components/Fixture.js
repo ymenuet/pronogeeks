@@ -45,7 +45,7 @@ const Fixture = ({ fixtureID }) => {
         if (new Date(fixture.date).getTime() - Date.now() < 0) return openNotification('error', 'Erreur', 'Ce match est déjà commencé ou fini. Tu ne peux plus changer ton prono.')
 
         // Warning message if one of the inputs doesn't have a number
-        if ((!homeScore || !awayScore) && (parseInt(homeScore) !== 0 || parseInt(awayScore) !== 0)) return openNotification('warning', 'Attention', `Tu n'as pas défini de score pour le match ${fixture.homeTeam.name} - ${fixture.awayTeam.name}. Prono non enregistré.`)
+        if ((!homeScore && parseInt(homeScore) !== 0) || (!awayScore && parseInt(awayScore) !== 0)) return openNotification('warning', 'Attention', `Tu n'as pas défini de score pour le match ${fixture.homeTeam.name} - ${fixture.awayTeam.name}. Prono non enregistré.`)
 
         let error = false
         await savePronogeeks(homeScore, awayScore, fixtureID).catch(err => {
@@ -63,7 +63,8 @@ const Fixture = ({ fixtureID }) => {
         notification[type]({
             message: title,
             description: message,
-            placement: 'bottomRight'
+            placement: 'bottomRight',
+            className: 'notification-box'
         })
     }
 
@@ -135,7 +136,7 @@ const Fixture = ({ fixtureID }) => {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
+                        <tr className='score-teams-row'>
                             <td className='team-name'>{fixture.homeTeam.name}</td>
                             <td className='score-fixture'>{fixture.goalsHomeTeam} - {fixture.goalsAwayTeam}</td>
                             <td className='team-name'>{fixture.awayTeam.name}</td>
