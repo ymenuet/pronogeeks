@@ -175,7 +175,15 @@ button.my-navbar-btn>span {
     align-items: center;
 }
 
-#my-navbar-toggle>ul>li>a {
+#my-navbar-toggle .logout-btn {
+    border: none;
+    background-color: var(--color-dark-blue-bp);
+    color: var(--color-white-cream) !important;
+    outline: none;
+}
+
+#my-navbar-toggle>ul>li>a,
+#my-navbar-toggle .logout-btn {
     height: 100%;
     width: 100%;
     padding: 0;
@@ -188,8 +196,10 @@ button.my-navbar-btn>span {
     transition: all 0.2s
 }
 
-#my-navbar-toggle>ul>li>a:hover {
+#my-navbar-toggle>ul>li>a:hover,
+#my-navbar-toggle .logout-btn:hover {
     background-color: var(--color-light-blue-bp);
+    color: var(--color-white-cream);
 }
 
 .my-home-icon {
@@ -199,7 +209,8 @@ button.my-navbar-btn>span {
 }
 
 @media (min-width: 992px) and (max-width: 1080px) {
-    #my-navbar-toggle>ul>li>a {
+    #my-navbar-toggle>ul>li>a,
+    #my-navbar-toggle .logout-btn {
         padding: 0 10px;
         font-size: 1.2rem !important;
     }
@@ -216,7 +227,8 @@ button.my-navbar-btn>span {
     #my-navbar-toggle>ul>li {
         width: unset;
     }
-    #my-navbar-toggle>ul>li>a {
+    #my-navbar-toggle>ul>li>a,
+    #my-navbar-toggle .logout-btn {
         width: 100%;
         font-size: 1.3rem;
     }
@@ -396,6 +408,28 @@ label::before {
     }
 }
 
+.social-logins {
+    margin-top: 20px;
+}
+
+.social-logins h4 {
+    color: var(--color-white-cream);
+}
+
+.social-login-links {
+    display: flex;
+    justify-content: center;
+}
+
+.social-login-links a {
+    margin: 0 10px;
+}
+
+.social-login-links img {
+    width: 40px;
+    height: 40px;
+}
+
 
 /* PROFILE */
 
@@ -458,6 +492,11 @@ section.about-section {
 .about-section button>svg {
     position: relative;
     bottom: 3px;
+    transition: all 0.3s;
+}
+
+.about-section button>svg:hover {
+    transform: scale(1.1);
 }
 
 .favteam-info {
@@ -523,7 +562,7 @@ div.profile-pic {
     width: 340px;
     height: 200px;
     top: calc(50vh - 100px);
-    left: calc(50vw - 170px);
+    left: calc(50vw - 180px);
 }
 
 #update-username-modal .modal-content {
@@ -1070,6 +1109,7 @@ a.geekleagues-page-btn:hover {
 
 .geekleague-seasons {
     justify-content: space-around;
+    margin-bottom: 20px;
 }
 
 .geekleague-seasons h4 {
@@ -1102,4 +1142,109 @@ a.geekleagues-page-btn:hover {
 .geekleague-page h2 button>svg {
     position: relative;
     bottom: 3px;
+    transition: all 0.3s;
+}
+
+.geekleague-page h2 button>svg:hover {
+    transform: scale(1.1)
+}
+
+.my-modal-edit-geekleague {
+    position: fixed;
+    min-height: 350px;
+    width: 340px;
+    top: calc(50vh - 150px);
+    left: calc(50vw - 170px);
+    background: var(--color-purple-rp);
+    border: 3px solid var(--color-white-cream);
+    padding: 10px 20px;
+    border-radius: 10px;
+}
+
+.my-modal-edit-geekleague .my-modal-body {
+    position: relative;
+}
+
+.close-edit-modal {
+    position: absolute;
+    right: -10px;
+    top: -5px;
+    cursor: pointer;
+}
+
+.my-modal-edit-geekleague h5 {
+    color: var(--color-white-cream);
+}
+
+.my-modal-edit-geekleague input {
+    outline: none !important;
+}
+
+.my-modal-edit-geekleague button {
+    border: 2px solid var(--color-white-cream);
+    margin: 10px;
+    line-height: 100%;
+    outline: none;
+}
+
+.my-modal-edit-geekleague button:hover {
+    transform: none;
+    background-color: var(--color-white-cream);
+    color: var(--color-purple-rp);
+}
+
+.my-modal-delete-geekleague {
+    position: fixed;
+    min-height: 200px;
+    width: 340px;
+    top: calc(50vh - 100px);
+    left: calc(50vw - 180px);
+    background: var(--color-white-cream);
+    border: 3px solid var(--color-white-cream);
+    padding: 10px 20px;
+    border-radius: 10px;
+    border: 2px solid var(--color-red-rp);
+}
+
+.my-modal-delete-geekleague h5 {
+    color: var(--color-red-rp);
+}
+
+.close-delete-modal {
+    color: var(--color-dark-blue-bp);
+    position: absolute;
+    right: 10px;
+    top: 5px;
+    cursor: pointer;
+}
+
+.my-modal-delete-geekleague .my-btn {
+    background-color: unset;
+    line-height: 100%;
+    margin-top: 10px;
+    outline: none;
+}
+
+.my-modal-delete-geekleague .delete {
+    color: var(--color-red-rp);
+    border: 2px solid var(--color-red-rp);
+    transform: none;
+}
+
+.my-modal-delete-geekleague .delete:hover {
+    background-color: var(--color-red-rp);
+    color: var(--color-white-cream);
+}
+
+.my-modal-delete-geekleague .return {
+    background-color: var(--color-dark-blue-bp);
+    color: var(--color-white-cream);
+}
+
+@media (max-width: 380px) {
+    .my-modal-edit-geekleague,
+    .my-modal-delete-geekleague {
+        width: 250px;
+        left: calc(50vw - 135px);
+    }
 }

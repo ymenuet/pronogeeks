@@ -130,8 +130,8 @@ const Profile = () => {
                                         <Spin size='large' tip='Chargement des ligues...' style={{ color: 'white', fontSize: '1.2rem' }} indicator={<LoadingOutlined spin style={{ color: 'white', fontSize: '3rem', marginBottom: 8 }} />} />
                                     </Space>
                                 </div>}
-                                {seasonRankingFull && <li className='list-group-item d-flex justify-content-between align-items-center mb-2'><span><b>Tes ligues</b></span>
-                                    <span><b>Ton classement</b></span></li>}
+                                {seasonRankingFull && <li className='list-group-item d-flex justify-content-between align-items-center mb-2'><span><b>Mes ligues</b></span>
+                                    <span><b>Mon classement</b></span></li>}
                                 {seasonRankingFull && user.geekLeagues.map(league => <Link to={`/myGeekLeagues/${league._id}`} key={league._id}>
                                     <li className='list-group-item d-flex justify-content-between align-items-center'>
                                         <span style={{ color: 'rgb(4, 78, 199)' }}>{league.name}</span>

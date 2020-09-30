@@ -27,7 +27,7 @@ const GeekLeagues = () => {
             <Redirect to='/login' />
         ) : (
                     <div className='container'>
-                        <h2>Tes Ligues Geek</h2>
+                        <h2>Mes Ligues Geek</h2>
                         <div className='my-geekleagues row'>
                             {geekLeagues.map(geekLeague => <div key={geekLeague._id} className='col-10 offset-1 col-lg-6 offset-lg-0 geekleague-card-container'>
                                 <div className='geekleague-card'>

@@ -25,7 +25,7 @@ const AppLayout = ({ children }) => {
                         {user ? (
                             <>
                                 <li className="nav-item">
-                                    <Link to='/' className="nav-link" onClick={logoutButton}>Déconnexion</Link>
+                                    <button className="nav-link logout-btn" onClick={logoutButton}>Déconnexion</button>
                                 </li>
                                 <li className="nav-item">
                                     <Link className="nav-link" to='/myGeekLeagues'>Mes ligues Geek</Link>

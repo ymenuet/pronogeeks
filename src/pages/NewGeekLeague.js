@@ -4,12 +4,13 @@ import { Spin, Space, Form, Input, notification, Select } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons'
 import { createLeague } from '../services/geekLeague'
 import { getUsers } from '../services/user'
+import { getProfile } from '../services/auth'
 import { Context } from '../context'
 
 const { Option } = Select
 
 const NewGeekLeague = ({ history }) => {
-    const { user } = useContext(Context)
+    const { user, loginUser } = useContext(Context)
     const [form] = Form.useForm()
     const [users, setUsers] = useState(null)
     const [creating, setCreating] = useState(false)
@@ -30,6 +31,8 @@ const NewGeekLeague = ({ history }) => {
         openNotification('success', `Ligue "${values.name}" créée`)
         history.push(`/myGeekLeagues/${geekLeague._id}`)
         setCreating(false)
+        const user = await getProfile()
+        loginUser(user)
     }
 
     const openNotification = (type, title, message) => {

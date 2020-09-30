@@ -127,6 +127,13 @@ const Signup = ({ history }) => {
                                     <button type='submit' className='btn my-btn submit-btn register-btn' style={{ marginTop: 10 }}>Créer mon compte</button>
                                 </div>
                             </Form>
+                            <div className='social-logins'>
+                                <h4>Se connecter avec :</h4>
+                                <div className='social-login-links'>
+                                    <a href={`${process.env.REACT_APP_BACKENDPOINT}/auth/facebook`}><img src='/images/facebook-logo.png' alt='Facebook' /></a>
+                                    <a href={`${process.env.REACT_APP_BACKENDPOINT}/auth/google`}><img src='/images/google-logo.png' alt='Google' /></a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 )

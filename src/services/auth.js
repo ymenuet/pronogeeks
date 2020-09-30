@@ -19,6 +19,14 @@ export const login = async userData => {
     return getProfile()
 }
 
+export const facebookLogin = async() => {
+    return await authService.get('/facebook')
+}
+
+export const googleLogin = async() => {
+    return await authService.get('/facebook')
+}
+
 export const updateProfile = async(userData) => {
     await authService.put('/edit', userData)
     return getProfile()
