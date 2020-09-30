@@ -34,13 +34,12 @@ const Profile = () => {
 
     const saveUsername = async () => {
         let saved = true
-        setUsernameChanged(true)
         await updateProfile({ username: usernameInput }).catch(err => {
-            setUsernameChanged(false)
             saved = false
             openNotification('warning', 'Attention', err.response.data.message.fr)
         })
         if (saved) {
+            setUsernameChanged(true)
             const user = await getProfile()
             loginUser(user)
             setShowModal(false)
@@ -50,10 +49,11 @@ const Profile = () => {
 
     useEffect(() => {
         setUsernameInput(user?.username)
+        if (user && !user.username) setShowModal(true)
         const getPlayers = async () => {
-            if (user && user.seasons.length > 0) {
-                const seasonID = user?.seasons[user.seasons.length - 1].season._id.toString()
-                setSeasonID(user?.seasons[user.seasons.length - 1].season._id.toString())
+            if (user?.seasons.length > 0) {
+                const seasonID = user.seasons[user.seasons.length - 1].season._id.toString()
+                setSeasonID(user.seasons[user.seasons.length - 1].season._id.toString())
                 const players = await fetchPlayers(seasonID)
                 const rankedPlayers = players.sort((a, b) => {
                     return b.seasons.filter(season => season.season.toString() === seasonID)[0].totalPoints - a.seasons.filter(season => season.season.toString() === seasonID)[0].totalPoints
@@ -66,7 +66,7 @@ const Profile = () => {
             }
         }
         getPlayers()
-    }, [user])
+    }, [user, showModal])
 
     const openNotification = (type, title, message) => {
         notification[type]({
@@ -176,7 +176,8 @@ const Profile = () => {
                         <div className="modal-dialog modal-dialog-centered" role="document">
                             <div className="modal-content">
                                 <div className="modal-header">
-                                    <h5 className="modal-title">Changer de pseudo :</h5>
+                                    {user.username && <h5 className="modal-title">Changer de pseudo :</h5>}
+                                    {!user.username && <h5 className="modal-title">Tu dois choisir un pseudo pour continuer :</h5>}
                                     <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={() => setShowModal(false)}>
                                         <span aria-hidden="true">&times;</span>
                                     </button>

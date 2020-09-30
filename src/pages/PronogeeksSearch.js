@@ -10,7 +10,7 @@ import { useInput } from '../customHooks'
 
 const PronogeeksSearch = ({ match: { params: { seasonID } } }) => {
 
-    const { loginUser, user } = useContext(Context)
+    const { loginUser } = useContext(Context)
 
     const [seasonTeams, setSeasonTeams] = useState(null)
     const [newSeason, setNewSeason] = useState(false)
@@ -95,11 +95,9 @@ const PronogeeksSearch = ({ match: { params: { seasonID } } }) => {
                         <Spin size='large' tip='Chargement de la page...' style={{ color: 'rgb(4, 78, 199)', fontSize: '1.2rem' }} indicator={<LoadingOutlined spin style={{ color: 'rgb(4, 78, 199)', fontSize: '3rem', marginBottom: 8 }} />} />
                     </Space>
                 </div>
-            ) : !user ? (
-                <Redirect to='/login' />
             ) : (
-                                <Redirect to={`/pronogeeks/${seasonID}/matchweek/${matchweek}`} />
-                            )
+                            <Redirect to={`/pronogeeks/${seasonID}/matchweek/${matchweek}`} />
+                        )
         }
     </div>
 }

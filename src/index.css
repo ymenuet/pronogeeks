@@ -354,6 +354,10 @@ button.my-navbar-btn>span {
     padding: 20px 0;
 }
 
+.register-pages h2 {
+    font-family: 'Audiowide';
+}
+
 div.signup-form {
     min-height: calc(100vh - 2*var(--navbar-height) - 30px);
     display: flex;
@@ -747,6 +751,18 @@ ul.season-ranking>li {
     font-family: 'Audiowide';
 }
 
+.pronogeeks-bg h2 svg {
+    position: relative;
+    bottom: 4px;
+    right: 5px;
+    transition: all 0.3s;
+    cursor: pointer;
+}
+
+.pronogeeks-bg h2 svg:hover {
+    transform: scale(1.1);
+}
+
 .previous-next-btns {
     display: flex;
     justify-content: space-between;
@@ -971,15 +987,54 @@ ul.season-ranking>li {
     margin: 0 7px;
 }
 
+.rules-box {
+    background: var(--color-dark-blue-bp);
+    border: 2px solid var(--color-white-cream);
+    color: var(--color-white-cream);
+    height: 400px;
+    width: 500px;
+    position: fixed;
+    top: calc(50vh + var(--navbar-height) / 2 - 200px);
+    left: calc(50vw - 250px);
+    padding: 20px;
+    overflow-y: scroll;
+    z-index: 2;
+}
+
+.rules-box>span {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.rules-box h4 {
+    color: var(--color-white-cream);
+}
+
+.rules-box>ul {
+    text-align: left;
+    padding: 0 40px;
+}
+
 @media (max-width: 576px) {
     .list-fixtures-header div {
         font-size: 1.2rem;
+    }
+    .rules-box {
+        width: 300px;
+        left: calc(50vw - 150px);
     }
 }
 
 @media (max-width: 340px) {
     .prono-input {
         width: 45px;
+    }
+    .rules-box {
+        width: 260px;
+        left: calc(50vw - 130px);
     }
 }
 
@@ -1071,6 +1126,10 @@ img.profile-pic-preview {
 
 .geekleagues-list {
     padding: 5vh 0;
+}
+
+.my-geekleagues {
+    justify-content: space-around;
 }
 
 .my-geekleagues h4 {
@@ -1198,7 +1257,7 @@ a.geekleagues-page-btn:hover {
     min-height: 200px;
     width: 340px;
     top: calc(50vh - 100px);
-    left: calc(50vw - 180px);
+    left: calc(50vw - 170px);
     background: var(--color-white-cream);
     border: 3px solid var(--color-white-cream);
     padding: 10px 20px;
@@ -1245,6 +1304,6 @@ a.geekleagues-page-btn:hover {
     .my-modal-edit-geekleague,
     .my-modal-delete-geekleague {
         width: 250px;
-        left: calc(50vw - 135px);
+        left: calc(50vw - 125px);
     }
 }
