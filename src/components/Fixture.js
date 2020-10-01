@@ -40,7 +40,6 @@ const Fixture = ({ fixtureID }) => {
     }, [fixtureID, user.seasons])
 
     const savePronos = async () => {
-        console.log('ici')
 
         // Error message if someone takes out the "disabled" property of a passed game to change their pronostics
         if (new Date(fixture.date).getTime() - Date.now() < 0) return openNotification('error', 'Erreur', 'Ce match est déjà commencé ou fini. Tu ne peux plus changer ton prono.')

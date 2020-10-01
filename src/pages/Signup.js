@@ -48,7 +48,8 @@ const Signup = ({ history }) => {
         notification[type]({
             message: title,
             description: message,
-            placement: 'bottomRight'
+            placement: 'bottomRight',
+            className: 'notification-box'
         })
     }
 

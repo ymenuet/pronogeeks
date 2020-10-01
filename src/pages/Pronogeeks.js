@@ -17,6 +17,8 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
     const [showRules, setShowRules] = useState(false)
     const [scoresUpdated, setScoresUpdated] = useState(false)
     const [oddsUpdated, setOddsUpdated] = useState(false)
+    const [lastOddsUpdated, setLastOddsUpdated] = useState(null)
+    const [lastScoresUpdated, setLastScoresUpdated] = useState(null)
 
     const { loginUser, user } = useContext(Context)
 
@@ -61,11 +63,19 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
         return true
     }
 
+    const dateTransform = (date) => {
+        date = new Date(date)
+        let month = date.getMonth() < 9 ? `0${date.getMonth() + 1}` : date.getMonth() + 1
+        let minutes = date.getMinutes() <= 9 ? `0${date.getMinutes()}` : date.getMinutes()
+        return `${date.getDate()}/${month}/${date.getFullYear()} à ${date.getHours()}h${minutes}`
+    }
+
     const openNotification = (type, title, message) => {
         notification[type]({
             message: title,
             description: message,
-            placement: 'bottomRight'
+            placement: 'bottomRight',
+            className: 'notification-box'
         })
     }
 
@@ -96,8 +106,9 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
             const fixturesInLessThanOneWeek = (minDate - Date.now()) < 1000 * 60 * 60 * 24 * 7
 
             // Update fixtures results from API-football data if last update happened more than 30minutes ago, first game of matchweek is in less than 1 week and last game of matchweek was over for less than 2 days.
-            const fixtureUpdates = fixtures.map(fixture => new Date(fixture.lastScoreUpdate))
+            const fixtureUpdates = fixtures.map(fixture => new Date(fixture.lastScoreUpdate).getTime())
             const lastUpdate = Math.max(...fixtureUpdates)
+            setLastScoresUpdated(lastUpdate)
 
             const fixturesOverForLessThanTwoDays = (Date.now() - maxDate) < 1000 * 60 * 60 * 24 * 2
             const fixturesUpdatedMoreThanThirtyMinutesAgo = Date.now() - lastUpdate > 1000 * 60 * 30
@@ -105,11 +116,13 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
             if (fixturesInLessThanOneWeek && fixturesOverForLessThanTwoDays && fixturesUpdatedMoreThanThirtyMinutesAgo && !scoresUpdated) {
                 setScoresUpdated(true)
                 fetchStatus()
+                setLastScoresUpdated(Date.now())
             }
 
             // Update fixtures odds from API-football data if last update happened more than a day ago, first game of matchweek is in less than 1 week and last game of matchweek hasn't started yet
-            const fixtureOddsUpdates = fixtures.map(fixture => new Date(fixture.lastOddsUpdate))
+            const fixtureOddsUpdates = fixtures.map(fixture => new Date(fixture.lastOddsUpdate).getTime())
             const lastOddsUpdate = Math.max(...fixtureOddsUpdates)
+            setLastOddsUpdated(lastOddsUpdate)
 
             const allFixturesStarted = Date.now() - maxDate > 0
             const oddsUpdatedMoreThanOneDayAgo = Date.now() - lastOddsUpdate > 1000 * 60 * 60 * 24
@@ -117,6 +130,7 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
             if (fixturesInLessThanOneWeek && !allFixturesStarted && oddsUpdatedMoreThanOneDayAgo && !oddsUpdated) {
                 setOddsUpdated(true)
                 fetchOdds()
+                setLastOddsUpdated(Date.now())
             }
         }
 
@@ -211,12 +225,12 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
                     <h4>Règles des pronogeeks :</h4>
                     <hr />
                     <ul>
-                        <li>Les statuts et résultats des matchs sont actualisés en moyenne toutes les 30 minutes et les points de pronogeeks avec.</li>
-                        <li>Les cotes sont actualisées une fois par jour. Une fois un match commencé, ses cotes ne changent plus.</li>
-                        <li>Il n'est plus possible de changer son pronogeek après le coup d'envoi.</li>
-                        <li>Un pronogeek <b>correct</b> (bon vainqueur ou match nul) rapporte le nombre de points indiqués dans les cotes de la rencontre.</li>
-                        <li>Un pronogeek <b>exact</b> (score exact bien pronogeeké) rapporte le double de la cote correspondante.</li>
-                        <li>Un pronogeek correct sur un match de son <b>équipe de coeur</b> (qu'elle soit gagnante ou perdante) rapporte 30 points bonus.</li>
+                        <li>Les statuts et résultats des matchs sont actualisés en moyenne toutes les 30 minutes (à partir de 7 jours avant le début de la journée) et les points de pronogeeks avec. (dernière mise à jour le {dateTransform(lastScoresUpdated)})</li><br />
+                        <li>Les cotes sont actualisées une fois par jour (à partir de 7 jours avant le début de la journée). Une fois un match commencé, ses cotes ne changent plus. (dernière mise à jour le {dateTransform(lastOddsUpdated)})</li><br />
+                        <li>Il n'est plus possible de changer son pronogeek après le coup d'envoi.</li><br />
+                        <li>Un pronogeek <b>correct</b> (bon vainqueur ou match nul) rapporte le nombre de points indiqués dans les cotes de la rencontre.</li><br />
+                        <li>Un pronogeek <b>exact</b> (score exact bien pronogeeké) rapporte le double de la cote correspondante.</li><br />
+                        <li>Un pronogeek correct sur un match de son <b>équipe de coeur</b> (qu'elle soit gagnante ou perdante) rapporte 30 points bonus.</li><br />
                         <li>Détail des bonus par journée de {season.leagueName} :
                         <ul>
                                 <li>Moins de 5 pronos corrects : 0pt bonus</li>

@@ -18,7 +18,8 @@ const Login = ({ history }) => {
         notification.warning({
             message: "Error",
             description: message,
-            placement: 'bottomRight'
+            placement: 'bottomRight',
+            className: 'notification-box'
         })
     }
 

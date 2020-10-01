@@ -32,7 +32,7 @@ const PronogeeksSearch = ({ match: { params: { seasonID } }, loading }) => {
         const fetchSeason = async (seasonID) => {
             const season = await getSeasonData(seasonID)
             setSeasonTeams(season.rankedTeams)
-            const fixturesToCome = season.fixtures.filter(fixture => (new Date(fixture.date).getTime() - Date.now()) > 0 - 1000 * 60 * 120)
+            const fixturesToCome = season.fixtures.filter(fixture => (new Date(fixture.date).getTime() + 1000 * 60 * 120) > Date.now())
             let nextMatchweek = fixturesToCome[0].matchweek;
             let nextDate = fixturesToCome[0].date
             fixturesToCome.forEach(fixture => nextMatchweek = fixture.matchweek < nextMatchweek && new Date(fixture.date).getTime() < new Date(nextDate).getTime() ? fixture.matchweek : nextMatchweek)
@@ -57,7 +57,8 @@ const PronogeeksSearch = ({ match: { params: { seasonID } }, loading }) => {
         notification[type]({
             message: title,
             description: message,
-            placement: 'bottomRight'
+            placement: 'bottomRight',
+            className: 'notification-box'
         })
     }
 

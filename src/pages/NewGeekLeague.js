@@ -38,7 +38,8 @@ const NewGeekLeague = ({ history, loading }) => {
         notification[type]({
             message: title,
             description: message,
-            placement: 'bottomRight'
+            placement: 'bottomRight',
+            className: 'notification-box'
         })
     }
 

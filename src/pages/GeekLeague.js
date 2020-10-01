@@ -6,6 +6,7 @@ import { getSeasons } from '../services/seasons'
 import { getUsers } from '../services/user'
 import { Spin, Space, Form, Input, Select } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons'
+import { Link } from 'react-router-dom'
 
 const { Option } = Select
 
@@ -107,7 +108,8 @@ const GeekLeague = ({ match: { params: { geekLeagueID } }, history, loading }) =
                     }}>
                         {seasons.map(season => <div key={season._id} className='league-season-ranking-container col-12 col-lg-6'>
                             <div className='league-season-ranking'>
-                                <h4>{season.leagueName} saison {season.year}</h4>
+                                <h4>{season.leagueName} saison {season.year}<br />
+                                Classement général</h4>
                                 <ul className='list-group list-group-flush geekleague-ranking-detail mt-2'>
                                     {geekLeague.geeks.sort((a, b) => {
                                         let result;
@@ -129,6 +131,7 @@ const GeekLeague = ({ match: { params: { geekLeagueID } }, history, loading }) =
                                         </li>)
                                     }
                                 </ul>
+                                <Link to={`/myGeekLeagues/${geekLeagueID}/season/${season._id}`}><button className='btn my-btn see-more-btn'>Détails par journée</button></Link>
                             </div>
                         </div>)}
                     </div>

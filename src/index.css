@@ -496,6 +496,7 @@ section.about-section {
     align-items: flex-start;
     justify-content: space-between;
     box-sizing: border-box;
+    overflow: hidden;
 }
 
 .my-profile-page h2 {
@@ -585,7 +586,7 @@ div.profile-pic {
     width: 340px;
     height: 200px;
     top: calc(50vh - 100px);
-    left: calc(50vw - 180px);
+    left: calc(50vw - 170px);
 }
 
 #update-username-modal .modal-content {
@@ -1319,6 +1320,19 @@ a.geekleagues-page-btn:hover {
     color: var(--color-white-cream);
 }
 
+.league-season-ranking .see-more-btn {
+    background: none;
+    border: 2px solid var(--color-white-cream);
+    color: var(--color-white-cream);
+    line-height: 100%;
+    outline: none;
+}
+
+.league-season-ranking .see-more-btn:hover {
+    background: var(--color-white-cream);
+    color: var(--color-purple-rp);
+}
+
 @media (max-width: 380px) {
     .my-modal-edit-geekleague,
     .my-modal-delete-geekleague {
@@ -1326,3 +1340,24 @@ a.geekleagues-page-btn:hover {
         left: calc(50vw - 125px);
     }
 }
+
+
+/* GEEKLEAGUE DETAIL MATCHWEEK */
+
+.ranking-geekleague-matchweek {
+    padding: 20px;
+    background-color: rgba(156, 0, 99, 0.8);
+    border-radius: 10px;
+}
+
+.ranking-geekleague-matchweek h4 {
+    color: var(--color-white-cream) !important;
+    font-family: 'Audiowide';
+    margin: 0 10px;
+}
+
+
+/* .previous-next-btns.geekleague-btns button {
+    background-color: var(--color-dark-purple-bp);
+    border-color: rgb(74, 4, 92);
+} */
