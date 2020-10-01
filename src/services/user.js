@@ -18,6 +18,15 @@ export const getUsers = async() => {
     return users
 }
 
+export const getUser = async(userID) => {
+    const {
+        data: {
+            user
+        }
+    } = await userService.get(`/geek/${userID}`)
+    return user
+}
+
 export const updateProfileWithSeason = async seasonID => {
     const {
         data: {

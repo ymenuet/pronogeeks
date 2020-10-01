@@ -81,6 +81,14 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
 
     useEffect(() => {
 
+        const setPoints = user => {
+            const seasonUser = user.seasons.filter(seas => seas.season._id.toString() === seasonID.toString())[0]
+            const matchweekUser = seasonUser.matchweeks.filter(matchweek => matchweek.number.toString() === matchweekNumber.toString())[0]
+            setMatchweekPoints(matchweekUser.totalPoints)
+            setMatchweekBonus(matchweekUser.bonusPoints)
+            setMatchweekCorrects(matchweekUser.numberCorrects)
+        }
+
         const fetchStatus = async () => {
             const { fixtures } = await updateFixturesStatus(seasonID, matchweekNumber)
             setFixtures(null)
@@ -99,7 +107,7 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
             }
         }
 
-        if (fixtures && (user.role === 'SUPER GEEK' || user.role === 'GEEK ADMIN')) {
+        if (fixtures && user && (user.role === 'SUPER GEEK' || user.role === 'GEEK ADMIN')) {
             const fixtureDates = fixtures.map(fixture => new Date(fixture.date).getTime())
             const minDate = Math.min(...fixtureDates)
             const maxDate = Math.max(...fixtureDates)
@@ -134,9 +142,18 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
             }
         }
 
-    }, [fixtures, scoresUpdated, oddsUpdated, matchweekNumber, seasonID])
+    }, [fixtures, scoresUpdated, oddsUpdated, matchweekNumber, seasonID, user])
 
     useEffect(() => {
+
+        const setPoints = user => {
+            const seasonUser = user.seasons.filter(seas => seas.season._id.toString() === seasonID.toString())[0]
+            const matchweekUser = seasonUser.matchweeks.filter(matchweek => matchweek.number.toString() === matchweekNumber.toString())[0]
+            setMatchweekPoints(matchweekUser.totalPoints)
+            setMatchweekBonus(matchweekUser.bonusPoints)
+            setMatchweekCorrects(matchweekUser.numberCorrects)
+        }
+
         const updateProfile = async (season, matchweek) => {
             await updateProfileWithSeason(season)
             await updateProfileWithMatchweek(season, matchweek)

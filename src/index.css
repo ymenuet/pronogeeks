@@ -1355,3 +1355,13 @@ a.geekleagues-page-btn:hover {
     font-family: 'Audiowide';
     margin: 0 10px;
 }
+
+
+/* PRONOGEEKS OTHER */
+
+h4.not-accessible {
+    color: var(--color-light-blue-gb);
+    font-family: 'Audiowide';
+    margin-right: 20px;
+    margin-left: 20px;
+}
