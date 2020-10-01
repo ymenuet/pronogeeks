@@ -35,7 +35,6 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
         if (data.message) return openNotification('warning', 'Actualisation abortée', data.message.fr)
         else {
             setFixtures(null)
-            console.log(data)
             setFixtures(data.fixtures)
             openNotification('success', 'Scores actualisés')
             const user = await getProfile()
@@ -107,7 +106,7 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
             }
         }
 
-        if (fixtures && user && (user.role === 'SUPER GEEK' || user.role === 'GEEK ADMIN')) {
+        if (fixtures && user) {
             const fixtureDates = fixtures.map(fixture => new Date(fixture.date).getTime())
             const minDate = Math.min(...fixtureDates)
             const maxDate = Math.max(...fixtureDates)
@@ -121,7 +120,7 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
             const fixturesOverForLessThanTwoDays = (Date.now() - maxDate) < 1000 * 60 * 60 * 24 * 2
             const fixturesUpdatedMoreThanThirtyMinutesAgo = Date.now() - lastUpdate > 1000 * 60 * 30
 
-            if (fixturesInLessThanOneWeek && fixturesOverForLessThanTwoDays && fixturesUpdatedMoreThanThirtyMinutesAgo && !scoresUpdated) {
+            if (fixturesInLessThanOneWeek && fixturesOverForLessThanTwoDays && fixturesUpdatedMoreThanThirtyMinutesAgo && !scoresUpdated && (user.role === 'SUPER GEEK' || user.role === 'GEEK ADMIN')) {
                 setScoresUpdated(true)
                 fetchStatus()
                 setLastScoresUpdated(Date.now())
@@ -135,7 +134,7 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
             const allFixturesStarted = Date.now() - maxDate > 0
             const oddsUpdatedMoreThanOneDayAgo = Date.now() - lastOddsUpdate > 1000 * 60 * 60 * 24
 
-            if (fixturesInLessThanOneWeek && !allFixturesStarted && oddsUpdatedMoreThanOneDayAgo && !oddsUpdated) {
+            if (fixturesInLessThanOneWeek && !allFixturesStarted && oddsUpdatedMoreThanOneDayAgo && !oddsUpdated && (user.role === 'SUPER GEEK' || user.role === 'GEEK ADMIN')) {
                 setOddsUpdated(true)
                 fetchOdds()
                 setLastOddsUpdated(Date.now())
