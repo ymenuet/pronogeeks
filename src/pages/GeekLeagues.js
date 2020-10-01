@@ -4,7 +4,7 @@ import { getUserLeagues } from '../services/geekLeague'
 import { Spin, Space } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons'
 
-const GeekLeagues = () => {
+const GeekLeagues = ({ loading }) => {
     const [geekLeagues, setGeekLeagues] = useState(null)
 
     useEffect(() => {
@@ -16,7 +16,7 @@ const GeekLeagues = () => {
     }, [])
 
     return <div className='geekleague-bg geekleagues-list'>
-        {!geekLeagues ? (<div className='loader-container'>
+        {!geekLeagues || loading ? (<div className='loader-container'>
             <Space size='large'>
                 <Spin size='large' tip='Chargement de la page...' style={{ color: 'white', fontSize: '1.2rem' }} indicator={<LoadingOutlined spin style={{ color: 'white', fontSize: '3rem', marginBottom: 8 }} />} />
             </Space>

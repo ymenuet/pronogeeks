@@ -8,7 +8,7 @@ import { LoadingOutlined } from '@ant-design/icons'
 import { Context } from '../context'
 import { useInput } from '../customHooks'
 
-const PronogeeksSearch = ({ match: { params: { seasonID } } }) => {
+const PronogeeksSearch = ({ match: { params: { seasonID } }, loading }) => {
 
     const { loginUser } = useContext(Context)
 
@@ -62,42 +62,41 @@ const PronogeeksSearch = ({ match: { params: { seasonID } } }) => {
     }
 
     return <div className='pronogeeks-bg'>
-        {
-            !seasonTeams ? (
-                <div className='loader-container'>
-                    <Space size='large'>
-                        <Spin size='large' tip='Chargement de la page...' style={{ color: 'rgb(4, 78, 199)', fontSize: '1.2rem' }} indicator={<LoadingOutlined spin style={{ color: 'rgb(4, 78, 199)', fontSize: '3rem', marginBottom: 8 }} />} />
-                    </Space>
-                </div>
-            ) : newSeason ? (
-                <div className='loader-container'>
-                    <div className='choose-favteam'>
-                        <label htmlFor="favteam-select">Choisis une équipe de coeur pour cette saison.
+        {!seasonTeams || loading ? (
+            <div className='loader-container'>
+                <Space size='large'>
+                    <Spin size='large' tip='Chargement de la page...' style={{ color: 'rgb(4, 78, 199)', fontSize: '1.2rem' }} indicator={<LoadingOutlined spin style={{ color: 'rgb(4, 78, 199)', fontSize: '3rem', marginBottom: 8 }} />} />
+                </Space>
+            </div>
+        ) : newSeason ? (
+            <div className='loader-container'>
+                <div className='choose-favteam'>
+                    <label htmlFor="favteam-select">Choisis une équipe de coeur pour cette saison.
                             <br />
                             NB : Chaque bon prono sur un match de ton équipe de coeur te rapporte un bonus de 30 pts.
                             <br />
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="rgb(253, 0, 7)" width="24px" height="24px"><path d="M0 0h24v24H0V0z" fill="none" /><path d="M12 5.99L19.53 19H4.47L12 5.99M12 2L1 21h22L12 2zm1 14h-2v2h2v-2zm0-6h-2v4h2v-4z" /></svg> Réfléchis bien, tu ne pourras plus changer ensuite...
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="rgb(253, 0, 7)" width="24px" height="24px"><path d="M0 0h24v24H0V0z" fill="none" /><path d="M12 5.99L19.53 19H4.47L12 5.99M12 2L1 21h22L12 2zm1 14h-2v2h2v-2zm0-6h-2v4h2v-4z" /></svg> Réfléchis bien, tu ne pourras plus changer ensuite...
                         </label>
-                        <br />
-                        <select name="favTeam" id="favteam-select" {...favTeam} >
-                            <option value="" disabled>Sélectionner une équipe</option>
-                            {seasonTeams.map(team =>
-                                <option key={team._id} value={team._id}>{team.name}</option>
-                            )}
-                        </select>
-                        <br />
-                        <button className='btn my-btn save-favteam-btn' onClick={saveFavTeam}>Confirmer</button>
-                    </div>
+                    <br />
+                    <select name="favTeam" id="favteam-select" {...favTeam} >
+                        <option value="" disabled>Sélectionner une équipe</option>
+                        {seasonTeams.map(team =>
+                            <option key={team._id} value={team._id}>{team.name}</option>
+                        )}
+                    </select>
+                    <br />
+                    <button className='btn my-btn save-favteam-btn' onClick={saveFavTeam}>Confirmer</button>
                 </div>
-            ) : !matchweek ? (
-                <div className='loader-container'>
-                    <Space size='large'>
-                        <Spin size='large' tip='Chargement de la page...' style={{ color: 'rgb(4, 78, 199)', fontSize: '1.2rem' }} indicator={<LoadingOutlined spin style={{ color: 'rgb(4, 78, 199)', fontSize: '3rem', marginBottom: 8 }} />} />
-                    </Space>
-                </div>
-            ) : (
-                            <Redirect to={`/pronogeeks/${seasonID}/matchweek/${matchweek}`} />
-                        )
+            </div>
+        ) : !matchweek ? (
+            <div className='loader-container'>
+                <Space size='large'>
+                    <Spin size='large' tip='Chargement de la page...' style={{ color: 'rgb(4, 78, 199)', fontSize: '1.2rem' }} indicator={<LoadingOutlined spin style={{ color: 'rgb(4, 78, 199)', fontSize: '3rem', marginBottom: 8 }} />} />
+                </Space>
+            </div>
+        ) : (
+                        <Redirect to={`/pronogeeks/${seasonID}/matchweek/${matchweek}`} />
+                    )
         }
     </div>
 }

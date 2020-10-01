@@ -13,7 +13,7 @@ const router = () => {
                 <Route component={Home} path='/' exact />
                 <Route component={Signup} path='/signup' />
                 <Route component={Login} path='/login' />
-                <Route component={Profile} path='/profile' exact />
+                <PrivateRoute component={Profile} path='/profile' exact />
                 <PrivateRoute component={PronogeeksSearch} path='/pronogeeks/:seasonID' exact />
                 <PrivateRoute component={Pronogeeks} path='/pronogeeks/:seasonID/matchweek/:matchweekNumber' />
                 <PrivateRoute component={GeekLeagues} path='/myGeekleagues' exact />

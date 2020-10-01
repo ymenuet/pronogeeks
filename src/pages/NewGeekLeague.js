@@ -8,7 +8,7 @@ import { Context } from '../context'
 
 const { Option } = Select
 
-const NewGeekLeague = ({ history }) => {
+const NewGeekLeague = ({ history, loading }) => {
     const { user, loginUser } = useContext(Context)
     const [form] = Form.useForm()
     const [users, setUsers] = useState(null)
@@ -43,7 +43,7 @@ const NewGeekLeague = ({ history }) => {
     }
 
     return <div className='geekleague-bg'>
-        {!users || creating ? (
+        {!users || creating || loading ? (
             <div className='loader-container'>
                 <Space size='large'>
                     <Spin size='large' tip='Chargement de la page...' style={{ color: 'white', fontSize: '1.2rem' }} indicator={<LoadingOutlined spin style={{ color: 'white', fontSize: '3rem', marginBottom: 8 }} />} />

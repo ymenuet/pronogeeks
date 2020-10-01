@@ -23,6 +23,13 @@ const Home = () => {
                             <Link className='btn my-btn login-btn' to='/login'>Se connecter</Link>
                             <Link className='btn my-btn signup-btn' to='/signup'>Créer un compte</Link>
                         </div>
+                        <div className='social-logins'>
+                            <h4>Se connecter avec :</h4>
+                            <div className='social-login-links'>
+                                <a href={`${process.env.REACT_APP_BACKENDPOINT}/auth/facebook`}><img src='/images/facebook-logo.png' alt='Facebook' /></a>
+                                <a href={`${process.env.REACT_APP_BACKENDPOINT}/auth/google`}><img src='/images/google-logo.png' alt='Google' /></a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

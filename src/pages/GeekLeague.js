@@ -9,7 +9,7 @@ import { LoadingOutlined } from '@ant-design/icons'
 
 const { Option } = Select
 
-const GeekLeague = ({ match: { params: { geekLeagueID } }, history }) => {
+const GeekLeague = ({ match: { params: { geekLeagueID } }, history, loading }) => {
     const { user, loginUser } = useContext(Context)
     const [geekLeague, setGeekLeague] = useState(null)
     const [seasons, setSeasons] = useState(null)
@@ -77,7 +77,7 @@ const GeekLeague = ({ match: { params: { geekLeagueID } }, history }) => {
     }
 
     return <div className='geekleague-bg geekleague-details'>
-        {!geekLeague || !seasons ? (
+        {!geekLeague || !seasons || loading ? (
             <div className='loader-container'>
                 <Space size='large'>
                     <Spin size='large' tip='Chargement de la page...' style={{ color: 'white', fontSize: '1.2rem' }} indicator={<LoadingOutlined spin style={{ color: 'white', fontSize: '3rem', marginBottom: 8 }} />} />

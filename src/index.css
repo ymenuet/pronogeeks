@@ -279,14 +279,14 @@ button.my-navbar-btn>span {
 }
 
 .home-div {
-    padding: 80px 0;
+    padding: 50px 0;
     color: var(--color-white-cream);
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-evenly;
-    min-height: calc(100vh - 2*var(--navbar-height) - 30px);
+    min-height: calc(100vh - var(--navbar-height));
 }
 
 .home-div h2 {
@@ -294,6 +294,10 @@ button.my-navbar-btn>span {
     font-size: 4rem;
     font-family: 'Audiowide';
     /* text-shadow: 4px 4px 8px var(--color-dark-blue-bp); */
+}
+
+.home-div button {
+    margin-top: 20px;
 }
 
 .home-div p {
@@ -308,6 +312,18 @@ button.my-navbar-btn>span {
 
 .logo-homepage {
     width: 600px;
+}
+
+.home-div .social-logins {
+    background: rgba(240, 247, 244, 0.8);
+    border-radius: 10px;
+    padding: 15px;
+    margin-top: 30px;
+}
+
+.home-div .social-logins h4 {
+    color: var(--color-dark-blue-bp) !important;
+    font-family: 'Audiowide';
 }
 
 @media (max-width: 768px) {
@@ -326,6 +342,9 @@ button.my-navbar-btn>span {
     .my-content-homepage {
         padding-right: 10px;
         padding-left: 10px;
+    }
+    .home-div .social-logins h4 {
+        font-size: 1.2rem;
     }
 }
 
