@@ -49,7 +49,6 @@ const Profile = ({ loading }) => {
 
     useEffect(() => {
         setUsernameInput(user?.username)
-        if (user && !user.username) setShowModal(true)
         const getPlayers = async () => {
             if (user?.seasons.length > 0) {
                 const seasonID = user.seasons[user.seasons.length - 1].season._id.toString()
@@ -66,7 +65,7 @@ const Profile = ({ loading }) => {
             }
         }
         getPlayers()
-    }, [user, showModal])
+    }, [user])
 
     const openNotification = (type, title, message) => {
         notification[type]({
