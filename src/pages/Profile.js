@@ -1,16 +1,17 @@
 import React, { useContext, useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { updateProfile, getProfile, updatePhoto } from '../services/auth'
-import { fetchPlayers } from '../services/user'
+import { fetchPlayers, deleteUserAccount } from '../services/user'
 import axios from 'axios'
 import { Spin, Space, notification } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons'
 import { Context } from '../context'
 
-const Profile = ({ loading }) => {
-    const { user, loginUser } = useContext(Context)
+const Profile = ({ loading, history }) => {
+    const { user, loginUser, logoutUser } = useContext(Context)
     const [photoLoading, setPhotoLoading] = useState(false)
     const [showModal, setShowModal] = useState(false)
+    const [deleteAccount, setDeleteAccount] = useState(false)
     const [usernameInput, setUsernameInput] = useState('')
     const [usernameChanged, setUsernameChanged] = useState(false)
     const [seasonID, setSeasonID] = useState(null)
@@ -45,6 +46,13 @@ const Profile = ({ loading }) => {
             setShowModal(false)
             setUsernameChanged(false)
         }
+    }
+
+    const removeAccount = async () => {
+        const userID = user._id
+        logoutUser()
+        history.push('/')
+        await deleteUserAccount(userID)
     }
 
     useEffect(() => {
@@ -169,13 +177,15 @@ const Profile = ({ loading }) => {
                             )}
                         </ul>
                     </>}
+                    <div className='delete-account'>
+                        <button onClick={() => setDeleteAccount(!deleteAccount)} className='btn my-btn delete-account-btn'>Supprimer compte</button>
+                    </div>
                 </section>}
                 {showModal && <div id="update-username-modal" tabIndex="-1" role="dialog" aria-labelledby="update-username-modal-title" aria-hidden="true">
                     <div className="modal-dialog modal-dialog-centered" role="document">
                         <div className="modal-content">
                             <div className="modal-header">
-                                {user.username && <h5 className="modal-title">Changer de pseudo :</h5>}
-                                {!user.username && <h5 className="modal-title">Tu dois choisir un pseudo pour continuer :</h5>}
+                                <h5 className="modal-title">Changer de pseudo :</h5>
                                 <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={() => setShowModal(false)}>
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -187,6 +197,25 @@ const Profile = ({ loading }) => {
                             <div className="modal-footer">
                                 <button type="button" className="my-btn close" onClick={() => setShowModal(false)}>Fermer</button>
                                 <button type="button" className=" my-btn save" onClick={saveUsername}>Enregistrer</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>}
+                {deleteAccount && <div id="delete-account-modal" tabIndex="-1" role="dialog" aria-labelledby="delete-account-modal-title" aria-hidden="true">
+                    <div className="modal-dialog modal-dialog-centered" role="document">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title">Supprimer mon compte</h5>
+                                <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={() => setDeleteAccount(false)}>
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div className="modal-body">
+                                <p><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="rgb(253, 0, 7)" width="24px" height="24px"><path d="M0 0h24v24H0V0z" fill="none" /><path d="M12 5.99L19.53 19H4.47L12 5.99M12 2L1 21h22L12 2zm1 14h-2v2h2v-2zm0-6h-2v4h2v-4z" /></svg> Es-tu sûr de vouloir supprimer ton compte ? Toutes tes données seront perdues...</p>
+                            </div>
+                            <div className="modal-footer">
+                                <button type="button" className="my-btn close-delete" onClick={() => setDeleteAccount(false)}>Annuler</button>
+                                <button type="button" className=" my-btn delete-account-btn" onClick={removeAccount}>Supprimer</button>
                             </div>
                         </div>
                     </div>

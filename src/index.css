@@ -580,13 +580,39 @@ div.profile-pic {
     padding-left: 5px;
 }
 
-#update-username-modal {
+#update-username-modal,
+#delete-account-modal {
     position: fixed;
     z-index: 2;
     width: 340px;
     height: 200px;
     top: calc(50vh - 100px);
     left: calc(50vw - 170px);
+}
+
+#delete-account-modal h5,
+#delete-account-modal p {
+    color: var(--color-red-rp);
+}
+
+#delete-account-modal .my-btn {
+    margin: 10px;
+    outline: none;
+}
+
+#delete-account-modal .delete-account-btn {
+    color: var(--color-red-rp);
+}
+
+#delete-account-modal .delete-account-btn:hover {
+    color: var(--color-white-cream);
+}
+
+#delete-account-modal .close-delete {
+    color: var(--color-white-cream);
+    background-color: var(--color-dark-blue-bp);
+    border: 2px solid var(--color-dark-blue-bp);
+    line-height: 100%;
 }
 
 #update-username-modal .modal-content {
@@ -676,6 +702,20 @@ ul.season-ranking>li {
     height: 20px;
     line-height: 100%;
     padding-top: 4px;
+}
+
+.delete-account-btn {
+    background-color: unset;
+    border: 2px solid var(--color-red-rp);
+    color: var(--color-red-rp);
+    line-height: 100%;
+    margin-bottom: 10px;
+}
+
+.delete-account-btn:hover {
+    transform: none;
+    background-color: var(--color-red-rp);
+    color: var(--color-white-cream);
 }
 
 @media (max-width: 340px) {

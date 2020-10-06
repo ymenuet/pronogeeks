@@ -58,3 +58,8 @@ export const fetchPlayers = async(seasonID) => {
     } = await userService.get(`/players/${seasonID}`)
     return users
 }
+
+export const deleteUserAccount = async userID => {
+    await userService.get(`/delete/${userID}`)
+    return true
+}
