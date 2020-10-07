@@ -60,6 +60,6 @@ export const fetchPlayers = async(seasonID) => {
 }
 
 export const deleteUserAccount = async userID => {
-    await userService.get(`/delete/${userID}`)
+    await userService.delete(`/${userID}`)
     return true
 }
