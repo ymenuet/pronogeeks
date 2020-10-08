@@ -19,6 +19,7 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
     const [oddsUpdated, setOddsUpdated] = useState(false)
     const [lastOddsUpdated, setLastOddsUpdated] = useState(null)
     const [lastScoresUpdated, setLastScoresUpdated] = useState(null)
+    const [saveAll, setSaveAll] = useState(false)
 
     const { loginUser, user } = useContext(Context)
 
@@ -175,6 +176,14 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
 
     }, [matchweekNumber, seasonID])
 
+    const saveAllPronos = () => {
+        const fixtureDates = fixtures.map(fixture => new Date(fixture.date).getTime())
+        const maxDate = Math.max(...fixtureDates)
+        if (maxDate < Date.now()) return openNotification('warning', 'Pronos terminés pour cette journée.')
+        setSaveAll(true)
+        setTimeout(() => setSaveAll(false), 1000)
+    }
+
     const previousPage = () => {
         setFixtures(null)
         history.push(`/pronogeeks/${seasonID}/matchweek/${parseInt(matchweekNumber) - 1}`)
@@ -195,6 +204,16 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
         </div>
     ) : (
             <div className='pronogeeks-bg matchweek-page'>
+                <div className='save-all'>
+                    <button onClick={saveAllPronos} className='btn my-btn save-all-btn'>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="40px" height="40px"><path d="M0 0h24v24H0z" fill="none" /><path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z" /></svg>
+                        &nbsp;
+                        <span>Enregistrer tout</span>
+                    </button>
+                    <div className='save-all-info'>
+                        <p>Enregistrer tous les pronos de la journée.</p>
+                    </div>
+                </div>
                 {user.role === 'GEEK ADMIN' && <div>
                     <button className='btn my-btn admin-btn top' onClick={getStatus}>Actualiser les scores</button>
                     <button className='btn my-btn admin-btn top' onClick={getOdds}>Actualiser les cotes</button>
@@ -222,7 +241,7 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
                     </div>
                     {fixtures.map(fixture => (
                         <li className="list-group-item" key={fixture._id} style={{ background: 'none' }}>
-                            <Fixture fixtureID={fixture._id} />
+                            <Fixture fixtureID={fixture._id} saveAll={saveAll} />
                         </li>
                     ))}
                     <div className='previous-next-btns'>

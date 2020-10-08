@@ -4,7 +4,7 @@ import { savePronogeeks } from '../services/pronogeeks'
 import { Skeleton, notification } from 'antd'
 import { Context } from '../context'
 
-const Fixture = ({ fixtureID }) => {
+const Fixture = ({ fixtureID, saveAll }) => {
     const [fixture, setFixture] = useState(null)
     const [pronogeek, setPronogeek] = useState(null)
     const [matchStarted, setMatchStarted] = useState(false)
@@ -39,7 +39,7 @@ const Fixture = ({ fixtureID }) => {
         fetchFixturesAndOdds(fixtureID)
     }, [fixtureID, user.seasons])
 
-    const savePronos = async () => {
+    const savePronos = async (bool = true, time = 4500) => {
 
         // Error message if someone takes out the "disabled" property of a passed game to change their pronostics
         if (new Date(fixture.date).getTime() - Date.now() < 0) return openNotification('error', 'Erreur', 'Ce match est déjà commencé ou fini. Tu ne peux plus changer ton prono.')
@@ -53,11 +53,15 @@ const Fixture = ({ fixtureID }) => {
             error = true
         })
         if (!error) {
-            openNotification('success', 'Enregistré', `Pronogeek enregistré pour ${fixture.homeTeam.name} - ${fixture.awayTeam.name}`)
+            if (bool) openNotification('success', 'Enregistré', `Pronogeek enregistré pour ${fixture.homeTeam.name} - ${fixture.awayTeam.name}`)
             setSaveSuccess(true)
-            setTimeout(() => setSaveSuccess(false), 3000)
+            setTimeout(() => setSaveSuccess(false), time)
         }
     }
+
+    useEffect(() => {
+        if (saveAll && (new Date(fixture.date).getTime() - Date.now() > 0) && (homeScore || parseInt(homeScore) === 0) && (awayScore || parseInt(awayScore) === 0)) savePronos(false, 10000)
+    }, [saveAll])
 
     const openNotification = (type, title, message) => {
         notification[type]({
@@ -168,13 +172,13 @@ const Fixture = ({ fixtureID }) => {
                 </table>
                 {pronogeek.points > 0 && pronogeek.bonusFavTeam && (
                     <div className='points-cell'>
-                        Tu as scoré <i>{pronogeek.points}pts</i> {pronogeek.exact && `(${pronogeek.potentialPoints}*2)`}<br />
-                        dont 30 pts bonus pour ton équipe de <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill=" rgb(253, 0, 7)" width="24px" height="24px"><path d="M0 0h24v24H0z" fill="none" /><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" /></svg>
+                        Tu as scoré <i>{pronogeek.points}pts</i> {pronogeek.exact && `(${(pronogeek.points - 30) / 2}*2)`}<br />
+                        dont 30pts bonus pour ton équipe de <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill=" rgb(253, 0, 7)" width="24px" height="24px"><path d="M0 0h24v24H0z" fill="none" /><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" /></svg>
                     </div>
                 )}
                 {pronogeek.points > 0 && !pronogeek.bonusFavTeam && (
                     <div className='points-cell'>
-                        Tu as scoré <i>{pronogeek.points}pts</i> {pronogeek.exact && `(${pronogeek.potentialPoints}*2)`}
+                        Tu as scoré <i>{pronogeek.points}pts</i> {pronogeek.exact && `(${pronogeek.points / 2}*2)`}
                     </div>
                 )}
                 {pronogeek.points === 0 && pronogeek.addedToProfile && (

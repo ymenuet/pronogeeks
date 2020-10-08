@@ -772,6 +772,7 @@ ul.season-ranking>li {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    padding-bottom: 50px;
 }
 
 .choose-favteam {
@@ -812,6 +813,95 @@ ul.season-ranking>li {
     background-color: var(--color-dark-blue-bp);
     color: var(--color-white-cream);
     transform: none;
+}
+
+.save-all {
+    position: fixed;
+    top: calc(var(--navbar-height) + 20px);
+    right: 20px;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.save-all-btn {
+    font-size: 1rem;
+    background-color: var(--color-dark-blue-bp);
+    margin: 0;
+    padding: 0;
+    width: 68px;
+    height: 68px;
+    border-radius: 50%;
+    outline: none;
+}
+
+.save-all-btn:hover {
+    transform: none;
+    background-color: var(--color-light-blue-bp);
+}
+
+.save-all-btn svg {
+    position: relative;
+    bottom: 2px;
+    left: 2px;
+}
+
+.save-all-btn span {
+    display: none;
+    font-size: 1.2rem;
+}
+
+.save-all-info {
+    display: none;
+    width: 160px;
+    margin-top: 10px;
+    background-color: var(--color-white-cream);
+    padding: 10px 5px;
+    border-radius: 5px;
+}
+
+.save-all-btn:hover+.save-all-info {
+    display: block;
+}
+
+.save-all-info p {
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .save-all {
+        width: 100vw;
+        bottom: 0;
+        top: unset;
+        right: unset;
+        height: 60px;
+    }
+    .save-all-btn {
+        height: 100%;
+        width: 100%;
+        border-radius: 0;
+        background: var(--color-dark-blue-bp);
+        transition: background 0.8s;
+    }
+    .save-all-btn:hover {
+        background: var(--color-dark-blue-bp) radial-gradient(circle, transparent 1%, var(--color-light-blue-bp) 1%) center/15000%;
+    }
+    .save-all-btn:active {
+        background-color: var(--color-dark-blue-bp);
+        background-size: 100%;
+        transition: background 0s;
+    }
+    .save-all-btn span {
+        display: inline;
+        transition: all 0.3s;
+    }
+    .save-all-btn svg {
+        transition: all 0.3s;
+    }
+    .save-all-btn:hover+.save-all-info {
+        display: none;
+    }
 }
 
 .pronogeeks-bg h2 {
