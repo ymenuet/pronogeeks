@@ -8,4 +8,4 @@ Pronogeeks is an app where you can make pronostics on French football league (Li
 
 #### Developed by: [Yvan Menuet](https://github.com/ymenuet)
 
-[Back-end repo](https://github.com/ymenuet/pronogeeks-server)
+This is the front-end repo. To see the server repo, follow [this link](https://github.com/ymenuet/pronogeeks-server)
