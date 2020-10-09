@@ -302,7 +302,6 @@ button.my-navbar-btn>span {
     color: var(--color-dark-blue-bp) !important;
     font-size: 4rem;
     font-family: 'Audiowide';
-    /* text-shadow: 4px 4px 8px var(--color-dark-blue-bp); */
 }
 
 .home-div button {
@@ -394,6 +393,11 @@ div.signup-form {
     border-radius: 10px;
     width: 100%;
     padding: 20px 10px;
+}
+
+.signup-form h3 {
+    font-family: 'Audiowide';
+    color: var(--color-white-cream)
 }
 
 .ant-form-item-explain>div {
