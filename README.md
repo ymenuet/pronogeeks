@@ -4,8 +4,8 @@
 ### Deployed application: https://pronogeeks.herokuapp.com/
 
 #### What is Pronogeeks?
-Pronogeeks is an app where you can make pronostics on French football league (Ligue 1), competing with friends and the whole community of geeks.<br>
+Pronogeeks is an app where you can make pronostics on French football league (Ligue 1), competing against friends and the whole community of geeks.<br>
 
-#### Developed by: Yvan Menuet (https://github.com/ymenuet)
+#### Developed by: [Yvan Menuet](https://github.com/ymenuet)
 
-[Back-end repo](https://github.com/ymenuet/pronogeeks-server)
+This is the **front-end repo**. To see the server repo, follow [this link](https://github.com/ymenuet/pronogeeks-server).
