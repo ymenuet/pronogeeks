@@ -15,7 +15,7 @@ const Signup = ({ history }) => {
 
     const onFinish = async (values) => {
         const emailCorrect = (/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@(([[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/).test(String(values.email).toLowerCase())
-        if (!emailCorrect) openNotification(`Je crois qu'il y a une faute de frappe dans ton email...`)
+        if (!emailCorrect) openNotification('warning', 'Attention', `Je crois qu'il y a une faute de frappe dans ton email...`)
         else {
             setSignupDone(true)
             let photoUrl = null
@@ -24,7 +24,7 @@ const Signup = ({ history }) => {
                 photoUrl = secure_url
             }
             await signup({ ...values, photo: photoUrl }).catch(err => {
-                openNotification(err.response.data.message.fr)
+                openNotification('error', 'Erreur', err.response.data.message.fr)
             })
             history.push('/login')
             setSignupDone(false)
@@ -33,6 +33,7 @@ const Signup = ({ history }) => {
 
     const uploadPhoto = e => {
         if (e.target.files.length > 0) {
+            console.log('TEST')
             const file = e.target.files[0]
             if (file.size > 1000000) return openNotification('warning', 'Attention', 'La taille du fichier ne peux pas excéder 1Mo.')
             if (file.type !== 'image/jpeg' && file.type !== 'image/png' && file.type !== 'image/jpg') return openNotification('warning', 'Attention', 'La photo doit être au format JPG ou PNG.')
