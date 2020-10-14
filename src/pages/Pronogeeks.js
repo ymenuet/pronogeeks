@@ -3,9 +3,8 @@ import { getMatchweekFixtures, getSeasonData } from '../services/seasons'
 import { updateProfileWithMatchweek, updateProfileWithSeason } from '../services/user'
 import { updateFixturesStatus, updateOdds } from '../services/apiFootball'
 import { getProfile } from '../services/auth'
-import { Fixture } from '../components'
-import { Spin, Space, notification } from 'antd'
-import { LoadingOutlined } from '@ant-design/icons'
+import { Fixture, Loader } from '../components'
+import { notification } from 'antd'
 import { Context } from '../context'
 
 const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history, loading }) => {
@@ -196,11 +195,7 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
 
     return !fixtures || !season || loading ? (
         <div className='pronogeeks-bg'>
-            <div className='loader-container'>
-                <Space size='large'>
-                    <Spin size='large' tip='Chargement de la page...' style={{ color: 'rgb(4, 78, 199)', fontSize: '1.2rem' }} indicator={<LoadingOutlined spin style={{ color: 'rgb(4, 78, 199)', fontSize: '3rem', marginBottom: 8 }} />} />
-                </Space>
-            </div>
+            <Loader color='rgb(4, 78, 199)' />
         </div>
     ) : (
             <div className='pronogeeks-bg matchweek-page'>

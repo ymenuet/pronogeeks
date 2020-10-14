@@ -2,8 +2,7 @@ import React, { useState, useEffect, useContext } from 'react'
 import { Context } from '../context'
 import { getSeasonData } from '../services/seasons'
 import { fetchLeague, fetchMatchweekRanking } from '../services/geekLeague'
-import { Space, Spin } from 'antd'
-import { LoadingOutlined } from '@ant-design/icons'
+import { Loader } from '../components'
 import { Link } from 'react-router-dom'
 
 const GeekLeagueDetail = ({ match: { params: { geekLeagueID, seasonID } }, loading }) => {
@@ -64,11 +63,7 @@ const GeekLeagueDetail = ({ match: { params: { geekLeagueID, seasonID } }, loadi
 
     return <div className='geekleague-bg geekleague-details'>
         {loading || !geekLeague || !matchweek || !season || !ranking || !lastMatchweek ? (
-            <div className='loader-container'>
-                <Space size='large'>
-                    <Spin size='large' tip='Chargement de la page...' style={{ color: 'white', fontSize: '1.2rem' }} indicator={<LoadingOutlined spin style={{ color: 'white', fontSize: '3rem', marginBottom: 8 }} />} />
-                </Space>
-            </div>
+            <Loader />
         ) : (
                 <div className='container'>
                     <div className='row'>

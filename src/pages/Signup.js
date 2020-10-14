@@ -1,10 +1,10 @@
 import React, { useState, useContext } from 'react'
 import { Redirect } from 'react-router-dom'
-import { Spin, Space, Form, Input, notification } from 'antd'
+import { Form, Input, notification } from 'antd'
 import { signup } from '../services/auth'
-import { LoadingOutlined } from '@ant-design/icons'
 import axios from 'axios'
 import { Context } from '../context'
+import { Loader } from '../components'
 
 const Signup = ({ confirm = false }) => {
     const { user } = useContext(Context)
@@ -60,11 +60,7 @@ const Signup = ({ confirm = false }) => {
 
     return <div className='register-pages'>
         {signupDone ? (
-            <div className='loader-container'>
-                <Space size='large'>
-                    <Spin size='large' tip='Enregistrement du compte...' style={{ color: ' rgb(4, 78, 199)', fontSize: '1.2rem' }} indicator={<LoadingOutlined spin style={{ color: ' rgb(4, 78, 199)', fontSize: '3rem', marginBottom: 8 }} />} />
-                </Space>
-            </div>
+            <Loader tip='Enregistrement du compte...' color='rgb(4, 78, 199)' />
         ) : confirmWait ? (
             <div className='row signup-form'>
                 <div className='col-10 offset-1 col-sm-8 offset-sm-2 col-xl-6 offset-xl-3'>

@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { getUserLeagues } from '../services/geekLeague'
-import { Spin, Space } from 'antd'
-import { LoadingOutlined } from '@ant-design/icons'
+import { Loader } from '../components'
 
 const GeekLeagues = ({ loading }) => {
     const [geekLeagues, setGeekLeagues] = useState(null)
@@ -16,11 +15,8 @@ const GeekLeagues = ({ loading }) => {
     }, [])
 
     return <div className='geekleague-bg geekleagues-list'>
-        {!geekLeagues || loading ? (<div className='loader-container'>
-            <Space size='large'>
-                <Spin size='large' tip='Chargement de la page...' style={{ color: 'white', fontSize: '1.2rem' }} indicator={<LoadingOutlined spin style={{ color: 'white', fontSize: '3rem', marginBottom: 8 }} />} />
-            </Space>
-        </div>
+        {!geekLeagues || loading ? (
+            <Loader />
         ) : (
                 <div className='container'>
                     <h2>Mes Ligues Geek</h2>

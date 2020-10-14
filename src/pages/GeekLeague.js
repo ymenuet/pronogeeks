@@ -4,8 +4,8 @@ import { fetchLeague, editGeekLeague, deleteGeekLeague, outGeekLeague } from '..
 import { getProfile } from '../services/auth'
 import { getSeasons } from '../services/seasons'
 import { getUsers } from '../services/user'
-import { Spin, Space, Form, Input, Select } from 'antd'
-import { LoadingOutlined } from '@ant-design/icons'
+import { Loader } from '../components'
+import { Form, Input, Select } from 'antd'
 import { Link } from 'react-router-dom'
 
 const { Option } = Select
@@ -79,11 +79,7 @@ const GeekLeague = ({ match: { params: { geekLeagueID } }, history, loading }) =
 
     return <div className='geekleague-bg geekleague-details'>
         {!geekLeague || !seasons || loading ? (
-            <div className='loader-container'>
-                <Space size='large'>
-                    <Spin size='large' tip='Chargement de la page...' style={{ color: 'white', fontSize: '1.2rem' }} indicator={<LoadingOutlined spin style={{ color: 'white', fontSize: '3rem', marginBottom: 8 }} />} />
-                </Space>
-            </div>
+            <Loader />
         ) : (
                 <div className='geekleague-page container'>
                     <h2>Ligue "{geekLeague.name}"

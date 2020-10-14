@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { updateProfile, getProfile, updatePhoto } from '../services/auth'
 import { fetchPlayers, deleteUserAccount } from '../services/user'
 import axios from 'axios'
+import { Loader } from '../components'
 import { Spin, Space, notification } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons'
 import { Context } from '../context'
@@ -90,11 +91,7 @@ const Profile = ({ loading, history }) => {
     }
 
     return usernameChanged || loading ? (<div className='my-profile-page'>
-        <div className='loader-container'>
-            <Space size='large'>
-                <Spin size='large' tip='Chargement de la page...' style={{ color: 'white', fontSize: '1.2rem' }} indicator={<LoadingOutlined spin style={{ color: 'white', fontSize: '3rem', marginBottom: 8 }} />} />
-            </Space>
-        </div>
+        <Loader />
     </div>
     ) : (
             <div className='my-profile-page row'>

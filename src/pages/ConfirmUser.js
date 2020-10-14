@@ -5,6 +5,7 @@ import { getProfile } from '../services/auth'
 import { Spin, Space, notification } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons'
 import { Context } from '../context'
+import { Loader } from '../components'
 
 const ConfirmUser = ({ match: { params: { userID } } }) => {
     const { user, loginUser } = useContext(Context)
@@ -49,11 +50,9 @@ const ConfirmUser = ({ match: { params: { userID } } }) => {
 
     return <div className='my-content-homepage' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
 
-        {!username ? <div className='loader-container'>
-            <Space size='large'>
-                <Spin size='large' tip='Enregistrement du compte...' style={{ color: ' rgb(4, 78, 199)', fontSize: '1.2rem' }} indicator={<LoadingOutlined spin style={{ color: ' rgb(4, 78, 199)', fontSize: '3rem', marginBottom: 8 }} />} />
-            </Space>
-        </div> : error ?
+        {!username ? (
+            <Loader tip='Enregistrement du compte...' color='rgb(4, 78, 199)' />
+        ) : error ?
                 <Redirect to='/' />
                 : <div style={{ padding: 30, background: 'rgba(4, 78, 199, 0.8)', borderRadius: 10, width: '80%' }}>
                     <h4 style={{ color: 'white' }}>Merci {username}, ton email est confirmé !<br />

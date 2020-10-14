@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useContext } from 'react'
-import { Spin, Space, Form, Input, notification, Select } from 'antd'
-import { LoadingOutlined } from '@ant-design/icons'
+import { Form, Input, notification, Select } from 'antd'
 import { createLeague } from '../services/geekLeague'
 import { getUsers } from '../services/user'
 import { getProfile } from '../services/auth'
 import { Context } from '../context'
+import { Loader } from '../components'
 
 const { Option } = Select
 
@@ -45,11 +45,7 @@ const NewGeekLeague = ({ history, loading }) => {
 
     return <div className='geekleague-bg'>
         {!users || creating || loading ? (
-            <div className='loader-container'>
-                <Space size='large'>
-                    <Spin size='large' tip='Chargement de la page...' style={{ color: 'white', fontSize: '1.2rem' }} indicator={<LoadingOutlined spin style={{ color: 'white', fontSize: '3rem', marginBottom: 8 }} />} />
-                </Space>
-            </div>
+            <Loader />
         ) : (
                 <div className='geekleague-form'>
                     <div className='col-10 offset-1 col-sm-8 offset-sm-2 col-xl-6 offset-xl-3'>

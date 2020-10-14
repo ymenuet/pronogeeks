@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { getMatchweekFixtures, getSeasonData } from '../services/seasons'
 import { getUser } from '../services/user'
-import { FixtureOther } from '../components'
-import { Spin, Space } from 'antd'
-import { LoadingOutlined } from '@ant-design/icons'
+import { FixtureOther, Loader } from '../components'
 
 const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID, geekID } }, history, loading }) => {
     const [season, setSeason] = useState(null)
@@ -74,11 +72,7 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID, geekID } }, 
 
     return !fixtures || !season || loading || !user ? (
         <div className='pronogeeks-bg'>
-            <div className='loader-container'>
-                <Space size='large'>
-                    <Spin size='large' tip='Chargement de la page...' style={{ color: 'rgb(4, 78, 199)', fontSize: '1.2rem' }} indicator={<LoadingOutlined spin style={{ color: 'rgb(4, 78, 199)', fontSize: '3rem', marginBottom: 8 }} />} />
-                </Space>
-            </div>
+            <Loader color='rgb(4, 78, 199)' />
         </div>
     ) : !matchweekStarted || noPronogeeks ? (
         <div className='pronogeeks-bg matchweek-page'>

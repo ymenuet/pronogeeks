@@ -7,6 +7,7 @@ import { Space, Spin, notification } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons'
 import { Context } from '../context'
 import { useInput } from '../customHooks'
+import { Loader } from '../components'
 
 const PronogeeksSearch = ({ match: { params: { seasonID } }, loading }) => {
 
@@ -64,11 +65,7 @@ const PronogeeksSearch = ({ match: { params: { seasonID } }, loading }) => {
 
     return <div className='pronogeeks-bg'>
         {!seasonTeams || loading ? (
-            <div className='loader-container'>
-                <Space size='large'>
-                    <Spin size='large' tip='Chargement de la page...' style={{ color: 'rgb(4, 78, 199)', fontSize: '1.2rem' }} indicator={<LoadingOutlined spin style={{ color: 'rgb(4, 78, 199)', fontSize: '3rem', marginBottom: 8 }} />} />
-                </Space>
-            </div>
+            <Loader color='rgb(4, 78, 199)' />
         ) : newSeason ? (
             <div className='loader-container'>
                 <div className='choose-favteam'>
