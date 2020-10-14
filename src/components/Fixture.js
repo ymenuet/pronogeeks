@@ -66,7 +66,7 @@ const Fixture = ({ fixtureID, saveAll }) => {
 
     useEffect(() => {
         if (saveAll && (new Date(fixture.date).getTime() - Date.now() > 0) && (homeScore || parseInt(homeScore) === 0) && (awayScore || parseInt(awayScore) === 0)) savePronos(false, 10000)
-    }, [saveAll])
+    }, [saveAll, awayScore, homeScore, fixture])
 
     const openNotification = (type, title, message) => {
         notification[type]({

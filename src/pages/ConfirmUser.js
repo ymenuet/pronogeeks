@@ -2,8 +2,7 @@ import React, { useState, useEffect, useContext } from 'react'
 import { Link, Redirect } from 'react-router-dom'
 import { getUser, confirmEmail } from '../services/user'
 import { getProfile } from '../services/auth'
-import { Spin, Space, notification } from 'antd'
-import { LoadingOutlined } from '@ant-design/icons'
+import { notification } from 'antd'
 import { Context } from '../context'
 import { Loader } from '../components'
 
@@ -37,7 +36,7 @@ const ConfirmUser = ({ match: { params: { userID } } }) => {
             openNotification('error', 'Erreur', 'Il y a eu une erreur lors de la confirmation de ton email. Merci de réessayer.')
             setError(true)
         }
-    }, [userID, user])
+    }, [userID, user, updated])
 
     const openNotification = (type, title, message) => {
         notification[type]({
