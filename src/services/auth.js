@@ -52,3 +52,17 @@ export const logout = async() => {
     } = await authService.get('/logout')
     return data
 }
+
+export const changePwd = async(email) => {
+    await authService.put(`/reset-pwd`, {
+        email
+    })
+    return true
+}
+
+export const updatePwd = async(userID, renewToken, password) => {
+    await authService.put(`/new-pwd/${userID}/${renewToken}`, {
+        password
+    })
+    return true
+}

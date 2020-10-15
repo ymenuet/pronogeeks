@@ -1,4 +1,5 @@
 import React, { useContext } from 'react'
+import { Link } from 'react-router-dom'
 import { Form, Input, notification } from 'antd'
 import { login } from '../services/auth'
 import { Context } from '../context'
@@ -64,9 +65,12 @@ const Login = ({ history }) => {
                             <Input.Password style={{ borderRadius: 15.8 }} placeholder='********' />
                         </Form.Item>
 
-                        <div style={{ display: 'flex', justifyContent: 'center' }}>
+                        <div style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
                             <button type='submit' className='btn register-btn my-btn submit-btn'>Me connecter</button>
+                            <p className='reset-pwd'>Tu as encore oublié ton mot de passe ?<br />
+                            Clique <Link to='/reset-pwd'>ici</Link> pour le renouveler.</p>
                         </div>
+
                     </Form>
                     <div className='social-logins'>
                         <h4>Se connecter avec :</h4>
@@ -74,6 +78,11 @@ const Login = ({ history }) => {
                             <a href={`${process.env.REACT_APP_BACKENDPOINT}/auth/facebook`}><img src='/images/facebook-logo.png' alt='Facebook' /></a>
                             <a href={`${process.env.REACT_APP_BACKENDPOINT}/auth/google`}><img src='/images/google-logo.png' alt='Google' /></a>
                         </div>
+                    </div>
+
+                    <div style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', marginTop: 20 }}>
+                        <p className='reset-pwd'>Tu n'as pas de compte ?<br />
+                            Crées-en un <Link to='/signup'>ici</Link>.</p>
                     </div>
                 </div>
             </div>

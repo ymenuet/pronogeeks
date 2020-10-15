@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react'
-import { Redirect } from 'react-router-dom'
+import { Redirect, Link } from 'react-router-dom'
 import { Form, Input, notification } from 'antd'
 import { signup } from '../services/auth'
 import axios from 'axios'
@@ -26,7 +26,6 @@ const Signup = ({ confirm = false }) => {
             }
             let error = false
             await signup({ ...values, photo: photoUrl }).catch(err => {
-                console.log(err.info)
                 openNotification('error', 'Erreur', err.response.data.message.fr)
                 error = true
             })
@@ -141,6 +140,10 @@ const Signup = ({ confirm = false }) => {
                                         <a href={`${process.env.REACT_APP_BACKENDPOINT}/auth/facebook`}><img src='/images/facebook-logo.png' alt='Facebook' /></a>
                                         <a href={`${process.env.REACT_APP_BACKENDPOINT}/auth/google`}><img src='/images/google-logo.png' alt='Google' /></a>
                                     </div>
+                                </div>
+                                <div style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', marginTop: 20 }}>
+                                    <p className='reset-pwd'>Tu as déjà un compte ?<br />
+                            Connecte-toi <Link to='/login'>ici</Link>.</p>
                                 </div>
                             </div>
                         </div>
