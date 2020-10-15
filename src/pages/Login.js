@@ -81,8 +81,7 @@ const Login = ({ history }) => {
                     </div>
 
                     <div style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', marginTop: 20 }}>
-                        <p className='reset-pwd'>Tu n'as pas de compte ?<br />
-                            Crées-en un <Link to='/signup'>ici</Link>.</p>
+                        <p className='reset-pwd'>Ou crée un compte <Link to='/signup'>ici</Link>.</p>
                     </div>
                 </div>
             </div>
