@@ -22,14 +22,14 @@ const ResetPwd = ({ history }) => {
 
     const onFinish = async ({ email }) => {
         setLoading(true)
-        const emailSent = await changePwd(email)
+        const emailSent = await changePwd(email).catch(err => {
+            openNotification('warning', 'Attention', err.response.data.message.fr)
+            setLoading(false)
+        })
         if (emailSent) {
             openNotification('success', 'Email envoyé', 'Un email a été envoyé à ton adresse mail pour renouveler ton mot de passe.')
             history.push('/login')
             setLoading(false)
-        } else {
-            setLoading(false)
-            openNotification('error', 'Un problème est survenu...', 'Essaye encore.')
         }
     }
 
