@@ -1,10 +1,11 @@
 import React, { useEffect, useState, useContext } from 'react'
-import { Form, Input, notification, Select } from 'antd'
+import { Form, Input, Select } from 'antd'
 import { createLeague } from '../services/geekLeague'
 import { getUsers } from '../services/user'
 import { getProfile } from '../services/auth'
 import { Context } from '../context'
 import { Loader } from '../components'
+import { openNotification } from '../helpers'
 
 const { Option } = Select
 
@@ -32,15 +33,6 @@ const NewGeekLeague = ({ history, loading }) => {
         setCreating(false)
         const user = await getProfile()
         loginUser(user)
-    }
-
-    const openNotification = (type, title, message) => {
-        notification[type]({
-            message: title,
-            description: message,
-            placement: 'bottomRight',
-            className: 'notification-box'
-        })
     }
 
     return <div className='geekleague-bg'>

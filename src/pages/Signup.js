@@ -1,10 +1,11 @@
 import React, { useState, useContext } from 'react'
 import { Redirect, Link } from 'react-router-dom'
-import { Form, Input, notification } from 'antd'
+import { Form, Input } from 'antd'
 import { signup } from '../services/auth'
 import axios from 'axios'
 import { Context } from '../context'
 import { Loader } from '../components'
+import { openNotification } from '../helpers'
 
 const Signup = ({ confirm = false }) => {
     const { user } = useContext(Context)
@@ -46,15 +47,6 @@ const Signup = ({ confirm = false }) => {
             data.append('upload_preset', 'pronogeeks')
             setPhoto(data)
         }
-    }
-
-    const openNotification = (type, title, message) => {
-        notification[type]({
-            message: title,
-            description: message,
-            placement: 'bottomRight',
-            className: 'notification-box'
-        })
     }
 
     return <div className='register-pages'>

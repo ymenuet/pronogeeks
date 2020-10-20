@@ -4,9 +4,10 @@ import { updateProfile, getProfile, updatePhoto } from '../services/auth'
 import { fetchPlayers, deleteUserAccount } from '../services/user'
 import axios from 'axios'
 import { Loader } from '../components'
-import { Spin, Space, notification } from 'antd'
+import { Spin, Space } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons'
 import { Context } from '../context'
+import { openNotification } from '../helpers'
 
 const Profile = ({ loading, history }) => {
     const { user, loginUser, logoutUser } = useContext(Context)
@@ -75,15 +76,6 @@ const Profile = ({ loading, history }) => {
         }
         getPlayers()
     }, [user])
-
-    const openNotification = (type, title, message) => {
-        notification[type]({
-            message: title,
-            description: message,
-            placement: 'bottomRight',
-            className: 'notification-box'
-        })
-    }
 
     const setRank = (num) => {
         if (parseInt(num) === 1) return '1er(e)'

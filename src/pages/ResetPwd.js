@@ -1,24 +1,16 @@
 import React, { useContext, useState } from 'react'
 import { Redirect } from 'react-router-dom'
-import { Form, Input, notification } from 'antd'
+import { Form, Input } from 'antd'
 import { changePwd } from '../services/auth'
 import { Context } from '../context'
 import { Loader } from '../components'
+import { openNotification } from '../helpers'
 
 const ResetPwd = ({ history }) => {
 
     const { user } = useContext(Context)
     const [loading, setLoading] = useState(false)
     const [form] = Form.useForm()
-
-    const openNotification = (type, title, message) => {
-        notification[type]({
-            message: title,
-            description: message,
-            placement: 'bottomRight',
-            className: 'notification-box'
-        })
-    }
 
     const onFinish = async ({ email }) => {
         setLoading(true)

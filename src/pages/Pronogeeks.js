@@ -4,7 +4,7 @@ import { updateProfileWithMatchweek, updateProfileWithSeason } from '../services
 import { updateFixturesStatus, updateOdds } from '../services/apiFootball'
 import { getProfile } from '../services/auth'
 import { Fixture, Loader } from '../components'
-import { notification } from 'antd'
+import { openNotification } from '../helpers'
 import { Context } from '../context'
 
 const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history, loading }) => {
@@ -67,15 +67,6 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
         let month = date.getMonth() < 9 ? `0${date.getMonth() + 1}` : date.getMonth() + 1
         let minutes = date.getMinutes() <= 9 ? `0${date.getMinutes()}` : date.getMinutes()
         return `${date.getDate()}/${month}/${date.getFullYear()} à ${date.getHours()}h${minutes}`
-    }
-
-    const openNotification = (type, title, message) => {
-        notification[type]({
-            message: title,
-            description: message,
-            placement: 'bottomRight',
-            className: 'notification-box'
-        })
     }
 
     useEffect(() => {
@@ -256,7 +247,7 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
                     <hr />
                     <ul>
                         <li>Les statuts et résultats des matchs sont actualisés en moyenne toutes les 30 minutes (à partir de 7 jours avant le début de la journée) et les points de pronogeeks avec. (dernière mise à jour le {dateTransform(lastScoresUpdated)})</li><br />
-                        <li>Les cotes sont actualisées une fois par jour (à partir de 7 jours avant le début de la journée). Une fois un match commencé, ses cotes ne changent plus. (dernière mise à jour le {dateTransform(lastOddsUpdated)})</li><br />
+                        <li>Les cotes sont actualisées une fois par jour (à partir de 7 jours avant le début de la journée). À partir de 30 minutes avant le début d'un match, ses cotes ne changent plus. (dernière mise à jour le {dateTransform(lastOddsUpdated)})</li><br />
                         <li>Il n'est plus possible de changer son pronogeek après le coup d'envoi.</li><br />
                         <li>Un pronogeek <b>correct</b> (bon vainqueur ou match nul) rapporte le nombre de points indiqués dans les cotes de la rencontre.</li><br />
                         <li>Un pronogeek <b>exact</b> (score exact bien pronogeeké) rapporte le double de la cote correspondante.</li><br />

@@ -1,27 +1,19 @@
 import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
-import { Form, Input, notification } from 'antd'
+import { Form, Input } from 'antd'
 import { login } from '../services/auth'
 import { Context } from '../context'
 import { Redirect } from 'react-router-dom'
+import { openNotification } from '../helpers'
 
 const Login = ({ history }) => {
     const [form] = Form.useForm()
     const { loginUser, user } = useContext(Context)
 
     const onFinish = async (values) => {
-        const user = await login(values).catch(err => openNotification(err.response.data.message))
+        const user = await login(values).catch(err => openNotification('error', 'Erreur', err.response.data.message))
         loginUser(user)
         history.push('/profile')
-    }
-
-    const openNotification = message => {
-        notification.warning({
-            message: "Error",
-            description: message,
-            placement: 'bottomRight',
-            className: 'notification-box'
-        })
     }
 
     return user ? <Redirect to='/profile' /> : (

@@ -3,11 +3,12 @@ import { Redirect } from 'react-router-dom'
 import { getSeasonData } from '../services/seasons'
 import { updateProfileWithSeason, updateFavTeam } from '../services/user'
 import { getProfile } from '../services/auth'
-import { Space, Spin, notification } from 'antd'
+import { Space, Spin } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons'
 import { Context } from '../context'
 import { useInput } from '../customHooks'
 import { Loader } from '../components'
+import { openNotification } from '../helpers'
 
 const PronogeeksSearch = ({ match: { params: { seasonID } }, loading }) => {
 
@@ -52,15 +53,6 @@ const PronogeeksSearch = ({ match: { params: { seasonID } }, loading }) => {
             loginUser(user)
             setNewSeason(false)
         }
-    }
-
-    const openNotification = (type, title, message) => {
-        notification[type]({
-            message: title,
-            description: message,
-            placement: 'bottomRight',
-            className: 'notification-box'
-        })
     }
 
     return <div className='pronogeeks-bg'>

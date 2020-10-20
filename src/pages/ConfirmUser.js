@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react'
 import { Link, Redirect } from 'react-router-dom'
 import { getUser, confirmEmail } from '../services/user'
 import { getProfile } from '../services/auth'
-import { notification } from 'antd'
+import { openNotification } from '../helpers'
 import { Context } from '../context'
 import { Loader } from '../components'
 
@@ -37,15 +37,6 @@ const ConfirmUser = ({ match: { params: { userID } } }) => {
             setError(true)
         }
     }, [userID, user, updated])
-
-    const openNotification = (type, title, message) => {
-        notification[type]({
-            message: title,
-            description: message,
-            placement: 'bottomRight',
-            className: 'notification-box'
-        })
-    }
 
     return <div className='my-content-homepage' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
 

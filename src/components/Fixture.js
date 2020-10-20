@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { getFixture } from '../services/fixtures'
 import { savePronogeeks } from '../services/pronogeeks'
-import { Skeleton, notification } from 'antd'
+import { Skeleton } from 'antd'
 import { Context } from '../context'
+import { openNotification } from '../helpers'
 import Loader from './Loader'
+
 
 const Fixture = ({ fixtureID, saveAll }) => {
     const [fixture, setFixture] = useState(null)
@@ -43,6 +45,8 @@ const Fixture = ({ fixtureID, saveAll }) => {
 
     const savePronos = async (bool = true, time = 4500) => {
 
+        setSaveSuccess(false)
+
         // Error message if someone takes out the "disabled" property of a passed game to change their pronostics
         if (new Date(fixture.date).getTime() - Date.now() < 0) return openNotification('error', 'Erreur', 'Ce match est déjà commencé ou fini. Tu ne peux plus changer ton prono.')
 
@@ -67,15 +71,6 @@ const Fixture = ({ fixtureID, saveAll }) => {
     useEffect(() => {
         if (saveAll && (new Date(fixture.date).getTime() - Date.now() > 0) && (homeScore || parseInt(homeScore) === 0) && (awayScore || parseInt(awayScore) === 0)) savePronos(false, 10000)
     }, [saveAll, awayScore, homeScore, fixture])
-
-    const openNotification = (type, title, message) => {
-        notification[type]({
-            message: title,
-            description: message,
-            placement: 'bottomRight',
-            className: 'notification-box'
-        })
-    }
 
     const dateTransform = (date) => {
         date = new Date(date)
