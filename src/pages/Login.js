@@ -72,10 +72,11 @@ const Login = ({ history }) => {
                         </div>
                     </div>
 
-                    <div style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', marginTop: 20 }}>
+                    <div style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', marginTop: 20, marginBottom: 20 }}>
                         <p className='reset-pwd'>Ou crée un compte <Link to='/signup'>ici</Link>.</p>
                     </div>
                 </div>
+                <Link to='/privacy-policy' className='privacy-policy-link'>Politique de confidentialité</Link>
             </div>
         </div>
     )

@@ -308,7 +308,7 @@ button.my-navbar-btn>span {
     margin-top: 20px;
 }
 
-.home-div p {
+.home-div .home-message {
     font-size: 1.29rem;
     color: var(--color-white-cream);
     background-color: var(--color-light-blue-gb);
@@ -334,6 +334,21 @@ button.my-navbar-btn>span {
     font-family: 'Audiowide';
 }
 
+.privacy-policy-link {
+    padding: 10px 20px;
+    color: var(--color-white-cream);
+    margin-top: 20px;
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    font-size: 0.8rem;
+}
+
+.privacy-policy-link:hover {
+    color: var(--color-white-cream);
+    text-decoration: underline;
+}
+
 @media (max-width: 768px) {
     .home-div {
         padding: 30px 0;
@@ -353,6 +368,44 @@ button.my-navbar-btn>span {
     }
     .home-div .social-logins h4 {
         font-size: 1.2rem;
+    }
+}
+
+
+/* PRIVACY POLICY */
+
+.home-message.privacy-policy {
+    max-width: unset;
+}
+
+.privacy-policy {
+    background-color: rgba(2, 88, 211, 0.8)!important;
+}
+
+.privacy-policy h2 {
+    color: var(--color-white-cream)!important;
+    font-size: 2.4rem;
+    margin-top: 20px;
+}
+
+.privacy-policy h4 {
+    color: var(--color-white-cream)!important;
+    font-style: italic;
+}
+
+.privacy-policy section {
+    text-align: left;
+    margin: 30px 0;
+}
+
+.privacy-policy section p,
+.privacy-policy section li {
+    font-size: 1rem;
+}
+
+@media (max-width:400px) {
+    .privacy-policy h2 {
+        font-size: 1.5rem;
     }
 }
 
@@ -393,6 +446,7 @@ div.signup-form {
     border-radius: 10px;
     width: 100%;
     padding: 20px 10px;
+    position: relative;
 }
 
 .signup-form h3 {
@@ -464,6 +518,11 @@ label::before {
 .social-login-links img {
     width: 40px;
     height: 40px;
+    transition: all 0.3s;
+}
+
+.social-login-links img:hover {
+    transform: scale(1.1);
 }
 
 .reset-pwd {

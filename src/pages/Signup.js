@@ -133,11 +133,12 @@ const Signup = ({ confirm = false }) => {
                                         <a href={`${process.env.REACT_APP_BACKENDPOINT}/auth/google`}><img src='/images/google-logo.png' alt='Google' /></a>
                                     </div>
                                 </div>
-                                <div style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', marginTop: 20 }}>
+                                <div style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', marginTop: 20, marginBottom: 20 }}>
                                     <p className='reset-pwd'>Tu as déjà un compte ?<br />
                             Connecte-toi <Link to='/login'>ici</Link>.</p>
                                 </div>
                             </div>
+                            <Link to='/privacy-policy' className='privacy-policy-link'>Politique de confidentialité</Link>
                         </div>
                     )
         }
