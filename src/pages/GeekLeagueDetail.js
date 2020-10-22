@@ -94,7 +94,7 @@ const GeekLeagueDetail = ({ match: { params: { geekLeagueID, seasonID } }, loadi
                     </div>
                 </div>
             )}
-    </div >
+    </div>
 }
 
 export default GeekLeagueDetail
