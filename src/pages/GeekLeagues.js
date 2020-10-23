@@ -24,7 +24,7 @@ const GeekLeagues = ({ loading }) => {
                         {geekLeagues.map(geekLeague => <div key={geekLeague._id} className='col-10 col-lg-6 geekleague-card-container'>
                             <div className='geekleague-card'>
                                 <h4>{geekLeague.name}</h4>
-                                <h6>Créée par {geekLeague.creator.username} en {new Date(geekLeague.createdAt).getMonth().length > 1 ? new Date(geekLeague.createdAt).getMonth() : `0${new Date(geekLeague.createdAt).getMonth()}`}/{new Date(geekLeague.createdAt).getFullYear()}</h6>
+                                <h6>Créée par {geekLeague.creator.username} en {`${new Date(geekLeague.createdAt).getMonth() + 1}`.length > 1 ? `${new Date(geekLeague.createdAt).getMonth() + 1}` : `0${new Date(geekLeague.createdAt).getMonth() + 1}`}/{new Date(geekLeague.createdAt).getFullYear()}</h6>
                                 <Link to={`/myGeekLeagues/${geekLeague._id}`} className='btn my-btn new-league geekleagues-page-btn'>Voir le détail</Link>
                             </div>
                         </div>
