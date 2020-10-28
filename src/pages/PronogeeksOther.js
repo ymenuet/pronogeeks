@@ -118,7 +118,7 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID, geekID } }, 
                         </div>
                         {fixtures.map(fixture => (
                             <li className="list-group-item" key={fixture._id} style={{ background: 'none' }}>
-                                <FixtureOther fixtureID={fixture._id} geekID={geekID} />
+                                <FixtureOther fixtureID={fixture._id} user={user} />
                             </li>
                         ))}
                         <div className='previous-next-btns'>

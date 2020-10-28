@@ -142,34 +142,36 @@ const Profile = ({ loading, history }) => {
                         </ul>}
                     </section>
                 </div>
-                {seasonID && <section className='my-profile-ranking col-10 offset-1 col-lg-4 offset-lg-2'>
-                    {!seasonRanking && <div className='pt-4'>
-                        <Space size='large'>
-                            <Spin size='large' tip='Chargement du classement...' style={{ color: 'white', fontSize: '1.2rem' }} indicator={<LoadingOutlined spin style={{ color: 'white', fontSize: '3rem', marginBottom: 8 }} />} />
-                        </Space>
-                    </div>}
-                    {seasonRanking && <>
-                        <h2>{user.seasons[user.seasons.length - 1].season.leagueName} saison {user.seasons[user.seasons.length - 1].season.year}
-                            <br />
+                <div className='col-10 offset-1 col-lg-4 offset-lg-2' style={{ paddingLeft: 0, paddingRight: 0 }}>
+                    {seasonID && <section className='my-profile-ranking pt-4'>
+                        {!seasonRanking && <div>
+                            <Space size='large'>
+                                <Spin size='large' tip='Chargement du classement...' style={{ color: 'white', fontSize: '1.2rem' }} indicator={<LoadingOutlined spin style={{ color: 'white', fontSize: '3rem', marginBottom: 8 }} />} />
+                            </Space>
+                        </div>}
+                        {seasonRanking && <>
+                            <h2 style={{ marginTop: 0 }}>{user.seasons[user.seasons.length - 1].season.leagueName} saison {user.seasons[user.seasons.length - 1].season.year}
+                                <br />
                     Classement général
                     </h2>
-                        <ul className='list-group list-group-flush season-ranking'>
-                            <li className='list-group-item d-flex justify-content-between align-items-center mb-2'>
-                                <span><b>{setRank(userRanking)} : {user.username}</b></span>
-                                <span className='badge badge-success badge-pill my-badge'>{user.seasons[user.seasons.length - 1].totalPoints} pts</span>
-                            </li>
-                            {seasonRanking.map((player, index) => <li key={player._id} className='list-group-item d-flex justify-content-between align-items-center'>
-                                {player._id === user._id && <span><b>{setRank(index + 1)} : {player.username}</b></span>}
-                                {player._id !== user._id && <span>{setRank(index + 1)} : {player.username}</span>}
-                                <span className='badge badge-success badge-pill my-badge'>{player.seasons.filter(seas => seas.season.toString() === seasonID.toString())[0].totalPoints} pts</span></li>
+                            <ul className='list-group list-group-flush season-ranking'>
+                                <li className='list-group-item d-flex justify-content-between align-items-center mb-2'>
+                                    <span><b>{setRank(userRanking)} : {user.username}</b></span>
+                                    <span className='badge badge-success badge-pill my-badge'>{user.seasons[user.seasons.length - 1].totalPoints} pts</span>
+                                </li>
+                                {seasonRanking.map((player, index) => <li key={player._id} className='list-group-item d-flex justify-content-between align-items-center'>
+                                    {player._id === user._id && <span><b>{setRank(index + 1)} : {player.username}</b></span>}
+                                    {player._id !== user._id && <span>{setRank(index + 1)} : {player.username}</span>}
+                                    <span className='badge badge-success badge-pill my-badge'>{player.seasons.filter(seas => seas.season.toString() === seasonID.toString())[0].totalPoints} pts</span></li>
 
-                            )}
-                        </ul>
-                    </>}
+                                )}
+                            </ul>
+                        </>}
+                    </section>}
                     <div className='delete-account'>
                         <button onClick={() => setDeleteAccount(!deleteAccount)} className='btn my-btn delete-account-btn'>Supprimer compte</button>
                     </div>
-                </section>}
+                </div>
                 {showModal && <div id="update-username-modal" tabIndex="-1" role="dialog" aria-labelledby="update-username-modal-title" aria-hidden="true">
                     <div className="modal-dialog modal-dialog-centered" role="document">
                         <div className="modal-content">
