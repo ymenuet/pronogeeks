@@ -85,6 +85,8 @@ const Fixture = ({ fixtureID, user }) => {
             return 'Match terminé'
         } else if (statusShort === 'HT') {
             return 'Mi-temps'
+        } else if (statusShort === 'PST') {
+            return 'Match reporté'
         } else return `${minutes}'`
 
     }
@@ -110,7 +112,7 @@ const Fixture = ({ fixtureID, user }) => {
                             <td className='score-fixture'>{fixture.goalsHomeTeam} - {fixture.goalsAwayTeam}</td>
                             <td className='team-name'>{fixture.awayTeam.name}</td>
                         </tr>
-                        {fixture.timeElapsed && <tr className='pb-1'>
+                        {(fixture.timeElapsed || fixture.statusShort === 'PST') && <tr className='pb-1'>
                             <td></td>
                             <td className='fixture-status'>{statusTranform(fixture.statusShort, fixture.timeElapsed)}</td>
                             <td></td>
@@ -125,7 +127,7 @@ const Fixture = ({ fixtureID, user }) => {
                             <td>{fixture.oddsDraw}</td>
                             <td>{fixture.oddsWinAway}</td>
                         </tr>
-                        {matchStarted && <tr className='prono-section'>
+                        {matchStarted && fixture.statusShort !== 'PST' && <tr className='prono-section'>
                             <td className='prono-input-col'><label>Buts domicile :</label><input className='prono-input' type="number" name='homeProno' value={homeScore} placeholder='Prono' disabled={true} /></td>
                             <td className='prono-input-col'>
                                 {pronogeek.points > 0 && pronogeek.bonusFavTeam && (
@@ -147,7 +149,7 @@ const Fixture = ({ fixtureID, user }) => {
                             </td>
                             <td className='prono-input-col'><label>Buts extérieur :</label><input className='prono-input' type="number" name='awayProno' value={awayScore} placeholder='Prono' disabled={true} /></td>
                         </tr>}
-                        {!matchStarted && <tr>
+                        {(!matchStarted || fixture.statusShort === 'PST') && <tr style={{ marginTop: 10 }}>
                             <td></td>
                             <td>Pronogeek non visible.</td>
                             <td></td>

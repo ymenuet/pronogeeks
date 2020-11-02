@@ -22,7 +22,7 @@ const Fixture = ({ fixtureID, saveAll }) => {
             const fixture = await getFixture(fixtureID)
             const seasonID = fixture.season
             const matchweekNumber = fixture.matchweek
-            if (new Date(fixture.date) - Date.now() < 0) setMatchStarted(true)
+            if (new Date(fixture.date) - Date.now() < 0 && fixture.statusShort !== 'PST') setMatchStarted(true)
             setFixture(fixture)
             let season = user.seasons.filter(season => season.season._id === seasonID)
             if (season.length > 0) season = season[0]
@@ -120,6 +120,8 @@ const Fixture = ({ fixtureID, saveAll }) => {
             return 'Match terminé'
         } else if (statusShort === 'HT') {
             return 'Mi-temps'
+        } else if (statusShort === 'PST') {
+            return 'Match reporté'
         } else return `${minutes}'`
 
     }
@@ -145,7 +147,7 @@ const Fixture = ({ fixtureID, saveAll }) => {
                             <td className='score-fixture'>{fixture.goalsHomeTeam} - {fixture.goalsAwayTeam}</td>
                             <td className='team-name'>{fixture.awayTeam.name}</td>
                         </tr>
-                        {fixture.timeElapsed && <tr className='pb-1'>
+                        {(fixture.timeElapsed || fixture.statusShort === 'PST') && <tr className='pb-1'>
                             <td></td>
                             <td className='fixture-status'>{statusTranform(fixture.statusShort, fixture.timeElapsed)}</td>
                             <td></td>
