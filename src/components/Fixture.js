@@ -22,7 +22,10 @@ const Fixture = ({ fixtureID, saveAll }) => {
             const fixture = await getFixture(fixtureID)
             const seasonID = fixture.season
             const matchweekNumber = fixture.matchweek
-            if (new Date(fixture.date) - Date.now() < 0 && fixture.statusShort !== 'PST') setMatchStarted(true)
+            if (
+                new Date(fixture.date) - Date.now() < 0 &&
+                fixture.statusShort !== 'PST'
+            ) setMatchStarted(true)
             setFixture(fixture)
             let season = user.seasons.filter(season => season.season._id === seasonID)
             if (season.length > 0) season = season[0]
