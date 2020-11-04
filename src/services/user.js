@@ -59,9 +59,11 @@ export const fetchPlayers = async(seasonID) => {
     return users
 }
 
-export const confirmEmail = async(userID) => {
-    await userService.put(`/${userID}`)
-    return true
+export const confirmEmail = async(userID, confirmToken) => {
+    let confirmed = false
+    await userService.put(`/${userID}/${confirmToken}`)
+    confirmed = true
+    return confirmed
 }
 
 export const deleteUserAccount = async userID => {

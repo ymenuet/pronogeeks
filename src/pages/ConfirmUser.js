@@ -6,23 +6,31 @@ import { openNotification } from '../helpers'
 import { Context } from '../context'
 import { Loader } from '../components'
 
-const ConfirmUser = ({ match: { params: { userID } } }) => {
+const ConfirmUser = ({ match: { params: { userID, confirmToken } } }) => {
     const { user, loginUser } = useContext(Context)
 
     const [username, setUsername] = useState(null)
     const [error, setError] = useState(false)
     const [updated, setUpdated] = useState(false)
 
+
     useEffect(() => {
         const confirmNewUser = async () => {
-            const result = await confirmEmail(userID)
+            let result = false
+            if (!error) {
+                result = await confirmEmail(userID, confirmToken).catch(err => {
+                    openNotification('error', 'Erreur', err.response.data.message.fr)
+                    setError(true)
+                })
+            }
             return result
         }
+        const confirmed = confirmNewUser()
         const fetchUser = async () => {
             const user = await getUser(userID)
             setUsername(user.username)
         }
-        if (confirmNewUser()) {
+        if (confirmed) {
             fetchUser()
             if (user && !updated) {
                 const updateUser = async () => {
@@ -36,6 +44,7 @@ const ConfirmUser = ({ match: { params: { userID } } }) => {
             openNotification('error', 'Erreur', 'Il y a eu une erreur lors de la confirmation de ton email. Merci de réessayer.')
             setError(true)
         }
+
     }, [userID, user, updated])
 
     return <div className='my-content-homepage' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
