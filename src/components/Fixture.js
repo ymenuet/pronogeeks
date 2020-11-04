@@ -20,10 +20,16 @@ const Fixture = ({ fixtureID, saveAll }) => {
         setSaveSuccess(false)
 
         // Error message if someone takes out the "disabled" property of a passed game to change their pronostics
-        if (new Date(fixture.date).getTime() - Date.now() < 0) return openNotification('error', 'Erreur', 'Ce match est déjà commencé ou fini. Tu ne peux plus changer ton prono.')
+        if (
+            new Date(fixture.date).getTime() - Date.now() < 0 &&
+            fixture.statusShort !== 'PST'
+        ) return openNotification('error', 'Erreur', 'Ce match est déjà commencé ou fini. Tu ne peux plus changer ton prono.')
 
         // Warning message if one of the inputs doesn't have a number
-        if ((!homeScore && parseInt(homeScore) !== 0) || (!awayScore && parseInt(awayScore) !== 0)) return openNotification('warning', 'Attention', `Tu n'as pas défini de score pour le match ${fixture.homeTeam.name} - ${fixture.awayTeam.name}. Prono non enregistré.`)
+        if (
+            (!homeScore && parseInt(homeScore) !== 0) ||
+            (!awayScore && parseInt(awayScore) !== 0)
+        ) return openNotification('warning', 'Attention', `Tu n'as pas défini de score pour le match ${fixture.homeTeam.name} - ${fixture.awayTeam.name}. Prono non enregistré.`)
 
         let error = false
         setSaving(true)
@@ -82,40 +88,53 @@ const Fixture = ({ fixtureID, saveAll }) => {
 
 
     return !fixture || homeScore == null || awayScore == null ? (
+
         <div style={{ padding: 20, paddingTop: 0 }}>
             <Skeleton active />
         </div>
+
     ) : (
+
             <div className='fixture-line'>
+
                 <table>
+
                     <thead>
+
                         <tr>
                             <th><img src={fixture.homeTeam.logo} alt="logo" className='team-logo' /></th>
                             <th><small>{fixture.homeTeam.stadium}<br />{dateTransform(fixture.date).fullDate}<br />à {dateTransform(fixture.date).fullTime}</small></th>
                             <th><img src={fixture.awayTeam.logo} alt="logo" className='team-logo' /></th>
                         </tr>
+
                     </thead>
+
                     <tbody>
+
                         <tr className='score-teams-row'>
                             <td className='team-name'>{fixture.homeTeam.name}</td>
                             <td className='score-fixture'>{fixture.goalsHomeTeam} - {fixture.goalsAwayTeam}</td>
                             <td className='team-name'>{fixture.awayTeam.name}</td>
                         </tr>
+
                         {(fixture.timeElapsed || fixture.statusShort === 'PST') && <tr className='pb-1'>
                             <td></td>
                             <td className='fixture-status'>{statusTranform(fixture.statusShort, fixture.timeElapsed)}</td>
                             <td></td>
                         </tr>}
+
                         <tr className='odds-section odds-top'>
                             <td>Cote domicile :</td>
                             <td>Cote nul :</td>
                             <td>Cote extérieur :</td>
                         </tr>
+
                         <tr className='odds-section odds-bottom'>
                             <td>{fixture.oddsWinHome}</td>
                             <td>{fixture.oddsDraw}</td>
                             <td>{fixture.oddsWinAway}</td>
                         </tr>
+
                         <tr className='prono-section'>
                             <td className='prono-input-col'><label>Buts domicile :</label><input className='prono-input' type="number" name='homeProno' value={homeScore} min={0} onChange={e => setHomeScore(e.target.value)} placeholder='Prono' disabled={matchStarted} /></td>
                             <td className='prono-input-col'>
@@ -127,24 +146,30 @@ const Fixture = ({ fixtureID, saveAll }) => {
                             </td>
                             <td className='prono-input-col'><label>Buts extérieur :</label><input className='prono-input' type="number" name='awayProno' value={awayScore} min={0} onChange={e => setAwayScore(e.target.value)} placeholder='Prono' disabled={matchStarted} /></td>
                         </tr>
+
                     </tbody>
+
                 </table>
+
                 {pronogeek.points > 0 && pronogeek.bonusFavTeam && (
                     <div className='points-cell'>
                         Tu as scoré <i>{pronogeek.points}pts</i> {pronogeek.exact && `(${(pronogeek.points - 30) / 2}*2)`}<br />
                         dont 30pts bonus pour ton équipe de <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill=" rgb(253, 0, 7)" width="24px" height="24px"><path d="M0 0h24v24H0z" fill="none" /><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" /></svg>
                     </div>
                 )}
+
                 {pronogeek.points > 0 && !pronogeek.bonusFavTeam && (
                     <div className='points-cell'>
                         Tu as scoré <i>{pronogeek.points}pts</i> {pronogeek.exact && `(${pronogeek.points / 2}*2)`}
                     </div>
                 )}
+
                 {pronogeek.points === 0 && pronogeek.addedToProfile && (
                     <div className='points-cell'>
                         Dommage, mauvais prono...
                     </div>
                 )}
+
             </div>
         )
 }

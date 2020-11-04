@@ -47,6 +47,13 @@ export const dateTransform = (date) => {
     }
 }
 
+export const dateFormatterForRulesPanel = date => {
+    date = new Date(date)
+    let month = date.getMonth() < 9 ? `0${date.getMonth() + 1}` : date.getMonth() + 1
+    let minutes = date.getMinutes() <= 9 ? `0${date.getMinutes()}` : date.getMinutes()
+    return `${date.getDate()}/${month}/${date.getFullYear()} à ${date.getHours()}h${minutes}`
+}
+
 export const statusTranform = (statusShort, minutes) => {
     if (statusShort !== 'TBD' &&
         statusShort !== 'NS' &&

@@ -1014,6 +1014,11 @@ ul.season-ranking>li>span:first-child {
     font-family: 'Audiowide';
 }
 
+.previous-next-btns .score-top p,
+.previous-next-btns .score-bottom p {
+    margin-bottom: 0;
+}
+
 .previous-next-btns .score-bottom {
     margin: 0 20px 10px 20px;
 }
