@@ -40,12 +40,12 @@ const ConfirmUser = ({ match: { params: { userID, confirmToken } } }) => {
                 }
                 updateUser()
             }
-        } else {
+        } else if (!error) {
             openNotification('error', 'Erreur', 'Il y a eu une erreur lors de la confirmation de ton email. Merci de réessayer.')
             setError(true)
         }
 
-    }, [userID, user, updated])
+    }, [userID, confirmToken, user, updated, error])
 
     return <div className='my-content-homepage' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
 

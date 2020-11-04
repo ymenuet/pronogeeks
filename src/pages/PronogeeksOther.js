@@ -38,6 +38,7 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID, geekID } }, 
                 user.seasons.filter(seas => seas.season._id.toString() === seasonID.toString())[0].matchweeks.filter(matchweek => matchweek.number.toString() === matchweekNumber.toString()).length < 1) {
                 return setNoPronogeeks(true)
             } else {
+                setNoPronogeeks(false)
                 const seasonUser = user.seasons.filter(seas => seas.season._id.toString() === seasonID.toString())[0]
                 const matchweekUser = seasonUser.matchweeks.filter(matchweek => matchweek.number.toString() === matchweekNumber.toString())[0]
                 setMatchweekPoints(matchweekUser.totalPoints)
@@ -92,7 +93,7 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID, geekID } }, 
 
                 </div>
             </ul>
-            <h4 className='not-accessible'>Les pronos de {user.username} ne sont pas encore accessibles.</h4>
+            <h4 className='not-accessible'>Les pronos de {user.username} ne sont pas accessibles.</h4>
         </div>
     ) : (
                 <div className='pronogeeks-bg matchweek-page'>

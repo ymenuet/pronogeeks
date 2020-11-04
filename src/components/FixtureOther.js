@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { getFixture } from '../services/fixtures'
 import { Skeleton } from 'antd'
+import { dateTransform, statusTranform } from '../helpers'
 
 const Fixture = ({ fixtureID, user }) => {
     const [fixture, setFixture] = useState(null)
@@ -35,61 +36,7 @@ const Fixture = ({ fixtureID, user }) => {
             }
             fetchFixturesAndOdds(fixtureID)
         }
-    }, [fixtureID])
-
-    const dateTransform = (date) => {
-        date = new Date(date)
-        let weekDay = date.getDay()
-        let month = date.getMonth() < 9 ? `0${date.getMonth() + 1}` : date.getMonth() + 1
-        let minutes = date.getMinutes() <= 9 ? `0${date.getMinutes()}` : date.getMinutes()
-        switch (weekDay) {
-            case 0:
-                weekDay = 'dimanche'
-                break
-            case 1:
-                weekDay = 'lundi'
-                break;
-            case 2:
-                weekDay = 'mardi'
-                break;
-            case 3:
-                weekDay = 'mercredi'
-                break
-            case 4:
-                weekDay = 'jeudi'
-                break;
-            case 5:
-                weekDay = 'vendredi'
-                break;
-            case 6:
-                weekDay = 'samedi'
-                break;
-            default:
-                weekDay = ''
-        }
-        return { fullDate: `${weekDay} ${date.getDate()}/${month}/${date.getFullYear()}`, fullTime: `${date.getHours()}h${minutes}` }
-    }
-
-    const statusTranform = (statusShort, minutes) => {
-        if (statusShort !== 'TBD' &&
-            statusShort !== 'NS' &&
-            statusShort !== '1H' &&
-            statusShort !== 'HT' &&
-            statusShort !== '2H' &&
-            statusShort !== 'ET' &&
-            statusShort !== 'P' &&
-            statusShort !== 'BT' &&
-            statusShort !== 'SUSP' &&
-            statusShort !== 'INT' &&
-            statusShort !== 'PST') {
-            return 'Match terminé'
-        } else if (statusShort === 'HT') {
-            return 'Mi-temps'
-        } else if (statusShort === 'PST') {
-            return 'Match reporté'
-        } else return `${minutes}'`
-
-    }
+    }, [fixtureID, user])
 
 
     return !fixture || homeScore == null || awayScore == null ? (
