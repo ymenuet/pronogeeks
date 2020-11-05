@@ -37,11 +37,17 @@ const NewGeekLeague = ({ history, loading }) => {
 
     return <div className='geekleague-bg'>
         {!users || creating || loading ? (
+
             <Loader />
+
         ) : (
+
                 <div className='geekleague-form'>
+
                     <div className='col-10 offset-1 col-sm-8 offset-sm-2 col-xl-6 offset-xl-3'>
+
                         <h2>Créer une ligue</h2>
+
                         <Form
                             form={form}
                             layout='vertical'
@@ -51,6 +57,7 @@ const NewGeekLeague = ({ history, loading }) => {
                             }}
                             onFinish={newLeague}
                         >
+
                             <Form.Item
                                 type='text'
                                 label="Nom de la ligue :"
@@ -62,8 +69,14 @@ const NewGeekLeague = ({ history, loading }) => {
                                     },
                                 ]}
                             >
-                                <Input style={{ borderRadius: 15.8 }} placeholder='Ma Ligue Geek' />
+
+                                <Input
+                                    style={{ borderRadius: 15.8 }}
+                                    placeholder='Ma Ligue Geek'
+                                />
+
                             </Form.Item>
+
                             <Form.Item
                                 type='text'
                                 label="Sélectionne d'autres geeks :"
@@ -75,6 +88,7 @@ const NewGeekLeague = ({ history, loading }) => {
                                     },
                                 ]}
                             >
+
                                 <Select
                                     mode="multiple"
                                     style={{ width: '100%', borderRadius: 15.8, overflow: 'hidden', textAlign: 'left' }}
@@ -82,21 +96,44 @@ const NewGeekLeague = ({ history, loading }) => {
                                     optionLabelProp="label"
                                     optionFilterProp='label'
                                 >
-                                    {users?.map(user => <Option key={user._id} value={user._id} label={user.username}>
+
+                                    {users?.map(user => <Option
+                                        key={user._id}
+                                        value={user._id}
+                                        label={user.username}
+                                    >
+
                                         <div className="demo-option-label-item">
                                             <span role="img" aria-label={user.username}>
-                                                <img src={user.photo} alt="profile" className='profile-pic-preview' />
+                                                <img
+                                                    src={user.photo}
+                                                    alt="profile"
+                                                    className='profile-pic-preview'
+                                                />
                                             </span>
-                                        &nbsp;&nbsp;{user.username}
+                                            &nbsp;&nbsp;{user.username}
                                         </div>
+
                                     </Option>)}
+
                                 </Select>
+
                             </Form.Item>
+
                             <div style={{ display: 'flex', justifyContent: 'center' }}>
-                                <button type='submit' className='btn my-btn create-league-btn' style={{ marginTop: 10 }}>Créer ligue</button>
+                                <button
+                                    type='submit'
+                                    className='btn my-btn create-league-btn'
+                                    style={{ marginTop: 10 }}
+                                >
+                                    Créer ligue
+                                </button>
                             </div>
+
                         </Form>
+
                     </div>
+
                 </div>
             )
         }

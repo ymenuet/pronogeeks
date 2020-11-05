@@ -25,47 +25,68 @@ const ResetPwd = ({ history }) => {
         }
     }
 
-    return user ? <Redirect to='/profile' /> : loading ? (
-        <div className='register-pages'>
-            <Loader tip="Envoi de l'email..." color='rgb(4, 78, 199)' />
-        </div>
-    ) : (
+    return user ? <Redirect to='/profile' /> :
+
+        loading ? (
+
             <div className='register-pages'>
-                <div className='row signup-form'>
-                    <div className='col-10 offset-1 col-sm-8 offset-sm-2 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4'>
-                        <h2>Renouvelle ton mot de passe</h2>
-                        <Form
-                            form={form}
-                            layout='vertical'
-                            name="basic"
-                            initialValues={{
-                                remember: true,
-                            }}
-                            onFinish={onFinish}
-                        >
-                            <Form.Item
-                                type='email'
-                                label="Email :"
-                                name="email"
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: `L'email est nécessaire pour te connecter à ton compte`,
-                                    },
-                                ]}
+                <Loader
+                    tip="Envoi de l'email..."
+                    color='rgb(4, 78, 199)'
+                />
+            </div>
+
+        ) : (
+
+                <div className='register-pages'>
+
+                    <div className='row signup-form'>
+
+                        <div className='col-10 offset-1 col-sm-8 offset-sm-2 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4'>
+
+                            <h2>Renouvelle ton mot de passe</h2>
+
+                            <Form
+                                form={form}
+                                layout='vertical'
+                                name="basic"
+                                onFinish={onFinish}
+                                initialValues={{
+                                    remember: true,
+                                }}
                             >
-                                <Input style={{ borderRadius: 15.8 }} placeholder='roi.geek@pronogeeks.fr' />
-                            </Form.Item>
 
-                            <div style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
-                                <button type='submit' className='btn register-btn my-btn submit-btn'>Renouveler</button>
-                            </div>
+                                <Form.Item
+                                    type='email'
+                                    label="Email :"
+                                    name="email"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: `L'email est nécessaire pour te connecter à ton compte`,
+                                        },
+                                    ]}
+                                >
+                                    <Input
+                                        style={{ borderRadius: 15.8 }}
+                                        placeholder='roi.geek@pronogeeks.fr'
+                                    />
+                                </Form.Item>
 
-                        </Form>
+                                <div style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
+                                    <button
+                                        type='submit'
+                                        className='btn register-btn my-btn submit-btn'
+                                    >
+                                        Renouveler
+                                    </button>
+                                </div>
+
+                            </Form>
+                        </div>
                     </div>
                 </div>
-            </div>
-        )
+            )
 }
 
 export default ResetPwd

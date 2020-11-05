@@ -689,14 +689,6 @@ div.profile-pic {
     outline: none;
 }
 
-#delete-account-modal .delete-account-btn {
-    color: var(--color-red-rp);
-}
-
-#delete-account-modal .delete-account-btn:hover {
-    color: var(--color-white-cream);
-}
-
 #delete-account-modal .close-delete {
     color: var(--color-white-cream);
     background-color: var(--color-dark-blue-bp);
@@ -786,6 +778,10 @@ ul.season-ranking>li {
     background-color: var(--color-white-cream);
 }
 
+ul.season-ranking>li>span:first-child {
+    text-align: left;
+}
+
 .my-badge {
     font-size: 0.9rem;
     height: 20px;
@@ -794,18 +790,15 @@ ul.season-ranking>li {
 }
 
 .delete-account-btn {
-    background-color: unset;
-    border: 2px solid var(--color-red-rp);
-    color: var(--color-red-rp);
-    line-height: 100%;
-    margin-bottom: 10px;
-}
-
-.delete-account-btn:hover {
-    transform: none;
     background-color: var(--color-red-rp);
     color: var(--color-white-cream);
+    border: 2px solid var(--color-red-rp);
+    line-height: 100%;
+    margin-bottom: 30px;
+    margin-top: 10px;
 }
+
+.delete-account-btn:hover {}
 
 @media (max-width: 340px) {
     .my-profile-page h2 {
@@ -1019,6 +1012,11 @@ ul.season-ranking>li {
     border-radius: 10px;
     margin: 10px 20px;
     font-family: 'Audiowide';
+}
+
+.previous-next-btns .score-top p,
+.previous-next-btns .score-bottom p {
+    margin-bottom: 0;
 }
 
 .previous-next-btns .score-bottom {
@@ -1428,6 +1426,10 @@ a.geekleagues-page-btn:hover {
 
 .geekleague-ranking-detail {
     color: black;
+}
+
+.geekleague-ranking-detail li span:first-child {
+    text-align: left;
 }
 
 .geekleague-page h2 button {

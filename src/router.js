@@ -12,7 +12,7 @@ const router = () => {
             <Switch>
                 <Route component={Home} path='/' exact />
                 <Route component={Signup} path='/signup' />
-                <Route component={ConfirmUser} path='/confirm-account/:userID' />
+                <Route component={ConfirmUser} path='/confirm-account/:userID/:confirmToken' />
                 <Route component={Login} path='/login' />
                 <Route component={ResetPwd} path='/reset-pwd' exact />
                 <Route component={ResetPwdUser} path='/reset-pwd/:userID/:renewToken' />

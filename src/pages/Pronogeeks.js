@@ -3,8 +3,8 @@ import { getMatchweekFixtures, getSeasonData } from '../services/seasons'
 import { updateProfileWithMatchweek, updateProfileWithSeason } from '../services/user'
 import { updateFixturesStatus, updateOdds } from '../services/apiFootball'
 import { getProfile } from '../services/auth'
-import { Fixture, Loader } from '../components'
-import { openNotification } from '../helpers'
+import { Fixture, Loader, MatchweekNavigation, AdminButtons } from '../components'
+import { openNotification, dateFormatterForRulesPanel } from '../helpers'
 import { Context } from '../context'
 
 const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history, loading }) => {
@@ -22,6 +22,14 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
 
     const { loginUser, user } = useContext(Context)
 
+    const fetchFixtures = async (season, matchweek) => {
+        const fixtures = await getMatchweekFixtures(season, matchweek)
+        fixtures.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+        setFixtures(null)
+        setFixtures(fixtures)
+        return true
+    }
+
     const setPoints = user => {
         const seasonUser = user.seasons.filter(seas => seas.season._id.toString() === seasonID.toString())[0]
         const matchweekUser = seasonUser.matchweeks.filter(matchweek => matchweek.number.toString() === matchweekNumber.toString())[0]
@@ -36,7 +44,7 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
         else {
             setFixtures(null)
             setFixtures(data.fixtures)
-            openNotification('success', 'Scores actualisés')
+            openNotification('success', 'Scores et dates actualisés')
             const user = await getProfile()
             loginUser(user)
             setPoints(user)
@@ -47,26 +55,11 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
         const message = await updateOdds(seasonID, matchweekNumber)
         if (message) return openNotification('warning', 'Actualisation abortée', message.fr)
         else {
-            const updated = fetchFixtures(seasonID, matchweekNumber)
+            const updated = await fetchFixtures(seasonID, matchweekNumber)
             if (updated) {
                 openNotification('success', 'Cotes actualisées')
             }
         }
-    }
-
-    const fetchFixtures = async (season, matchweek) => {
-        const fixtures = await getMatchweekFixtures(season, matchweek)
-        fixtures.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
-        setFixtures(null)
-        setFixtures(fixtures)
-        return true
-    }
-
-    const dateTransform = (date) => {
-        date = new Date(date)
-        let month = date.getMonth() < 9 ? `0${date.getMonth() + 1}` : date.getMonth() + 1
-        let minutes = date.getMinutes() <= 9 ? `0${date.getMinutes()}` : date.getMinutes()
-        return `${date.getDate()}/${month}/${date.getFullYear()} à ${date.getHours()}h${minutes}`
     }
 
     useEffect(() => {
@@ -83,7 +76,7 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
             const { fixtures } = await updateFixturesStatus(seasonID, matchweekNumber)
             setFixtures(null)
             setFixtures(fixtures)
-            openNotification('success', 'Scores actualisés')
+            openNotification('success', 'Scores et dates actualisés')
             const user = await getProfile()
             loginUser(user)
             setPoints(user)
@@ -91,7 +84,7 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
 
         const fetchOdds = async () => {
             await updateOdds(seasonID, matchweekNumber)
-            const updated = fetchFixtures(seasonID, matchweekNumber)
+            const updated = await fetchFixtures(seasonID, matchweekNumber)
             if (updated) {
                 openNotification('success', 'Cotes actualisées')
             }
@@ -185,69 +178,108 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
     }
 
     return !fixtures || !season || loading ? (
+
         <div className='pronogeeks-bg'>
             <Loader color='rgb(4, 78, 199)' />
         </div>
+
     ) : (
             <div className='pronogeeks-bg matchweek-page'>
+
                 <div className='save-all'>
-                    <button onClick={saveAllPronos} className='btn my-btn save-all-btn'>
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="40px" height="40px"><path d="M0 0h24v24H0z" fill="none" /><path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z" /></svg>
+
+                    <button
+                        onClick={saveAllPronos}
+                        className='btn my-btn save-all-btn'
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="40px" height="40px"><path d="M0 0h24v24H0z" fill="none" />
+                            <path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z" />
+                        </svg>
                         &nbsp;
                         <span>Enregistrer tout</span>
                     </button>
+
                     <div className='save-all-info'>
                         <p>Enregistrer tous les pronos de la journée.</p>
                     </div>
+
                 </div>
-                {user.role === 'GEEK ADMIN' && <div>
-                    <button className='btn my-btn admin-btn top' onClick={getStatus}>Actualiser les scores</button>
-                    <button className='btn my-btn admin-btn top' onClick={getOdds}>Actualiser les cotes</button>
-                </div>}
+
+                <AdminButtons
+                    user={user}
+                    getStatus={getStatus}
+                    getOdds={getOdds}
+                />
+
                 <h2>
-                    <svg onClick={() => setShowRules(!showRules)} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="rgb(4, 78, 199)" width="40px" height="40px"><path d="M0 0h24v24H0z" fill="none" /><path d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z" /></svg>
+                    <svg onClick={() => setShowRules(!showRules)} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="rgb(4, 78, 199)" width="40px" height="40px">
+                        <path d="M0 0h24v24H0z" fill="none" />
+                        <path d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z" />
+                    </svg>
                     {season.leagueName} saison {season.year} :<br />
                     journée {matchweekNumber}
                 </h2>
-                <ul onClick={() => setShowRules(false)} className="list-group list-group-flush list-fixtures col-10 offset-1 col-md-8 offset-md-2 col-xl-6 offset-xl-3">
-                    <div className='previous-next-btns'>
 
-                        {parseInt(matchweekNumber) !== 1 && <div><button className='btn my-btn' onClick={previousPage}><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="24px" height="24px"><path d="M0 0h24v24H0z" fill="none" /><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" /></svg></button></div>}
+                <ul
+                    onClick={() => setShowRules(false)}
+                    className="list-group list-group-flush list-fixtures col-10 offset-1 col-md-8 offset-md-2 col-xl-6 offset-xl-3"
+                >
 
-                        {matchweekBonus > 0 && <div className='score-top'>Ton total J{matchweekNumber} : {matchweekPoints} pts<br />dont {matchweekBonus} pts bonus ({matchweekCorrects}/10)</div>}
-                        {!matchweekBonus && <div className='score-top'>Ton total J{matchweekNumber} : {matchweekPoints} pts</div>}
+                    <MatchweekNavigation
+                        matchweekNumber={matchweekNumber}
+                        matchweekPoints={matchweekPoints}
+                        matchweekCorrects={matchweekCorrects}
+                        matchweekBonus={matchweekBonus}
+                        previousPage={previousPage}
+                        nextPage={nextPage}
+                        myClassName='score-top'
+                    />
 
-                        {parseInt(matchweekNumber) !== 38 && <div><button className='btn my-btn' onClick={nextPage}><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="24px" height="24px"><path d="M0 0h24v24H0z" fill="none" /><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z" /></svg></button></div>}
-
-                    </div>
                     <div className='list-fixtures-header'>
                         <div className='header-title'>Domicile</div>
                         <div>|</div>
                         <div className='header-title'>Extérieur</div>
                     </div>
+
                     {fixtures.map(fixture => (
-                        <li className="list-group-item" key={fixture._id} style={{ background: 'none' }}>
-                            <Fixture fixtureID={fixture._id} saveAll={saveAll} />
+                        <li
+                            className="list-group-item"
+                            key={fixture._id}
+                            style={{ background: 'none' }}
+                        >
+                            <Fixture
+                                fixtureID={fixture._id}
+                                saveAll={saveAll}
+                            />
                         </li>
                     ))}
-                    <div className='previous-next-btns'>
-                        <div><button className='btn my-btn' onClick={previousPage}><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="24px" height="24px"><path d="M0 0h24v24H0z" fill="none" /><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" /></svg></button></div>
-                        {matchweekBonus > 0 && <div className='score-bottom'>Ton total J{matchweekNumber} : {matchweekPoints} pts<br />dont {matchweekBonus} pts bonus ({matchweekCorrects}/10)</div>}
-                        {!matchweekBonus && <div className='score-bottom'>Ton total J{matchweekNumber} : {matchweekPoints} pts</div>}
-                        <div><button className='btn my-btn' onClick={nextPage}><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="24px" height="24px"><path d="M0 0h24v24H0z" fill="none" /><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z" /></svg></button></div>
-                    </div>
+
+                    <MatchweekNavigation
+                        matchweekNumber={matchweekNumber}
+                        matchweekPoints={matchweekPoints}
+                        matchweekCorrects={matchweekCorrects}
+                        matchweekBonus={matchweekBonus}
+                        previousPage={previousPage}
+                        nextPage={nextPage}
+                        myClassName='score-bottom'
+                    />
+
                 </ul>
-                {user.role === 'GEEK ADMIN' && <div>
-                    <button className='btn my-btn admin-btn' onClick={getStatus}>Actualiser les scores</button>
-                    <button className='btn my-btn admin-btn' onClick={getOdds}>Actualiser les cotes</button>
-                </div>}
+
+                <AdminButtons
+                    user={user}
+                    getStatus={getStatus}
+                    getOdds={getOdds}
+                />
+
                 {showRules && <div className='rules-box'>
+
                     <span onClick={(() => setShowRules(false))}>X</span>
                     <h4>Règles des pronogeeks :</h4>
                     <hr />
                     <ul>
-                        <li>Les statuts et résultats des matchs sont actualisés en moyenne toutes les 30 minutes (à partir de 7 jours avant le début de la journée) et les points de pronogeeks avec. (dernière mise à jour le {dateTransform(lastScoresUpdated)})</li><br />
-                        <li>Les cotes sont actualisées une fois par jour (à partir de 7 jours avant le début de la journée). À partir de 30 minutes avant le début d'un match, ses cotes ne changent plus. (dernière mise à jour le {dateTransform(lastOddsUpdated)})</li><br />
+                        <li>Les statuts et résultats des matchs sont actualisés en moyenne toutes les 30 minutes (à partir de 7 jours avant le début de la journée) et les points de pronogeeks avec. (dernière mise à jour le {dateFormatterForRulesPanel(lastScoresUpdated)})</li><br />
+                        <li>Les cotes sont actualisées une fois par jour (à partir de 7 jours avant le début de la journée). À partir de 30 minutes avant le début d'un match, ses cotes ne changent plus. (dernière mise à jour le {dateFormatterForRulesPanel(lastOddsUpdated)})</li><br />
                         <li>Il n'est plus possible de changer son pronogeek après le coup d'envoi.</li><br />
                         <li>Un pronogeek <b>correct</b> (bon vainqueur ou match nul) rapporte le nombre de points indiqués dans les cotes de la rencontre.</li><br />
                         <li>Un pronogeek <b>exact</b> (score exact bien pronogeeké) rapporte le double de la cote correspondante.</li><br />
@@ -264,7 +296,9 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
                             </ul>
                         </li>
                     </ul>
+
                 </div>}
+
             </div>
 
         )
