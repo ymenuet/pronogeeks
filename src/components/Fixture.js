@@ -4,7 +4,6 @@ import { savePronogeeks } from '../services/pronogeeks'
 import { Skeleton } from 'antd'
 import { Context } from '../context'
 import { openNotification, dateTransform, statusTranform } from '../helpers'
-import Loader from './Loader'
 import SavePronoButton from './SavePronoButton'
 
 const Fixture = ({ fixtureID, saveAll }) => {
