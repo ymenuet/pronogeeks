@@ -3,7 +3,7 @@ import { getMatchweekFixtures, getSeasonData } from '../services/seasons'
 import { updateProfileWithMatchweek, updateProfileWithSeason } from '../services/user'
 import { updateFixturesStatus, updateOdds } from '../services/apiFootball'
 import { getProfile } from '../services/auth'
-import { Fixture, Loader } from '../components'
+import { Fixture, Loader, MatchweekNavigation, AdminButtons } from '../components'
 import { openNotification, dateFormatterForRulesPanel } from '../helpers'
 import { Context } from '../context'
 
@@ -188,8 +188,13 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
 
                 <div className='save-all'>
 
-                    <button onClick={saveAllPronos} className='btn my-btn save-all-btn'>
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="40px" height="40px"><path d="M0 0h24v24H0z" fill="none" /><path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z" /></svg>
+                    <button
+                        onClick={saveAllPronos}
+                        className='btn my-btn save-all-btn'
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="40px" height="40px"><path d="M0 0h24v24H0z" fill="none" />
+                            <path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z" />
+                        </svg>
                         &nbsp;
                         <span>Enregistrer tout</span>
                     </button>
@@ -200,37 +205,35 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
 
                 </div>
 
-                {user.role === 'GEEK ADMIN' && <div>
-                    <button className='btn my-btn admin-btn top' onClick={getStatus}>Actualiser les scores</button>
-                    <button className='btn my-btn admin-btn top' onClick={getOdds}>Actualiser les cotes</button>
-                </div>}
+                <AdminButtons
+                    user={user}
+                    getStatus={getStatus}
+                    getOdds={getOdds}
+                />
 
                 <h2>
-                    <svg onClick={() => setShowRules(!showRules)} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="rgb(4, 78, 199)" width="40px" height="40px"><path d="M0 0h24v24H0z" fill="none" /><path d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z" /></svg>
+                    <svg onClick={() => setShowRules(!showRules)} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="rgb(4, 78, 199)" width="40px" height="40px">
+                        <path d="M0 0h24v24H0z" fill="none" />
+                        <path d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z" />
+                    </svg>
                     {season.leagueName} saison {season.year} :<br />
                     journée {matchweekNumber}
                 </h2>
 
-                <ul onClick={() => setShowRules(false)} className="list-group list-group-flush list-fixtures col-10 offset-1 col-md-8 offset-md-2 col-xl-6 offset-xl-3">
+                <ul
+                    onClick={() => setShowRules(false)}
+                    className="list-group list-group-flush list-fixtures col-10 offset-1 col-md-8 offset-md-2 col-xl-6 offset-xl-3"
+                >
 
-                    <div className='previous-next-btns'>
-
-                        {parseInt(matchweekNumber) !== 1 && <div>
-                            <button className='btn my-btn' onClick={previousPage}><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="24px" height="24px"><path d="M0 0h24v24H0z" fill="none" /><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" /></svg></button>
-                        </div>}
-
-                        {matchweekBonus > 0 && <div className='score-top'>
-                            <p>Total J{matchweekNumber} : {matchweekPoints} pts<br />dont {matchweekBonus} pts bonus ({matchweekCorrects}/10)</p>
-                        </div>}
-                        {!matchweekBonus && <div className='score-top'>
-                            <p>Total J{matchweekNumber} : {matchweekPoints} pts ({matchweekCorrects}/10)</p>
-                        </div>}
-
-                        {parseInt(matchweekNumber) !== 38 && <div>
-                            <button className='btn my-btn' onClick={nextPage}><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="24px" height="24px"><path d="M0 0h24v24H0z" fill="none" /><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z" /></svg></button>
-                        </div>}
-
-                    </div>
+                    <MatchweekNavigation
+                        matchweekNumber={matchweekNumber}
+                        matchweekPoints={matchweekPoints}
+                        matchweekCorrects={matchweekCorrects}
+                        matchweekBonus={matchweekBonus}
+                        previousPage={previousPage}
+                        nextPage={nextPage}
+                        myClassName='score-top'
+                    />
 
                     <div className='list-fixtures-header'>
                         <div className='header-title'>Domicile</div>
@@ -239,36 +242,35 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
                     </div>
 
                     {fixtures.map(fixture => (
-                        <li className="list-group-item" key={fixture._id} style={{ background: 'none' }}>
-                            <Fixture fixtureID={fixture._id} saveAll={saveAll} />
+                        <li
+                            className="list-group-item"
+                            key={fixture._id}
+                            style={{ background: 'none' }}
+                        >
+                            <Fixture
+                                fixtureID={fixture._id}
+                                saveAll={saveAll}
+                            />
                         </li>
                     ))}
 
-                    <div className='previous-next-btns'>
-
-                        {parseInt(matchweekNumber) !== 1 && <div>
-                            <button className='btn my-btn' onClick={previousPage}><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="24px" height="24px"><path d="M0 0h24v24H0z" fill="none" /><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" /></svg></button>
-                        </div>}
-
-                        {matchweekBonus > 0 && <div className='score-bottom'>
-                            <p>Total J{matchweekNumber} : {matchweekPoints} pts<br />dont {matchweekBonus} pts bonus ({matchweekCorrects}/10)</p>
-                        </div>}
-                        {!matchweekBonus && <div className='score-bottom'>
-                            <p>Total J{matchweekNumber} : {matchweekPoints} pts ({matchweekCorrects}/10)</p>
-                        </div>}
-
-                        {parseInt(matchweekNumber) !== 38 && <div>
-                            <button className='btn my-btn' onClick={nextPage}><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="24px" height="24px"><path d="M0 0h24v24H0z" fill="none" /><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z" /></svg></button>
-                        </div>}
-
-                    </div>
+                    <MatchweekNavigation
+                        matchweekNumber={matchweekNumber}
+                        matchweekPoints={matchweekPoints}
+                        matchweekCorrects={matchweekCorrects}
+                        matchweekBonus={matchweekBonus}
+                        previousPage={previousPage}
+                        nextPage={nextPage}
+                        myClassName='score-bottom'
+                    />
 
                 </ul>
 
-                {user.role === 'GEEK ADMIN' && <div>
-                    <button className='btn my-btn admin-btn' onClick={getStatus}>Actualiser les scores</button>
-                    <button className='btn my-btn admin-btn' onClick={getOdds}>Actualiser les cotes</button>
-                </div>}
+                <AdminButtons
+                    user={user}
+                    getStatus={getStatus}
+                    getOdds={getOdds}
+                />
 
                 {showRules && <div className='rules-box'>
 
