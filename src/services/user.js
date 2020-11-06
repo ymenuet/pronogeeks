@@ -59,6 +59,11 @@ export const fetchPlayers = async(seasonID) => {
     return users
 }
 
+export const saveGeekLeagueHistory = async(userID, geekLeagueID) => {
+    await userService.put(`/geekLeagueHistory/${userID}/${geekLeagueID}`)
+    return true
+}
+
 export const confirmEmail = async(userID, confirmToken) => {
     let confirmed = false
     await userService.put(`/${userID}/${confirmToken}`)

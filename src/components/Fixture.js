@@ -5,6 +5,7 @@ import { Skeleton } from 'antd'
 import { Context } from '../context'
 import { openNotification, dateTransform, statusTranform } from '../helpers'
 import SavePronoButton from './SavePronoButton'
+import PreviewPoints from './PreviewPoints'
 
 const Fixture = ({ fixtureID, saveAll }) => {
     const [fixture, setFixture] = useState(null)
@@ -212,6 +213,12 @@ const Fixture = ({ fixtureID, saveAll }) => {
                         Dommage, mauvais prono...
                     </div>
                 )}
+
+                <PreviewPoints
+                    user={user}
+                    seasonID={fixture.season}
+                    matchweekNumber={fixture.matchweek}
+                />
 
             </div>
         )
