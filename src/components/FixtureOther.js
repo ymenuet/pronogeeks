@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { getFixture } from '../services/fixtures'
 import { Skeleton } from 'antd'
-import { dateTransform, statusTranform } from '../helpers'
+import { dateTransform, statusTranform, getGeeksProno } from '../helpers'
 
 const Fixture = ({ fixtureID, user }) => {
     const [fixture, setFixture] = useState(null)
@@ -12,29 +12,11 @@ const Fixture = ({ fixtureID, user }) => {
 
     useEffect(() => {
         if (user && user.seasons.length > 0) {
-            const fetchFixturesAndOdds = async (fixtureID) => {
+            const fetchFixture = async () => {
                 const fixture = await getFixture(fixtureID)
-                const seasonID = fixture.season
-                const matchweekNumber = fixture.matchweek
-                if (new Date(fixture.date) - Date.now() < 0) setMatchStarted(true)
-                setFixture(fixture)
-                let season = user.seasons.filter(season => season.season._id === seasonID)
-                if (season.length > 0) season = season[0]
-                let pronogeek = { homeProno: '', awayProno: '' };
-                let pronogeekFound = [];
-                let matchweekIndex = 0;
-                if (season.matchweeks.length > 0) {
-                    season.matchweeks.forEach((matchweek, i) => {
-                        if (matchweek.number.toString() === matchweekNumber.toString()) matchweekIndex = i
-                    })
-                    if (season.matchweeks[matchweekIndex].pronogeeks.length > 0) pronogeekFound = season.matchweeks[matchweekIndex].pronogeeks.filter(pronogeek => pronogeek.fixture === fixtureID)
-                }
-                if (pronogeekFound.length > 0) pronogeek = pronogeekFound[0]
-                setPronogeek(pronogeek)
-                setHomeScore(pronogeek.homeProno)
-                setAwayScore(pronogeek.awayProno)
+                getGeeksProno(user, fixture, setMatchStarted, setHomeScore, setAwayScore, setPronogeek, setFixture)
             }
-            fetchFixturesAndOdds(fixtureID)
+            fetchFixture()
         }
     }, [fixtureID, user])
 

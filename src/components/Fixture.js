@@ -7,7 +7,7 @@ import { openNotification, dateTransform, statusTranform } from '../helpers'
 import SavePronoButton from './SavePronoButton'
 import PreviewPoints from './PreviewPoints'
 
-const Fixture = ({ fixtureID, saveAll }) => {
+const Fixture = ({ fixtureID, saveAll, showLeaguePronos, setShowLeaguePronos }) => {
     const [fixture, setFixture] = useState(null)
     const [pronogeek, setPronogeek] = useState(null)
     const [matchStarted, setMatchStarted] = useState(false)
@@ -15,6 +15,7 @@ const Fixture = ({ fixtureID, saveAll }) => {
     const [awayScore, setAwayScore] = useState(null)
     const [saving, setSaving] = useState(false)
     const [saveSuccess, setSaveSuccess] = useState(false)
+    const [showLeagues, setShowLeagues] = useState(false)
     const { user } = useContext(Context)
 
     const saveProno = async (bool = true, time = 4500) => {
@@ -86,6 +87,20 @@ const Fixture = ({ fixtureID, saveAll }) => {
             (awayScore || parseInt(awayScore) === 0)
         ) saveProno(false, 10000)
     }, [saveAll, awayScore, homeScore, fixture])
+
+
+    useEffect(() => {
+        if (showLeaguePronos && setShowLeagues) {
+            setShowLeagues(false)
+            setShowLeaguePronos(false)
+        }
+    }, [showLeaguePronos, setShowLeaguePronos])
+
+
+    const seeLeaguePronos = () => {
+        setShowLeaguePronos(true)
+        setTimeout(() => setShowLeagues(!showLeagues), 100)
+    }
 
 
     return !fixture || homeScore == null || awayScore == null ? (
@@ -214,11 +229,15 @@ const Fixture = ({ fixtureID, saveAll }) => {
                     </div>
                 )}
 
-                <PreviewPoints
-                    user={user}
-                    seasonID={fixture.season}
-                    matchweekNumber={fixture.matchweek}
-                />
+                <button onClick={seeLeaguePronos}>Voir les pronos de mes ligues</button>
+
+                {showLeagues && <div style={{ position: 'fixed', left: 100, top: 100 }}>
+                    <PreviewPoints
+                        user={user}
+                        fixture={fixture}
+                    />
+                </div>}
+
 
             </div>
         )

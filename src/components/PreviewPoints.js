@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react'
 import { saveGeekLeagueHistory } from '../services/user'
 import { fetchLeague } from '../services/geekLeague'
 import Loader from './Loader'
+import GeekProno from './GeekProno'
 
-const PreviewPoints = ({ user, seasonID, matchweekNumber }) => {
+const PreviewPoints = ({ user, fixture }) => {
 
     const [geekLeague, setGeekLeague] = useState(user.geekLeagueHistory)
     const [geekLeagueDetails, setGeekLeagueDetails] = useState(null)
@@ -41,7 +42,16 @@ const PreviewPoints = ({ user, seasonID, matchweekNumber }) => {
             </select>
 
             {!geekLeagueDetails ? <Loader /> : <div>
-                <h4>{geekLeagueDetails.name}</h4>
+                <ul>
+                    {geekLeagueDetails.geeks.map((geek, i) =>
+                        <GeekProno
+                            key={geek._id}
+                            user={geek}
+                            fixture={fixture}
+                        />
+                    )}
+                </ul>
+
             </div>}
 
         </div>

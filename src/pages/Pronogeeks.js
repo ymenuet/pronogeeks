@@ -19,6 +19,7 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
     const [lastOddsUpdated, setLastOddsUpdated] = useState(null)
     const [lastScoresUpdated, setLastScoresUpdated] = useState(null)
     const [saveAll, setSaveAll] = useState(false)
+    const [showLeaguePronos, setShowLeaguePronos] = useState(false)
 
     const { loginUser, user } = useContext(Context)
 
@@ -50,12 +51,14 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
 
         const fetchStatus = async () => {
             const { fixtures } = await updateFixturesStatus(seasonID, matchweekNumber)
-            setFixtures(null)
-            setFixtures(fixtures)
-            openNotification('success', 'Scores et dates actualisés')
-            const user = await getProfile()
-            loginUser(user)
-            setPoints(user)
+            if (fixtures) {
+                setFixtures(null)
+                setFixtures(fixtures)
+                openNotification('success', 'Scores et dates actualisés')
+                const user = await getProfile()
+                loginUser(user)
+                setPoints(user)
+            }
         }
 
         const fetchOdds = async () => {
@@ -228,6 +231,8 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
                             <Fixture
                                 fixtureID={fixture._id}
                                 saveAll={saveAll}
+                                showLeaguePronos={showLeaguePronos}
+                                setShowLeaguePronos={setShowLeaguePronos}
                             />
                         </li>
                     ))}
