@@ -3,7 +3,7 @@ import { saveGeekLeagueHistory } from '../services/user'
 import { fetchLeague } from '../services/geekLeague'
 import Loader from './Loader'
 import GeekProno from './GeekProno'
-import { dateTransform, statusTranform } from '../helpers/index'
+import { statusTranform } from '../helpers/index'
 
 const PreviewPoints = ({ user, fixture }) => {
 
@@ -21,6 +21,11 @@ const PreviewPoints = ({ user, fixture }) => {
 
     }, [geekLeague, user])
 
+    const changeLeague = (e) => {
+        setGeekLeagueDetails(null)
+        setGeekLeague(e.target.value)
+    }
+
     return (
 
         <>
@@ -29,11 +34,11 @@ const PreviewPoints = ({ user, fixture }) => {
 
                 <div className='view-pronos-choose-league col-12 col-md-4'>
 
-                    <p>Choisis une ligue geek :</p>
+                    <p>Choisis une ligue :&nbsp;</p>
 
                     <select
                         defaultValue={geekLeague}
-                        onChange={e => setGeekLeague(e.target.value)}
+                        onChange={changeLeague}
                         style={{ color: 'black' }}
                     >
 
@@ -98,18 +103,24 @@ const PreviewPoints = ({ user, fixture }) => {
             </div>
 
 
-            {geekLeagueDetails && <div className='view-pronos-body'>
-                <ul>
-                    {geekLeagueDetails.geeks.map(geek =>
-                        <GeekProno
-                            key={geek._id}
-                            user={geek}
-                            fixture={fixture}
-                        />
-                    )}
-                </ul>
+            <div className={`${!geekLeagueDetails ? 'align-items-center' : ''} view-pronos-body`}>
+                {!geekLeagueDetails ? <Loader
+                    size='small'
+                    tip='Chargement des pronos...'
+                    fontSize='2.4rem'
+                    container={false}
+                /> : <ul>
+                        {geekLeagueDetails.geeks.map(geek =>
+                            <GeekProno
+                                key={geek._id}
+                                user={geek}
+                                fixture={fixture}
+                            />
+                        )}
+                    </ul>
 
-            </div>}
+                }
+            </div>
 
         </>
 

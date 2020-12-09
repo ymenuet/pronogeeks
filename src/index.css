@@ -1184,8 +1184,8 @@ ul.season-ranking>li>span:first-child {
 .view-pronos {
     box-sizing: border-box;
     position: fixed;
-    height: 400px;
-    top: calc(50vh + var(--navbar-height) / 2 - 200px);
+    height: 500px;
+    top: calc(50vh + var(--navbar-height) / 2 - 250px);
     width: 80%;
     left: 10%;
     background-color: var(--color-white-cream);
@@ -1203,14 +1203,80 @@ ul.season-ranking>li>span:first-child {
     height: 120px;
 }
 
+.view-pronos-choose-league p {
+    margin: 0;
+}
+
+@media (max-width:768px) {
+    .view-pronos-choose-league {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
+
 .view-pronos-game-info table {
     margin: 0 auto;
     width: 100%;
 }
 
 .view-pronos-body {
-    max-height: 380px;
+    height: 260px;
     overflow-y: scroll;
+    background-color: var(--color-dark-blue-bp);
+    border-radius: 5px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.view-pronos-body ul {
+    list-style: none;
+    padding: 0;
+    width: 80%;
+}
+
+.view-pronos-list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 5px 0;
+    background-color: var(--color-white-cream);
+    padding: 5px 20px;
+}
+
+.view-pronos-list-item>div {
+    display: flex;
+    align-items: center;
+    text-align: left;
+}
+
+.view-pronos-list-item>div:first-child {
+    justify-content: flex-start;
+}
+
+.view-pronos-list-item>div:first-child img {
+    margin-right: 15px;
+}
+
+@media (max-width:530px) {
+    .view-pronos-list-item>div:nth-child(2) img {
+        display: none;
+    }
+    .view-pronos-list-item>div:first-child img {
+        margin-right: 8px;
+    }
+}
+
+.view-pronos-list-item img {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.view-pronos-body::-webkit-scrollbar {
+    display: none;
 }
 
 .legend-save-btn {

@@ -7,12 +7,19 @@ const GeekProno = ({ user, fixture }) => {
 
     useEffect(() => {
         getGeeksProno(user, fixture, setHomeScore, setAwayScore)
-    }, [])
+    }, [fixture, user])
 
     return (
-        <li>
-            <span>{user.username}</span>
-            <span>{homeScore} - {awayScore}</span>
+        <li className="view-pronos-list-item">
+            <div>
+                <span><img src={user.photo} alt="Pic" /></span>
+                <span>{user.username}</span>
+            </div>
+            <div>
+                <span><img src={fixture.homeTeam.logo} alt="Home" /></span>
+                <span>{homeScore} - {awayScore}</span>
+                <span><img src={fixture.awayTeam.logo} alt="Away" /></span>
+            </div>
         </li>
     )
 }
