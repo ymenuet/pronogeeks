@@ -16,9 +16,9 @@ const GeekProno = ({ user, fixture }) => {
                 <span>{user.username}</span>
             </div>
             <div>
-                <span><img src={fixture.homeTeam.logo} alt="Home" /></span>
+                <span><img src={fixture.homeTeam.logo} alt="Home" />&nbsp;</span>
                 <span>{homeScore} - {awayScore}</span>
-                <span><img src={fixture.awayTeam.logo} alt="Away" /></span>
+                <span>&nbsp;<img src={fixture.awayTeam.logo} alt="Away" /></span>
             </div>
         </li>
     )

@@ -1184,8 +1184,8 @@ ul.season-ranking>li>span:first-child {
 .view-pronos {
     box-sizing: border-box;
     position: fixed;
-    height: 500px;
-    top: calc(50vh + var(--navbar-height) / 2 - 250px);
+    height: 80%;
+    top: calc(50vh + var(--navbar-height) / 2 - 40%);
     width: 80%;
     left: 10%;
     background-color: var(--color-white-cream);
@@ -1200,7 +1200,7 @@ ul.season-ranking>li>span:first-child {
 .view-pronos-header {
     justify-content: space-around;
     align-items: center!important;
-    height: 120px;
+    height: 30%;
 }
 
 .view-pronos-choose-league p {
@@ -1213,6 +1213,9 @@ ul.season-ranking>li>span:first-child {
         justify-content: center;
         align-items: center;
     }
+    .view-pronos {
+        top: calc(50vh + var(--navbar-height) / 2 - 30px - 40%);
+    }
 }
 
 .view-pronos-game-info table {
@@ -1221,7 +1224,7 @@ ul.season-ranking>li>span:first-child {
 }
 
 .view-pronos-body {
-    height: 260px;
+    height: 70%;
     overflow-y: scroll;
     background-color: var(--color-dark-blue-bp);
     border-radius: 5px;
@@ -1242,7 +1245,7 @@ ul.season-ranking>li>span:first-child {
     align-items: center;
     margin: 5px 0;
     background-color: var(--color-white-cream);
-    padding: 5px 20px;
+    padding: 5px 5vw;
 }
 
 .view-pronos-list-item>div {
@@ -1258,6 +1261,8 @@ ul.season-ranking>li>span:first-child {
 .view-pronos-list-item>div:first-child img {
     margin-right: 15px;
 }
+
+.view-pronos-list-item>div:nth-child(2) img {}
 
 @media (max-width:530px) {
     .view-pronos-list-item>div:nth-child(2) img {

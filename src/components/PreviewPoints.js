@@ -110,6 +110,14 @@ const PreviewPoints = ({ user, fixture }) => {
                     fontSize='2.4rem'
                     container={false}
                 /> : <ul>
+                        <li className="view-pronos-list-item">
+                            <div>
+                                Geek
+                            </div>
+                            <div>
+                                Pronogeek
+                            </div>
+                        </li>
                         {geekLeagueDetails.geeks.map(geek =>
                             <GeekProno
                                 key={geek._id}
