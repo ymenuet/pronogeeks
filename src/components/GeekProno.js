@@ -19,7 +19,7 @@ const GeekProno = ({ user, fixture, winner, determineWinner }) => {
             const exact = fixture.goalsHomeTeam === homeScore && fixture.goalsAwayTeam === awayScore
             if (exact) setExact(true)
         }
-    }, [fixture, homeScore, awayScore, winner])
+    }, [fixture, homeScore, awayScore, winner, determineWinner])
 
     return (
         <li className={`view-pronos-list-item ${correct ? 'right-prono' : 'wrong-prono'} ${exact ? 'exact-prono' : ''}`}>

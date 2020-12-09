@@ -1195,24 +1195,28 @@ ul.season-ranking>li>span:first-child {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
+    border-radius: 10px;
+    border: 3px solid var(--color-dark-blue-bp);
 }
 
 .view-pronos-header {
     justify-content: space-around;
     align-items: center!important;
-    height: 25%;
+    height: 35%;
     position: relative;
+    box-sizing: border-box;
 }
 
 .view-pronos-header>span:first-child {
     position: absolute;
-    top: -18px;
-    right: -4px;
+    top: -20px;
+    right: 0px;
     cursor: pointer;
 }
 
 .view-pronos-choose-league p {
     margin: 0;
+    font-size: 1.2rem;
 }
 
 .view-pronos-choose-league select {
@@ -1229,13 +1233,14 @@ ul.season-ranking>li>span:first-child {
 }
 
 .view-pronos-body {
-    height: 70%;
+    height: 65%;
     overflow-y: scroll;
     background-color: rgba(4, 78, 199, 0.8);
     border-radius: 5px;
     display: flex;
     align-items: flex-start;
     justify-content: center;
+    border: 3px solid var(--color-dark-blue-bp);
 }
 
 .view-pronos-body ul {
@@ -1248,9 +1253,11 @@ ul.season-ranking>li>span:first-child {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 5px 0;
+    margin: 8px 0;
     background-color: var(--color-white-cream);
     padding: 5px 5vw;
+    height: 46px;
+    border-radius: 23px;
 }
 
 .right-prono {
@@ -1280,18 +1287,24 @@ ul.season-ranking>li>span:first-child {
     margin-right: 15px;
 }
 
+.view-pronos-list-item>div:first-child>span:nth-child(2) {
+    text-align: left;
+}
+
 .view-pronos-list-item>div:nth-child(2)>span:nth-child(2) {
     background-color: var(--color-white-cream);
 }
 
 @media (max-width:768px) {
     .view-pronos-choose-league {
-        margin-top: 10px;
-    }
-    .view-pronos-choose-league {
+        order: 1;
         display: flex;
         justify-content: center;
         align-items: center;
+        margin-bottom: 10px;
+    }
+    .view-pronos-game-info {
+        margin: 10px 0;
     }
     .view-pronos {
         top: calc(50vh + var(--navbar-height) / 2 - 30px - 40%);
@@ -1317,6 +1330,9 @@ ul.season-ranking>li>span:first-child {
     }
     .view-pronos-header .score-fixture {
         font-size: 1.6rem;
+    }
+    .view-pronos-choose-league p {
+        font-size: 1rem;
     }
 }
 

@@ -1,15 +1,19 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
+import { getProfile } from '../services/auth'
 import { saveGeekLeagueHistory } from '../services/user'
 import { fetchLeague } from '../services/geekLeague'
 import Loader from './Loader'
 import GeekProno from './GeekProno'
 import { statusTranform } from '../helpers/index'
+import { Context } from '../context'
 
 const PreviewPoints = ({ user, fixture, setShowLeagues }) => {
 
     const [geekLeague, setGeekLeague] = useState(user.geekLeagueHistory)
     const [geekLeagueDetails, setGeekLeagueDetails] = useState(null)
     const [winner, setWinner] = useState(null)
+
+    const { loginUser } = useContext(Context)
 
     const determineWinner = (goalsHome, goalsAway) => {
         return goalsHome > goalsAway ? 'Home' :
@@ -20,22 +24,37 @@ const PreviewPoints = ({ user, fixture, setShowLeagues }) => {
     useEffect(() => {
         const winner = determineWinner(fixture.goalsHomeTeam, fixture.goalsAwayTeam)
         setWinner(winner)
-    }, [])
+    }, [fixture])
 
     useEffect(() => {
 
         const getLeague = async () => {
             const league = await fetchLeague(geekLeague)
+            league.geeks = league.geeks.sort((a, b) => {
+                const userA = a.username.toLowerCase()
+                const userB = b.username.toLowerCase()
+                if (userA >= userB) return 1
+                else return -1
+            })
             setGeekLeagueDetails(league)
-            await saveGeekLeagueHistory(user._id, league._id)
         }
         if (geekLeague) getLeague()
 
-    }, [geekLeague, user])
+    }, [geekLeague])
 
-    const changeLeague = (e) => {
+    useEffect(() => {
+        const fetchProfile = async () => {
+            const user = await getProfile()
+            loginUser(user)
+        }
+        fetchProfile()
+    }, [geekLeagueDetails])
+
+    const changeLeague = async (e) => {
+        const geekLeagueID = e.target.value
         setGeekLeagueDetails(null)
-        setGeekLeague(e.target.value)
+        setGeekLeague(geekLeagueID)
+        await saveGeekLeagueHistory(user._id, geekLeagueID)
     }
 
     return (
