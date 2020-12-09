@@ -798,8 +798,6 @@ ul.season-ranking>li>span:first-child {
     margin-top: 10px;
 }
 
-.delete-account-btn:hover {}
-
 @media (max-width: 340px) {
     .my-profile-page h2 {
         font-size: 1.8rem;
@@ -1181,6 +1179,38 @@ ul.season-ranking>li>span:first-child {
     height: 30px;
     margin-bottom: 10px;
     font-weight: bold;
+}
+
+.view-pronos {
+    box-sizing: border-box;
+    position: fixed;
+    height: 400px;
+    top: calc(50vh + var(--navbar-height) / 2 - 200px);
+    width: 80%;
+    left: 10%;
+    background-color: var(--color-white-cream);
+    z-index: 2;
+    padding: 20px;
+    color: var(--color-dark-blue-bp);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.view-pronos-header {
+    justify-content: space-around;
+    align-items: center!important;
+    height: 120px;
+}
+
+.view-pronos-game-info table {
+    margin: 0 auto;
+    width: 100%;
+}
+
+.view-pronos-body {
+    max-height: 380px;
+    overflow-y: scroll;
 }
 
 .legend-save-btn {

@@ -187,6 +187,7 @@ const Fixture = ({ fixtureID, saveAll, showLeaguePronos, setShowLeaguePronos }) 
                                     matchStarted={matchStarted}
                                     saveProno={saveProno}
                                     saving={saving}
+                                    seeLeaguePronos={seeLeaguePronos}
                                 />
 
                             </td>
@@ -229,9 +230,7 @@ const Fixture = ({ fixtureID, saveAll, showLeaguePronos, setShowLeaguePronos }) 
                     </div>
                 )}
 
-                <button onClick={seeLeaguePronos}>Voir les pronos de mes ligues</button>
-
-                {showLeagues && <div style={{ position: 'fixed', left: 100, top: 100 }}>
+                {showLeagues && <div className='view-pronos'>
                     <PreviewPoints
                         user={user}
                         fixture={fixture}

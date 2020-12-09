@@ -78,10 +78,10 @@ export const statusTranform = (statusShort, minutes) => {
     } else return `${minutes}'`
 }
 
-export const getGeeksProno = (user, fixture, setMatchStarted, setHomeScore, setAwayScore, setPronogeek = null, setFixture = null) => {
+export const getGeeksProno = (user, fixture, setHomeScore, setAwayScore, setMatchStarted = null, setPronogeek = null, setFixture = null) => {
     const seasonID = fixture.season
     const matchweekNumber = fixture.matchweek
-    if (new Date(fixture.date) - Date.now() < 0) setMatchStarted(true)
+    if (setMatchStarted && new Date(fixture.date) - Date.now() < 0) setMatchStarted(true)
     if (setFixture) setFixture(fixture)
     let season = user.seasons.filter(season => season.season._id || season.season === seasonID)
     if (season.length > 0) season = season[0]

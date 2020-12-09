@@ -14,7 +14,7 @@ const Fixture = ({ fixtureID, user }) => {
         if (user && user.seasons.length > 0) {
             const fetchFixture = async () => {
                 const fixture = await getFixture(fixtureID)
-                getGeeksProno(user, fixture, setMatchStarted, setHomeScore, setAwayScore, setPronogeek, setFixture)
+                getGeeksProno(user, fixture, setHomeScore, setAwayScore, setMatchStarted, setPronogeek, setFixture)
             }
             fetchFixture()
         }
