@@ -1186,8 +1186,8 @@ ul.season-ranking>li>span:first-child {
     position: fixed;
     height: 80%;
     top: calc(50vh + var(--navbar-height) / 2 - 40%);
-    width: 80%;
-    left: 10%;
+    width: 86%;
+    left: 7%;
     background-color: var(--color-white-cream);
     z-index: 2;
     padding: 20px;
@@ -1200,22 +1200,27 @@ ul.season-ranking>li>span:first-child {
 .view-pronos-header {
     justify-content: space-around;
     align-items: center!important;
-    height: 30%;
+    height: 25%;
+    position: relative;
+}
+
+.view-pronos-header>span:first-child {
+    position: absolute;
+    top: -18px;
+    right: -4px;
+    cursor: pointer;
 }
 
 .view-pronos-choose-league p {
     margin: 0;
 }
 
-@media (max-width:768px) {
-    .view-pronos-choose-league {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-    .view-pronos {
-        top: calc(50vh + var(--navbar-height) / 2 - 30px - 40%);
-    }
+.view-pronos-choose-league select {
+    border: 1px solid var(--color-dark-blue-bp);
+    padding: 0px 5px;
+    height: 26px;
+    border-radius: 13px;
+    outline: none;
 }
 
 .view-pronos-game-info table {
@@ -1226,7 +1231,7 @@ ul.season-ranking>li>span:first-child {
 .view-pronos-body {
     height: 70%;
     overflow-y: scroll;
-    background-color: var(--color-dark-blue-bp);
+    background-color: rgba(4, 78, 199, 0.8);
     border-radius: 5px;
     display: flex;
     align-items: flex-start;
@@ -1236,7 +1241,7 @@ ul.season-ranking>li>span:first-child {
 .view-pronos-body ul {
     list-style: none;
     padding: 0;
-    width: 80%;
+    width: 60%;
 }
 
 .view-pronos-list-item {
@@ -1248,10 +1253,23 @@ ul.season-ranking>li>span:first-child {
     padding: 5px 5vw;
 }
 
+.right-prono {
+    color: var(--color-dark-green-gb);
+}
+
+.exact-prono {
+    font-weight: 900;
+}
+
+.wrong-prono {
+    color: var(--color-red-rp);
+}
+
 .view-pronos-list-item>div {
     display: flex;
     align-items: center;
-    text-align: left;
+    justify-content: center;
+    width: 50%;
 }
 
 .view-pronos-list-item>div:first-child {
@@ -1262,7 +1280,29 @@ ul.season-ranking>li>span:first-child {
     margin-right: 15px;
 }
 
-.view-pronos-list-item>div:nth-child(2) img {}
+.view-pronos-list-item>div:nth-child(2)>span:nth-child(2) {
+    background-color: var(--color-white-cream);
+}
+
+@media (max-width:768px) {
+    .view-pronos-choose-league {
+        margin-top: 10px;
+    }
+    .view-pronos-choose-league {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .view-pronos {
+        top: calc(50vh + var(--navbar-height) / 2 - 30px - 40%);
+    }
+    .view-pronos-list-item>div:nth-child(2) {
+        justify-content: flex-end;
+    }
+    .view-pronos-body ul {
+        width: 80%;
+    }
+}
 
 @media (max-width:530px) {
     .view-pronos-list-item>div:nth-child(2) img {
@@ -1270,6 +1310,22 @@ ul.season-ranking>li>span:first-child {
     }
     .view-pronos-list-item>div:first-child img {
         margin-right: 8px;
+    }
+    .view-pronos-header img {
+        width: 40px;
+        height: 40px;
+    }
+    .view-pronos-header .score-fixture {
+        font-size: 1.6rem;
+    }
+}
+
+@media (max-width:350px) {
+    .view-pronos-header .team-names {
+        display: none;
+    }
+    .view-pronos-list-item>div:first-child img {
+        display: none;
     }
 }
 

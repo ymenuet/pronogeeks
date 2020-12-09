@@ -234,6 +234,7 @@ const Fixture = ({ fixtureID, saveAll, showLeaguePronos, setShowLeaguePronos }) 
                     <PreviewPoints
                         user={user}
                         fixture={fixture}
+                        setShowLeagues={setShowLeagues}
                     />
                 </div>}
 
