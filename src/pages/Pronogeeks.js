@@ -19,6 +19,7 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
     const [lastOddsUpdated, setLastOddsUpdated] = useState(null)
     const [lastScoresUpdated, setLastScoresUpdated] = useState(null)
     const [saveAll, setSaveAll] = useState(false)
+    const [showLeaguePronos, setShowLeaguePronos] = useState(false)
 
     const { loginUser, user } = useContext(Context)
 
@@ -38,30 +39,6 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
         setMatchweekCorrects(matchweekUser.numberCorrects)
     }
 
-    const getStatus = async () => {
-        const data = await updateFixturesStatus(seasonID, matchweekNumber)
-        if (data.message) return openNotification('warning', 'Actualisation abortée', data.message.fr)
-        else {
-            setFixtures(null)
-            setFixtures(data.fixtures)
-            openNotification('success', 'Scores et dates actualisés')
-            const user = await getProfile()
-            loginUser(user)
-            setPoints(user)
-        }
-    }
-
-    const getOdds = async () => {
-        const message = await updateOdds(seasonID, matchweekNumber)
-        if (message) return openNotification('warning', 'Actualisation abortée', message.fr)
-        else {
-            const updated = await fetchFixtures(seasonID, matchweekNumber)
-            if (updated) {
-                openNotification('success', 'Cotes actualisées')
-            }
-        }
-    }
-
     useEffect(() => {
 
         const setPoints = user => {
@@ -74,12 +51,14 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
 
         const fetchStatus = async () => {
             const { fixtures } = await updateFixturesStatus(seasonID, matchweekNumber)
-            setFixtures(null)
-            setFixtures(fixtures)
-            openNotification('success', 'Scores et dates actualisés')
-            const user = await getProfile()
-            loginUser(user)
-            setPoints(user)
+            if (fixtures) {
+                setFixtures(null)
+                setFixtures(fixtures)
+                openNotification('success', 'Scores et dates actualisés')
+                const user = await getProfile()
+                loginUser(user)
+                setPoints(user)
+            }
         }
 
         const fetchOdds = async () => {
@@ -206,9 +185,11 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
                 </div>
 
                 <AdminButtons
-                    user={user}
-                    getStatus={getStatus}
-                    getOdds={getOdds}
+                    seasonID={seasonID}
+                    matchweekNumber={matchweekNumber}
+                    setFixtures={setFixtures}
+                    setPoints={setPoints}
+                    fetchFixtures={fetchFixtures}
                 />
 
                 <h2>
@@ -250,6 +231,8 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
                             <Fixture
                                 fixtureID={fixture._id}
                                 saveAll={saveAll}
+                                showLeaguePronos={showLeaguePronos}
+                                setShowLeaguePronos={setShowLeaguePronos}
                             />
                         </li>
                     ))}
@@ -267,9 +250,11 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
                 </ul>
 
                 <AdminButtons
-                    user={user}
-                    getStatus={getStatus}
-                    getOdds={getOdds}
+                    seasonID={seasonID}
+                    matchweekNumber={matchweekNumber}
+                    setFixtures={setFixtures}
+                    setPoints={setPoints}
+                    fetchFixtures={fetchFixtures}
                 />
 
                 {showRules && <div className='rules-box'>

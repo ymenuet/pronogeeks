@@ -5,8 +5,9 @@ import { Skeleton } from 'antd'
 import { Context } from '../context'
 import { openNotification, dateTransform, statusTranform } from '../helpers'
 import SavePronoButton from './SavePronoButton'
+import PreviewPoints from './PreviewPoints'
 
-const Fixture = ({ fixtureID, saveAll }) => {
+const Fixture = ({ fixtureID, saveAll, showLeaguePronos, setShowLeaguePronos }) => {
     const [fixture, setFixture] = useState(null)
     const [pronogeek, setPronogeek] = useState(null)
     const [matchStarted, setMatchStarted] = useState(false)
@@ -14,6 +15,7 @@ const Fixture = ({ fixtureID, saveAll }) => {
     const [awayScore, setAwayScore] = useState(null)
     const [saving, setSaving] = useState(false)
     const [saveSuccess, setSaveSuccess] = useState(false)
+    const [showLeagues, setShowLeagues] = useState(false)
     const { user } = useContext(Context)
 
     const saveProno = async (bool = true, time = 4500) => {
@@ -85,6 +87,20 @@ const Fixture = ({ fixtureID, saveAll }) => {
             (awayScore || parseInt(awayScore) === 0)
         ) saveProno(false, 10000)
     }, [saveAll, awayScore, homeScore, fixture])
+
+
+    useEffect(() => {
+        if (showLeaguePronos && setShowLeagues) {
+            setShowLeagues(false)
+            setShowLeaguePronos(false)
+        }
+    }, [showLeaguePronos, setShowLeaguePronos])
+
+
+    const seeLeaguePronos = () => {
+        setShowLeaguePronos(true)
+        setTimeout(() => setShowLeagues(!showLeagues), 100)
+    }
 
 
     return !fixture || homeScore == null || awayScore == null ? (
@@ -171,6 +187,7 @@ const Fixture = ({ fixtureID, saveAll }) => {
                                     matchStarted={matchStarted}
                                     saveProno={saveProno}
                                     saving={saving}
+                                    seeLeaguePronos={seeLeaguePronos}
                                 />
 
                             </td>
@@ -212,6 +229,15 @@ const Fixture = ({ fixtureID, saveAll }) => {
                         Dommage, mauvais prono...
                     </div>
                 )}
+
+                {showLeagues && <div className='view-pronos'>
+                    <PreviewPoints
+                        user={user}
+                        fixture={fixture}
+                        setShowLeagues={setShowLeagues}
+                    />
+                </div>}
+
 
             </div>
         )
