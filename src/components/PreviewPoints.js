@@ -9,7 +9,7 @@ import { Context } from '../context'
 
 const PreviewPoints = ({ user, fixture, setShowLeagues }) => {
 
-    const [geekLeague, setGeekLeague] = useState(user.geekLeagueHistory)
+    const [geekLeague, setGeekLeague] = useState(user.geekLeagueHistory || user.geekLeagues[0]._id)
     const [geekLeagueDetails, setGeekLeagueDetails] = useState(null)
     const [winner, setWinner] = useState(null)
 
