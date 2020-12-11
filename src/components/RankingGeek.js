@@ -6,6 +6,7 @@ const RankingGeek = ({ user, geek, index, seasonID, matchweek }) => {
     const [totalPoints, setTotalPoints] = useState(0)
     const [correctPronos, setCorrectPronos] = useState(0)
     const [exactPronos, setExactPronos] = useState(0)
+    const [favTeam, setFavTeam] = useState(false)
 
     useEffect(() => {
         if (
@@ -18,6 +19,7 @@ const RankingGeek = ({ user, geek, index, seasonID, matchweek }) => {
             setTotalPoints(matchweekDetails.totalPoints)
             setCorrectPronos(matchweekDetails.numberCorrects)
             setExactPronos(matchweekDetails.numberExacts)
+            setFavTeam(matchweekDetails.bonusFavTeam)
         }
     }, [geek, matchweek, seasonID])
 
@@ -38,8 +40,9 @@ const RankingGeek = ({ user, geek, index, seasonID, matchweek }) => {
                 </Link>
             </span>}
 
-            <span className='badge badge-success badge-pill my-badge'>{correctPronos}</span>
-            <span className='badge badge-success badge-pill my-badge'>{exactPronos}</span>
+            {favTeam && <svg style={{ display: 'none' }} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill=" rgb(253, 0, 7)" width="24px" height="24px"><path d="M0 0h24v24H0z" fill="none" /><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" /></svg>}
+            <span style={{ display: 'none' }} className='badge badge-success badge-pill my-badge'>{correctPronos}</span>
+            <span style={{ display: 'none' }} className='badge badge-success badge-pill my-badge'>{exactPronos}</span>
             <span className='badge badge-success badge-pill my-badge'>{totalPoints} pts</span>
 
         </li>
