@@ -1738,16 +1738,97 @@ a.geekleagues-page-btn:hover {
 
 /* GEEKLEAGUE DETAIL MATCHWEEK */
 
+.ranking-geekleague-matchweek-container {
+    padding: 0;
+}
+
 .ranking-geekleague-matchweek {
     padding: 20px;
     background-color: rgba(156, 0, 99, 0.8);
     border-radius: 10px;
+    margin-bottom: 35px;
+}
+
+.geek-ranking-number {
+    font-size: 1.3rem;
 }
 
 .ranking-geekleague-matchweek h4 {
     color: var(--color-white-cream) !important;
     font-family: 'Audiowide';
     margin: 0 10px;
+}
+
+li.list-group-item {
+    padding: 0.75rem 0.75rem;
+}
+
+.my-badge-ranking {
+    font-size: 1.2rem;
+    height: 26px;
+    line-height: 100%;
+    padding-top: 4px;
+}
+
+.ranking-line-top {
+    margin-bottom: 3px;
+}
+
+.username-ranking {
+    font-size: 1.2rem;
+}
+
+.profile-pic-ranking {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.team-logo-ranking {
+    width: 20px;
+    height: 20px;
+}
+
+.ranking-icon {
+    padding: 0 5px;
+    border-right: 1px solid rgba(0, 0, 0, 0.2);
+    font-size: 1.1rem;
+    position: relative;
+}
+
+.ranking-icon-details {
+    display: none;
+    position: absolute;
+    background: #fbe291;
+    z-index: 2;
+    padding: 5px 10px;
+    width: 180px;
+    border-radius: 10px;
+}
+
+.ranking-icon-details-right {
+    left: -180px;
+}
+
+.ranking-icon-details p {
+    margin: 0;
+    color: black;
+    text-align: left;
+}
+
+.ranking-icon:hover>.ranking-icon-details {
+    display: initial;
+}
+
+.ranking-icon-last {
+    padding-right: 0;
+    border: none;
+}
+
+.medal-icons-ranking {
+    position: relative;
+    right: 6px;
 }
 
 

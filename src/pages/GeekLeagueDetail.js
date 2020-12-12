@@ -67,7 +67,7 @@ const GeekLeagueDetail = ({ match: { params: { geekLeagueID, seasonID } }, loadi
 
                     <div className='row'>
 
-                        <div className='col-10 offset-1 col-lg-6 offset-lg-3'>
+                        <div className='ranking-geekleague-matchweek-container col-10 offset-1 col-lg-6 offset-lg-3'>
 
                             <h2>Classement {geekLeague.name}</h2>
 
