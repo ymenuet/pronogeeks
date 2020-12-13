@@ -105,7 +105,7 @@ const GeekLeagueDetail = ({ match: { params: { geekLeagueID, seasonID } }, loadi
                                     </div>
                                 </div>
 
-                                <ul className='list-group list-group-flush geekleague-ranking-detail mt-2'>
+                                <ul className='list-group list-group-flush geekleague-ranking-detail'>
 
                                     {ranking.map((geek, index) => <RankingGeek
                                         key={geek._id}

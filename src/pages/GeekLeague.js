@@ -4,7 +4,7 @@ import { fetchLeague, editGeekLeague, deleteGeekLeague, outGeekLeague } from '..
 import { getProfile } from '../services/auth'
 import { getSeasons } from '../services/seasons'
 import { getUsers } from '../services/user'
-import { Loader } from '../components'
+import { Loader, RankingGeek } from '../components'
 import { Form, Input, Select } from 'antd'
 import { Link } from 'react-router-dom'
 
@@ -72,9 +72,19 @@ const GeekLeague = ({ match: { params: { geekLeagueID } }, history, loading }) =
         history.push('/myGeekLeagues')
     }
 
-    const setRank = (num) => {
-        if (parseInt(num) === 1) return '1er(e)'
-        else return `${num}ème`
+    const rankGeeks = season => {
+        return geekLeague.geeks.sort((a, b) => {
+            let result;
+            if (!a.seasons && !b.seasons) result = -1
+            else if (!a.seasons) result = 1
+            else if (!b.seasons) result = -1
+            else if (a.seasons.length > 0 && b.seasons.length > 0) {
+                result = b.seasons.filter(seas => seas.season.toString() === season._id.toString())[0].totalPoints - a.seasons.filter(seas => seas.season.toString() === season._id.toString())[0].totalPoints
+            } else if (a.seasons.length > 0 && b.seasons.length < 1) result = -1
+            else if (a.seasons.length < 1 && b.seasons.length > 0) result = 1
+            else if (a.seasons.length < 1 && b.seasons.length < 1) result = -1
+            return result
+        })
     }
 
     return <div className='geekleague-bg geekleague-details'>
@@ -132,40 +142,25 @@ const GeekLeague = ({ match: { params: { geekLeagueID } }, history, loading }) =
                     >
                         {seasons.map(season => <div
                             key={season._id}
-                            className='league-season-ranking-container col-12 col-lg-6'
+                            className='ranking-geekleague-matchweek-container col-10 offset-1 col-lg-6 offset-lg-3'
                         >
                             <div className='league-season-ranking'>
 
                                 <h4>{season.leagueName} saison {season.year}<br />Classement général</h4>
 
-                                <ul className='list-group list-group-flush geekleague-ranking-detail mt-2'>
+                                <Link to={`/myGeekLeagues/${geekLeagueID}/season/${season._id}`}>
+                                    <button className='btn my-btn see-more-btn'>Détails par journée</button>
+                                </Link>
 
-                                    {geekLeague.geeks.sort((a, b) => {
-                                        let result;
-                                        if (!a.seasons && !b.seasons) result = -1
-                                        else if (!a.seasons) result = 1
-                                        else if (!b.seasons) result = -1
-                                        else if (a.seasons.length > 0 && b.seasons.length > 0) {
-                                            result = b.seasons.filter(seas => seas.season.toString() === season._id.toString())[0].totalPoints - a.seasons.filter(seas => seas.season.toString() === season._id.toString())[0].totalPoints
-                                        } else if (a.seasons.length > 0 && b.seasons.length < 1) result = -1
-                                        else if (a.seasons.length < 1 && b.seasons.length > 0) result = 1
-                                        else if (a.seasons.length < 1 && b.seasons.length < 1) result = -1
-                                        return result
-                                    })
-                                        .map((geek, index) => <li
-                                            className='list-group-item d-flex justify-content-between align-items-center'
-                                            key={geek._id}
-                                        >
+                                <ul className='list-group list-group-flush geekleague-ranking-detail'>
 
-                                            {geek._id === user._id && <span><b>{setRank(index + 1)} : {geek.username}</b></span>}
-
-                                            {geek._id !== user._id && <span>{setRank(index + 1)} : {geek.username}</span>}
-
-                                            {geek.seasons.length > 0 && <span className='badge badge-success badge-pill my-badge'>{geek.seasons.filter(seas => seas.season.toString() === season._id.toString())[0]?.totalPoints} pts</span>}
-
-                                            {geek.seasons.length < 1 && <span className='badge badge-success badge-pill my-badge'>0 pts</span>}
-
-                                        </li>)
+                                    {rankGeeks(season).map((geek, index) => <RankingGeek
+                                        key={geek._id}
+                                        user={user}
+                                        geek={geek}
+                                        index={index}
+                                        seasonID={season._id}
+                                    />)
                                     }
                                 </ul>
 

@@ -13,12 +13,13 @@ const RankingGeek = ({ user, geek, index, seasonID, matchweek }) => {
     const [team, setTeam] = useState(null)
 
     useEffect(() => {
-        if (
-            geek.seasons.length > 0 &&
-            geek.seasons.filter(seas => seas.season.toString() === seasonID.toString()).length > 0 &&
+        const geekPlaysSeason = geek.seasons.length > 0 &&
+            geek.seasons.filter(seas => seas.season.toString() === seasonID.toString()).length > 0
+        const geekPlaysMatchweek = matchweek &&
             geek.seasons.filter(seas => seas.season.toString() === seasonID.toString())[0].matchweeks.length > 0 &&
             geek.seasons.filter(seas => seas.season.toString() === seasonID.toString())[0].matchweeks.filter(oneMatchweek => oneMatchweek.number.toString() === matchweek.toString()).length > 0
-        ) {
+
+        if (geekPlaysSeason && geekPlaysMatchweek) {
             const team = geek.seasons.filter(seas => seas.season.toString() === seasonID.toString())[0].favTeam
             const matchweekDetails = geek.seasons.filter(seas => seas.season.toString() === seasonID.toString())[0].matchweeks.filter(oneMatchweek => oneMatchweek.number.toString() === matchweek.toString())[0]
             setTotalPoints(matchweekDetails.totalPoints)
@@ -26,6 +27,14 @@ const RankingGeek = ({ user, geek, index, seasonID, matchweek }) => {
             setExactPronos(matchweekDetails.numberExacts)
             setFavTeam(matchweekDetails.bonusFavTeam)
             setTeam(team)
+        }
+        else if (!matchweek && geekPlaysSeason) {
+            const seasonDetails = geek.seasons.filter(seas => seas.season.toString() === seasonID.toString())[0]
+            setTotalPoints(seasonDetails.totalPoints || seasonDetails.initialPoints)
+            setCorrectPronos(seasonDetails.numberCorrects || seasonDetails.initialNumberCorrects)
+            setExactPronos(seasonDetails.numberExacts || seasonDetails.initialNumberExacts)
+            setFavTeam(seasonDetails.bonusFavTeam || seasonDetails.initialBonusFavTeam)
+            setTeam(seasonDetails.favTeam)
         }
     }, [geek, matchweek, seasonID])
 
@@ -39,6 +48,40 @@ const RankingGeek = ({ user, geek, index, seasonID, matchweek }) => {
                 return <ThirdIcon className='medal-icons-ranking' size='28px' color='#6A3805' />
             default: return ` ${index + 1} - `
         }
+    }
+
+    const favTeamInfo = () => {
+        if (matchweek) return favTeam && <span className='ranking-icon'>
+            <FavTeamIcon size={iconSize} />
+            <div className='ranking-icon-details ranking-icon-details-right'>
+                <p>Bon prono avec son équipe de coeur :<br />
+                    <img className="team-logo-ranking" src={team?.logo} alt="Fav Team" /> {team?.name}
+                </p>
+            </div>
+        </span>
+        else return <span className='ranking-icon'>
+            {favTeam}<FavTeamIcon className='ranking-icon-component' size={iconSize} />
+            <div className='ranking-icon-details ranking-icon-details-right'>
+                <p>{favTeam} bons pronos avec son équipe de coeur.</p>
+            </div>
+        </span>
+    }
+
+    const seePronos = () => {
+        if (matchweek) return <Link to={`/geek/${geek._id}/pronogeeks/${seasonID}/matchweek/${matchweek}`}>
+            <span className='ranking-icon ranking-icon-last'>
+                <ViewPronoIcon color='rgba(156, 0, 99, 0.8)' size='24px' />
+                <div className='ranking-icon-details'>
+                    <p>Voir les pronos de {geek.username}</p>
+                </div>
+            </span>
+        </Link>
+        else return <span className='ranking-icon ranking-icon-last ranking-favteam-logo'>
+            <img className="team-logo-ranking" src={team?.logo} alt="Fav Team" />
+            <div className='ranking-icon-details'>
+                <p>Équipe de coeur de {geek.username} : {team?.name}</p>
+            </div>
+        </span>
     }
 
     return (
@@ -65,38 +108,26 @@ const RankingGeek = ({ user, geek, index, seasonID, matchweek }) => {
 
                 <div className='d-flex justify-content-between align-items-center'>
 
-                    <Link to={`/geek/${geek._id}/pronogeeks/${seasonID}/matchweek/${matchweek}`}>
-                        <span className='ranking-icon ranking-icon-last'>
-                            <ViewPronoIcon color='rgba(156, 0, 99, 0.8)' size='24px' />
-                            <div className='ranking-icon-details'>
-                                <p>Voir les pronos de {geek.username}</p>
-                            </div>
-                        </span>
-                    </Link>
+                    {seePronos()}
 
                     <div className='d-flex justify-content-evenly align-items-center'>
-                        {favTeam && <span className='ranking-icon'>
-                            <FavTeamIcon size={iconSize} />
-                            <div className='ranking-icon-details ranking-icon-details-right'>
-                                <p>Bon prono avec son équipe de coeur :<br />
-                                    <img className="team-logo-ranking" src={team.logo} alt="Fav Team" /> {team.name}
-                                </p>
-                            </div>
-                        </span>}
+
+                        {favTeamInfo()}
 
                         <span className='ranking-icon'>
-                            {correctPronos} <CorrectIcon size={iconSize} color='#28a745' />
+                            {correctPronos}<CorrectIcon className='ranking-icon-component' size={iconSize} color='#28a745' />
                             <div className='ranking-icon-details ranking-icon-details-right'>
                                 <p>{correctPronos} pronogeeks corrects</p>
                             </div>
                         </span>
 
                         <span className='ranking-icon ranking-icon-last'>
-                            {exactPronos} <ExactIcon size={iconSize} color='#0041aa' />
+                            {exactPronos}<ExactIcon className='ranking-icon-component' size={iconSize} color='#0041aa' />
                             <div className='ranking-icon-details ranking-icon-details-right'>
                                 <p>{exactPronos} pronogeeks exacts</p>
                             </div>
                         </span>
+
                     </div>
 
                 </div>
