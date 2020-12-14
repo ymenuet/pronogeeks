@@ -278,6 +278,14 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
                                 <li>8 pronos corrects: 300pts bonus</li>
                                 <li>9 pronos corrects: 500pts bonus</li>
                                 <li>10 pronos corrects: 700pts bonus</li>
+                                <li style={{ listStyle: 'none' }}>&nbsp;</li>
+                                <li>Moins de 5 pronos exacts : 0pt bonus</li>
+                                <li>5 pronos exacts: 50pts bonus</li>
+                                <li>6 pronos exacts: 100pts bonus</li>
+                                <li>7 pronos exacts: 200pts bonus</li>
+                                <li>8 pronos exacts: 300pts bonus</li>
+                                <li>9 pronos exacts: 500pts bonus</li>
+                                <li>10 pronos exacts: 700pts bonus</li>
                             </ul>
                         </li>
                     </ul>

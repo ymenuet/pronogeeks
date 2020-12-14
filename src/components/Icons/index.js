@@ -1,0 +1,7 @@
+export { default as CorrectIcon } from './CorrectIcon'
+export { default as ExactIcon } from './ExactIcon'
+export { default as FavTeamIcon } from './FavTeamIcon'
+export { default as ViewPronoIcon } from './ViewPronoIcon'
+export { default as FirstIcon } from './FirstIcon'
+export { default as SecondIcon } from './SecondIcon'
+export { default as ThirdIcon } from './ThirdIcon'

@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { CorrectIcon, ExactIcon, FavTeamIcon, ViewPronoIcon, FirstIcon, SecondIcon, ThirdIcon } from './Icons'
+
+const iconSize = '20px'
 
 const RankingGeek = ({ user, geek, index, seasonID, matchweek }) => {
 
@@ -7,43 +10,129 @@ const RankingGeek = ({ user, geek, index, seasonID, matchweek }) => {
     const [correctPronos, setCorrectPronos] = useState(0)
     const [exactPronos, setExactPronos] = useState(0)
     const [favTeam, setFavTeam] = useState(false)
+    const [team, setTeam] = useState(null)
 
     useEffect(() => {
-        if (
-            geek.seasons.length > 0 &&
-            geek.seasons.filter(seas => seas.season.toString() === seasonID.toString()).length > 0 &&
+        const geekPlaysSeason = geek.seasons.length > 0 &&
+            geek.seasons.filter(seas => seas.season.toString() === seasonID.toString()).length > 0
+        const geekPlaysMatchweek = matchweek &&
             geek.seasons.filter(seas => seas.season.toString() === seasonID.toString())[0].matchweeks.length > 0 &&
             geek.seasons.filter(seas => seas.season.toString() === seasonID.toString())[0].matchweeks.filter(oneMatchweek => oneMatchweek.number.toString() === matchweek.toString()).length > 0
-        ) {
+
+        if (geekPlaysSeason && geekPlaysMatchweek) {
+            const team = geek.seasons.filter(seas => seas.season.toString() === seasonID.toString())[0].favTeam
             const matchweekDetails = geek.seasons.filter(seas => seas.season.toString() === seasonID.toString())[0].matchweeks.filter(oneMatchweek => oneMatchweek.number.toString() === matchweek.toString())[0]
             setTotalPoints(matchweekDetails.totalPoints)
             setCorrectPronos(matchweekDetails.numberCorrects)
             setExactPronos(matchweekDetails.numberExacts)
             setFavTeam(matchweekDetails.bonusFavTeam)
+            setTeam(team)
+        }
+        else if (!matchweek && geekPlaysSeason) {
+            const seasonDetails = geek.seasons.filter(seas => seas.season.toString() === seasonID.toString())[0]
+            setTotalPoints(seasonDetails.totalPoints || seasonDetails.initialPoints)
+            setCorrectPronos(seasonDetails.numberCorrects || seasonDetails.initialNumberCorrects)
+            setExactPronos(seasonDetails.numberExacts || seasonDetails.initialNumberExacts)
+            setFavTeam(seasonDetails.bonusFavTeam || seasonDetails.initialBonusFavTeam)
+            setTeam(seasonDetails.favTeam)
         }
     }, [geek, matchweek, seasonID])
+
+    const giveMedal = () => {
+        switch (index) {
+            case 0:
+                return <FirstIcon className='medal-icons-ranking' size='28px' color='#FFA500' />
+            case 1:
+                return <SecondIcon className='medal-icons-ranking' size='28px' color='#616060' />
+            case 2:
+                return <ThirdIcon className='medal-icons-ranking' size='28px' color='#6A3805' />
+            default: return ` ${index + 1} - `
+        }
+    }
+
+    const favTeamInfo = () => {
+        if (matchweek) return favTeam && <span className='ranking-icon'>
+            <FavTeamIcon size={iconSize} />
+            <div className='ranking-icon-details ranking-icon-details-right'>
+                <p>Bon prono avec son équipe de coeur :<br />
+                    <img className="team-logo-ranking" src={team?.logo} alt="Fav Team" /> {team?.name}
+                </p>
+            </div>
+        </span>
+        else return <span className='ranking-icon'>
+            {favTeam}<FavTeamIcon className='ranking-icon-component' size={iconSize} />
+            <div className='ranking-icon-details ranking-icon-details-right'>
+                <p>{favTeam} bons pronos avec son équipe de coeur.</p>
+            </div>
+        </span>
+    }
+
+    const seePronos = () => {
+        if (matchweek) return <Link to={`/geek/${geek._id}/pronogeeks/${seasonID}/matchweek/${matchweek}`}>
+            <span className='ranking-icon ranking-icon-last'>
+                <ViewPronoIcon color='rgba(156, 0, 99, 0.8)' size='24px' />
+                <div className='ranking-icon-details'>
+                    <p>Voir les pronos de {geek.username}</p>
+                </div>
+            </span>
+        </Link>
+        else return team ? <span className='ranking-icon ranking-icon-last ranking-favteam-logo'>
+            <img className="team-logo-ranking" src={team.logo} alt="Fav Team" />
+            <div className='ranking-icon-details'>
+                <p>Équipe de coeur de {geek.username} : {team.name}</p>
+            </div>
+        </span> : <span className='ranking-icon ranking-icon-last ranking-favteam-logo'>&nbsp;</span>
+    }
 
     return (
         <li
             key={geek._id}
-            className='list-group-item d-flex justify-content-between align-items-center'
+            className='list-group-item d-flex'
         >
 
-            {user._id === geek._id && <span><b>{index + 1} : {geek.username}</b></span>}
+            <div className='d-flex justify-content-center align-items-center mr-2 geek-ranking-number'>
+                <span>{giveMedal()}<img className='profile-pic-ranking' src={geek.photo} alt="Pic" /></span>
+            </div>
 
-            {user._id !== geek._id && <span>{index + 1} : {geek.username}&nbsp;
-                <Link to={`/geek/${geek._id}/pronogeeks/${seasonID}/matchweek/${matchweek}`}>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="rgba(156, 0, 99, 0.8)" width="24px" height="24px">
-                        <path d="M0 0h24v24H0z" fill="none" />
-                        <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" />
-                    </svg>
-                </Link>
-            </span>}
+            <div className='flex-grow-1'>
 
-            {favTeam && <svg style={{ display: 'none' }} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill=" rgb(253, 0, 7)" width="24px" height="24px"><path d="M0 0h24v24H0z" fill="none" /><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" /></svg>}
-            <span style={{ display: 'none' }} className='badge badge-success badge-pill my-badge'>{correctPronos}</span>
-            <span style={{ display: 'none' }} className='badge badge-success badge-pill my-badge'>{exactPronos}</span>
-            <span className='badge badge-success badge-pill my-badge'>{totalPoints} pts</span>
+                <div className='d-flex justify-content-between align-items-center ranking-line-top'>
+
+                    {user._id === geek._id && <span className='username-ranking'><b>{geek.username}</b></span>}
+
+                    {user._id !== geek._id && <span className='username-ranking'>{geek.username}</span>}
+
+                    <span className='badge badge-success badge-pill my-badge my-badge-ranking'>{totalPoints} pts</span>
+
+                </div>
+
+                <div className='d-flex justify-content-between align-items-center'>
+
+                    {seePronos()}
+
+                    <div className='d-flex justify-content-evenly align-items-center'>
+
+                        {favTeamInfo()}
+
+                        <span className='ranking-icon'>
+                            {correctPronos}<CorrectIcon className='ranking-icon-component' size={iconSize} color='#28a745' />
+                            <div className='ranking-icon-details ranking-icon-details-right'>
+                                <p>{correctPronos} pronogeeks corrects</p>
+                            </div>
+                        </span>
+
+                        <span className='ranking-icon ranking-icon-last'>
+                            {exactPronos}<ExactIcon className='ranking-icon-component' size={iconSize} color='#0041aa' />
+                            <div className='ranking-icon-details ranking-icon-details-right'>
+                                <p>{exactPronos} pronogeeks exacts</p>
+                            </div>
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
 
         </li>
     )
