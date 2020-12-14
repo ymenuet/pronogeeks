@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { Context } from '../context'
-import { getSeasonData } from '../services/seasons'
+import { getSeasonData, getMatchweekFixtures } from '../services/seasons'
 import { fetchLeague, fetchMatchweekRanking } from '../services/geekLeague'
 import { Loader, RankingGeek } from '../components'
+import { matchFinished } from '../helpers'
 
 const GeekLeagueDetail = ({ match: { params: { geekLeagueID, seasonID } }, loading }) => {
     const { user } = useContext(Context)
@@ -11,6 +12,8 @@ const GeekLeagueDetail = ({ match: { params: { geekLeagueID, seasonID } }, loadi
     const [lastMatchweek, setLastMatchweek] = useState(null)
     const [geekLeague, setGeekLeague] = useState(null)
     const [ranking, setRanking] = useState(null)
+    const [totalGames, setTotalGames] = useState(null)
+    const [gamesFinished, setGamesFinished] = useState(null)
 
     useEffect(() => {
         const setNextMatchweek = async (seasonID) => {
@@ -45,6 +48,18 @@ const GeekLeagueDetail = ({ match: { params: { geekLeagueID, seasonID } }, loadi
         }
     }, [matchweek, geekLeagueID, seasonID])
 
+    useEffect(() => {
+        if (matchweek) {
+            const fetchMatchweekFixtures = async () => {
+                const fixtures = await getMatchweekFixtures(seasonID, matchweek)
+                setTotalGames(fixtures.length)
+                const gamesFinished = fixtures.filter(fixture => matchFinished(fixture.statusShort))
+                setGamesFinished(gamesFinished.length)
+            }
+            fetchMatchweekFixtures()
+        }
+    }, [matchweek, seasonID])
+
     const previousMatchweek = () => {
         setRanking(null)
         setMatchweek(matchweek - 1)
@@ -57,7 +72,7 @@ const GeekLeagueDetail = ({ match: { params: { geekLeagueID, seasonID } }, loadi
 
     return <div className='geekleague-bg geekleague-details'>
 
-        {loading || !geekLeague || !matchweek || !season || !ranking || !lastMatchweek ? (
+        {loading || !geekLeague || !matchweek || !season || !ranking || !lastMatchweek || !gamesFinished || !totalGames ? (
 
             <Loader />
 
@@ -88,7 +103,11 @@ const GeekLeagueDetail = ({ match: { params: { geekLeagueID, seasonID } }, loadi
                                             </button>
                                         </div>}
 
-                                        <h4>J{matchweek} de {season.leagueName}, saison {season.year}</h4>
+                                        <h4>
+                                            J{matchweek} de {season.leagueName}, saison {season.year}
+                                            <br />
+                                            <small>{gamesFinished === totalGames ? 'Journée terminée' : `Matchs joués : ${gamesFinished}/${totalGames}`}</small>
+                                        </h4>
 
                                         {matchweek < lastMatchweek && <div>
                                             <button

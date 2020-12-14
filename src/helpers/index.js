@@ -78,6 +78,20 @@ export const statusTranform = (statusShort, minutes) => {
     } else return `${minutes}'`
 }
 
+export const matchFinished = (statusShort) => {
+    return statusShort !== 'TBD' &&
+        statusShort !== 'NS' &&
+        statusShort !== '1H' &&
+        statusShort !== 'HT' &&
+        statusShort !== '2H' &&
+        statusShort !== 'ET' &&
+        statusShort !== 'P' &&
+        statusShort !== 'BT' &&
+        statusShort !== 'SUSP' &&
+        statusShort !== 'INT' &&
+        statusShort !== 'PST'
+}
+
 export const getGeeksProno = (user, fixture, setHomeScore, setAwayScore, setMatchStarted = null, setPronogeek = null, setFixture = null) => {
     const seasonID = fixture.season
     const matchweekNumber = fixture.matchweek

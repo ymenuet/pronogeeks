@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { updateProfile, getProfile, updatePhoto } from '../services/auth'
 import { fetchPlayers, deleteUserAccount } from '../services/user'
 import axios from 'axios'
-import { Loader } from '../components'
+import { Loader, RankingGeek } from '../components'
 import { Spin, Space } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons'
 import { Context } from '../context'
@@ -197,8 +197,8 @@ const Profile = ({ loading, history }) => {
                             </div>}
 
                             {seasonRankingFull && <li className='list-group-item d-flex justify-content-between align-items-center mb-2'>
-                                <span><b>Mes ligues</b></span>
-                                <span><b>Mon classement</b></span>
+                                <span className='username-ranking'><b>Ligues</b></span>
+                                <span className='username-ranking'><b>Classement</b></span>
                             </li>}
 
                             {seasonRankingFull && user.geekLeagues.map(league => <Link
@@ -207,8 +207,8 @@ const Profile = ({ loading, history }) => {
                             >
                                 <li className='list-group-item d-flex justify-content-between align-items-center'>
 
-                                    <span style={{ color: 'rgb(4, 78, 199)' }}>{league.name}</span>
-                                    <span className='badge badge-success badge-pill my-badge'>{setRank(seasonRankingFull.filter(player => {
+                                    <span className='username-ranking' style={{ color: 'rgb(4, 78, 199)' }}>{league.name}</span>
+                                    <span className='badge badge-success badge-pill my-badge my-badge-ranking'>{setRank(seasonRankingFull.filter(player => {
                                         let result = false
                                         league.geeks.forEach(geek => {
                                             if (geek._id === player._id) result = true
@@ -255,21 +255,17 @@ const Profile = ({ loading, history }) => {
                             <ul className='list-group list-group-flush season-ranking'>
 
                                 <li className='list-group-item d-flex justify-content-between align-items-center mb-2'>
-                                    <span><b>{setRank(userRanking)} : {user.username}</b></span>
-                                    <span className='badge badge-success badge-pill my-badge'>{user.seasons[user.seasons.length - 1].totalPoints} pts</span>
+                                    <span className='username-ranking'><b>{setRank(userRanking)} : {user.username}</b></span>
+                                    <span className='badge badge-success badge-pill my-badge my-badge-ranking'>{user.seasons[user.seasons.length - 1].totalPoints} pts</span>
                                 </li>
 
-                                {seasonRanking.map((player, index) => <li
+                                {seasonRanking.map((player, index) => <RankingGeek
                                     key={player._id}
-                                    className='list-group-item d-flex justify-content-between align-items-center'
-                                >
-                                    {player._id === user._id && <span><b>{setRank(index + 1)} : {player.username}</b></span>}
-
-                                    {player._id !== user._id && <span>{setRank(index + 1)} : {player.username}</span>}
-
-                                    <span className='badge badge-success badge-pill my-badge'>{player.seasons.filter(seas => seas.season.toString() === seasonID.toString())[0].totalPoints} pts</span>
-
-                                </li>
+                                    user={user}
+                                    geek={player}
+                                    index={index}
+                                    seasonID={seasonID}
+                                />
 
                                 )}
 

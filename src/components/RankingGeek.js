@@ -76,12 +76,12 @@ const RankingGeek = ({ user, geek, index, seasonID, matchweek }) => {
                 </div>
             </span>
         </Link>
-        else return <span className='ranking-icon ranking-icon-last ranking-favteam-logo'>
-            <img className="team-logo-ranking" src={team?.logo} alt="Fav Team" />
+        else return team ? <span className='ranking-icon ranking-icon-last ranking-favteam-logo'>
+            <img className="team-logo-ranking" src={team.logo} alt="Fav Team" />
             <div className='ranking-icon-details'>
-                <p>Équipe de coeur de {geek.username} : {team?.name}</p>
+                <p>Équipe de coeur de {geek.username} : {team.name}</p>
             </div>
-        </span>
+        </span> : <span className='ranking-icon ranking-icon-last ranking-favteam-logo'>&nbsp;</span>
     }
 
     return (
