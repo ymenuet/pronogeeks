@@ -208,7 +208,7 @@ const Profile = ({ loading, history }) => {
                                 <li className='list-group-item d-flex justify-content-between align-items-center'>
 
                                     <span className='username-ranking' style={{ color: 'rgb(4, 78, 199)' }}>{league.name}</span>
-                                    <span className='badge badge-success badge-pill my-badge my-badge-ranking'>{setRank(seasonRankingFull.filter(player => {
+                                    <span className='badge badge-success badge-pill my-badge my-badge-ranking my-badge-ranking-header'>{setRank(seasonRankingFull.filter(player => {
                                         let result = false
                                         league.geeks.forEach(geek => {
                                             if (geek._id === player._id) result = true
@@ -256,7 +256,7 @@ const Profile = ({ loading, history }) => {
 
                                 <li className='list-group-item d-flex justify-content-between align-items-center mb-2'>
                                     <span className='username-ranking'><b>{setRank(userRanking)} : {user.username}</b></span>
-                                    <span className='badge badge-success badge-pill my-badge my-badge-ranking'>{user.seasons[user.seasons.length - 1].totalPoints} pts</span>
+                                    <span className='badge badge-success badge-pill my-badge my-badge-ranking my-badge-ranking-header'>{user.seasons[user.seasons.length - 1].totalPoints} pts</span>
                                 </li>
 
                                 {seasonRanking.map((player, index) => <RankingGeek

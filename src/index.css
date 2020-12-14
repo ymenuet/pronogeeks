@@ -243,6 +243,19 @@ button.my-navbar-btn>span {
     }
 }
 
+@media (max-width: 991px) {
+    #my-navbar-toggle .navbar-nav {
+        flex-direction: column-reverse;
+    }
+    .profile-pic-navbar {
+        width: 50px;
+        height: 50px;
+    }
+    #my-navbar-toggle .navbar-nav .nav-item {
+        border-bottom: 1px solid rgba(240, 247, 244, 0.03)
+    }
+}
+
 @media (max-width: 500px) {
     .my-brand>h1 {
         font-size: 2.9rem;
@@ -1746,8 +1759,21 @@ a.geekleagues-page-btn:hover {
 
 /* GEEKLEAGUE DETAIL MATCHWEEK */
 
+.return-button {
+    color: var(--color-white-cream);
+}
+
+.return-button:hover {
+    text-decoration: underline;
+    color: var(--color-white-cream);
+}
+
 .ranking-geekleague-matchweek-container {
     padding: 0;
+}
+
+.ranking-geekleague-matchweek-container h2 {
+    margin-top: 10px;
 }
 
 .ranking-geekleague-matchweek {
@@ -1776,14 +1802,22 @@ li.list-group-item {
     height: 26px;
     line-height: 100%;
     padding-top: 4px;
+    position: absolute;
+    right: 0;
+}
+
+.my-badge-ranking-header {
+    position: unset;
 }
 
 .ranking-line-top {
     margin-bottom: 3px;
+    position: relative;
 }
 
 .username-ranking {
     font-size: 1.2rem;
+    text-align: left;
 }
 
 .profile-pic-ranking {
