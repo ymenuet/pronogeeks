@@ -102,7 +102,9 @@ const RankingGeek = ({ user, geek, index, seasonID, matchweek }) => {
 
                     {user._id !== geek._id && <span className='username-ranking'>{geek.username}</span>}
 
-                    <span className='badge badge-success badge-pill my-badge my-badge-ranking'>{totalPoints} pts</span>
+                    <span className='badge badge-success badge-pill my-badge my-badge-ranking'>
+                        {totalPoints}pts
+                    </span>
 
                 </div>
 
