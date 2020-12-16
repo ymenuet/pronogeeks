@@ -270,7 +270,64 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
                         <li>Un pronogeek <b>exact</b> (score exact bien pronogeeké) rapporte le double de la cote correspondante.</li><br />
                         <li>Un pronogeek correct sur un match de son <b>équipe de coeur</b> (qu'elle soit gagnante ou perdante) rapporte 30 points bonus.</li><br />
                         <li>Détail des bonus par journée de {season.leagueName} :
-                        <ul>
+                        <table className='bonus-table'>
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Pronos corrects</th>
+                                        <th>Pronos exacts</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>{'< 3'}</td>
+                                        <td>+0pt</td>
+                                        <td>+0pt</td>
+                                    </tr>
+                                    <tr>
+                                        <td>3</td>
+                                        <td>+0pt</td>
+                                        <td>+50pts</td>
+                                    </tr>
+                                    <tr>
+                                        <td>4</td>
+                                        <td>+0pt</td>
+                                        <td>+100pts</td>
+                                    </tr>
+                                    <tr>
+                                        <td>5</td>
+                                        <td>+50pts</td>
+                                        <td>+200pts</td>
+                                    </tr>
+                                    <tr>
+                                        <td>6</td>
+                                        <td>+100pts</td>
+                                        <td>+300pts</td>
+                                    </tr>
+                                    <tr>
+                                        <td>7</td>
+                                        <td>+200pts</td>
+                                        <td>+500pts</td>
+                                    </tr>
+                                    <tr>
+                                        <td>8</td>
+                                        <td>+300pts</td>
+                                        <td>+700pts</td>
+                                    </tr>
+                                    <tr>
+                                        <td>9</td>
+                                        <td>+500pts</td>
+                                        <td>+1000pts</td>
+                                    </tr>
+                                    <tr>
+                                        <td>10</td>
+                                        <td>+700pts</td>
+                                        <td>+1500pts</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            Exemple : Si un geek a 7 pronos corrects (+200pts) dont 4 pronos exacts (+100pts) sur une même journée, il prend 300 points bonus sur cette journée.
+                            {/* <ul>
                                 <li>Moins de 5 pronos corrects : 0pt bonus</li>
                                 <li>5 pronos corrects: 50pts bonus</li>
                                 <li>6 pronos corrects: 100pts bonus</li>
@@ -288,7 +345,7 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
                                 <li>8 pronos exacts: 700pts bonus</li>
                                 <li>9 pronos exacts: 1000pts bonus</li>
                                 <li>10 pronos exacts: 1500pts bonus</li>
-                            </ul>
+                            </ul> */}
                         </li>
                     </ul>
 

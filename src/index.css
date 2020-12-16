@@ -1441,6 +1441,19 @@ ul.season-ranking>li>span:first-child {
     padding: 0 40px;
 }
 
+.bonus-table {
+    margin: 10px 0;
+}
+
+.bonus-table,
+.bonus-table th,
+.bonus-table td {
+    border: 1px solid white;
+    text-align: left;
+    padding: 5px;
+    min-width: 35px;
+}
+
 @media (max-width: 576px) {
     .list-fixtures-header div {
         font-size: 1.2rem;
