@@ -8,6 +8,7 @@ import { Spin, Space } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons'
 import { Context } from '../context'
 import { openNotification } from '../helpers'
+import { EditIcon, WarningIcon } from '../components/Icons'
 
 const Profile = ({ loading, history }) => {
     const { user, loginUser, logoutUser } = useContext(Context)
@@ -94,10 +95,7 @@ const Profile = ({ loading, history }) => {
 
                         <h2>Bonjour {user.username}
                             <button onClick={() => setShowModal(!showModal)}>
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="30px" height="30px">
-                                    <path d="M0 0h24v24H0z" fill="none" />
-                                    <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
-                                </svg>
+                                <EditIcon />
                             </button>
                         </h2>
 
@@ -377,10 +375,7 @@ const Profile = ({ loading, history }) => {
 
                             <div className="modal-body">
                                 <p>
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="rgb(253, 0, 7)" width="24px" height="24px">
-                                        <path d="M0 0h24v24H0V0z" fill="none" />
-                                        <path d="M12 5.99L19.53 19H4.47L12 5.99M12 2L1 21h22L12 2zm1 14h-2v2h2v-2zm0-6h-2v4h2v-4z" />
-                                    </svg>
+                                    <WarningIcon />
                                 Es-tu sûr de vouloir supprimer ton compte ? Toutes tes données seront perdues...
                                 </p>
                             </div>

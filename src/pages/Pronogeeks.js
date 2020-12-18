@@ -6,6 +6,7 @@ import { getProfile } from '../services/auth'
 import { Fixture, Loader, MatchweekNavigation, AdminButtons } from '../components'
 import { openNotification, dateFormatterForRulesPanel } from '../helpers'
 import { Context } from '../context'
+import { QuestionIcon, SaveIcon } from '../components/Icons'
 
 const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history, loading }) => {
     const [season, setSeason] = useState(null)
@@ -171,9 +172,7 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
                         onClick={saveAllPronos}
                         className='btn my-btn save-all-btn'
                     >
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="40px" height="40px"><path d="M0 0h24v24H0z" fill="none" />
-                            <path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z" />
-                        </svg>
+                        <SaveIcon size='40px' />
                         &nbsp;
                         <span>Enregistrer tout</span>
                     </button>
@@ -193,10 +192,7 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
                 />
 
                 <h2>
-                    <svg onClick={() => setShowRules(!showRules)} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="rgb(4, 78, 199)" width="40px" height="40px">
-                        <path d="M0 0h24v24H0z" fill="none" />
-                        <path d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z" />
-                    </svg>
+                    <QuestionIcon onClick={() => setShowRules(!showRules)} />
                     {season.leagueName} saison {season.year} :<br />
                     journée {matchweekNumber}
                 </h2>
@@ -327,25 +323,6 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
                                 </tbody>
                             </table>
                             Exemple : Si un geek a 7 pronos corrects (+200pts) dont 4 pronos exacts (+100pts) sur une même journée, il prend 300 points bonus sur cette journée.
-                            {/* <ul>
-                                <li>Moins de 5 pronos corrects : 0pt bonus</li>
-                                <li>5 pronos corrects: 50pts bonus</li>
-                                <li>6 pronos corrects: 100pts bonus</li>
-                                <li>7 pronos corrects: 200pts bonus</li>
-                                <li>8 pronos corrects: 300pts bonus</li>
-                                <li>9 pronos corrects: 500pts bonus</li>
-                                <li>10 pronos corrects: 700pts bonus</li>
-                                <li style={{ listStyle: 'none' }}>&nbsp;</li>
-                                <li>Moins de 3 pronos exacts : 0pt bonus</li>
-                                <li>3 pronos exacts: 50pts bonus</li>
-                                <li>4 pronos exacts: 100pts bonus</li>
-                                <li>5 pronos exacts: 200pts bonus</li>
-                                <li>6 pronos exacts: 300pts bonus</li>
-                                <li>7 pronos exacts: 500pts bonus</li>
-                                <li>8 pronos exacts: 700pts bonus</li>
-                                <li>9 pronos exacts: 1000pts bonus</li>
-                                <li>10 pronos exacts: 1500pts bonus</li>
-                            </ul> */}
                         </li>
                     </ul>
 

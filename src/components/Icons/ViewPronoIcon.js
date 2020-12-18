@@ -1,6 +1,6 @@
 import React from 'react'
 
-const ViewPronoIcon = ({ size, color, className }) => {
+const ViewPronoIcon = ({ size = '24px', color = "white", className = null }) => {
     return (
         <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill={color} width={size} height={size}>
             <path d="M0 0h24v24H0z" fill="none" />
