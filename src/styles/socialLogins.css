@@ -1,0 +1,26 @@
+.social-logins {
+    margin-top: 20px;
+}
+
+.social-logins h4 {
+    color: var(--color-white-cream);
+}
+
+.social-login-links {
+    display: flex;
+    justify-content: center;
+}
+
+.social-login-links a {
+    margin: 0 10px;
+}
+
+.social-login-links img {
+    width: 40px;
+    height: 40px;
+    transition: all 0.3s;
+}
+
+.social-login-links img:hover {
+    transform: scale(1.1);
+}

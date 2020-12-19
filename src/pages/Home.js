@@ -1,6 +1,7 @@
 import React, { useContext } from 'react'
 import { Context } from '../context'
 import { Redirect, Link } from 'react-router-dom'
+import '../styles/homePage.css'
 
 const Home = () => {
 

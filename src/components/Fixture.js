@@ -184,10 +184,13 @@ const Fixture = ({ fixtureID, saveAll, showLeaguePronos, setShowLeaguePronos }) 
                             <td className='prono-input-col'>
 
                                 <SavePronoButton
+                                    user={user}
                                     saveSuccess={saveSuccess}
                                     matchStarted={matchStarted}
                                     saveProno={saveProno}
                                     saving={saving}
+                                    homeScore={homeScore}
+                                    awayScore={awayScore}
                                     seeLeaguePronos={seeLeaguePronos}
                                 />
 

@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import { Context } from '../context'
 import { logout } from '../services/auth'
 import { HomeIcon } from './Icons'
+import '../styles/appLayout.css'
 
 const AppLayout = ({ children }) => {
     const { user, logoutUser } = useContext(Context)

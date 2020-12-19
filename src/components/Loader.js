@@ -1,6 +1,7 @@
 import React from 'react'
 import { Spin, Space } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons'
+import '../styles/loader.css'
 
 const Loader = ({ size = 'large', tip = 'Chargement de la page...', color = 'white', fontSize = '3rem', container = true }) => {
 

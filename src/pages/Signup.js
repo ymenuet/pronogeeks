@@ -4,8 +4,9 @@ import { Form, Input } from 'antd'
 import { signup } from '../services/auth'
 import axios from 'axios'
 import { Context } from '../context'
-import { Loader } from '../components'
+import { Loader, SocialLogins } from '../components'
 import { openNotification } from '../helpers'
+import '../styles/connectPages.css'
 
 const Signup = ({ confirm = false }) => {
     const { user } = useContext(Context)
@@ -96,10 +97,7 @@ const Signup = ({ confirm = false }) => {
                                         },
                                     ]}
                                 >
-                                    <Input
-                                        style={{ borderRadius: 15.8 }}
-                                        placeholder='roi.geek@pronogeeks.fr'
-                                    />
+                                    <Input placeholder='roi.geek@pronogeeks.fr' />
                                 </Form.Item>
 
                                 <Form.Item
@@ -112,10 +110,7 @@ const Signup = ({ confirm = false }) => {
                                         },
                                     ]}
                                 >
-                                    <Input
-                                        style={{ borderRadius: 15.8 }}
-                                        placeholder='RoiGeek'
-                                    />
+                                    <Input placeholder='RoiGeek' />
                                 </Form.Item>
 
                                 <Form.Item
@@ -128,10 +123,7 @@ const Signup = ({ confirm = false }) => {
                                         },
                                     ]}
                                 >
-                                    <Input.Password
-                                        style={{ borderRadius: 15.8 }}
-                                        placeholder='********'
-                                    />
+                                    <Input.Password placeholder='********' />
                                 </Form.Item>
 
                                 <label
@@ -171,33 +163,7 @@ const Signup = ({ confirm = false }) => {
 
                             </Form>
 
-                            <div className='social-logins'>
-
-                                <h4>Créer un compte avec :</h4>
-
-                                <div className='social-login-links'>
-
-                                    <a href={`${process.env.REACT_APP_BACKENDPOINT}/auth/facebook`}>
-                                        <img
-                                            src='/images/facebook-logo.png'
-                                            alt='Facebook'
-                                        />
-                                    </a>
-
-                                    <a href={`${process.env.REACT_APP_BACKENDPOINT}/auth/google`}>
-                                        <img
-                                            src='/images/google-logo.png'
-                                            alt='Google'
-                                        />
-                                    </a>
-
-                                </div>
-
-                            </div>
-
-                            <div style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', marginTop: 20, marginBottom: 20 }}>
-                                <p className='reset-pwd'>Tu as déjà un compte ?<br />Connecte-toi <Link to='/login'>ici</Link>.</p>
-                            </div>
+                            <SocialLogins />
 
                         </div>
 

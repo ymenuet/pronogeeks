@@ -61,7 +61,7 @@ const PronogeeksSearch = ({ match: { params: { seasonID } }, loading }) => {
 
         ) : newSeason ? (
 
-            <div className='loader-container'>
+            <div>
 
                 <div className='choose-favteam'>
 

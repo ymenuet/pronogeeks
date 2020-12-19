@@ -9,6 +9,7 @@ import { LoadingOutlined } from '@ant-design/icons'
 import { Context } from '../context'
 import { openNotification } from '../helpers'
 import { EditIcon, WarningIcon } from '../components/Icons'
+import '../styles/profile.css'
 
 const Profile = ({ loading, history }) => {
     const { user, loginUser, logoutUser } = useContext(Context)
