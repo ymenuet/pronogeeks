@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import '../styles/socialLogins.css'
 
-const SocialLogins = ({ login }) => {
+const SocialLogins = ({ login, home }) => {
     return <>
         <div className='social-logins'>
 
@@ -28,10 +28,10 @@ const SocialLogins = ({ login }) => {
 
         </div>
 
-        <div style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', marginTop: 20, marginBottom: 20 }}>
+        {!home && <div style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', marginTop: 20, marginBottom: 20 }}>
             {login ? <p className='reset-pwd'>Ou crée un compte <Link to='/signup'>ici</Link>.</p> :
                 <p className='reset-pwd'>Tu as déjà un compte ?<br />Connecte-toi <Link to='/login'>ici</Link>.</p>}
-        </div>
+        </div>}
     </>
 }
 

@@ -33,15 +33,22 @@ const SavePronoButton = ({ user, saveSuccess, matchStarted, saveProno, saving, h
             />}
         </button>
 
-    </> : user.geekLeagues.length > 0 && <>
-        <small className='legend-save-btn'>Voir pronos</small>
+    </> : matchStarted && !user.geekLeagues.length ? <>
         <button
             className='btn my-btn save-prono'
-            onClick={seeLeaguePronos}
+            disabled={true}
         >
-            <ViewPronoIcon />
+            <SaveIcon />
         </button>
-    </>
+    </> : <>
+                    <small className='legend-save-btn'>Voir pronos</small>
+                    <button
+                        className='btn my-btn save-prono'
+                        onClick={seeLeaguePronos}
+                    >
+                        <ViewPronoIcon />
+                    </button>
+                </>
 }
 
 export default SavePronoButton

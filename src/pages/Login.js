@@ -85,7 +85,7 @@ const Login = ({ history }) => {
 
                     </Form>
 
-                    <SocialLogins login={true} />
+                    <SocialLogins login />
 
                 </div>
 

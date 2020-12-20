@@ -2,6 +2,7 @@ import React, { useContext } from 'react'
 import { Context } from '../context'
 import { Redirect, Link } from 'react-router-dom'
 import '../styles/homePage.css'
+import { SocialLogins } from '../components'
 
 const Home = () => {
 
@@ -48,26 +49,7 @@ const Home = () => {
 
                         </div>
 
-                        <div className='social-logins'>
-
-                            <h4>Se connecter avec :</h4>
-
-                            <div className='social-login-links'>
-                                <a href={`${process.env.REACT_APP_BACKENDPOINT}/auth/facebook`}>
-                                    <img
-                                        src='/images/facebook-logo.png'
-                                        alt='Facebook'
-                                    />
-                                </a>
-                                <a href={`${process.env.REACT_APP_BACKENDPOINT}/auth/google`}>
-                                    <img
-                                        src='/images/google-logo.png'
-                                        alt='Google'
-                                    />
-                                </a>
-                            </div>
-
-                        </div>
+                        <SocialLogins login home />
 
                     </div>
 
