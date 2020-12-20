@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { getGeeksProno } from '../helpers'
+import '../styles/geekProno.css'
 
 const GeekProno = ({ user, fixture, winner, determineWinner }) => {
     const [homeScore, setHomeScore] = useState(null)

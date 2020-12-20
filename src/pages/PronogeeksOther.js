@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { getMatchweekFixtures, getSeasonData } from '../services/seasons'
 import { getUser } from '../services/user'
 import { FixtureOther, Loader, MatchweekNavigation } from '../components'
+import '../styles/pronogeeks.css'
 
 const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID, geekID } }, history, loading }) => {
     const [season, setSeason] = useState(null)

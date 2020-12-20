@@ -1,0 +1,18 @@
+.previous-next-btns .score-top,
+.previous-next-btns .score-bottom {
+    font-size: 1.4rem;
+    background-color: rgba(240, 247, 244, 0.8);
+    padding: 5px 20px;
+    border-radius: 10px;
+    margin: 10px 20px;
+    font-family: 'Audiowide';
+}
+
+.previous-next-btns .score-top p,
+.previous-next-btns .score-bottom p {
+    margin-bottom: 0;
+}
+
+.previous-next-btns .score-bottom {
+    margin: 0 20px 10px 20px;
+}

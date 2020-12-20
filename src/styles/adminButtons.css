@@ -1,0 +1,21 @@
+.admin-btn {
+    margin-bottom: 30px;
+    margin-top: 5px;
+    background-color: unset;
+    border: 3px solid var(--color-dark-blue-bp);
+    color: var(--color-dark-blue-bp);
+    line-height: 100%;
+}
+
+.admin-btn.top {
+    margin-top: 20px;
+    margin-bottom: 5px;
+    background-color: unset;
+    border: 3px solid var(--color-dark-blue-bp);
+    color: var(--color-dark-blue-bp);
+}
+
+.admin-btn:hover {
+    color: var(--color-white-cream);
+    background-color: var(--color-dark-blue-bp);
+}

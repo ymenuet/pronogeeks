@@ -1,0 +1,35 @@
+.save-prono {
+    background-color: rgb(0, 65, 170);
+    font-size: 1rem;
+    margin: 0;
+    min-width: unset;
+    width: 44px;
+    padding: 0 10px;
+    height: 43px;
+    border-right: 1px solid rgb(0, 0, 187);
+    border-bottom: 2px solid rgb(0, 0, 187);
+}
+
+.save-prono:hover {
+    transform: scale(1.1);
+}
+
+.save-prono:disabled {
+    transform: none;
+    opacity: 0.5;
+}
+
+.save-prono>svg {
+    position: relative;
+    bottom: 2px;
+}
+
+.saved-prono {
+    background-color: var(--color-light-green-gb);
+    border-right: 1px solid rgb(0, 109, 0);
+    border-bottom: 2px solid rgb(0, 109, 0);
+}
+
+.legend-save-btn {
+    margin: 0 7px;
+}

@@ -1,6 +1,7 @@
 import React from 'react'
 import { SaveIcon, ValidateIcon, ViewPronoIcon } from './Icons'
 import Loader from './Loader'
+import '../styles/savePronoButton.css'
 
 const SavePronoButton = ({ user, saveSuccess, matchStarted, saveProno, saving, homeScore, awayScore, seeLeaguePronos }) => {
 

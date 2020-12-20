@@ -62,10 +62,6 @@ const GeekLeagueDetail = ({ match: { params: { geekLeagueID, seasonID } }, loadi
         }
     }, [matchweek, seasonID])
 
-    useEffect(() => {
-        console.log(gamesFinished);
-    }, [gamesFinished])
-
     const previousMatchweek = () => {
         setRanking(null)
         setMatchweek(matchweek - 1)

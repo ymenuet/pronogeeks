@@ -7,8 +7,9 @@ import GeekProno from './GeekProno'
 import { statusTranform } from '../helpers/index'
 import { Context } from '../context'
 import { CloseIcon } from './Icons'
+import '../styles/previewPronos.css'
 
-const PreviewPoints = ({ user, fixture, setShowLeagues }) => {
+const PreviewPronos = ({ user, fixture, setShowLeagues }) => {
 
     const [geekLeague, setGeekLeague] = useState(user.geekLeagueHistory || user.geekLeagues[0]._id)
     const [geekLeagueDetails, setGeekLeagueDetails] = useState(null)
@@ -60,7 +61,7 @@ const PreviewPoints = ({ user, fixture, setShowLeagues }) => {
 
     return (
 
-        <>
+        <div className='view-pronos'>
 
             <div className='view-pronos-header row'>
 
@@ -159,9 +160,9 @@ const PreviewPoints = ({ user, fixture, setShowLeagues }) => {
                 }
             </div>
 
-        </>
+        </div>
 
     )
 }
 
-export default PreviewPoints
+export default PreviewPronos

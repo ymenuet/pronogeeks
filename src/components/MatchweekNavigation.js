@@ -1,5 +1,6 @@
 import React from 'react'
 import { GoBackIcon, GoNextIcon } from './Icons'
+import '../styles/matchweekNavigation.css'
 
 const MatchweekNavigation = ({ matchweekNumber, matchweekPoints, matchweekCorrects, matchweekBonus, previousPage, nextPage, myClassName, noPronos }) => {
 

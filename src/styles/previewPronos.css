@@ -1,0 +1,117 @@
+.view-pronos {
+    box-sizing: border-box;
+    position: fixed;
+    height: 80%;
+    top: calc(50vh + var(--navbar-height) / 2 - 40%);
+    width: 86%;
+    left: 7%;
+    background-color: var(--color-white-cream);
+    z-index: 2;
+    padding: 20px;
+    color: var(--color-dark-blue-bp);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    border-radius: 10px;
+    border: 3px solid var(--color-dark-blue-bp);
+}
+
+.team-logo {
+    width: 50px;
+}
+
+.score-fixture {
+    font-size: 2rem;
+}
+
+.view-pronos-header {
+    justify-content: space-around;
+    align-items: center!important;
+    height: 35%;
+    position: relative;
+    box-sizing: border-box;
+}
+
+.view-pronos-header>span:first-child {
+    position: absolute;
+    top: -15px;
+    right: 0px;
+    cursor: pointer;
+}
+
+.view-pronos-choose-league p {
+    margin: 0;
+    font-size: 1.2rem;
+}
+
+.view-pronos-choose-league select {
+    border: 1px solid var(--color-dark-blue-bp);
+    padding: 0px 5px;
+    height: 26px;
+    border-radius: 13px;
+    outline: none;
+}
+
+.view-pronos-game-info table {
+    margin: 0 auto;
+    width: 100%;
+}
+
+.view-pronos-body {
+    height: 65%;
+    overflow-y: scroll;
+    background-color: rgba(4, 78, 199, 0.8);
+    border-radius: 5px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    border: 3px solid var(--color-dark-blue-bp);
+}
+
+.view-pronos-body ul {
+    list-style: none;
+    padding: 0;
+    width: 60%;
+}
+
+.view-pronos-body::-webkit-scrollbar {
+    display: none;
+}
+
+@media (max-width:768px) {
+    .view-pronos-choose-league {
+        order: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+    .view-pronos-game-info {
+        margin: 10px 0;
+    }
+    .view-pronos {
+        top: calc(50vh + var(--navbar-height) / 2 - 30px - 40%);
+    }
+    .view-pronos-body ul {
+        width: 80%;
+    }
+}
+
+@media (max-width:530px) {
+    .view-pronos-header img {
+        width: 40px;
+        height: 40px;
+    }
+    .view-pronos-header .score-fixture {
+        font-size: 1.6rem;
+    }
+    .view-pronos-choose-league p {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width:350px) {
+    .view-pronos-header .team-names {
+        display: none;
+    }
+}

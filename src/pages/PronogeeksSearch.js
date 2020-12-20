@@ -8,6 +8,7 @@ import { useInput } from '../customHooks'
 import { Loader } from '../components'
 import { openNotification } from '../helpers'
 import { WarningIcon } from '../components/Icons'
+import '../styles/pronogeeksSearch.css'
 
 const PronogeeksSearch = ({ match: { params: { seasonID } }, loading }) => {
 

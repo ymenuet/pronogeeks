@@ -5,8 +5,9 @@ import { Skeleton } from 'antd'
 import { Context } from '../context'
 import { openNotification, dateTransform, statusTranform } from '../helpers'
 import SavePronoButton from './SavePronoButton'
-import PreviewPoints from './PreviewPoints'
+import PreviewPronos from './PreviewPronos'
 import { FavTeamIcon } from '../components/Icons'
+import '../styles/fixture.css'
 
 const Fixture = ({ fixtureID, saveAll, showLeaguePronos, setShowLeaguePronos }) => {
     const [fixture, setFixture] = useState(null)
@@ -234,13 +235,11 @@ const Fixture = ({ fixtureID, saveAll, showLeaguePronos, setShowLeaguePronos }) 
                     </div>
                 )}
 
-                {showLeagues && <div className='view-pronos'>
-                    <PreviewPoints
-                        user={user}
-                        fixture={fixture}
-                        setShowLeagues={setShowLeagues}
-                    />
-                </div>}
+                {showLeagues && <PreviewPronos
+                    user={user}
+                    fixture={fixture}
+                    setShowLeagues={setShowLeagues}
+                />}
 
 
             </div>

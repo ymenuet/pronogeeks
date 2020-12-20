@@ -3,6 +3,7 @@ import { updateFixturesStatus, updateOdds } from '../services/apiFootball'
 import { getProfile } from '../services/auth'
 import { openNotification } from '../helpers'
 import { Context } from '../context'
+import '../styles/adminButtons.css'
 
 const AdminButtons = ({ seasonID, matchweekNumber, setFixtures, setPoints, fetchFixtures }) => {
 

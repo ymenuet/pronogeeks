@@ -3,6 +3,7 @@ import { getFixture } from '../services/fixtures'
 import { Skeleton } from 'antd'
 import { dateTransform, statusTranform, getGeeksProno } from '../helpers'
 import { FavTeamIcon } from './Icons'
+import '../styles/fixture.css'
 
 const Fixture = ({ fixtureID, user }) => {
     const [fixture, setFixture] = useState(null)
