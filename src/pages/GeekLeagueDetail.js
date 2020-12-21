@@ -6,6 +6,7 @@ import { fetchLeague, fetchMatchweekRanking } from '../services/geekLeague'
 import { Loader, RankingGeek } from '../components'
 import { matchFinished } from '../helpers'
 import { GoBackIcon, GoNextIcon } from '../components/Icons'
+import '../styles/detailGeekleague.css'
 
 const GeekLeagueDetail = ({ match: { params: { geekLeagueID, seasonID } }, loading }) => {
     const { user } = useContext(Context)

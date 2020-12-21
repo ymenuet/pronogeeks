@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { getUserLeagues } from '../services/geekLeague'
 import { Loader } from '../components'
+import '../styles/geekleagues.css'
 
 const GeekLeagues = ({ loading }) => {
     const [geekLeagues, setGeekLeagues] = useState(null)

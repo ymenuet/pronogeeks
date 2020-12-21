@@ -8,6 +8,7 @@ import { Loader, RankingGeek } from '../components'
 import { Form, Input, Select } from 'antd'
 import { Link } from 'react-router-dom'
 import { EditIcon, DeleteIcon, RemoveIcon, WarningIcon } from '../components/Icons'
+import '../styles/detailGeekleague.css'
 
 const { Option } = Select
 
@@ -40,7 +41,7 @@ const GeekLeague = ({ match: { params: { geekLeagueID } }, history, loading }) =
                 const allUsers = await getUsers()
                 const users = allUsers.filter(oneUser => {
                     let result = true
-                    geekLeague.geeks.forEach(geek => {
+                    geekLeague.geeks.map(geek => {
                         if (geek._id.toString() === oneUser._id.toString()) result = false
                     })
                     return result
@@ -74,13 +75,14 @@ const GeekLeague = ({ match: { params: { geekLeagueID } }, history, loading }) =
     }
 
     const rankGeeks = season => {
+        const findSeason = seasonsArr => seasonsArr.filter(seas => seas.season.toString() === season._id.toString())[0]
         return geekLeague.geeks.sort((a, b) => {
             let result;
             if (!a.seasons && !b.seasons) result = -1
             else if (!a.seasons) result = 1
             else if (!b.seasons) result = -1
             else if (a.seasons.length > 0 && b.seasons.length > 0) {
-                result = b.seasons.filter(seas => seas.season.toString() === season._id.toString())[0].totalPoints - a.seasons.filter(seas => seas.season.toString() === season._id.toString())[0].totalPoints
+                result = findSeason(b.seasons).totalPoints - findSeason(a.seasons).totalPoints
             } else if (a.seasons.length > 0 && b.seasons.length < 1) result = -1
             else if (a.seasons.length < 1 && b.seasons.length > 0) result = 1
             else if (a.seasons.length < 1 && b.seasons.length < 1) result = -1

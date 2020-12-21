@@ -84,6 +84,16 @@ const Profile = ({ loading, history }) => {
         else return `${num}ème`
     }
 
+    const defineUserRank = (seasonRanking, league) => {
+        return seasonRanking.filter(player => {
+            let result = false
+            league.geeks.map(geek => {
+                if (geek._id === player._id) result = true
+            })
+            return result
+        }).map(player => player._id).indexOf(user._id) + 1
+    }
+
     return usernameChanged || loading ? (<div className='my-profile-page'>
         <Loader />
     </div>
@@ -207,13 +217,7 @@ const Profile = ({ loading, history }) => {
                                 <li className='list-group-item d-flex justify-content-between align-items-center'>
 
                                     <span className='username-ranking' style={{ color: 'rgb(4, 78, 199)' }}>{league.name}</span>
-                                    <span className='badge badge-success badge-pill my-badge my-badge-ranking my-badge-ranking-header'>{setRank(seasonRankingFull.filter(player => {
-                                        let result = false
-                                        league.geeks.forEach(geek => {
-                                            if (geek._id === player._id) result = true
-                                        })
-                                        return result
-                                    }).map(player => player._id).indexOf(user._id) + 1)} / {league.geeks.length}</span>
+                                    <span className='badge badge-success badge-pill my-badge my-badge-ranking my-badge-ranking-header'>{setRank(defineUserRank(seasonRankingFull, league))} / {league.geeks.length}</span>
 
                                 </li>
                             </Link>)}

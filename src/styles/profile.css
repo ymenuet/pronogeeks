@@ -224,6 +224,10 @@ ul.season-ranking>li>span:first-child {
     margin-top: 10px;
 }
 
+.my-badge-ranking-header {
+    position: unset;
+}
+
 @media (max-width: 340px) {
     .my-profile-page h2 {
         font-size: 1.8rem;

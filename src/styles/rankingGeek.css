@@ -1,0 +1,70 @@
+.geek-ranking-number {
+    font-size: 1.3rem;
+}
+
+.ranking-line-top {
+    margin-bottom: 3px;
+    position: relative;
+}
+
+.profile-pic-ranking {
+    width: 37px;
+    height: 37px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.team-logo-ranking {
+    width: 20px;
+    height: 20px;
+}
+
+.ranking-icon {
+    padding: 0 3px;
+    border-right: 1px solid rgba(0, 0, 0, 0.2);
+    font-size: 1.1rem;
+    position: relative;
+}
+
+.ranking-icon-details {
+    display: none;
+    position: absolute;
+    background: #fbe291;
+    z-index: 2;
+    padding: 5px 10px;
+    width: 180px;
+    border-radius: 10px;
+}
+
+.ranking-icon-details-right {
+    left: -180px;
+}
+
+.ranking-icon-details p {
+    margin: 0;
+    color: black;
+    text-align: left;
+}
+
+.ranking-icon:hover>.ranking-icon-details {
+    display: initial;
+}
+
+.ranking-icon-last {
+    padding-right: 0;
+    border: none;
+}
+
+.ranking-favteam-logo img {
+    width: 24px;
+    height: 24px;
+}
+
+.ranking-icon-component {
+    margin-left: 1px;
+}
+
+.medal-icons-ranking {
+    position: relative;
+    right: 6px;
+}

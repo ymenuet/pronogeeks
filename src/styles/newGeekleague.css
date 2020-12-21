@@ -1,0 +1,38 @@
+.geekleague-form {
+    padding: 20vh 20px;
+    width: 100%;
+    height: calc(80vh - var(--navbar-height));
+    margin-bottom: 10vh;
+    background-color: rgba(156, 0, 99, 0.8);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.create-league-btn {
+    margin: 0;
+    background: none;
+    border: 2px solid var(--color-white-cream);
+    color: var(--color-white-cream);
+    line-height: 100%;
+    outline: none !important;
+}
+
+.create-league-btn:hover {
+    background: var(--color-white-cream);
+    color: var(--color-purple-rp);
+    font-weight: 500;
+    transform: none;
+}
+
+.geekleague-form>div {
+    height: 100% !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.geekleague-form form {
+    height: 100%;
+}

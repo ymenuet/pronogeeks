@@ -106,7 +106,7 @@ export const getGeeksProno = (user, fixture, setHomeScore, setAwayScore, setMatc
     let pronogeekFound = [];
     let matchweekIndex = 0;
     if (season.matchweeks.length > 0) {
-        season.matchweeks.forEach((matchweek, i) => {
+        season.matchweeks.map((matchweek, i) => {
             if (matchweek.number.toString() === matchweekNumber.toString()) matchweekIndex = i
         })
         if (season.matchweeks[matchweekIndex].pronogeeks.length > 0) pronogeekFound = season.matchweeks[matchweekIndex].pronogeeks.filter(pronogeek => pronogeek.fixture === fixture._id)

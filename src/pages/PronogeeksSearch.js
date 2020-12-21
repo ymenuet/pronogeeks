@@ -8,7 +8,7 @@ import { useInput } from '../customHooks'
 import { Loader } from '../components'
 import { openNotification } from '../helpers'
 import { WarningIcon } from '../components/Icons'
-import '../styles/pronogeeksSearch.css'
+import '../styles/pronogeeks.css'
 
 const PronogeeksSearch = ({ match: { params: { seasonID } }, loading }) => {
 
@@ -37,7 +37,7 @@ const PronogeeksSearch = ({ match: { params: { seasonID } }, loading }) => {
             const fixturesToCome = season.fixtures.filter(fixture => (new Date(fixture.date).getTime() + 1000 * 60 * 120) > Date.now())
             let nextMatchweek = fixturesToCome[0].matchweek;
             let nextDate = fixturesToCome[0].date
-            fixturesToCome.forEach(fixture => nextMatchweek = fixture.matchweek < nextMatchweek && new Date(fixture.date).getTime() < new Date(nextDate).getTime() ? fixture.matchweek : nextMatchweek)
+            fixturesToCome.map(fixture => nextMatchweek = fixture.matchweek < nextMatchweek && new Date(fixture.date).getTime() < new Date(nextDate).getTime() ? fixture.matchweek : nextMatchweek)
             setMatchweek(nextMatchweek)
         }
         fetchSeason(seasonID)

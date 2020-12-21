@@ -6,6 +6,7 @@ import { getProfile } from '../services/auth'
 import { Context } from '../context'
 import { Loader } from '../components'
 import { openNotification } from '../helpers'
+import '../styles/newGeekleague.css'
 
 const { Option } = Select
 
