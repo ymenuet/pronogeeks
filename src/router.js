@@ -24,6 +24,7 @@ const router = () => {
                 <PrivateRoute component={GeekLeagues} path='/myGeekleagues' exact />
                 <PrivateRoute component={NewGeekLeague} path='/myGeekleagues/new' exact />
                 <PrivateRoute component={GeekLeague} path='/myGeekleagues/:geekLeagueID' exact />
+                <PrivateRoute component={GeekLeagueDetail} path='/myGeekleagues/:geekLeagueID/season/:seasonID/:matchweekNumber' />
                 <PrivateRoute component={GeekLeagueDetail} path='/myGeekleagues/:geekLeagueID/season/:seasonID' />
                 <Route component={NotFound} />
             </Switch>

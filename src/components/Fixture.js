@@ -69,6 +69,7 @@ const Fixture = ({ fixtureID, saveAll, showLeaguePronos, setShowLeaguePronos }) 
             if (season.matchweeks.length > 0) {
                 season.matchweeks.map((matchweek, i) => {
                     if (matchweek.number.toString() === matchweekNumber.toString()) matchweekIndex = i
+                    return matchweek
                 })
                 if (season.matchweeks[matchweekIndex].pronogeeks.length > 0) pronogeekFound = season.matchweeks[matchweekIndex].pronogeeks.filter(pronogeek => pronogeek.fixture === fixtureID)
             }

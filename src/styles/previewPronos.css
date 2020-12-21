@@ -39,6 +39,17 @@
     cursor: pointer;
 }
 
+.view-pronos-header a {
+    color: unset;
+    text-decoration: underline;
+}
+
+.view-pronos-header a:hover {
+    color: unset;
+    text-decoration: underline;
+    font-weight: bold;
+}
+
 .view-pronos-choose-league p {
     margin: 0;
     font-size: 1.2rem;
@@ -83,7 +94,7 @@
         order: 1;
         display: flex;
         justify-content: center;
-        align-items: center;
+        align-items: flex-start;
         margin-bottom: 10px;
     }
     .view-pronos-game-info {

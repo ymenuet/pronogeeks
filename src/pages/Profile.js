@@ -89,6 +89,7 @@ const Profile = ({ loading, history }) => {
             let result = false
             league.geeks.map(geek => {
                 if (geek._id === player._id) result = true
+                return geek
             })
             return result
         }).map(player => player._id).indexOf(user._id) + 1

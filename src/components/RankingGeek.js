@@ -37,6 +37,12 @@ const RankingGeek = ({ user, geek, index, seasonID, matchweek }) => {
             setFavTeam(seasonDetails.bonusFavTeam || seasonDetails.initialBonusFavTeam)
             setTeam(seasonDetails.favTeam)
         }
+        return () => {
+            setTotalPoints(0)
+            setCorrectPronos(0)
+            setExactPronos(0)
+            setFavTeam(false)
+        }
     }, [geek, matchweek, seasonID])
 
     const giveMedal = () => {

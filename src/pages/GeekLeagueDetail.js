@@ -8,10 +8,10 @@ import { matchFinished } from '../helpers'
 import { GoBackIcon, GoNextIcon } from '../components/Icons'
 import '../styles/detailGeekleague.css'
 
-const GeekLeagueDetail = ({ match: { params: { geekLeagueID, seasonID } }, loading }) => {
+const GeekLeagueDetail = ({ match: { params: { geekLeagueID, seasonID, matchweekNumber } }, loading }) => {
     const { user } = useContext(Context)
     const [season, setSeason] = useState(null)
-    const [matchweek, setMatchweek] = useState(null)
+    const [matchweek, setMatchweek] = useState(parseInt(matchweekNumber))
     const [lastMatchweek, setLastMatchweek] = useState(null)
     const [geekLeague, setGeekLeague] = useState(null)
     const [ranking, setRanking] = useState(null)
@@ -25,10 +25,10 @@ const GeekLeagueDetail = ({ match: { params: { geekLeagueID, seasonID } }, loadi
             const lastFixtures = season.fixtures.filter(fixture => new Date(fixture.date).getTime() < Date.now())
             if (lastFixtures.length > 0) {
                 const lastMatchweek = lastFixtures[lastFixtures.length - 1].matchweek
-                setMatchweek(lastMatchweek)
+                if (!matchweekNumber) setMatchweek(lastMatchweek)
                 setLastMatchweek(lastMatchweek)
             } else {
-                setMatchweek(1)
+                if (!matchweekNumber) setMatchweek(1)
                 setLastMatchweek(1)
             }
         }
@@ -39,7 +39,7 @@ const GeekLeagueDetail = ({ match: { params: { geekLeagueID, seasonID } }, loadi
             setGeekLeague(geekLeague)
         }
         getGeekLeague(geekLeagueID)
-    }, [geekLeagueID, seasonID])
+    }, [geekLeagueID, seasonID, matchweekNumber])
 
     useEffect(() => {
         if (matchweek) {
@@ -71,6 +71,21 @@ const GeekLeagueDetail = ({ match: { params: { geekLeagueID, seasonID } }, loadi
     const nextMatchweek = () => {
         setRanking(null)
         setMatchweek(matchweek + 1)
+    }
+
+    const changeMatchweek = e => {
+        setMatchweek(null)
+        setMatchweek(e.target.value)
+    }
+
+    const selectMatchweek = () => {
+        const matchweekArr = []
+        for (let i = 1; i <= lastMatchweek; i++) {
+            matchweekArr.push(i)
+        }
+        return <select defaultValue={matchweek} onChange={changeMatchweek}>
+            {matchweekArr.map(matchweek => <option key={matchweek} value={matchweek}>{matchweek}</option>)}
+        </select>
     }
 
     return <div className='geekleague-bg geekleague-details'>
@@ -110,7 +125,7 @@ const GeekLeagueDetail = ({ match: { params: { geekLeagueID, seasonID } }, loadi
                                         </div>}
 
                                         <h4>
-                                            J{matchweek} de {season.leagueName}, saison {season.year}
+                                            J{selectMatchweek()} de {season.leagueName}, saison {season.year}
                                             <br />
                                             <small>{gamesFinished === totalGames ? 'Journée terminée' : `Matchs joués : ${gamesFinished}/${totalGames}`}</small>
                                         </h4>

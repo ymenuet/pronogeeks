@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react'
+import { Link } from 'react-router-dom'
 import { getProfile } from '../services/auth'
 import { saveGeekLeagueHistory } from '../services/user'
 import { fetchLeague } from '../services/geekLeague'
@@ -71,23 +72,31 @@ const PreviewPronos = ({ user, fixture, setShowLeagues }) => {
 
                 <div className='view-pronos-choose-league col-12 col-md-4'>
 
+
                     <p>Choisis une ligue :&nbsp;</p>
 
-                    <select
-                        defaultValue={geekLeague}
-                        onChange={changeLeague}
-                    >
+                    <div>
 
-                        {user.geekLeagues.map(oneGeekLeague =>
-                            <option
-                                key={oneGeekLeague._id}
-                                value={oneGeekLeague._id}
-                            >
-                                {oneGeekLeague.name}
-                            </option>
-                        )}
+                        <select
+                            defaultValue={geekLeague}
+                            onChange={changeLeague}
+                        >
 
-                    </select>
+                            {user.geekLeagues.map(oneGeekLeague =>
+                                <option
+                                    key={oneGeekLeague._id}
+                                    value={oneGeekLeague._id}
+                                >
+                                    {oneGeekLeague.name}
+                                </option>
+                            )}
+
+                        </select>
+
+
+                        <p><Link to={`/myGeekleagues/${geekLeague}/season/${fixture.season}/${fixture.matchweek}`}>Voir le classement</Link></p>
+
+                    </div>
 
                 </div>
 

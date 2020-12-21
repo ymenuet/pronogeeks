@@ -43,6 +43,7 @@ const GeekLeague = ({ match: { params: { geekLeagueID } }, history, loading }) =
                     let result = true
                     geekLeague.geeks.map(geek => {
                         if (geek._id.toString() === oneUser._id.toString()) result = false
+                        return geek
                     })
                     return result
                 })
