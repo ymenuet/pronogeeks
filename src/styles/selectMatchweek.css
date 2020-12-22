@@ -12,8 +12,6 @@
 .select-matchweek.opened {
     position: absolute;
     border-radius: 0;
-    size: 6!important;
-    min-height: 150px;
 }
 
 .select-matchweek::-webkit-scrollbar {
