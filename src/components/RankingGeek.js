@@ -75,11 +75,14 @@ const RankingGeek = ({ user, geek, index, seasonID, matchweek }) => {
     }
 
     const seePronos = () => {
-        if (matchweek) return <Link to={`/geek/${geek._id}/pronogeeks/${seasonID}/matchweek/${matchweek}`}>
+        const geekIsCurrentUser = geek._id === user._id
+        const linkToPronos = geekIsCurrentUser ? `/pronogeeks/${seasonID}/matchweek/${matchweek}` : `/geek/${geek._id}/pronogeeks/${seasonID}/matchweek/${matchweek}`
+        if (matchweek) return <Link to={linkToPronos}>
             <span className='ranking-icon ranking-icon-last'>
                 <ViewPronoIcon color='rgba(156, 0, 99, 0.8)' size='24px' />
                 <div className='ranking-icon-details'>
-                    <p>Voir les pronos de {geek.username}</p>
+                    {geekIsCurrentUser ? <p>Voir mes pronos</p> :
+                        <p>Voir les pronos de {geek.username}</p>}
                 </div>
             </span>
         </Link>

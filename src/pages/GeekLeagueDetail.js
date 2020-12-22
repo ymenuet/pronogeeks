@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { Context } from '../context'
 import { getSeasonData, getMatchweekFixtures } from '../services/seasons'
 import { fetchLeague, fetchMatchweekRanking } from '../services/geekLeague'
-import { Loader, RankingGeek } from '../components'
+import { Loader, RankingGeek, SelectMatchweek } from '../components'
 import { matchFinished } from '../helpers'
 import { GoBackIcon, GoNextIcon } from '../components/Icons'
 import '../styles/detailGeekleague.css'
@@ -17,6 +17,7 @@ const GeekLeagueDetail = ({ match: { params: { geekLeagueID, seasonID, matchweek
     const [ranking, setRanking] = useState(null)
     const [totalGames, setTotalGames] = useState(null)
     const [gamesFinished, setGamesFinished] = useState(null)
+    const [seeSelectOptions, setSeeSelectOptions] = useState(false)
 
     useEffect(() => {
         const setNextMatchweek = async (seasonID) => {
@@ -74,21 +75,13 @@ const GeekLeagueDetail = ({ match: { params: { geekLeagueID, seasonID, matchweek
     }
 
     const changeMatchweek = e => {
+        setSeeSelectOptions(false)
         setMatchweek(null)
-        setMatchweek(e.target.value)
+        setRanking(null)
+        setMatchweek(parseInt(e.target.value))
     }
 
-    const selectMatchweek = () => {
-        const matchweekArr = []
-        for (let i = 1; i <= lastMatchweek; i++) {
-            matchweekArr.push(i)
-        }
-        return <select defaultValue={matchweek} onChange={changeMatchweek}>
-            {matchweekArr.map(matchweek => <option key={matchweek} value={matchweek}>{matchweek}</option>)}
-        </select>
-    }
-
-    return <div className='geekleague-bg geekleague-details'>
+    return <div className='geekleague-bg geekleague-details' onClick={() => { if (seeSelectOptions) setSeeSelectOptions(false) }}>
 
         {loading || !geekLeague || !matchweek || !season || !ranking || !lastMatchweek || gamesFinished === null || totalGames === null ? (
 
@@ -104,7 +97,7 @@ const GeekLeagueDetail = ({ match: { params: { geekLeagueID, seasonID, matchweek
 
                             <Link to={`/myGeekleagues/${geekLeagueID}`} className='return-button'>
                                 <GoBackIcon size='18px' />
-                            &nbsp;Retour classement général
+                            &nbsp;Retour classement saison
                             </Link>
 
 
@@ -125,7 +118,14 @@ const GeekLeagueDetail = ({ match: { params: { geekLeagueID, seasonID, matchweek
                                         </div>}
 
                                         <h4>
-                                            J{selectMatchweek()} de {season.leagueName}, saison {season.year}
+                                            J<SelectMatchweek
+                                                matchweek={matchweek}
+                                                changeMatchweek={changeMatchweek}
+                                                lastMatchweek={lastMatchweek}
+                                                seeSelectOptions={seeSelectOptions}
+                                                setSeeSelectOptions={setSeeSelectOptions}
+                                                backgroundColor='rgb(156, 0, 99)'
+                                            /> {season.leagueName} {season.year}
                                             <br />
                                             <small>{gamesFinished === totalGames ? 'Journée terminée' : `Matchs joués : ${gamesFinished}/${totalGames}`}</small>
                                         </h4>

@@ -86,7 +86,13 @@
 }
 
 .view-pronos-body::-webkit-scrollbar {
-    display: none;
+    width: 5px;
+    height: 15px;
+    background-color: var(--color-white-cream);
+}
+
+.view-pronos-body::-webkit-scrollbar-thumb {
+    background-color: var(--color-dark-blue-bp);
 }
 
 @media (max-width:768px) {

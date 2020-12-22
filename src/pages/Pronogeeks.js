@@ -3,7 +3,7 @@ import { getMatchweekFixtures, getSeasonData } from '../services/seasons'
 import { updateProfileWithMatchweek, updateProfileWithSeason } from '../services/user'
 import { updateFixturesStatus, updateOdds } from '../services/apiFootball'
 import { getProfile } from '../services/auth'
-import { Fixture, Loader, MatchweekNavigation, AdminButtons, RulesBox } from '../components'
+import { Fixture, Loader, MatchweekNavigation, AdminButtons, RulesBox, SelectMatchweek } from '../components'
 import { openNotification } from '../helpers'
 import { Context } from '../context'
 import { QuestionIcon, SaveIcon } from '../components/Icons'
@@ -22,6 +22,7 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
     const [lastScoresUpdated, setLastScoresUpdated] = useState(null)
     const [saveAll, setSaveAll] = useState(false)
     const [showLeaguePronos, setShowLeaguePronos] = useState(false)
+    const [seeSelectOptions, setSeeSelectOptions] = useState(false)
 
     const { loginUser, user } = useContext(Context)
 
@@ -158,6 +159,12 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
         history.push(`/pronogeeks/${seasonID}/matchweek/${parseInt(matchweekNumber) + 1}`)
     }
 
+    const changeMatchweek = e => {
+        setSeeSelectOptions(false)
+        setFixtures(null)
+        history.push(`/pronogeeks/${seasonID}/matchweek/${e.target.value}`)
+    }
+
     return !fixtures || !season || loading ? (
 
         <div className='pronogeeks-bg'>
@@ -165,7 +172,9 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
         </div>
 
     ) : (
-            <div className='pronogeeks-bg matchweek-page'>
+            <div className='pronogeeks-bg matchweek-page' onClick={() => {
+                if (seeSelectOptions) setSeeSelectOptions(false)
+            }}>
 
                 <div className='save-all'>
 
@@ -195,7 +204,15 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
                 <h2>
                     <QuestionIcon onClick={() => setShowRules(!showRules)} />
                     {season.leagueName} saison {season.year} :<br />
-                    journée {matchweekNumber}
+                    journée <SelectMatchweek
+                        matchweek={matchweekNumber}
+                        changeMatchweek={changeMatchweek}
+                        lastMatchweek={38}
+                        seeSelectOptions={seeSelectOptions}
+                        setSeeSelectOptions={setSeeSelectOptions}
+                        backgroundColor='rgb(4, 78, 199)'
+                        fontSize='2rem'
+                    />
                 </h2>
 
                 <ul
