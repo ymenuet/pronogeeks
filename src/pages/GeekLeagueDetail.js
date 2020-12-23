@@ -4,7 +4,7 @@ import { Context } from '../context'
 import { getSeasonData, getMatchweekFixtures } from '../services/seasons'
 import { fetchLeague, fetchMatchweekRanking } from '../services/geekLeague'
 import { Loader, RankingGeek, InputMatchweek } from '../components'
-import { matchFinished } from '../helpers'
+import { matchFinished, resetMatchweek } from '../helpers'
 import { GoBackIcon, GoNextIcon } from '../components/Icons'
 import '../styles/detailGeekleague.css'
 
@@ -82,9 +82,7 @@ const GeekLeagueDetail = ({ match: { params: { geekLeagueID, seasonID, matchweek
 
     return <div
         className='geekleague-bg geekleague-details'
-        onClick={() => {
-            if (matchweekFromInput !== matchweek) setMatchweekFromInput(matchweek)
-        }}
+        onClick={e => resetMatchweek(e, matchweekFromInput, matchweek, setMatchweekFromInput)}
     >
 
         {loading || !geekLeague || !matchweek || !season || !ranking || !lastMatchweek || gamesFinished === null || totalGames === null ? (

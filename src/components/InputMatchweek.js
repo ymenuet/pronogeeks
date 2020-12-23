@@ -17,9 +17,9 @@ const InputMatchweek = ({ matchweekInit, matchweekFromInput, setMatchweekFromInp
         setMatchweekFromInput(e.target.value)
     }
 
-    return <div className='input-matchweek-container'>
+    return <form className='input-matchweek-container cancel-target' onSubmit={confirmMatchweek}>
         <input
-            className='input-matchweek'
+            className='input-matchweek cancel-target'
             value={matchweekFromInput}
             onChange={handleInput}
             type='number'
@@ -27,8 +27,8 @@ const InputMatchweek = ({ matchweekInit, matchweekFromInput, setMatchweekFromInp
             max={lastMatchweek}
             style={{ backgroundColor, fontSize }}
         />
-        <button className='button-input-matchweek' onClick={confirmMatchweek}><span style={{ color: backgroundColor }}>OK</span></button>
-    </div>
+        <button className='button-input-matchweek cancel-target' type='submit'><span className='cancel-target' style={{ color: backgroundColor }}>OK</span></button>
+    </form>
 }
 
 export default InputMatchweek

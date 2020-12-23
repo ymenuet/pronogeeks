@@ -4,7 +4,7 @@ import { updateProfileWithMatchweek, updateProfileWithSeason } from '../services
 import { updateFixturesStatus, updateOdds } from '../services/apiFootball'
 import { getProfile } from '../services/auth'
 import { Fixture, Loader, MatchweekNavigation, AdminButtons, RulesBox, InputMatchweek } from '../components'
-import { openNotification } from '../helpers'
+import { openNotification, resetMatchweek } from '../helpers'
 import { Context } from '../context'
 import { QuestionIcon, SaveIcon } from '../components/Icons'
 import '../styles/pronogeeks.css'
@@ -151,16 +151,25 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
 
     const previousPage = () => {
         setFixtures(null)
+        setMatchweekPoints(null)
+        setMatchweekBonus(null)
+        setMatchweekCorrects(null)
         history.push(`/pronogeeks/${seasonID}/matchweek/${parseInt(matchweekNumber) - 1}`)
     }
 
     const nextPage = () => {
         setFixtures(null)
+        setMatchweekPoints(null)
+        setMatchweekBonus(null)
+        setMatchweekCorrects(null)
         history.push(`/pronogeeks/${seasonID}/matchweek/${parseInt(matchweekNumber) + 1}`)
     }
 
     const changeMatchweek = matchweek => {
         setFixtures(null)
+        setMatchweekPoints(null)
+        setMatchweekBonus(null)
+        setMatchweekCorrects(null)
         history.push(`/pronogeeks/${seasonID}/matchweek/${matchweek}`)
     }
 
@@ -173,9 +182,7 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
     ) : (
             <div
                 className='pronogeeks-bg matchweek-page'
-                onClick={() => {
-                    if (matchweekFromInput !== matchweekNumber) setMatchweekFromInput(matchweekNumber)
-                }}
+                onClick={e => resetMatchweek(e, matchweekFromInput, matchweekNumber, setMatchweekFromInput)}
             >
 
                 <div className='save-all'>
