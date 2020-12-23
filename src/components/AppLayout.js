@@ -131,6 +131,10 @@ const AppLayout = ({ children }) => {
             {children}
         </div>
 
+        {window.addEventListener('click', () => {
+            if (document.querySelector('.navbar-collapse').classList.contains('show')) document.querySelector('.navbar-collapse').classList.remove('show')
+        })}
+
     </>
 }
 
