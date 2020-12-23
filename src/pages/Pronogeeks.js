@@ -3,7 +3,7 @@ import { getMatchweekFixtures, getSeasonData } from '../services/seasons'
 import { updateProfileWithMatchweek, updateProfileWithSeason } from '../services/user'
 import { updateFixturesStatus, updateOdds } from '../services/apiFootball'
 import { getProfile } from '../services/auth'
-import { Fixture, Loader, MatchweekNavigation, AdminButtons, RulesBox, SelectMatchweek } from '../components'
+import { Fixture, Loader, MatchweekNavigation, AdminButtons, RulesBox, InputMatchweek } from '../components'
 import { openNotification } from '../helpers'
 import { Context } from '../context'
 import { QuestionIcon, SaveIcon } from '../components/Icons'
@@ -22,7 +22,7 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
     const [lastScoresUpdated, setLastScoresUpdated] = useState(null)
     const [saveAll, setSaveAll] = useState(false)
     const [showLeaguePronos, setShowLeaguePronos] = useState(false)
-    const [seeSelectOptions, setSeeSelectOptions] = useState(false)
+    const [matchweekFromInput, setMatchweekFromInput] = useState(matchweekNumber)
 
     const { loginUser, user } = useContext(Context)
 
@@ -159,10 +159,9 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
         history.push(`/pronogeeks/${seasonID}/matchweek/${parseInt(matchweekNumber) + 1}`)
     }
 
-    const changeMatchweek = e => {
-        setSeeSelectOptions(false)
+    const changeMatchweek = matchweek => {
         setFixtures(null)
-        history.push(`/pronogeeks/${seasonID}/matchweek/${e.target.value}`)
+        history.push(`/pronogeeks/${seasonID}/matchweek/${matchweek}`)
     }
 
     return !fixtures || !season || loading ? (
@@ -172,9 +171,12 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
         </div>
 
     ) : (
-            <div className='pronogeeks-bg matchweek-page' onClick={() => {
-                if (seeSelectOptions) setSeeSelectOptions(false)
-            }}>
+            <div
+                className='pronogeeks-bg matchweek-page'
+                onClick={() => {
+                    if (matchweekFromInput !== matchweekNumber) setMatchweekFromInput(matchweekNumber)
+                }}
+            >
 
                 <div className='save-all'>
 
@@ -204,12 +206,12 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
                 <h2>
                     <QuestionIcon onClick={() => setShowRules(!showRules)} />
                     {season.leagueName} saison {season.year} :<br />
-                    journée <SelectMatchweek
-                        matchweek={matchweekNumber}
+                    journée <InputMatchweek
+                        matchweekInit={matchweekNumber}
+                        matchweekFromInput={matchweekFromInput}
+                        setMatchweekFromInput={setMatchweekFromInput}
                         changeMatchweek={changeMatchweek}
                         lastMatchweek={38}
-                        seeSelectOptions={seeSelectOptions}
-                        setSeeSelectOptions={setSeeSelectOptions}
                         backgroundColor='rgb(4, 78, 199)'
                         fontSize='2rem'
                     />

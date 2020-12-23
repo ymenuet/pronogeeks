@@ -55,6 +55,10 @@
     font-size: 1.2rem;
 }
 
+.link-to-ranking-matchweek {
+    margin-top: 10px!important;
+}
+
 .view-pronos-choose-league select {
     border: 1px solid var(--color-dark-blue-bp);
     padding: 0px 5px;
@@ -86,13 +90,14 @@
 }
 
 .view-pronos-body::-webkit-scrollbar {
-    width: 5px;
+    width: 7px;
     height: 15px;
-    background-color: var(--color-white-cream);
+    background-color: var(--color-dark-blue-bp);
 }
 
 .view-pronos-body::-webkit-scrollbar-thumb {
-    background-color: var(--color-dark-blue-bp);
+    background-color: var(--color-white-cream);
+    border-left: 3px solid var(--color-dark-blue-bp);
 }
 
 @media (max-width:768px) {
@@ -101,7 +106,6 @@
         display: flex;
         justify-content: center;
         align-items: flex-start;
-        margin-bottom: 10px;
     }
     .view-pronos-game-info {
         margin: 10px 0;

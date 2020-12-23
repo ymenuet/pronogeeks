@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { Context } from '../context'
 import { getSeasonData, getMatchweekFixtures } from '../services/seasons'
 import { fetchLeague, fetchMatchweekRanking } from '../services/geekLeague'
-import { Loader, RankingGeek, SelectMatchweek } from '../components'
+import { Loader, RankingGeek, InputMatchweek } from '../components'
 import { matchFinished } from '../helpers'
 import { GoBackIcon, GoNextIcon } from '../components/Icons'
 import '../styles/detailGeekleague.css'
@@ -17,7 +17,7 @@ const GeekLeagueDetail = ({ match: { params: { geekLeagueID, seasonID, matchweek
     const [ranking, setRanking] = useState(null)
     const [totalGames, setTotalGames] = useState(null)
     const [gamesFinished, setGamesFinished] = useState(null)
-    const [seeSelectOptions, setSeeSelectOptions] = useState(false)
+    const [matchweekFromInput, setMatchweekFromInput] = useState(matchweekNumber)
 
     useEffect(() => {
         const setNextMatchweek = async (seasonID) => {
@@ -74,14 +74,18 @@ const GeekLeagueDetail = ({ match: { params: { geekLeagueID, seasonID, matchweek
         setMatchweek(matchweek + 1)
     }
 
-    const changeMatchweek = e => {
-        setSeeSelectOptions(false)
+    const changeMatchweek = matchweek => {
         setMatchweek(null)
         setRanking(null)
-        setMatchweek(parseInt(e.target.value))
+        setMatchweek(parseInt(matchweek))
     }
 
-    return <div className='geekleague-bg geekleague-details' onClick={() => { if (seeSelectOptions) setSeeSelectOptions(false) }}>
+    return <div
+        className='geekleague-bg geekleague-details'
+        onClick={() => {
+            if (matchweekFromInput !== matchweek) setMatchweekFromInput(matchweek)
+        }}
+    >
 
         {loading || !geekLeague || !matchweek || !season || !ranking || !lastMatchweek || gamesFinished === null || totalGames === null ? (
 
@@ -118,12 +122,12 @@ const GeekLeagueDetail = ({ match: { params: { geekLeagueID, seasonID, matchweek
                                         </div>}
 
                                         <h4>
-                                            J<SelectMatchweek
-                                                matchweek={matchweek}
+                                            J<InputMatchweek
+                                                matchweekInit={matchweek}
+                                                matchweekFromInput={matchweekFromInput}
+                                                setMatchweekFromInput={setMatchweekFromInput}
                                                 changeMatchweek={changeMatchweek}
                                                 lastMatchweek={lastMatchweek}
-                                                seeSelectOptions={seeSelectOptions}
-                                                setSeeSelectOptions={setSeeSelectOptions}
                                                 backgroundColor='rgb(156, 0, 99)'
                                             /> {season.leagueName} {season.year}
                                             <br />

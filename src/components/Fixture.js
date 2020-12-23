@@ -219,14 +219,16 @@ const Fixture = ({ fixtureID, saveAll, showLeaguePronos, setShowLeaguePronos }) 
 
                 {pronogeek.points > 0 && pronogeek.bonusFavTeam && (
                     <div className='points-cell'>
-                        Tu as scoré <i>{pronogeek.points}pts</i> {pronogeek.exact && `(${(pronogeek.points - 30) / 2}*2)`}<br />
-                        dont 30pts bonus pour ton équipe de <FavTeamIcon size='24px' />
+                        Tu as scoré {pronogeek.points}pts,<br />
+                        avec bonus {pronogeek.exact && 'score exact (cote*2)'}{pronogeek.exact && <br />}
+                        {pronogeek.exact && 'et'} 30pts équipe de <FavTeamIcon size='24px' />
                     </div>
                 )}
 
                 {pronogeek.points > 0 && !pronogeek.bonusFavTeam && (
                     <div className='points-cell'>
-                        Tu as scoré <i>{pronogeek.points}pts</i> {pronogeek.exact && `(${pronogeek.points / 2}*2)`}
+                        Tu as scoré {pronogeek.points}pts{pronogeek.exact && ','}{pronogeek.exact && <br />}
+                        {pronogeek.exact && `avec bonus score exact (cote*2)`}
                     </div>
                 )}
 

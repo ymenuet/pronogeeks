@@ -1,0 +1,61 @@
+.input-matchweek-container {
+    display: inline-flex;
+    align-items: center;
+}
+
+.input-matchweek {
+    outline: none;
+    border: 1px solid var(--color-white-cream);
+    border-right: none;
+    border-radius: 21px;
+    margin-left: 2px;
+    width: fit-content!important;
+    color: var(--color-white-cream);
+    text-align: center;
+    height: 37px;
+    -webkit-appearance: textfield;
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+.input-matchweek::-webkit-inner-spin-button,
+.input-matchweek::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+}
+
+.input-matchweek:hover,
+.button-input-matchweek:hover~.input-matchweek {
+    border-bottom-right-radius: 0;
+    border-top-right-radius: 0;
+}
+
+button.button-input-matchweek {
+    border: none;
+    border-top-right-radius: 21px;
+    border-bottom-right-radius: 21px;
+    padding: 0;
+    margin: 0;
+    height: 37px;
+    display: flex;
+    align-items: center;
+    outline: none;
+    background-color: ;
+}
+
+.button-input-matchweek>span {
+    display: none;
+    font-size: 1rem;
+    padding-left: 5px;
+    padding-right: 7px;
+}
+
+.input-matchweek-container:hover>.input-matchweek,
+.input-matchweek:focus {
+    border-bottom-right-radius: 0;
+    border-top-right-radius: 0;
+}
+
+.input-matchweek-container:hover>button>span,
+.input-matchweek:focus+button>span {
+    display: inline;
+}
