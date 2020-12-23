@@ -23,12 +23,6 @@
     -webkit-appearance: none;
 }
 
-.input-matchweek:hover,
-.button-input-matchweek:hover~.input-matchweek {
-    border-bottom-right-radius: 0;
-    border-top-right-radius: 0;
-}
-
 button.button-input-matchweek {
     border: none;
     border-top-right-radius: 21px;
@@ -39,7 +33,11 @@ button.button-input-matchweek {
     display: flex;
     align-items: center;
     outline: none;
-    background-color: ;
+    background-color: rgba(240, 247, 244, 0.8);
+}
+
+button.button-input-matchweek:hover {
+    background-color: rgb(240, 247, 244);
 }
 
 .button-input-matchweek>span {
