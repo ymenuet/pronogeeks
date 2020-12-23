@@ -69,7 +69,7 @@
 }
 
 .view-pronos-body {
-    max-height: 65%;
+    height: 60%;
     overflow-y: scroll;
     background-color: rgba(4, 78, 199, 0.8);
     border-radius: 5px;
