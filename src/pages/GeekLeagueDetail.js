@@ -2,9 +2,9 @@ import React, { useState, useEffect, useContext } from 'react'
 import { Link } from 'react-router-dom'
 import { Context } from '../context'
 import { getSeasonData, getMatchweekFixtures } from '../services/seasons'
-import { fetchLeague, fetchMatchweekRanking } from '../services/geekLeague'
+import { fetchLeague } from '../services/geekLeague'
 import { Loader, RankingGeek, InputMatchweek } from '../components'
-import { matchFinished, resetMatchweek } from '../helpers'
+import { matchFinished, resetMatchweek, rankGeeks } from '../helpers'
 import { GoBackIcon, GoNextIcon } from '../components/Icons'
 import '../styles/detailGeekleague.css'
 
@@ -43,14 +43,11 @@ const GeekLeagueDetail = ({ match: { params: { geekLeagueID, seasonID, matchweek
     }, [geekLeagueID, seasonID, matchweekNumber])
 
     useEffect(() => {
-        if (matchweek) {
-            const updateRanking = async () => {
-                const geeks = await fetchMatchweekRanking(geekLeagueID, seasonID, matchweek)
-                setRanking(geeks)
-            }
-            updateRanking()
+        if (matchweek && geekLeague) {
+            const rankedGeeks = rankGeeks(geekLeague.geeks, seasonID, matchweek)
+            setRanking(rankedGeeks)
         }
-    }, [matchweek, geekLeagueID, seasonID])
+    }, [matchweek, geekLeague, seasonID])
 
     useEffect(() => {
         if (matchweek) {

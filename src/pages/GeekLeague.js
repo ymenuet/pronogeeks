@@ -4,6 +4,7 @@ import { fetchLeague, editGeekLeague, deleteGeekLeague, outGeekLeague } from '..
 import { getProfile } from '../services/auth'
 import { getSeasons } from '../services/seasons'
 import { getUsers } from '../services/user'
+import { rankGeeks } from '../helpers'
 import { Loader, RankingGeek } from '../components'
 import { Form, Input, Select } from 'antd'
 import { Link } from 'react-router-dom'
@@ -75,22 +76,6 @@ const GeekLeague = ({ match: { params: { geekLeagueID } }, history, loading }) =
         history.push('/myGeekLeagues')
     }
 
-    const rankGeeks = season => {
-        const findSeason = seasonsArr => seasonsArr.filter(seas => seas.season.toString() === season._id.toString())[0]
-        return geekLeague.geeks.sort((a, b) => {
-            let result;
-            if (!a.seasons && !b.seasons) result = -1
-            else if (!a.seasons) result = 1
-            else if (!b.seasons) result = -1
-            else if (a.seasons.length > 0 && b.seasons.length > 0) {
-                result = findSeason(b.seasons).totalPoints - findSeason(a.seasons).totalPoints
-            } else if (a.seasons.length > 0 && b.seasons.length < 1) result = -1
-            else if (a.seasons.length < 1 && b.seasons.length > 0) result = 1
-            else if (a.seasons.length < 1 && b.seasons.length < 1) result = -1
-            return result
-        })
-    }
-
     return <div className='geekleague-bg geekleague-details'>
         {!geekLeague || !seasons || loading ? (
 
@@ -149,7 +134,7 @@ const GeekLeague = ({ match: { params: { geekLeagueID } }, history, loading }) =
 
                                 <ul className='list-group list-group-flush geekleague-ranking-detail'>
 
-                                    {rankGeeks(season).map((geek, index) => <RankingGeek
+                                    {rankGeeks(geekLeague.geeks, season._id).map((geek, index) => <RankingGeek
                                         key={geek._id}
                                         user={user}
                                         geek={geek}

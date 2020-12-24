@@ -27,15 +27,6 @@ export const fetchLeague = async leagueID => {
     return geekLeague
 }
 
-export const fetchMatchweekRanking = async(geekLeagueID, seasonID, matchweekNumber) => {
-    const {
-        data: {
-            geeks
-        }
-    } = await geekLeagueService.get(`/ranking/${geekLeagueID}/season/${seasonID}/matchweek/${matchweekNumber}`)
-    return geeks
-}
-
 export const getUserLeagues = async() => {
     const {
         data: {

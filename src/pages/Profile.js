@@ -7,7 +7,7 @@ import { Loader, RankingGeek } from '../components'
 import { Spin, Space } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons'
 import { Context } from '../context'
-import { openNotification } from '../helpers'
+import { openNotification, rankGeeks } from '../helpers'
 import { EditIcon, WarningIcon } from '../components/Icons'
 import '../styles/profile.css'
 
@@ -66,9 +66,7 @@ const Profile = ({ loading, history }) => {
                 const seasonID = user.seasons[user.seasons.length - 1].season._id.toString()
                 setSeasonID(user.seasons[user.seasons.length - 1].season._id.toString())
                 const players = await fetchPlayers(seasonID)
-                const rankedPlayers = players.sort((a, b) => {
-                    return b.seasons.filter(season => season.season.toString() === seasonID)[0].totalPoints - a.seasons.filter(season => season.season.toString() === seasonID)[0].totalPoints
-                })
+                const rankedPlayers = rankGeeks(players, seasonID)
                 const userRanking = rankedPlayers.map(player => player.username).indexOf(user.username) + 1
                 const rankedPlayers20 = rankedPlayers.slice(0, 20)
                 setUserRanking(userRanking)
