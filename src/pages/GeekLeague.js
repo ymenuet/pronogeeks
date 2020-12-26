@@ -5,7 +5,7 @@ import { getProfile } from '../services/auth'
 import { getSeasons } from '../services/seasons'
 import { getUsers } from '../services/user'
 import { rankGeeks } from '../helpers'
-import { Loader, RankingGeek } from '../components'
+import { Loader, RankGeeks } from '../components'
 import { Form, Input, Select } from 'antd'
 import { Link } from 'react-router-dom'
 import { EditIcon, DeleteIcon, RemoveIcon, WarningIcon } from '../components/Icons'
@@ -132,17 +132,12 @@ const GeekLeague = ({ match: { params: { geekLeagueID } }, history, loading }) =
                                     <button className='btn my-btn see-more-btn'>Détails par journée</button>
                                 </Link>
 
-                                <ul className='list-group list-group-flush geekleague-ranking-detail'>
-
-                                    {rankGeeks(geekLeague.geeks, season._id).map((geek, index) => <RankingGeek
-                                        key={geek._id}
-                                        user={user}
-                                        geek={geek}
-                                        index={index}
-                                        seasonID={season._id}
-                                    />)
-                                    }
-                                </ul>
+                                <RankGeeks
+                                    user={user}
+                                    ranking={rankGeeks(geekLeague.geeks, season._id)}
+                                    seasonID={season._id}
+                                    geekLeague
+                                />
 
                                 <Link to={`/myGeekLeagues/${geekLeagueID}/season/${season._id}`}>
                                     <button className='btn my-btn see-more-btn'>Détails par journée</button>

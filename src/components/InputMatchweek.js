@@ -17,7 +17,7 @@ const InputMatchweek = ({ matchweekInit, matchweekFromInput, setMatchweekFromInp
         setMatchweekFromInput(e.target.value)
     }
 
-    return <form className='input-matchweek-container cancel-target' onSubmit={confirmMatchweek}>
+    return matchweekFromInput || parseInt(matchweekFromInput) === 0 || matchweekFromInput === '' ? <form className='input-matchweek-container cancel-target' onSubmit={confirmMatchweek}>
         <input
             className='input-matchweek cancel-target'
             value={matchweekFromInput}
@@ -28,7 +28,7 @@ const InputMatchweek = ({ matchweekInit, matchweekFromInput, setMatchweekFromInp
             style={{ backgroundColor, fontSize }}
         />
         <button className='button-input-matchweek cancel-target' type='submit'><span className='cancel-target' style={{ color: backgroundColor }}>OK</span></button>
-    </form>
+    </form> : null
 }
 
 export default InputMatchweek

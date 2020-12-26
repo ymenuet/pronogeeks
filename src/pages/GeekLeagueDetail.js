@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { Context } from '../context'
 import { getSeasonData, getMatchweekFixtures } from '../services/seasons'
 import { fetchLeague } from '../services/geekLeague'
-import { Loader, RankingGeek, InputMatchweek } from '../components'
+import { Loader, InputMatchweek, RankGeeks } from '../components'
 import { matchFinished, resetMatchweek, rankGeeks } from '../helpers'
 import { GoBackIcon, GoNextIcon } from '../components/Icons'
 import '../styles/detailGeekleague.css'
@@ -61,19 +61,23 @@ const GeekLeagueDetail = ({ match: { params: { geekLeagueID, seasonID, matchweek
         }
     }, [matchweek, seasonID])
 
-    const previousMatchweek = () => {
+    const resetComponent = () => {
+        setMatchweek(null)
         setRanking(null)
+    }
+
+    const previousMatchweek = () => {
+        resetComponent()
         setMatchweek(matchweek - 1)
     }
 
     const nextMatchweek = () => {
-        setRanking(null)
+        resetComponent()
         setMatchweek(matchweek + 1)
     }
 
     const changeMatchweek = matchweek => {
-        setMatchweek(null)
-        setRanking(null)
+        resetComponent()
         setMatchweek(parseInt(matchweek))
     }
 
@@ -141,18 +145,13 @@ const GeekLeagueDetail = ({ match: { params: { geekLeagueID, seasonID, matchweek
                                     </div>
                                 </div>
 
-                                <ul className='list-group list-group-flush geekleague-ranking-detail'>
-
-                                    {ranking.map((geek, index) => <RankingGeek
-                                        key={geek._id}
-                                        user={user}
-                                        geek={geek}
-                                        index={index}
-                                        seasonID={seasonID}
-                                        matchweek={matchweek}
-                                    />)}
-
-                                </ul>
+                                <RankGeeks
+                                    user={user}
+                                    ranking={ranking}
+                                    seasonID={seasonID}
+                                    matchweek={matchweek}
+                                    geekLeague
+                                />
 
                             </div>
 

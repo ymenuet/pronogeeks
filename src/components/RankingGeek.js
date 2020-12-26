@@ -5,7 +5,7 @@ import '../styles/rankingGeek.css'
 
 const iconSize = '20px'
 
-const RankingGeek = ({ user, geek, index, seasonID, matchweek }) => {
+const RankingGeek = ({ user, geek, index, seasonID, matchweek, header }) => {
 
     const [totalPoints, setTotalPoints] = useState(0)
     const [correctPronos, setCorrectPronos] = useState(0)
@@ -14,15 +14,18 @@ const RankingGeek = ({ user, geek, index, seasonID, matchweek }) => {
     const [team, setTeam] = useState(null)
 
     useEffect(() => {
+
+        const getSeasonID = season => season.season._id?.toString() || season.season.toString()
+
         const geekPlaysSeason = geek.seasons.length > 0 &&
-            geek.seasons.filter(seas => seas.season.toString() === seasonID.toString()).length > 0
+            geek.seasons.filter(seas => getSeasonID(seas) === seasonID.toString()).length > 0
         const geekPlaysMatchweek = matchweek &&
-            geek.seasons.filter(seas => seas.season.toString() === seasonID.toString())[0].matchweeks.length > 0 &&
-            geek.seasons.filter(seas => seas.season.toString() === seasonID.toString())[0].matchweeks.filter(oneMatchweek => oneMatchweek.number.toString() === matchweek.toString()).length > 0
+            geek.seasons.filter(seas => getSeasonID(seas) === seasonID.toString())[0].matchweeks.length > 0 &&
+            geek.seasons.filter(seas => getSeasonID(seas) === seasonID.toString())[0].matchweeks.filter(oneMatchweek => oneMatchweek.number.toString() === matchweek.toString()).length > 0
 
         if (geekPlaysSeason && geekPlaysMatchweek) {
-            const team = geek.seasons.filter(seas => seas.season.toString() === seasonID.toString())[0].favTeam
-            const matchweekDetails = geek.seasons.filter(seas => seas.season.toString() === seasonID.toString())[0].matchweeks.filter(oneMatchweek => oneMatchweek.number.toString() === matchweek.toString())[0]
+            const team = geek.seasons.filter(seas => getSeasonID(seas) === seasonID.toString())[0].favTeam
+            const matchweekDetails = geek.seasons.filter(seas => getSeasonID(seas) === seasonID.toString())[0].matchweeks.filter(oneMatchweek => oneMatchweek.number.toString() === matchweek.toString())[0]
             setTotalPoints(matchweekDetails.totalPoints)
             setCorrectPronos(matchweekDetails.numberCorrects)
             setExactPronos(matchweekDetails.numberExacts)
@@ -30,12 +33,19 @@ const RankingGeek = ({ user, geek, index, seasonID, matchweek }) => {
             setTeam(team)
         }
         else if (!matchweek && geekPlaysSeason) {
-            const seasonDetails = geek.seasons.filter(seas => seas.season.toString() === seasonID.toString())[0]
+            const seasonDetails = geek.seasons.filter(seas => getSeasonID(seas) === seasonID.toString())[0]
             setTotalPoints(seasonDetails.totalPoints || seasonDetails.initialPoints)
             setCorrectPronos(seasonDetails.numberCorrects || seasonDetails.initialNumberCorrects)
             setExactPronos(seasonDetails.numberExacts || seasonDetails.initialNumberExacts)
             setFavTeam(seasonDetails.bonusFavTeam || seasonDetails.initialBonusFavTeam)
             setTeam(seasonDetails.favTeam)
+        }
+        else {
+            setTotalPoints(0)
+            setCorrectPronos(0)
+            setExactPronos(0)
+            setFavTeam(false)
+            setTeam(null)
         }
         return () => {
             setTotalPoints(0)
@@ -97,7 +107,7 @@ const RankingGeek = ({ user, geek, index, seasonID, matchweek }) => {
     return (
         <li
             key={geek._id}
-            className='list-group-item d-flex'
+            className={`list-group-item d-flex ${header ? 'mb-2' : ''}`}
         >
 
             <div className='d-flex justify-content-center align-items-center mr-2 geek-ranking-number'>

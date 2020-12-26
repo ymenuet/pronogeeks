@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { updateProfile, getProfile, updatePhoto } from '../services/auth'
 import { fetchPlayers, deleteUserAccount } from '../services/user'
 import axios from 'axios'
-import { Loader, RankingGeek } from '../components'
+import { Loader, RankGeeks } from '../components'
 import { Spin, Space } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons'
 import { Context } from '../context'
@@ -67,7 +67,7 @@ const Profile = ({ loading, history }) => {
                 setSeasonID(user.seasons[user.seasons.length - 1].season._id.toString())
                 const players = await fetchPlayers(seasonID)
                 const rankedPlayers = rankGeeks(players, seasonID)
-                const userRanking = rankedPlayers.map(player => player.username).indexOf(user.username) + 1
+                const userRanking = rankedPlayers.map(player => player.username).indexOf(user.username)
                 const rankedPlayers20 = rankedPlayers.slice(0, 20)
                 setUserRanking(userRanking)
                 setSeasonRankingFull(rankedPlayers)
@@ -254,24 +254,12 @@ const Profile = ({ loading, history }) => {
 
                             <h2 style={{ marginTop: 0 }}>{user.seasons[user.seasons.length - 1].season.leagueName} saison {user.seasons[user.seasons.length - 1].season.year}<br />Classement général</h2>
 
-                            <ul className='list-group list-group-flush season-ranking'>
-
-                                <li className='list-group-item d-flex justify-content-between align-items-center mb-2'>
-                                    <span className='username-ranking'><b>{setRank(userRanking)} : {user.username}</b></span>
-                                    <span className='badge badge-success badge-pill my-badge my-badge-ranking my-badge-ranking-header'>{user.seasons[user.seasons.length - 1].totalPoints} pts</span>
-                                </li>
-
-                                {seasonRanking.map((player, index) => <RankingGeek
-                                    key={player._id}
-                                    user={user}
-                                    geek={player}
-                                    index={index}
-                                    seasonID={seasonID}
-                                />
-
-                                )}
-
-                            </ul>
+                            <RankGeeks
+                                user={user}
+                                userRanking={userRanking}
+                                ranking={seasonRanking}
+                                seasonID={seasonID}
+                            />
 
                         </>}
 
