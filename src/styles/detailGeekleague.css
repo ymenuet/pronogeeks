@@ -22,10 +22,6 @@
     color: black;
 }
 
-.geekleague-ranking-detail li span:first-child {
-    text-align: left;
-}
-
 .geekleague-page.container {
     padding: 0;
 }

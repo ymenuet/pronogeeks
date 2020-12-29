@@ -207,14 +207,6 @@ a.new-league:hover {
     height: fit-content;
 }
 
-ul.season-ranking>li {
-    background-color: var(--color-white-cream);
-}
-
-ul.season-ranking>li>span:first-child {
-    text-align: left;
-}
-
 .delete-account-btn {
     background-color: var(--color-red-rp);
     color: var(--color-white-cream);
