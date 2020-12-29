@@ -4,7 +4,6 @@ import { fetchLeague, editGeekLeague, deleteGeekLeague, outGeekLeague } from '..
 import { getProfile } from '../services/auth'
 import { getSeasons } from '../services/seasons'
 import { getUsers } from '../services/user'
-import { rankGeeks } from '../helpers'
 import { Loader, RankGeeks } from '../components'
 import { Form, Input, Select } from 'antd'
 import { Link } from 'react-router-dom'
@@ -134,9 +133,8 @@ const GeekLeague = ({ match: { params: { geekLeagueID } }, history, loading }) =
 
                                 <RankGeeks
                                     user={user}
-                                    ranking={rankGeeks(geekLeague.geeks, season._id)}
+                                    players={geekLeague.geeks}
                                     seasonID={season._id}
-                                    geekLeague
                                 />
 
                                 <Link to={`/myGeekLeagues/${geekLeagueID}/season/${season._id}`}>

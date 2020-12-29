@@ -1,24 +1,39 @@
 import React, { useEffect, useState } from 'react'
 import { RankingGeek } from '.'
+import { rankGeeks } from '../helpers'
 
-const RankGeeks = ({ user, userRanking, ranking, seasonID, geekLeague, matchweek }) => {
+const RankGeeks = ({ user, players, seasonID, generalRanking, matchweek }) => {
 
-    const [userRankingLocal, setUserRankingLocal] = useState(userRanking)
+    const [ranking, setRanking] = useState(null)
+    const [userRanking, setUserRanking] = useState(null)
 
     useEffect(() => {
-        if (!userRanking) {
-            const userRanking = ranking.map(player => player.username).indexOf(user.username)
-            setUserRankingLocal(userRanking)
+        if (!generalRanking) {
+            const ranking = rankGeeks(players, seasonID, matchweek)
+            setRanking(ranking)
         }
-    }, [user, ranking, userRanking])
+        else setRanking(players.slice(0, 50))
+    }, [players, seasonID, matchweek, setRanking, generalRanking])
+
+    useEffect(() => {
+        const setUserRank = ranking => {
+            const userRanking = ranking.map(player => player.username).indexOf(user.username) + 1
+            setUserRanking(userRanking)
+        }
+        if (!generalRanking && ranking) {
+            setUserRank(ranking)
+        } else if (generalRanking) {
+            setUserRank(players)
+        }
+    }, [user, ranking, players, generalRanking, matchweek])
 
     return (
-        userRankingLocal || userRankingLocal === 0 ? <ul className={`list-group list-group-flush ${geekLeague ? 'geekleague-ranking-detail' : 'season-ranking'}`}>
+        ranking ? <ul className={`list-group list-group-flush ${generalRanking ? 'season-ranking' : 'geekleague-ranking-detail'}`}>
 
-            {userRankingLocal !== 0 && <RankingGeek
+            {userRanking > 1 && <RankingGeek
                 user={user}
                 geek={user}
-                index={userRankingLocal}
+                rank={userRanking}
                 seasonID={seasonID}
                 matchweek={matchweek}
                 header
@@ -28,7 +43,7 @@ const RankGeeks = ({ user, userRanking, ranking, seasonID, geekLeague, matchweek
                 key={player._id}
                 user={user}
                 geek={player}
-                index={index}
+                rank={index + 1}
                 seasonID={seasonID}
                 matchweek={matchweek}
             />)}

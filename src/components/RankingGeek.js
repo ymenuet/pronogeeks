@@ -5,7 +5,7 @@ import '../styles/rankingGeek.css'
 
 const iconSize = '20px'
 
-const RankingGeek = ({ user, geek, index, seasonID, matchweek, header }) => {
+const RankingGeek = ({ user, geek, rank, seasonID, matchweek, header }) => {
 
     const [totalPoints, setTotalPoints] = useState(0)
     const [correctPronos, setCorrectPronos] = useState(0)
@@ -56,14 +56,14 @@ const RankingGeek = ({ user, geek, index, seasonID, matchweek, header }) => {
     }, [geek, matchweek, seasonID])
 
     const giveMedal = () => {
-        switch (index) {
-            case 0:
-                return <FirstIcon className='medal-icons-ranking' size='28px' color='#FFA500' />
+        switch (rank) {
             case 1:
-                return <SecondIcon className='medal-icons-ranking' size='28px' color='#616060' />
+                return <FirstIcon className='medal-icons-ranking' size='28px' color='#FFA500' />
             case 2:
+                return <SecondIcon className='medal-icons-ranking' size='28px' color='#616060' />
+            case 3:
                 return <ThirdIcon className='medal-icons-ranking' size='28px' color='#6A3805' />
-            default: return ` ${index + 1} - `
+            default: return ` ${rank} - `
         }
     }
 

@@ -257,8 +257,9 @@ const Profile = ({ loading, history }) => {
                             <RankGeeks
                                 user={user}
                                 userRanking={userRanking}
-                                ranking={seasonRanking}
+                                players={seasonRanking}
                                 seasonID={seasonID}
+                                generalRanking
                             />
 
                         </>}
