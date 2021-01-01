@@ -1,5 +1,5 @@
 import React from 'react'
-import '../styles/privacyPolicy.css'
+import '../styles/rulesPrivacyPolicy.css'
 
 const PrivacyPolicy = () => {
     return (
@@ -7,7 +7,7 @@ const PrivacyPolicy = () => {
             <div className='row'>
                 <div className='col-10 offset-1 col-md-8 offset-md-2'>
                     <div className='home-div' style={{ width: '100%' }}>
-                        <div className='home-message privacy-policy' style={{ width: '100%' }}>
+                        <div className='home-message rules-privacy-policy' style={{ width: '100%' }}>
                             <h2>Politique de confidentialité</h2>
                             <section id='data-collection'>
                                 <h4>1. Collecte de l'information</h4>

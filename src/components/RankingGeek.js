@@ -137,14 +137,14 @@ const RankingGeek = ({ user, geek, rank, seasonID, matchweek, header }) => {
                         {favTeamInfo()}
 
                         <span className='ranking-icon'>
-                            {correctPronos}<CorrectIcon className='ranking-icon-component' size={iconSize} color='#28a745' />
+                            {correctPronos}<CorrectIcon className='ranking-icon-component' size={iconSize} />
                             <div className='ranking-icon-details ranking-icon-details-right'>
                                 <p>{correctPronos} pronogeeks corrects</p>
                             </div>
                         </span>
 
                         <span className='ranking-icon ranking-icon-last'>
-                            {exactPronos}<ExactIcon className='ranking-icon-component' size={iconSize} color='#0041aa' />
+                            {exactPronos}<ExactIcon className='ranking-icon-component' size={iconSize} />
                             <div className='ranking-icon-details ranking-icon-details-right'>
                                 <p>{exactPronos} pronogeeks exacts</p>
                             </div>

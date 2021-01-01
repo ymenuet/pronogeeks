@@ -3,7 +3,7 @@ import { getMatchweekFixtures, getSeasonData } from '../services/seasons'
 import { updateProfileWithMatchweek, updateProfileWithSeason } from '../services/user'
 import { updateFixturesStatus, updateOdds } from '../services/apiFootball'
 import { getProfile } from '../services/auth'
-import { Fixture, Loader, MatchweekNavigation, AdminButtons, RulesBox, InputMatchweek } from '../components'
+import { Fixture, Loader, MatchweekNavigation, AdminButtons, RulesProno, InputMatchweek } from '../components'
 import { openNotification, resetMatchweek } from '../helpers'
 import { Context } from '../context'
 import { QuestionIcon, SaveIcon } from '../components/Icons'
@@ -280,12 +280,14 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
                     fetchFixtures={fetchFixtures}
                 />
 
-                {showRules && <RulesBox
-                    setShowRules={setShowRules}
-                    lastScoresUpdated={lastScoresUpdated}
-                    lastOddsUpdated={lastOddsUpdated}
-                    season={season}
-                />}
+                {showRules && <div className="rules-box">
+                    <RulesProno
+                        setShowRules={setShowRules}
+                        lastScoresUpdated={lastScoresUpdated}
+                        lastOddsUpdated={lastOddsUpdated}
+                        season={season}
+                    />
+                </div>}
 
             </div>
 

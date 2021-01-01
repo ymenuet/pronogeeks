@@ -29,6 +29,10 @@
     padding: 0 40px;
 }
 
+.pronogeeks-rules-list>li {
+    margin-bottom: 10px;
+}
+
 .bonus-table {
     margin: 10px 0;
 }
@@ -40,6 +44,10 @@
     text-align: left;
     padding: 5px;
     min-width: 35px;
+}
+
+.bonus-table th {
+    text-align: center;
 }
 
 @media (max-width: 576px) {

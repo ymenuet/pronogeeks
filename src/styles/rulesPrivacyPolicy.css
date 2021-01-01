@@ -1,0 +1,44 @@
+.home-message.rules-privacy-policy {
+    max-width: unset;
+}
+
+.rules-privacy-policy {
+    background-color: rgba(2, 88, 211, 0.8)!important;
+}
+
+.rules-privacy-policy h2 {
+    color: var(--color-white-cream)!important;
+    font-size: 2.4rem;
+    margin-top: 20px;
+}
+
+.rules-privacy-policy h4 {
+    color: var(--color-white-cream)!important;
+    font-style: italic;
+    text-decoration: underline;
+}
+
+.rules-privacy-policy section {
+    text-align: left;
+    margin: 30px 0;
+}
+
+.rules-privacy-policy section p,
+.rules-privacy-policy section li {
+    font-size: 1rem;
+}
+
+.rules-privacy-policy ul {
+    text-align: left;
+    padding: 0 20px;
+}
+
+#rules-ranking>p:nth-child(3) {
+    margin: 0;
+}
+
+@media (max-width:400px) {
+    .rules-privacy-policy h2 {
+        font-size: 1.5rem;
+    }
+}
