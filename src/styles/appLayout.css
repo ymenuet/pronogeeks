@@ -84,23 +84,23 @@ button.my-navbar-btn>span {
     margin: 0 !important;
 }
 
-#my-navbar-toggle>ul>li {
+#my-navbar-toggle ul>li {
     height: 100%;
     width: 100%;
     display: flex;
     align-items: center;
 }
 
-#my-navbar-toggle .logout-btn {
+#my-navbar-toggle .navbar-btns {
     border: none;
-    background-color: var(--color-dark-blue-bp);
-    color: var(--color-white-cream) !important;
     outline: none;
 }
 
-#my-navbar-toggle>ul>li>a,
-#my-navbar-toggle .logout-btn {
-    height: 100%;
+#my-navbar-toggle ul>li>a,
+#my-navbar-toggle .navbar-btns {
+    background-color: var(--color-dark-blue-bp);
+    color: var(--color-white-cream) !important;
+    height: var(--navbar-height);
     width: 100%;
     padding: 0;
     text-align: center;
@@ -112,10 +112,44 @@ button.my-navbar-btn>span {
     transition: all 0.2s
 }
 
-#my-navbar-toggle>ul>li>a:hover,
-#my-navbar-toggle .logout-btn:hover {
+#my-navbar-toggle ul>li>a:hover,
+#my-navbar-toggle .navbar-btns:hover {
     background-color: var(--color-light-blue-bp);
     color: var(--color-white-cream);
+}
+
+.profile-pic-navbar-list-item {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.profile-pic-navbar-list-item>a:first-child {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#my-navbar-toggle .profile-pic-navbar-list-item>.profile-submenu {
+    display: none;
+}
+
+#my-navbar-toggle .profile-pic-navbar-list-item:hover>.profile-submenu {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: var(--navbar-height);
+    right: 0;
+}
+
+.profile-submenu ul {
+    list-style: none;
+    padding: 0;
+}
+
+.profile-submenu a,
+.profile-submenu button {
+    font-size: 1.2rem!important;
 }
 
 .my-home-icon {
@@ -126,7 +160,7 @@ button.my-navbar-btn>span {
 
 @media (min-width: 992px) and (max-width: 1080px) {
     #my-navbar-toggle>ul>li>a,
-    #my-navbar-toggle .logout-btn {
+    #my-navbar-toggle .navbar-btns {
         padding: 0 10px;
         font-size: 1.2rem !important;
     }
@@ -144,9 +178,12 @@ button.my-navbar-btn>span {
         width: unset;
     }
     #my-navbar-toggle>ul>li>a,
-    #my-navbar-toggle .logout-btn {
+    #my-navbar-toggle .navbar-btns {
         width: 100%;
         font-size: 1.3rem;
+    }
+    .mobile-list-item {
+        display: none!important;
     }
 }
 
@@ -160,6 +197,13 @@ button.my-navbar-btn>span {
     }
     #my-navbar-toggle .navbar-nav .nav-item {
         border-bottom: 1px solid rgba(240, 247, 244, 0.03)
+    }
+    #my-navbar-toggle .profile-pic-navbar-list-item>.profile-submenu {
+        display: flex;
+        flex-direction: column;
+    }
+    .profile-submenu {
+        display: none!important;
     }
 }
 

@@ -126,6 +126,10 @@ label::before {
     text-align: center;
 }
 
+.my-content-homepage .row>div:first-child {
+    padding: 0;
+}
+
 .home-div {
     padding: 50px 0;
     color: var(--color-white-cream);

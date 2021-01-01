@@ -47,13 +47,22 @@ const AppLayout = ({ children }) => {
 
                     {user ? <>
 
-                        <li className="nav-item">
+                        <li className="nav-item  mobile-list-item">
                             <button
-                                className="nav-link logout-btn"
+                                className="nav-link navbar-btns"
                                 onClick={logoutButton}
                             >
                                 Déconnexion
-                                    </button>
+                            </button>
+                        </li>
+
+                        <li className="nav-item mobile-list-item">
+                            <Link
+                                className="nav-link"
+                                to='/rules'
+                            >
+                                Règles du jeu
+                            </Link>
                         </li>
 
                         <li className="nav-item">
@@ -74,7 +83,7 @@ const AppLayout = ({ children }) => {
                                     </Link>
                         </li>
 
-                        <li className="nav-item">
+                        <li className="nav-item profile-pic-navbar-list-item">
                             <Link
                                 className="nav-link"
                                 to="/profile"
@@ -85,6 +94,29 @@ const AppLayout = ({ children }) => {
                                     alt='Profile'
                                 />
                             </Link>
+                            <div className='profile-submenu'>
+                                <ul>
+                                    <li className="nav-item">
+                                        <Link to="/profile">Profil</Link>
+                                    </li>
+                                    <li className="nav-item">
+                                        <Link
+                                            className="nav-link"
+                                            to='/rules'
+                                        >
+                                            Règles
+                                        </Link>
+                                    </li>
+                                    <li className="nav-item">
+                                        <button
+                                            className="nav-link navbar-btns"
+                                            onClick={logoutButton}
+                                        >
+                                            Déconnexion
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
                         </li>
 
                     </> : <>

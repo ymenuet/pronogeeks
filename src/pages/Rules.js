@@ -1,7 +1,7 @@
 import React from 'react'
 import '../styles/rulesPrivacyPolicy.css'
-import { RulesProno } from '.'
-import { CorrectIcon, ExactIcon, FavTeamIcon } from './Icons'
+import { RulesProno } from '../components'
+import { CorrectIcon, ExactIcon, FavTeamIcon } from '../components/Icons'
 
 const Rules = () => {
     return (
@@ -24,6 +24,7 @@ const Rules = () => {
                                     <li><ExactIcon className='rules-icon' /> nombre de pronogeeks exacts</li>
                                     <li><FavTeamIcon className='rules-icon' /> bonus équipe de coeur</li>
                                 </ol>
+                                <p>Si deux geeks ont le même nombre de points, l'avantage sera donc donné à celui qui a le plus grand nombre de pronogeeks corrects. S'ils sont encore à égalité, on regardera le nombre de pronogeeks exacts. Enfin, en cas d'égalité encore au niveau des pronogeeks exacts, le bonus équipe de coeur aura le dernier mot.</p>
                             </section>
                             <section id='rules-previsional-ranking'>
                                 <h4><span className='relative-links' id='link-to-provisional-ranking'></span>Classement prévisionnel</h4>

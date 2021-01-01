@@ -10,6 +10,7 @@
     color: var(--color-white-cream)!important;
     font-size: 2.4rem;
     margin-top: 20px;
+    text-decoration: underline;
 }
 
 .rules-privacy-policy h4 {
@@ -40,5 +41,8 @@
 @media (max-width:400px) {
     .rules-privacy-policy h2 {
         font-size: 1.5rem;
+    }
+    .rules-privacy-policy h4 {
+        font-size: 1.4rem;
     }
 }
