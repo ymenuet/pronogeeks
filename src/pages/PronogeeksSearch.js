@@ -33,7 +33,11 @@ const PronogeeksSearch = ({ match: { params: { seasonID } }, loading }) => {
 
         const fetchSeason = async (seasonID) => {
             const season = await getSeasonData(seasonID)
-            setSeasonTeams(season.rankedTeams)
+            const seasonTeams = season.rankedTeams.sort((a, b) => {
+                if (a.name > b.name) return 1
+                else return -1
+            })
+            setSeasonTeams(seasonTeams)
             const fixturesToCome = season.fixtures.filter(fixture => (new Date(fixture.date).getTime() + 1000 * 60 * 120) > Date.now())
             let nextMatchweek = fixturesToCome[0].matchweek;
             let nextDate = fixturesToCome[0].date

@@ -1,7 +1,7 @@
 import React from 'react'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { AppLayout } from './components'
-import { Login, Signup, Home, Profile, PronogeeksSearch, Pronogeeks, NewGeekLeague, GeekLeague, GeekLeagues, GeekLeagueDetail, PronogeeksOther, ConfirmUser, ResetPwd, ResetPwdUser, PrivacyPolicy, Rules } from './pages'
+import { Login, Signup, Home, Profile, PronogeeksSearch, Pronogeeks, NewGeekLeague, GeekLeague, GeekLeagues, GeekLeagueDetail, PronogeeksOther, ConfirmUser, ResetPwd, ResetPwdUser, PrivacyPolicy, Rules, SeasonRanking } from './pages'
 import PrivateRoute from './helpers/PrivateRoute'
 
 const NotFound = () => <h2 className='page-404-heading'>Cette page n'existe pas...<br />Retourne faire tes pronos au lieu de papilloner !</h2>
@@ -27,6 +27,7 @@ const router = () => {
                 <PrivateRoute component={GeekLeague} path='/myGeekleagues/:geekLeagueID' exact />
                 <PrivateRoute component={GeekLeagueDetail} path='/myGeekleagues/:geekLeagueID/season/:seasonID/:matchweekNumber' />
                 <PrivateRoute component={GeekLeagueDetail} path='/myGeekleagues/:geekLeagueID/season/:seasonID' />
+                <PrivateRoute component={SeasonRanking} path='/ranking/season/:seasonID' />
                 <Route component={NotFound} />
             </Switch>
         </AppLayout>
