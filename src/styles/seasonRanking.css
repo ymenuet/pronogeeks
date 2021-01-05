@@ -1,0 +1,129 @@
+.season-provisional-ranking h4 {
+    font-family: 'Audiowide';
+    color: var(--color-white-cream);
+    margin-bottom: 20px;
+}
+
+.season-team-ranking {
+    color: var(--color-dark-blue-bp);
+    background-color: rgba(4, 78, 199, 0.8);
+    border-radius: 10px;
+    margin-top: 20px!important;
+    padding: 20px;
+    max-width: min(700px, 90%);
+    margin: 0 auto;
+}
+
+.season-team-ranking table {
+    margin: 0 auto;
+    width: 100%;
+}
+
+.season-team-ranking tr {
+    margin-bottom: 5px;
+}
+
+.table-row-spacer {
+    height: 5px;
+    background-color: none;
+}
+
+.season-team-ranking th,
+.season-team-ranking td {
+    background-color: var(--color-white-cream);
+    padding: 2px 5px;
+}
+
+.season-team-ranking th {
+    padding: 5px;
+}
+
+td.season-ranking-team-name,
+th.season-ranking-team-name {
+    display: flex;
+    align-items: center;
+    padding: 5px 10px;
+    justify-content: flex-start;
+}
+
+.team-ranking-logo {
+    width: 35px;
+    height: 35px;
+    margin-right: 4px;
+}
+
+.season-ranking-team-name span {
+    text-align: left;
+}
+
+.season-ranking-team-points {
+    font-weight: bold;
+}
+
+.user-provisional-ranking {
+    max-width: min(90%, 400px);
+}
+
+.user-provisional-ranking p {
+    color: var(--color-white-cream);
+    text-align: left;
+}
+
+.user-provisional-ranking ul {
+    list-style: none;
+    width: fit-content;
+    margin: 0 auto;
+    padding: 0;
+}
+
+.user-provisional-ranking li {
+    background-color: var(--color-white-cream);
+    margin-bottom: 5px;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 5px 15px;
+    border-radius: 20px;
+    height: 40px;
+}
+
+.user-provisional-ranking li.provisional-ranking-header {
+    background-color: var(--color-dark-blue-bp);
+    color: var(--color-white-cream);
+    border: 2px solid var(--color-white-cream);
+    font-size: 1.1rem;
+}
+
+.user-provisional-ranking li.correct-position {
+    background-color: var(--color-light-green-gb);
+    color: var(--color-white-cream);
+}
+
+.user-provisional-ranking li span:first-child,
+.user-provisional-ranking li span:nth-child(2) {
+    margin-right: 5px;
+}
+
+@media (max-width: 460px) {
+    .season-provisional-ranking h4 {
+        font-size: 1.4rem;
+    }
+    .season-team-ranking th,
+    .season-team-ranking td {
+        padding: 2px 3px;
+    }
+    .season-ranking-team-name span {
+        display: none;
+    }
+    .team-ranking-logo {
+        margin-right: 0;
+    }
+}
+
+@media (max-width: 340px) {
+    .team-ranking-logo {
+        width: 30px;
+        height: 30px;
+    }
+}
