@@ -75,6 +75,16 @@
     align-items: flex-end;
 }
 
+.go-to-ranking {
+    position: fixed;
+    top: calc(var(--navbar-height) + 20px);
+    left: 20px;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
 .save-all-btn {
     font-size: 1rem;
     background-color: var(--color-dark-blue-bp);
@@ -86,23 +96,40 @@
     outline: none;
 }
 
+.go-to-ranking-btn {
+    font-size: 1rem;
+    background-color: var(--color-dark-blue-bp);
+    margin: 0;
+    padding: 0;
+    width: 68px;
+    height: 68px;
+    border-radius: 50%;
+    outline: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .save-all-btn:hover {
     transform: none;
     background-color: var(--color-light-blue-bp);
 }
 
-.save-all-btn svg {
+.save-all-btn svg,
+.go-to-ranking-btn svg {
     position: relative;
     bottom: 2px;
     left: 2px;
 }
 
-.save-all-btn span {
+.save-all-btn span,
+.go-to-ranking-btn span {
     display: none;
     font-size: 1.2rem;
 }
 
-.save-all-info {
+.save-all-info,
+.go-to-ranking-info {
     display: none;
     width: 160px;
     margin-top: 10px;
@@ -115,11 +142,24 @@
     display: block;
 }
 
-.save-all-info p {
+.go-to-ranking-btn:hover+.go-to-ranking-info {
+    display: block;
+    float: right;
+}
+
+.save-all-info p,
+.go-to-ranking-info p {
     margin: 0;
 }
 
 @media (max-width: 768px) {
+    .go-to-ranking {
+        top: var(--navbar-height);
+        left: 0;
+        width: 100vw;
+        height: 60px;
+        border-top: 1px solid var(--color-white-cream);
+    }
     .save-all {
         width: 100vw;
         bottom: 0;
@@ -127,30 +167,39 @@
         right: unset;
         height: 60px;
     }
-    .save-all-btn {
+    .save-all-btn,
+    .go-to-ranking-btn {
         height: 100%;
         width: 100%;
         border-radius: 0;
         background: var(--color-dark-blue-bp);
         transition: background 0.8s;
     }
-    .save-all-btn:hover {
+    .save-all-btn:hover,
+    .go-to-ranking-btn:hover {
         background: var(--color-dark-blue-bp) radial-gradient(circle, transparent 1%, var(--color-light-blue-bp) 1%) center/15000%;
     }
-    .save-all-btn:active {
+    .save-all-btn:active,
+    .go-to-ranking-btn:active {
         background-color: var(--color-dark-blue-bp);
         background-size: 100%;
         transition: background 0s;
     }
-    .save-all-btn span {
+    .save-all-btn span,
+    .go-to-ranking-btn span {
         display: inline;
         transition: all 0.3s;
     }
-    .save-all-btn svg {
+    .save-all-btn svg,
+    .go-to-ranking-btn svg {
         transition: all 0.3s;
     }
-    .save-all-btn:hover+.save-all-info {
+    .save-all-btn:hover+.save-all-info,
+    .go-to-ranking-btn:hover+.go-to-ranking-info {
         display: none;
+    }
+    .offset-for-btn {
+        margin-top: 60px;
     }
 }
 

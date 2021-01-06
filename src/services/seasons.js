@@ -35,3 +35,8 @@ export const getMatchweekFixtures = async(seasonID, matchweekNum) => {
     } = await seasonService.get(`/${seasonID}/${matchweekNum}`)
     return fixtures
 }
+
+export const closeProvRankings = async(seasonID) => {
+    await seasonService.put(`/closeRankings/${seasonID}`)
+    return true
+}

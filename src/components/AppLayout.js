@@ -70,7 +70,7 @@ const AppLayout = ({ children }) => {
                                 className="nav-link"
                                 to='/myGeekLeagues'
                             >
-                                Mes ligues Geek
+                                Mes ligues
                                     </Link>
                         </li>
 
@@ -79,7 +79,7 @@ const AppLayout = ({ children }) => {
                                 className="nav-link"
                                 to='/pronogeeks/5f67f525d7b14148997ee3eb'
                             >
-                                Mes pronogeeks
+                                Pronogeeks
                                     </Link>
                         </li>
 

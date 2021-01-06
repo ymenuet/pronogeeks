@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
+import { Link } from 'react-router-dom'
 import { getMatchweekFixtures, getSeasonData } from '../services/seasons'
 import { updateProfileWithMatchweek, updateProfileWithSeason } from '../services/user'
 import { updateFixturesStatus, updateOdds } from '../services/apiFootball'
@@ -6,7 +7,7 @@ import { getProfile } from '../services/auth'
 import { Fixture, Loader, MatchweekNavigation, AdminButtons, RulesProno, InputMatchweek } from '../components'
 import { openNotification, resetMatchweek } from '../helpers'
 import { Context } from '../context'
-import { QuestionIcon, SaveIcon } from '../components/Icons'
+import { QuestionIcon, SaveIcon, RankingIcon } from '../components/Icons'
 import '../styles/pronogeeks.css'
 
 const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history, loading }) => {
@@ -181,9 +182,23 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
 
     ) : (
             <div
-                className='pronogeeks-bg matchweek-page'
+                className='pronogeeks-bg matchweek-page offset-for-btn'
                 onClick={e => resetMatchweek(e, matchweekFromInput, matchweekNumber, setMatchweekFromInput)}
             >
+
+                <div className='go-to-ranking'>
+
+                    <Link className='btn my-btn go-to-ranking-btn' to={`/ranking/season/${seasonID}/${matchweekNumber}`}>
+                        <RankingIcon size='40px' />
+                        &nbsp;
+                        <span>{season.provRankingOpen ? 'Faire classement prévisionnel' : 'Voir le classement'}</span>
+                    </Link>
+
+                    <div className='go-to-ranking-info'>
+                        <p>{season.provRankingOpen ? 'Faire mon classement prévisionnel' : 'Voir le classement de la saison'}.</p>
+                    </div>
+
+                </div>
 
                 <div className='save-all'>
 

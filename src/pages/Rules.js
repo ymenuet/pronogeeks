@@ -26,7 +26,7 @@ const Rules = () => {
                                 </ol>
                                 <p>Si deux geeks ont le même nombre de points, l'avantage sera donc donné à celui qui a le plus grand nombre de pronogeeks corrects. S'ils sont encore à égalité, on regardera le nombre de pronogeeks exacts. Enfin, en cas d'égalité encore au niveau des pronogeeks exacts, le bonus équipe de coeur aura le dernier mot.</p>
                             </section>
-                            <section id='rules-previsional-ranking'>
+                            <section id='rules-provisional-ranking'>
                                 <h4><span className='relative-links' id='link-to-provisional-ranking'></span>Classement prévisionnel</h4>
                                 <p>Fonctionnalité et détails à venir...</p>
                             </section>

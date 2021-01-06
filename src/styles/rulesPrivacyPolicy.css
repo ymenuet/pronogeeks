@@ -38,6 +38,12 @@
     margin: 0;
 }
 
+.relative-links {
+    display: none;
+    position: relative;
+    bottom: var(--navbar-height);
+}
+
 @media (max-width:400px) {
     .rules-privacy-policy h2 {
         font-size: 1.5rem;

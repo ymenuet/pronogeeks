@@ -1,13 +1,20 @@
 import React, { useState, useEffect, useContext } from 'react'
+import { Link } from 'react-router-dom'
 import { getSeasonData } from '../services/seasons'
 import { Context } from '../context'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
+import { Loader } from '../components'
+import { DragIcon, SaveIcon, ListIcon } from '../components/Icons'
+import { saveUserProvRanking } from '../services/user'
+import { closeProvRankings } from '../services/seasons'
+import { openNotification } from '../helpers'
 import '../styles/seasonRanking.css'
 
-const SeasonRanking = ({ match: { params: { seasonID } } }) => {
+const SeasonRanking = ({ match: { params: { seasonID, matchweekNumber } } }) => {
 
     const [season, setSeason] = useState(null)
     const [userProvRanking, setUserProvRanking] = useState(null)
+    const [userWithoutRanking, setUserWithoutRanking] = useState(false)
     const { user } = useContext(Context)
 
     useEffect(() => {
@@ -24,105 +31,193 @@ const SeasonRanking = ({ match: { params: { seasonID } } }) => {
             if (seasonUser.length) {
                 const userProvRanking = seasonUser[0].provisionalRanking
                 if (userProvRanking.length) setUserProvRanking(userProvRanking)
-                else setUserProvRanking(season.rankedTeams)
+                else {
+                    setUserWithoutRanking(true)
+                    if (season.provRankingOpen) setUserProvRanking(season.rankedTeams)
+                    else setUserProvRanking([])
+                }
             }
         }
     }, [user, season, seasonID])
 
+    useEffect(() => {
+        if (season && season.provRankingOpen) {
+            const checkIfProvRankingOpen = async () => {
+                const matchweek7Dates = season.fixtures.filter(({ matchweek }) => matchweek === 7).map(({ date }) => new Date(date))
+                const matchweek7HasStarted = Date.now() - Math.min(...matchweek7Dates) > 0
+                if (matchweek7HasStarted) await closeProvRankings(season._id)
+            }
+            checkIfProvRankingOpen()
+        }
+    }, [season])
+
     const handleDragEnd = result => {
         if (!result.destination) return
-        const newRanking = Array.from(userProvRanking)
+        const newRanking = [...userProvRanking]
         const [reorderedItem] = newRanking.splice(result.source.index, 1)
         newRanking.splice(result.destination.index, 0, reorderedItem)
         setUserProvRanking(newRanking)
     }
 
-    return season && userProvRanking ? <div className="pronogeeks-bg">
-        <div className='season-provisional-ranking'>
-            <div className='season-team-ranking'>
-                <h4>Classement de {season.leagueName},
+    const saveRanking = async () => {
+        const teamRankingArr = userProvRanking.map(team => team._id)
+        const rankingSaved = await saveUserProvRanking(seasonID, teamRankingArr)
+        if (rankingSaved) openNotification('success', 'Classement enregistré')
+    }
+
+    const infoProvRanking = (provRankingOpen) => {
+        return provRankingOpen ? <p>Tu as jusqu'avant le début de la <b>journée 7</b> pour modifier ton classement prévisionnel. Il pourra te rapporter des points bonus à la fin de la saison.
+        <br />
+        Les équipes bien classées par rapport au classement actuel apparaissent en vert. Mais tout le monde sait que le classement peut beaucoup bouger d'ici à la fin de la saison, donc réfléchis bien !</p>
+            : !userWithoutRanking ? <p>Ton classement prévisionnel n'est plus modifiable. Mais n'hésite pas à le consulter de temps en temps pour voir si tu te rapproches des points bonus ! (Clique <Link to='/rules#link-to-provisional-ranking'>ici</Link> pour plus de détails)
+            <br />
+            Les clubs qui apparaissent sur fond vert sont ceux qui sont bien positionnés par rapport au classement actuel.</p>
+                : <p>Il est trop tard pour faire ton classement prévisionnel... Tu avais jusqu'avant le début de la journée 7.
+                <br />
+                RDV la saison prochaine !</p>
+    }
+
+    return <div className="pronogeeks-bg offset-for-btn">
+
+        {season && userProvRanking ? <>
+
+            <div className='go-to-ranking'>
+
+                <Link className='btn my-btn go-to-ranking-btn' to={`/pronogeeks/${seasonID}${matchweekNumber ? `/matchweek/${matchweekNumber}` : ''}`}>
+                    <ListIcon size='40px' />
+                        &nbsp;
+                        <span>Faire mes pronogeeks</span>
+                </Link>
+
+                <div className='go-to-ranking-info'>
+                    <p>Faire mes pronogeeks.</p>
+                </div>
+
+            </div>
+
+            <div className='season-provisional-ranking'>
+
+                <div className='season-team-ranking'>
+
+                    <h4>Classement de {season.leagueName},
                     <br />
                 saison {season.year}</h4>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th className="season-ranking-team-name">Club</th>
-                            <th className="season-ranking-team-points">Pts</th>
-                            <th>MJ</th>
-                            <th>G</th>
-                            <th>N</th>
-                            <th>P</th>
-                            <th>BP</th>
-                            <th>BC</th>
-                            <th>+/-</th>
-                        </tr>
-                        <tr className='table-row-spacer'></tr>
-                    </thead>
-                    <tbody>
-                        {season.rankedTeams.map(team => <React.Fragment key={team._id}>
+
+                    <table>
+
+                        <thead>
                             <tr>
-                                <td>{team.rank}</td>
-                                <td className="season-ranking-team-name">
-                                    <img
-                                        src={team.logo}
-                                        alt='logo'
-                                        className='team-ranking-logo'
-                                    />
-                                    <span>{team.name}</span></td>
-                                <td className="season-ranking-team-points">{team.points}</td>
-                                <td>{team.matchsPlayed}</td>
-                                <td>{team.win}</td>
-                                <td>{team.draw}</td>
-                                <td>{team.lose}</td>
-                                <td>{team.goalsFor}</td>
-                                <td>{team.goalsAgainst}</td>
-                                <td>{team.goalsDiff}</td>
+                                <th>#</th>
+                                <th className="season-ranking-team-name">Club</th>
+                                <th className="season-ranking-team-points">Pts</th>
+                                <th>MJ</th>
+                                <th>G</th>
+                                <th>N</th>
+                                <th>P</th>
+                                <th>BP</th>
+                                <th>BC</th>
+                                <th>+/-</th>
                             </tr>
                             <tr className='table-row-spacer'></tr>
-                        </React.Fragment>)}
-                    </tbody>
-                </table>
-            </div>
-            <div className='user-provisional-ranking season-team-ranking'>
-                <h4>Ton classement prévisonnel</h4>
-                <p>Tu as jusqu'avant le début de la <b>journée 7</b> pour modifier ton classement prévisionnel. Il pourra te rapporter des points bonus à la fin de la saison.
-                <br />
-                Les équipes bien classées par rapport au classement actuel apparaissent en vert. Mais tout le monde sait que le classement peut beaucoup bouger d'ici à la fin de la saison, donc réfléchis bien !</p>
-                <DragDropContext onDragEnd={handleDragEnd}>
-                    <Droppable droppableId='provisional-ranking'>
-                        {provided => <ul {...provided.droppableProps} ref={provided.innerRef}>
-                            <li className='provisional-ranking-header'>
-                                <span>#</span>
-                                <span>-</span>
-                                <span>Club</span>
-                            </li>
-                            {userProvRanking.map((team, index) => <Draggable key={team._id} draggableId={team._id} index={index}>
-                                {provided => <li
-                                    ref={provided.innerRef}
-                                    {...provided.draggableProps}
-                                    {...provided.dragHandleProps}
-                                    className={index + 1 === team.rank ? 'correct-position' : ''}
-                                >
-                                    <span>{index + 1}</span>
-                                    <span>-</span>
-                                    <span>
+                        </thead>
+
+                        <tbody>
+                            {season.rankedTeams.map(team => <React.Fragment key={team._id}>
+                                <tr>
+                                    <td>{team.rank}</td>
+                                    <td className="season-ranking-team-name">
                                         <img
                                             src={team.logo}
                                             alt='logo'
                                             className='team-ranking-logo'
                                         />
-                                        {team.name}
-                                    </span>
+                                        <span>{team.name}</span></td>
+                                    <td className="season-ranking-team-points">{team.points}</td>
+                                    <td>{team.matchsPlayed}</td>
+                                    <td>{team.win}</td>
+                                    <td>{team.draw}</td>
+                                    <td>{team.lose}</td>
+                                    <td>{team.goalsFor}</td>
+                                    <td>{team.goalsAgainst}</td>
+                                    <td>{team.goalsDiff}</td>
+                                </tr>
+                                <tr className='table-row-spacer'></tr>
+                            </React.Fragment>)}
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+                <div className='user-provisional-ranking season-team-ranking'>
+
+                    <h4>Classement prévisonnel</h4>
+
+                    {infoProvRanking()}
+
+                    {season.provRankingOpen && <button className='btn my-btn save-prono save-ranking-btn' onClick={saveRanking}><SaveIcon /> Sauver classement</button>
+                    }
+                    <DragDropContext onDragEnd={handleDragEnd}>
+
+                        <Droppable droppableId='provisional-ranking'>
+
+                            {provided => <ul {...provided.droppableProps} ref={provided.innerRef}>
+
+                                {userProvRanking.length > 0 && <li className='provisional-ranking-header'>
+                                    <div>
+                                        <span>#</span>
+                                        <span>-</span>
+                                        <span>Club</span>
+                                    </div>
                                 </li>}
-                            </Draggable>)}
-                            {provided.placeholder}
-                        </ul>}
-                    </Droppable>
-                </DragDropContext>
+
+                                {userProvRanking.map((team, index) => <Draggable
+                                    key={team._id}
+                                    draggableId={team._id}
+                                    index={index}
+                                    isDragDisabled={!season.provRankingOpen}
+                                >
+                                    {provided => <li
+                                        ref={provided.innerRef}
+                                        {...provided.draggableProps}
+                                        {...provided.dragHandleProps}
+                                        className={index + 1 === team.rank ? 'correct-position' : ''}
+                                    >
+                                        <div>
+                                            <span>{index + 1}</span>
+                                            <span>-</span>
+                                            <span>
+                                                <img
+                                                    src={team.logo}
+                                                    alt='logo'
+                                                    className='team-ranking-logo'
+                                                />
+                                                {team.name}
+                                            </span>
+                                        </div>
+                                        {season.provRankingOpen && <span><DragIcon color={index + 1 === team.rank ? '#F0F7F4' : 'rgb(4, 78, 199)'} /></span>}
+                                    </li>}
+
+                                </Draggable>)}
+
+                                {provided.placeholder}
+
+                            </ul>}
+
+                        </Droppable>
+
+                    </DragDropContext>
+
+                    {season.provRankingOpen && <button className='btn my-btn save-prono save-ranking-btn-bottom' onClick={saveRanking}><SaveIcon /> Sauver classement</button>}
+
+                </div>
+
             </div>
-        </div>
-    </div> : null
+
+        </> : <Loader color='rgb(4, 78, 199)' />}
+
+    </div>
+
 }
 
 export default SeasonRanking
