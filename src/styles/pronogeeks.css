@@ -94,6 +94,7 @@
     height: 68px;
     border-radius: 50%;
     outline: none;
+    border: 1px solid var(--color-white-cream);
 }
 
 .go-to-ranking-btn {
@@ -108,9 +109,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    border: 1px solid var(--color-white-cream);
 }
 
-.save-all-btn:hover {
+.save-all-btn:hover,
+.go-to-ranking-btn:hover {
     transform: none;
     background-color: var(--color-light-blue-bp);
 }
@@ -169,6 +172,7 @@
     }
     .save-all-btn,
     .go-to-ranking-btn {
+        border: none;
         height: 100%;
         width: 100%;
         border-radius: 0;
