@@ -15,6 +15,7 @@ const SeasonRanking = ({ match: { params: { seasonID, matchweekNumber } } }) => 
     const [season, setSeason] = useState(null)
     const [userProvRanking, setUserProvRanking] = useState(null)
     const [userWithoutRanking, setUserWithoutRanking] = useState(false)
+    const [provRankingOpen, setProvRankingOpen] = useState(false)
     const { user } = useContext(Context)
 
     useEffect(() => {
@@ -46,6 +47,7 @@ const SeasonRanking = ({ match: { params: { seasonID, matchweekNumber } } }) => 
                 const matchweek7Dates = season.fixtures.filter(({ matchweek }) => matchweek === 7).map(({ date }) => new Date(date))
                 const matchweek7HasStarted = Date.now() - Math.min(...matchweek7Dates) > 0
                 if (matchweek7HasStarted) await closeProvRankings(season._id)
+                else setProvRankingOpen(true)
             }
             checkIfProvRankingOpen()
         }
@@ -155,7 +157,7 @@ const SeasonRanking = ({ match: { params: { seasonID, matchweekNumber } } }) => 
 
                     {infoProvRanking()}
 
-                    {season.provRankingOpen && <button className='btn my-btn save-prono save-ranking-btn' onClick={saveRanking}><SaveIcon /> Sauver classement</button>
+                    {provRankingOpen && <button className='btn my-btn save-prono save-ranking-btn' onClick={saveRanking}><SaveIcon /> Sauver classement</button>
                     }
                     <DragDropContext onDragEnd={handleDragEnd}>
 
@@ -175,7 +177,7 @@ const SeasonRanking = ({ match: { params: { seasonID, matchweekNumber } } }) => 
                                     key={team._id}
                                     draggableId={team._id}
                                     index={index}
-                                    isDragDisabled={!season.provRankingOpen}
+                                    isDragDisabled={!provRankingOpen}
                                 >
                                     {provided => <li
                                         ref={provided.innerRef}
@@ -195,7 +197,7 @@ const SeasonRanking = ({ match: { params: { seasonID, matchweekNumber } } }) => 
                                                 {team.name}
                                             </span>
                                         </div>
-                                        {season.provRankingOpen && <span><DragIcon color={index + 1 === team.rank ? '#F0F7F4' : 'rgb(4, 78, 199)'} /></span>}
+                                        {provRankingOpen && <span><DragIcon color={index + 1 === team.rank ? '#F0F7F4' : 'rgb(4, 78, 199)'} /></span>}
                                     </li>}
 
                                 </Draggable>)}
@@ -208,7 +210,7 @@ const SeasonRanking = ({ match: { params: { seasonID, matchweekNumber } } }) => 
 
                     </DragDropContext>
 
-                    {season.provRankingOpen && <button className='btn my-btn save-prono save-ranking-btn-bottom' onClick={saveRanking}><SaveIcon /> Sauver classement</button>}
+                    {provRankingOpen && <button className='btn my-btn save-prono save-ranking-btn-bottom' onClick={saveRanking}><SaveIcon /> Sauver classement</button>}
 
                 </div>
 

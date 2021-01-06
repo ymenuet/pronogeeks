@@ -28,7 +28,32 @@ const Rules = () => {
                             </section>
                             <section id='rules-provisional-ranking'>
                                 <h4><span className='relative-links' id='link-to-provisional-ranking'></span>Classement prévisionnel</h4>
-                                <p>Fonctionnalité et détails à venir...</p>
+                                <p>Les points apportés par le classement prévisionnel sont calculés et ajoutés au total de la saison une fois cette dernière terminée, sous le modèle suivant :
+                                    <ul style={{ paddingLeft: 40 }}>
+                                        <li>+300pts pour un bon prono sur le 1er club du classement</li>
+                                        <li>+200pts pour un bon prono sur le 2ème club du classement</li>
+                                        <li>+100pts pour un bon prono sur le 3ème club du classement</li>
+                                        <li>+50pts pour chaque bon prono sur un des clubs situés de la 4ème à la 17ème place du classement</li>
+                                        <li>+100pts pour chaque bon prono sur un des clubs situés de la 18ème à la 20ème place du classement</li>
+                                    </ul>
+                                </p>
+                                <p>Un système de bonus combo s'applique de la manière suivante, en fonction du nombre de clubs bien situés dans le classement prévisionnel :
+                                    <ul style={{ paddingLeft: 40 }}>
+                                        <li>Moins de 5 clubs bien pronogeekés : 0pt bonus</li>
+                                        <li>Entre 5 et 9 clubs bien pronogeekés : 100pts bonus</li>
+                                        <li>Entre 10 et 14 clubs bien pronogeekés : 300pts bonus</li>
+                                        <li>Entre 15 et 19 clubs bien pronogeekés : 500pts bonus</li>
+                                        <li>Pour un perfect au classement prévisonnel : 1000pts bonus</li>
+                                    </ul>
+                                </p>
+                                <p>Si le classement de l'équipe de coeur <FavTeamIcon /> a été bien pronogeeké, 100 points bonus seront aussi ajoutés au total des points.</p>
+                                <p>Pour résumer et donner un exemple, il y a potentiellement 2700pts bonus à prendre en fin de saison sur le classement prévsionnel, en cas de perfect !
+                                    <ul style={{ paddingLeft: 40 }}>
+                                        <li>1600pts sur le classement en lui-même (300 + 200 + 100 + 14*50 + 3*100)</li>
+                                        <li>1000pts bonus pour un combo perfect 20/20</li>
+                                        <li>100pts bonus pour le bon prono sur l'équipe de coeur</li>
+                                    </ul>
+                                </p>
                             </section>
                         </div>
                     </div>
