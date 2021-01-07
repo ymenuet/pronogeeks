@@ -29,7 +29,7 @@ const Rules = () => {
 
                                 <h4><span className='relative-links' id='link-to-provisional-ranking'></span>Classement prévisionnel</h4>
 
-                                <p>Le classement prévisionnel est modifiable jusqu'<b>avant le début de la journée 7</b>. Une fois la journée 7 commencée, le classement prévsionnel ne peut plus être changé. S'il n'a pas été fait avant cette date, les points bonus éventuellement gagnés grâce au classement prévisionnel ne pourront pas être cumulés sur cette saison.</p>
+                                <p>Le classement prévisionnel est modifiable jusqu'<b>avant le début de la journée 7</b>. Une fois la journée 7 commencée, le classement prévisionnel ne peut plus être changé. S'il n'a pas été fait avant cette date, les points bonus éventuellement gagnés grâce au classement prévisionnel ne pourront pas être cumulés sur cette saison.</p>
 
                                 <p>Les points apportés par le classement prévisionnel sont calculés et ajoutés au total de la saison une fois cette dernière terminée, sous le modèle suivant :
 
