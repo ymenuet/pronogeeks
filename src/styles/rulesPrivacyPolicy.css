@@ -29,8 +29,7 @@
     font-size: 1rem;
 }
 
-.rules-privacy-policy ul {
-    text-align: left;
+.rules-privacy-policy ul.pronogeeks-rules-list {
     padding: 0 20px;
 }
 
