@@ -24,7 +24,7 @@ export const facebookLogin = async() => {
 }
 
 export const googleLogin = async() => {
-    return await authService.get('/facebook')
+    return await authService.get('/google')
 }
 
 export const updateProfile = async(userData) => {
