@@ -157,3 +157,15 @@ export const rankGeeks = (players, seasonID, matchweekNumber = null) => {
         }
     })
 }
+
+export const getUserSeasonFromProfile = (user, seasonID) => {
+    const seasonFiltered = user.seasons.filter(season => season.season._id.toString() === seasonID.toString())
+    if (seasonFiltered.length > 0) return seasonFiltered[0]
+    else return null
+}
+
+export const getUserMatchweekFromProfile = (userSeason, matchweekNumber) => {
+    const matchweekFiltered = userSeason.matchweeks.filter(matchweek => matchweek.number.toString() === matchweekNumber.toString())
+    if (matchweekFiltered.length > 0) return matchweekFiltered[0]
+    else return null
+}

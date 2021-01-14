@@ -1,16 +1,14 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { getFixture } from '../services/fixtures'
 import { savePronogeeks } from '../services/pronogeeks'
 import { Skeleton } from 'antd'
 import { Context } from '../context'
-import { openNotification, dateTransform, statusTranform } from '../helpers'
+import { openNotification, dateTransform, statusTranform, getUserSeasonFromProfile, getUserMatchweekFromProfile } from '../helpers'
 import SavePronoButton from './SavePronoButton'
 import PreviewPronos from './PreviewPronos'
 import { FavTeamIcon } from '../components/Icons'
 import '../styles/fixture.css'
 
-const Fixture = ({ fixtureID, saveAll, showLeaguePronos, setShowLeaguePronos }) => {
-    const [fixture, setFixture] = useState(null)
+const Fixture = ({ fixture, saveAll, showLeaguePronos, setShowLeaguePronos }) => {
     const [pronogeek, setPronogeek] = useState(null)
     const [matchStarted, setMatchStarted] = useState(false)
     const [homeScore, setHomeScore] = useState(null)
@@ -37,7 +35,7 @@ const Fixture = ({ fixtureID, saveAll, showLeaguePronos, setShowLeaguePronos }) 
 
         let error = false
         setSaving(true)
-        await savePronogeeks(homeScore, awayScore, fixtureID).catch(err => {
+        await savePronogeeks(homeScore, awayScore, fixture._id).catch(err => {
             openNotification('warning', 'Attention', err.response.data.message.fr)
             error = true
             setSaving(false)
@@ -50,36 +48,26 @@ const Fixture = ({ fixtureID, saveAll, showLeaguePronos, setShowLeaguePronos }) 
         }
     }
 
-
     useEffect(() => {
-        const fetchFixturesAndOdds = async (fixtureID) => {
-            const fixture = await getFixture(fixtureID)
+        const setFixtureAndOdds = () => {
             const seasonID = fixture.season
             const matchweekNumber = fixture.matchweek
             if (
                 new Date(fixture.date) - Date.now() < 0 &&
                 fixture.statusShort !== 'PST'
             ) setMatchStarted(true)
-            setFixture(fixture)
-            let season = user.seasons.filter(season => season.season._id === seasonID)
-            if (season.length > 0) season = season[0]
+            let userSeason = getUserSeasonFromProfile(user, seasonID)
             let pronogeek = { homeProno: '', awayProno: '' };
             let pronogeekFound = [];
-            let matchweekIndex = 0;
-            if (season.matchweeks.length > 0) {
-                season.matchweeks.map((matchweek, i) => {
-                    if (matchweek.number.toString() === matchweekNumber.toString()) matchweekIndex = i
-                    return matchweek
-                })
-                if (season.matchweeks[matchweekIndex].pronogeeks.length > 0) pronogeekFound = season.matchweeks[matchweekIndex].pronogeeks.filter(pronogeek => pronogeek.fixture === fixtureID)
-            }
+            let userMatchweek = getUserMatchweekFromProfile(userSeason, matchweekNumber)
+            if (userMatchweek && userMatchweek.pronogeeks.length > 0) pronogeekFound = userMatchweek.pronogeeks.filter(pronogeek => pronogeek.fixture._id === fixture._id)
             if (pronogeekFound.length > 0) pronogeek = pronogeekFound[0]
             setPronogeek(pronogeek)
             setHomeScore(pronogeek.homeProno)
             setAwayScore(pronogeek.awayProno)
         }
-        fetchFixturesAndOdds(fixtureID)
-    }, [fixtureID, user])
+        setFixtureAndOdds()
+    }, [fixture, user])
 
 
     useEffect(() => {

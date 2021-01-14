@@ -5,7 +5,7 @@ import { updateProfileWithMatchweek, updateProfileWithSeason } from '../services
 import { updateFixturesStatus, updateOdds } from '../services/apiFootball'
 import { getProfile } from '../services/auth'
 import { Fixture, Loader, MatchweekNavigation, AdminButtons, RulesProno, InputMatchweek } from '../components'
-import { openNotification, resetMatchweek } from '../helpers'
+import { openNotification, resetMatchweek, getUserSeasonFromProfile, getUserMatchweekFromProfile } from '../helpers'
 import { Context } from '../context'
 import { QuestionIcon, SaveIcon, RankingIcon } from '../components/Icons'
 import '../styles/pronogeeks.css'
@@ -124,23 +124,42 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
             await updateProfileWithSeason(season)
             await updateProfileWithMatchweek(season, matchweek)
         }
-        const setNewUser = async () => {
-            await updateProfile(seasonID, matchweekNumber)
-            const user = await getProfile()
-            loginUser(user)
-            setPoints(user)
-        }
-        setNewUser()
 
-        const fetchSeason = async seasonID => {
+        const setUserData = async user => {
+            let updatedUser = user
+            const userSeason = getUserSeasonFromProfile(user, seasonID)
+            if (!userSeason) {
+                await updateProfile(seasonID, matchweekNumber)
+                updatedUser = await getProfile()
+                loginUser(updatedUser)
+            } else {
+                const userMatchweek = getUserMatchweekFromProfile(userSeason, matchweekNumber)
+                if (!userMatchweek) {
+                    await updateProfileWithMatchweek(seasonID, matchweekNumber)
+                    updatedUser = await getProfile()
+                    loginUser(updatedUser)
+                }
+            }
+            setPoints(updatedUser)
+        }
+        if (user) setUserData(user)
+
+    }, [matchweekNumber, seasonID, user])
+
+    useEffect(() => {
+        const fetchSeason = async () => {
             const season = await getSeasonData(seasonID)
             setSeason(season)
         }
-        fetchSeason(seasonID)
+        fetchSeason()
+    }, [seasonID])
 
-        fetchFixtures(seasonID, matchweekNumber)
-
-    }, [matchweekNumber, seasonID])
+    useEffect(() => {
+        if (season) {
+            const fixtures = season.fixtures.filter(fixture => `${fixture.matchweek}` === matchweekNumber)
+            setFixtures(fixtures)
+        }
+    }, [season, matchweekNumber])
 
     const saveAllPronos = () => {
         const fixtureDates = fixtures.map(fixture => new Date(fixture.date).getTime())
@@ -150,27 +169,25 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
         setTimeout(() => setSaveAll(false), 1000)
     }
 
-    const previousPage = () => {
+    const resetHeader = () => {
         setFixtures(null)
         setMatchweekPoints(null)
         setMatchweekBonus(null)
         setMatchweekCorrects(null)
+    }
+
+    const previousPage = () => {
+        resetHeader()
         history.push(`/pronogeeks/${seasonID}/matchweek/${parseInt(matchweekNumber) - 1}`)
     }
 
     const nextPage = () => {
-        setFixtures(null)
-        setMatchweekPoints(null)
-        setMatchweekBonus(null)
-        setMatchweekCorrects(null)
+        resetHeader()
         history.push(`/pronogeeks/${seasonID}/matchweek/${parseInt(matchweekNumber) + 1}`)
     }
 
     const changeMatchweek = matchweek => {
-        setFixtures(null)
-        setMatchweekPoints(null)
-        setMatchweekBonus(null)
-        setMatchweekCorrects(null)
+        resetHeader()
         history.push(`/pronogeeks/${seasonID}/matchweek/${matchweek}`)
     }
 
@@ -267,7 +284,7 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
                             style={{ background: 'none' }}
                         >
                             <Fixture
-                                fixtureID={fixture._id}
+                                fixture={fixture}
                                 saveAll={saveAll}
                                 showLeaguePronos={showLeaguePronos}
                                 setShowLeaguePronos={setShowLeaguePronos}
