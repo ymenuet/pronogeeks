@@ -38,9 +38,12 @@
 }
 
 .relative-links {
-    display: none;
     position: relative;
     bottom: var(--navbar-height);
+}
+
+.no-margin-para {
+    margin-bottom: 0;
 }
 
 @media (max-width:400px) {

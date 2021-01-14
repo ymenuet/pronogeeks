@@ -94,7 +94,7 @@ const PreviewPronos = ({ user, fixture, setShowLeagues }) => {
                         </select>
 
 
-                        <p className='link-to-ranking-matchweek'><Link to={`/myGeekleagues/${geekLeague}/season/${fixture.season}/${fixture.matchweek}`}>Voir classement</Link></p>
+                        <p className='link-to-ranking-matchweek'><Link to={`/myGeekleagues/${geekLeague}/season/${fixture.season}/${fixture.matchweek}`}>Classement ligue</Link></p>
 
                     </div>
 

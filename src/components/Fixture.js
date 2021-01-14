@@ -3,6 +3,7 @@ import { savePronogeeks } from '../services/pronogeeks'
 import { Skeleton } from 'antd'
 import { Context } from '../context'
 import { openNotification, dateTransform, statusTranform, getUserSeasonFromProfile, getUserMatchweekFromProfile } from '../helpers'
+import { getProfile } from '../services/auth'
 import SavePronoButton from './SavePronoButton'
 import PreviewPronos from './PreviewPronos'
 import { FavTeamIcon } from '../components/Icons'
@@ -16,7 +17,7 @@ const Fixture = ({ fixture, saveAll, showLeaguePronos, setShowLeaguePronos }) =>
     const [saving, setSaving] = useState(false)
     const [saveSuccess, setSaveSuccess] = useState(false)
     const [showLeagues, setShowLeagues] = useState(false)
-    const { user } = useContext(Context)
+    const { user, loginUser } = useContext(Context)
 
     const saveProno = async (bool = true, time = 4500) => {
         setSaveSuccess(false)
@@ -45,6 +46,8 @@ const Fixture = ({ fixture, saveAll, showLeaguePronos, setShowLeaguePronos }) =>
             setSaving(false)
             setSaveSuccess(true)
             setTimeout(() => setSaveSuccess(false), time)
+            const user = await getProfile()
+            loginUser(user)
         }
     }
 

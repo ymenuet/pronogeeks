@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { Link } from 'react-router-dom'
-import { getMatchweekFixtures, getSeasonData } from '../services/seasons'
 import { updateProfileWithMatchweek, updateProfileWithSeason } from '../services/user'
 import { updateFixturesStatus, updateOdds } from '../services/apiFootball'
 import { getProfile } from '../services/auth'
@@ -12,6 +11,7 @@ import '../styles/pronogeeks.css'
 
 const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history, loading }) => {
     const [season, setSeason] = useState(null)
+    const [userMatchweek, setUserMatchweek] = useState(null)
     const [fixtures, setFixtures] = useState(null)
     const [matchweekPoints, setMatchweekPoints] = useState(null)
     const [matchweekBonus, setMatchweekBonus] = useState(null)
@@ -27,31 +27,21 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
 
     const { loginUser, user } = useContext(Context)
 
-    const fetchFixtures = async (season, matchweek) => {
-        const fixtures = await getMatchweekFixtures(season, matchweek)
-        fixtures.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+    const setMatchweekFixtures = (season, matchweekNumber) => {
         setFixtures(null)
+        const fixtures = season.fixtures
+            .filter(fixture => `${fixture.matchweek}` === matchweekNumber)
+            .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
         setFixtures(fixtures)
-        return true
     }
 
-    const setPoints = user => {
-        const seasonUser = user.seasons.filter(seas => seas.season._id.toString() === seasonID.toString())[0]
-        const matchweekUser = seasonUser.matchweeks.filter(matchweek => matchweek.number.toString() === matchweekNumber.toString())[0]
-        setMatchweekPoints(matchweekUser.totalPoints)
-        setMatchweekBonus(matchweekUser.bonusPoints)
-        setMatchweekCorrects(matchweekUser.numberCorrects)
+    const setPoints = userMatchweek => {
+        setMatchweekPoints(userMatchweek.totalPoints)
+        setMatchweekBonus(userMatchweek.bonusPoints)
+        setMatchweekCorrects(userMatchweek.numberCorrects)
     }
 
     useEffect(() => {
-
-        const setPoints = user => {
-            const seasonUser = user.seasons.filter(seas => seas.season._id.toString() === seasonID.toString())[0]
-            const matchweekUser = seasonUser.matchweeks.filter(matchweek => matchweek.number.toString() === matchweekNumber.toString())[0]
-            setMatchweekPoints(matchweekUser.totalPoints)
-            setMatchweekBonus(matchweekUser.bonusPoints)
-            setMatchweekCorrects(matchweekUser.numberCorrects)
-        }
 
         const fetchStatus = async () => {
             const { fixtures } = await updateFixturesStatus(seasonID, matchweekNumber)
@@ -61,19 +51,17 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
                 openNotification('success', 'Scores et dates actualisés')
                 const user = await getProfile()
                 loginUser(user)
-                setPoints(user)
+                setPoints(userMatchweek)
             }
         }
 
         const fetchOdds = async () => {
             await updateOdds(seasonID, matchweekNumber)
-            const updated = await fetchFixtures(seasonID, matchweekNumber)
-            if (updated) {
-                openNotification('success', 'Cotes actualisées')
-            }
+            setMatchweekFixtures(seasonID, matchweekNumber)
+            openNotification('success', 'Cotes actualisées')
         }
 
-        if (fixtures && user) {
+        if (fixtures && userMatchweek) {
             const fixtureDates = fixtures.map(fixture => new Date(fixture.date).getTime())
             const minDate = Math.min(...fixtureDates)
             const maxDate = Math.max(...fixtureDates)
@@ -108,58 +96,41 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
             }
         }
 
-    }, [fixtures, scoresUpdated, oddsUpdated, matchweekNumber, seasonID, user])
+    }, [fixtures, scoresUpdated, oddsUpdated, matchweekNumber, seasonID, user, userMatchweek])
 
     useEffect(() => {
-
-        const setPoints = user => {
-            const seasonUser = user.seasons.filter(seas => seas.season._id.toString() === seasonID.toString())[0]
-            const matchweekUser = seasonUser.matchweeks.filter(matchweek => matchweek.number.toString() === matchweekNumber.toString())[0]
-            setMatchweekPoints(matchweekUser.totalPoints)
-            setMatchweekBonus(matchweekUser.bonusPoints)
-            setMatchweekCorrects(matchweekUser.numberCorrects)
-        }
 
         const updateProfile = async (season, matchweek) => {
             await updateProfileWithSeason(season)
             await updateProfileWithMatchweek(season, matchweek)
         }
 
-        const setUserData = async user => {
+        const setUserDataAndSeasonAndFixtures = async user => {
             let updatedUser = user
-            const userSeason = getUserSeasonFromProfile(user, seasonID)
+            let userSeason = getUserSeasonFromProfile(user, seasonID)
+            let userMatchweek
             if (!userSeason) {
                 await updateProfile(seasonID, matchweekNumber)
                 updatedUser = await getProfile()
                 loginUser(updatedUser)
+                userSeason = getUserSeasonFromProfile(updatedUser, seasonID)
             } else {
-                const userMatchweek = getUserMatchweekFromProfile(userSeason, matchweekNumber)
+                userMatchweek = getUserMatchweekFromProfile(userSeason, matchweekNumber)
                 if (!userMatchweek) {
                     await updateProfileWithMatchweek(seasonID, matchweekNumber)
                     updatedUser = await getProfile()
                     loginUser(updatedUser)
+                    userMatchweek = getUserMatchweekFromProfile(userSeason, matchweekNumber)
                 }
             }
-            setPoints(updatedUser)
+            setUserMatchweek(userMatchweek)
+            setSeason(userSeason.season)
+            setMatchweekFixtures(userSeason.season, matchweekNumber)
+            setPoints(userMatchweek)
         }
-        if (user) setUserData(user)
+        if (user) setUserDataAndSeasonAndFixtures(user)
 
     }, [matchweekNumber, seasonID, user])
-
-    useEffect(() => {
-        const fetchSeason = async () => {
-            const season = await getSeasonData(seasonID)
-            setSeason(season)
-        }
-        fetchSeason()
-    }, [seasonID])
-
-    useEffect(() => {
-        if (season) {
-            const fixtures = season.fixtures.filter(fixture => `${fixture.matchweek}` === matchweekNumber)
-            setFixtures(fixtures)
-        }
-    }, [season, matchweekNumber])
 
     const saveAllPronos = () => {
         const fixtureDates = fixtures.map(fixture => new Date(fixture.date).getTime())
@@ -191,7 +162,7 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
         history.push(`/pronogeeks/${seasonID}/matchweek/${matchweek}`)
     }
 
-    return !fixtures || !season || loading ? (
+    return !fixtures || !season || !userMatchweek || loading ? (
 
         <div className='pronogeeks-bg'>
             <Loader color='rgb(4, 78, 199)' />
@@ -208,11 +179,11 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
                     <Link className='btn my-btn go-to-ranking-btn' to={`/ranking/season/${seasonID}/${matchweekNumber}`}>
                         <RankingIcon size='40px' />
                         &nbsp;
-                        <span>{season.provRankingOpen ? 'Faire classement prévisionnel' : 'Voir le classement'}</span>
+                        <span>{season.provRankingOpen ? 'Faire classement prévisionnel' : `Classement ${season.leagueName}`}</span>
                     </Link>
 
                     <div className='go-to-ranking-info'>
-                        <p>{season.provRankingOpen ? 'Faire mon classement prévisionnel' : 'Voir le classement de la saison'}.</p>
+                        <p>{season.provRankingOpen ? 'Faire mon classement prévisionnel' : `Voir le classement de ${season.leagueName}`}.</p>
                     </div>
 
                 </div>
@@ -235,11 +206,12 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
                 </div>
 
                 <AdminButtons
-                    seasonID={seasonID}
+                    season={season}
                     matchweekNumber={matchweekNumber}
+                    userMatchweek={userMatchweek}
                     setFixtures={setFixtures}
                     setPoints={setPoints}
-                    fetchFixtures={fetchFixtures}
+                    setMatchweekFixtures={setMatchweekFixtures}
                 />
 
                 <h2>
@@ -305,11 +277,12 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
                 </ul>
 
                 <AdminButtons
-                    seasonID={seasonID}
+                    season={season}
                     matchweekNumber={matchweekNumber}
+                    userMatchweek={userMatchweek}
                     setFixtures={setFixtures}
                     setPoints={setPoints}
-                    fetchFixtures={fetchFixtures}
+                    setMatchweekFixtures={setMatchweekFixtures}
                 />
 
                 {showRules && <div className="rules-box">

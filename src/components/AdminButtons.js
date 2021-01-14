@@ -5,12 +5,12 @@ import { openNotification } from '../helpers'
 import { Context } from '../context'
 import '../styles/adminButtons.css'
 
-const AdminButtons = ({ seasonID, matchweekNumber, setFixtures, setPoints, fetchFixtures }) => {
+const AdminButtons = ({ season, matchweekNumber, userMatchweek, setFixtures, setPoints, setMatchweekFixtures }) => {
 
     const { user, loginUser } = useContext(Context)
 
     const getStatus = async () => {
-        const data = await updateFixturesStatus(seasonID, matchweekNumber)
+        const data = await updateFixturesStatus(season._id, matchweekNumber)
         if (data.message) return openNotification('warning', 'Actualisation abortée', data.message.fr)
         else {
             setFixtures(null)
@@ -18,18 +18,16 @@ const AdminButtons = ({ seasonID, matchweekNumber, setFixtures, setPoints, fetch
             openNotification('success', 'Scores et dates actualisés')
             const user = await getProfile()
             loginUser(user)
-            setPoints(user)
+            setPoints(userMatchweek)
         }
     }
 
     const getOdds = async () => {
-        const message = await updateOdds(seasonID, matchweekNumber)
+        const message = await updateOdds(season._id, matchweekNumber)
         if (message) return openNotification('warning', 'Actualisation abortée', message.fr)
         else {
-            const updated = await fetchFixtures(seasonID, matchweekNumber)
-            if (updated) {
-                openNotification('success', 'Cotes actualisées')
-            }
+            setMatchweekFixtures(season, matchweekNumber)
+            openNotification('success', 'Cotes actualisées')
         }
     }
 
