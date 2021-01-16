@@ -8,11 +8,13 @@ import { Loader, RankGeeks } from '../components'
 import { Spin, Space } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons'
 import { Context } from '../context'
-import { openNotification, rankGeeks } from '../helpers'
+import { isConnected, openNotification, rankGeeks } from '../helpers'
 import { EditIcon, WarningIcon } from '../components/Icons'
 import '../styles/profile.css'
 
-const Profile = ({ loading, history, authReducer: { user } }) => {
+import * as authActions from '../actions/authActions'
+
+const Profile = ({ loading, history, user, authActions }) => {
     const { loginUser, logoutUser } = useContext(Context)
     const [photoLoading, setPhotoLoading] = useState(false)
     const [showModal, setShowModal] = useState(false)
@@ -23,6 +25,8 @@ const Profile = ({ loading, history, authReducer: { user } }) => {
     const [seasonRankingFull, setSeasonRankingFull] = useState(null)
     const [seasonRanking, setSeasonRanking] = useState(null)
     const [userRanking, setUserRanking] = useState(null)
+
+    const { login, logout, setProfile } = authActions
 
     const uploadPhoto = async e => {
         const file = e.target.files[0]
@@ -46,8 +50,8 @@ const Profile = ({ loading, history, authReducer: { user } }) => {
         })
         if (saved) {
             setUsernameChanged(true)
-            const user = await getProfile()
-            loginUser(user)
+            // const user = await getProfile()
+            // loginUser(user)
             setShowModal(false)
             setUsernameChanged(false)
         }
@@ -61,21 +65,23 @@ const Profile = ({ loading, history, authReducer: { user } }) => {
     }
 
     useEffect(() => {
-        setUsernameInput(user?.username)
-        const getPlayers = async () => {
-            if (user?.seasons.length > 0) {
-                const seasonID = user.seasons[user.seasons.length - 1].season._id.toString()
-                setSeasonID(user.seasons[user.seasons.length - 1].season._id.toString())
-                const players = await fetchPlayers(seasonID)
-                const rankedPlayers = rankGeeks(players, seasonID)
-                const userRanking = rankedPlayers.map(player => player.username).indexOf(user.username)
-                const rankedPlayers20 = rankedPlayers.slice(0, 20)
-                setUserRanking(userRanking)
-                setSeasonRankingFull(rankedPlayers)
-                setSeasonRanking(rankedPlayers20)
+        if (isConnected(user)) {
+            setUsernameInput(user?.username)
+            const getPlayers = async () => {
+                if (user?.seasons.length > 0) {
+                    const seasonID = user.seasons[user.seasons.length - 1].season._id.toString()
+                    setSeasonID(user.seasons[user.seasons.length - 1].season._id.toString())
+                    const players = await fetchPlayers(seasonID)
+                    const rankedPlayers = rankGeeks(players, seasonID)
+                    const userRanking = rankedPlayers.map(player => player.username).indexOf(user.username)
+                    const rankedPlayers20 = rankedPlayers.slice(0, 20)
+                    setUserRanking(userRanking)
+                    setSeasonRankingFull(rankedPlayers)
+                    setSeasonRanking(rankedPlayers20)
+                }
             }
+            getPlayers()
         }
-        getPlayers()
     }, [user])
 
     const setRank = (num) => {
@@ -404,7 +410,11 @@ const Profile = ({ loading, history, authReducer: { user } }) => {
 }
 
 const mapStateToProps = state => ({
-    authReducer: state.authReducer
+    user: state.authReducer.user
 })
 
-export default connect(mapStateToProps)(Profile)
+const mapDispatchToProps = () => ({
+    authActions
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Profile)

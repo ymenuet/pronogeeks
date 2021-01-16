@@ -1,18 +1,18 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { useHistory } from 'react-router-dom'
 import { Link } from 'react-router-dom'
-import { Context } from '../context'
-import { logout } from '../services/auth'
+import { connect } from 'react-redux'
 import { HomeIcon } from './Icons'
+import { isConnected } from '../helpers'
 import '../styles/appLayout.css'
 
-const AppLayout = ({ children }) => {
-    const { user, logoutUser } = useContext(Context)
+import * as mapDispatchToProps from '../actions/authActions'
+
+const AppLayout = ({ children, user, logout }) => {
     const history = useHistory()
 
     const logoutButton = async () => {
         await logout()
-        logoutUser()
         history.push('/')
     }
 
@@ -45,7 +45,7 @@ const AppLayout = ({ children }) => {
             >
                 <ul className="navbar-nav mt-2 mt-lg-0">
 
-                    {user ? <>
+                    {isConnected(user) ? <>
 
                         <li className="nav-item  mobile-list-item">
                             <button
@@ -87,11 +87,12 @@ const AppLayout = ({ children }) => {
                             <Link
                                 className="nav-link"
                                 to="/profile"
+                                style={{ fontSize: '1rem' }}
                             >
                                 <img
                                     className='profile-pic-navbar'
                                     src={user.photo}
-                                    alt='Profile'
+                                    alt='pic'
                                 />
                             </Link>
                             <div className='profile-submenu'>
@@ -170,4 +171,6 @@ const AppLayout = ({ children }) => {
     </>
 }
 
-export default AppLayout
+const mapStateToProps = ({ authReducer }) => authReducer
+
+export default connect(mapStateToProps, mapDispatchToProps)(AppLayout)

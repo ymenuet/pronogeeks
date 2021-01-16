@@ -2,6 +2,10 @@ import {
     notification
 } from 'antd'
 
+export const isConnected = user => {
+    return user ? Object.keys(user).length : null
+}
+
 export const openNotification = (type, title, message) => {
     notification[type]({
         message: title,
@@ -9,6 +13,10 @@ export const openNotification = (type, title, message) => {
         placement: 'bottomRight',
         className: 'notification-box'
     })
+}
+
+export const errorNotification = (error) => {
+    openNotification('error', error)
 }
 
 export const dateTransform = (date) => {

@@ -1,3 +1,4 @@
-export const LOADING = "user_loading"
-export const ERROR = "user_error"
-export const LOGIN = "user_login"
+export const LOADING = "auth_loading"
+export const ERROR = "auth_error"
+export const LOGIN = "auth_login"
+export const LOGOUT = "auth_logout"

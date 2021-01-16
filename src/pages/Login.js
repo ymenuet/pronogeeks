@@ -1,23 +1,26 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { Form, Input } from 'antd'
 import { Redirect } from 'react-router-dom'
-import { openNotification } from '../helpers'
+import { errorNotification, isConnected } from '../helpers'
 import '../styles/connectPages.css'
 import { SocialLogins } from '../components'
 
 import * as mapDispatchToProps from '../actions/authActions'
 
-const Login = ({ history, user, login }) => {
+const Login = ({ user, login, error }) => {
     const [form] = Form.useForm()
 
     const onFinish = async ({ email, password }) => {
-        await login({ email, password }).catch(err => openNotification('error', 'Erreur', err.response.data.message))
-        history.push('/profile')
+        await login({ email, password })
     }
 
-    return Object.keys(user).length ? <Redirect to='/profile' /> : (
+    useEffect(() => {
+        if (error) errorNotification(error)
+    }, [error])
+
+    return isConnected(user) ? <Redirect to='/profile' /> : (
 
         <div className='register-pages'>
 
