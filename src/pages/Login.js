@@ -1,24 +1,23 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
+import { connect } from 'react-redux'
 import { Form, Input } from 'antd'
-import { login } from '../services/auth'
-import { Context } from '../context'
 import { Redirect } from 'react-router-dom'
 import { openNotification } from '../helpers'
 import '../styles/connectPages.css'
 import { SocialLogins } from '../components'
 
-const Login = ({ history }) => {
-    const [form] = Form.useForm()
-    const { loginUser, user } = useContext(Context)
+import * as mapDispatchToProps from '../actions/authActions'
 
-    const onFinish = async (values) => {
-        const user = await login(values).catch(err => openNotification('error', 'Erreur', err.response.data.message))
-        loginUser(user)
+const Login = ({ history, user, login }) => {
+    const [form] = Form.useForm()
+
+    const onFinish = async ({ email, password }) => {
+        await login({ email, password }).catch(err => openNotification('error', 'Erreur', err.response.data.message))
         history.push('/profile')
     }
 
-    return user ? <Redirect to='/profile' /> : (
+    return Object.keys(user).length ? <Redirect to='/profile' /> : (
 
         <div className='register-pages'>
 
@@ -102,4 +101,6 @@ const Login = ({ history }) => {
     )
 }
 
-export default Login
+const mapStateToProps = ({ authReducer }) => authReducer
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login)

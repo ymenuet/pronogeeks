@@ -57,7 +57,7 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
 
         const fetchOdds = async () => {
             await updateOdds(seasonID, matchweekNumber)
-            setMatchweekFixtures(seasonID, matchweekNumber)
+            setMatchweekFixtures(season, matchweekNumber)
             openNotification('success', 'Cotes actualisées')
         }
 

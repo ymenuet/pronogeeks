@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { connect } from "react-redux"
 import { updateProfile, getProfile, updatePhoto } from '../services/auth'
 import { fetchPlayers, deleteUserAccount } from '../services/user'
 import axios from 'axios'
@@ -11,8 +12,8 @@ import { openNotification, rankGeeks } from '../helpers'
 import { EditIcon, WarningIcon } from '../components/Icons'
 import '../styles/profile.css'
 
-const Profile = ({ loading, history }) => {
-    const { user, loginUser, logoutUser } = useContext(Context)
+const Profile = ({ loading, history, authReducer: { user } }) => {
+    const { loginUser, logoutUser } = useContext(Context)
     const [photoLoading, setPhotoLoading] = useState(false)
     const [showModal, setShowModal] = useState(false)
     const [deleteAccount, setDeleteAccount] = useState(false)
@@ -402,4 +403,8 @@ const Profile = ({ loading, history }) => {
         )
 }
 
-export default Profile
+const mapStateToProps = state => ({
+    authReducer: state.authReducer
+})
+
+export default connect(mapStateToProps)(Profile)
