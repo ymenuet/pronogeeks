@@ -17,7 +17,7 @@ const RankGeeks = ({ user, players, seasonID, generalRanking, matchweek }) => {
 
     useEffect(() => {
         const setUserRank = ranking => {
-            const userRanking = ranking.map(player => player.username).indexOf(user.username) + 1
+            const userRanking = ranking.map(player => player._id).indexOf(user._id) + 1
             setUserRanking(userRanking)
         }
         if (!generalRanking && ranking) {

@@ -1,5 +1,4 @@
-import React from 'react'
-import { useHistory } from 'react-router-dom'
+import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { HomeIcon } from './Icons'
@@ -8,13 +7,11 @@ import '../styles/appLayout.css'
 
 import * as mapDispatchToProps from '../actions/authActions'
 
-const AppLayout = ({ children, user, logout }) => {
-    const history = useHistory()
+const AppLayout = ({ children, user, logout, setProfile }) => {
 
-    const logoutButton = async () => {
-        await logout()
-        history.push('/')
-    }
+    useEffect(() => {
+        if (!isConnected(user)) setProfile()
+    }, [user, setProfile])
 
     return <>
 
@@ -50,7 +47,7 @@ const AppLayout = ({ children, user, logout }) => {
                         <li className="nav-item  mobile-list-item">
                             <button
                                 className="nav-link navbar-btns"
-                                onClick={logoutButton}
+                                onClick={logout}
                             >
                                 Déconnexion
                             </button>
@@ -111,7 +108,7 @@ const AppLayout = ({ children, user, logout }) => {
                                     <li className="nav-item">
                                         <button
                                             className="nav-link navbar-btns"
-                                            onClick={logoutButton}
+                                            onClick={logout}
                                         >
                                             Déconnexion
                                         </button>

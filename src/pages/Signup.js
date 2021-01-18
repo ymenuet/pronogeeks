@@ -1,44 +1,38 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Redirect, Link } from 'react-router-dom'
+import { connect } from 'react-redux'
 import { Form, Input } from 'antd'
-import { signup } from '../services/auth'
 import axios from 'axios'
-import { Context } from '../context'
 import { Loader, SocialLogins } from '../components'
-import { openNotification } from '../helpers'
+import { openNotification, isConnected, errorNotification } from '../helpers'
 import '../styles/connectPages.css'
 
-const Signup = ({ confirm = false }) => {
-    const { user } = useContext(Context)
+import * as mapDispatchToProps from '../actions/authActions'
+
+const Signup = ({ signup, error, loading, user, signedup }) => {
     const [form] = Form.useForm()
     const [photo, setPhoto] = useState(null)
     const [fileName, setFileName] = useState('Charger une photo')
-    const [signupDone, setSignupDone] = useState(false)
-    const [confirmWait, setConfirmWait] = useState(confirm)
 
     const onFinish = async (values) => {
         const emailCorrect = (/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@(([[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/).test(String(values.email).toLowerCase())
         if (!emailCorrect) openNotification('warning', 'Attention', `Je crois qu'il y a une faute de frappe dans ton email...`)
         else {
-            setSignupDone(true)
             let photoUrl = null
             if (photo) {
                 const { data: { secure_url } } = await axios.post(process.env.REACT_APP_CLOUDINARY_URL, photo)
                 photoUrl = secure_url
             }
-            let error = false
-            await signup({ ...values, photo: photoUrl }).catch(err => {
-                openNotification('error', 'Erreur', err.response.data.message.fr)
-                error = true
-            })
-            if (!error) setConfirmWait(true)
-            setSignupDone(false)
+            signup({ ...values, photo: photoUrl })
         }
     }
 
+    useEffect(() => {
+        if (error) errorNotification(error)
+    }, [error])
+
     const uploadPhoto = e => {
         if (e.target.files.length > 0) {
-            console.log('TEST')
             const file = e.target.files[0]
             if (file.size > 1000000) return openNotification('warning', 'Attention', 'La taille du fichier ne peux pas excéder 1Mo.')
             if (file.type !== 'image/jpeg' && file.type !== 'image/png' && file.type !== 'image/jpg') return openNotification('warning', 'Attention', 'La photo doit être au format JPG ou PNG.')
@@ -51,14 +45,14 @@ const Signup = ({ confirm = false }) => {
     }
 
     return <div className='register-pages'>
-        {signupDone ? (
+        {loading ? (
 
             <Loader
                 tip='Enregistrement du compte...'
                 color='rgb(4, 78, 199)'
             />
 
-        ) : confirmWait ? (
+        ) : signedup ? (
 
             <div className='row signup-form'>
                 <div className='col-10 offset-1 col-sm-8 offset-sm-2 col-xl-6 offset-xl-3'>
@@ -66,7 +60,7 @@ const Signup = ({ confirm = false }) => {
                 </div>
             </div>
 
-        ) : user ? (
+        ) : isConnected(user) ? (
 
             <Redirect to='/profile' />
 
@@ -179,4 +173,6 @@ const Signup = ({ confirm = false }) => {
     </div>
 }
 
-export default Signup
+const mapStateToProps = ({ authReducer }) => authReducer
+
+export default connect(mapStateToProps, mapDispatchToProps)(Signup)

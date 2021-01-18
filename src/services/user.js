@@ -78,7 +78,7 @@ export const confirmEmail = async(userID, confirmToken) => {
     return confirmed
 }
 
-export const deleteUserAccount = async userID => {
-    await userService.delete(`/${userID}`)
+export const deleteUserAccount = async() => {
+    await userService.delete(`/`)
     return true
 }

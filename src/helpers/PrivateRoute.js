@@ -1,19 +1,10 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Redirect, Route } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { isConnected } from '../helpers'
-//import { Context } from '../context'
 import { Signup } from '../pages'
 
-import * as mapDispatchToProps from '../actions/authActions'
-
-const PrivateRoute = ({ component: Component, user, setProfile, ...rest }) => {
-
-    //const { user } = useContext(Context)
-
-    useEffect(() => {
-        if (!isConnected(user)) setProfile()
-    }, [user, setProfile])
+const PrivateRoute = ({ component: Component, user, ...rest }) => {
 
     return (
         <Route
@@ -21,7 +12,7 @@ const PrivateRoute = ({ component: Component, user, setProfile, ...rest }) => {
             render={props => isConnected(user) === 0 ? (
                 <Component {...props} loading />
             ) : isConnected(user) && !user.confirmed ? (
-                <Signup confirm={true} />
+                <Signup signedup={true} />
             ) : isConnected(user) ? (
                 <Component {...props} />
             ) : (
@@ -38,4 +29,4 @@ const PrivateRoute = ({ component: Component, user, setProfile, ...rest }) => {
 
 const mapStateToProps = ({ authReducer }) => authReducer
 
-export default connect(mapStateToProps, mapDispatchToProps)(PrivateRoute)
+export default connect(mapStateToProps)(PrivateRoute)

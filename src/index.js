@@ -6,12 +6,19 @@ import CtxProvider from './context'
 import * as serviceWorker from './serviceWorker';
 import 'antd/dist/antd.css'
 
-import { createStore, applyMiddleware } from "redux"
+import { createStore, applyMiddleware, compose } from "redux"
 import { Provider } from "react-redux"
 import reduxThunk from "redux-thunk"
 import reducers from './reducers'
 
-const store = createStore(reducers, {}, applyMiddleware(reduxThunk))
+const store = createStore(
+  reducers,
+  {},
+  compose(
+    applyMiddleware(reduxThunk),
+    window.__REDUX_DEVTOOLS_EXTENSION__ ? window.__REDUX_DEVTOOLS_EXTENSION__() : f => f
+  )
+)
 
 ReactDOM.render(<Provider store={store}>
   <CtxProvider>

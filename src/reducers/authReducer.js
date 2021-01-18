@@ -1,12 +1,19 @@
 import {
     LOADING,
     ERROR,
+    SIGNUP,
     LOGIN,
-    LOGOUT
+    LOGOUT,
 } from "../types/authTypes"
 
 const INITIAL_STATE = {
     user: {},
+    signedup: false,
+    loading: false,
+    error: false,
+}
+
+const done = {
     loading: false,
     error: false
 }
@@ -25,12 +32,17 @@ const authReducer = (state = INITIAL_STATE, action) => {
                 error: action.payload,
                 loading: false
             }
+        case SIGNUP:
+            return {
+                ...state,
+                signedup: true,
+                ...done
+            }
         case LOGIN:
             return {
                 ...state,
                 user: action.payload,
-                loading: false,
-                error: false
+                ...done
             }
         case LOGOUT:
             return {}
