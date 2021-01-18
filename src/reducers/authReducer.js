@@ -4,6 +4,7 @@ import {
     SIGNUP,
     LOGIN,
     LOGOUT,
+    RESET_ERROR
 } from "../types/authTypes"
 
 const INITIAL_STATE = {
@@ -46,6 +47,11 @@ const authReducer = (state = INITIAL_STATE, action) => {
             }
         case LOGOUT:
             return {}
+        case RESET_ERROR:
+            return {
+                ...state,
+                error: false
+            }
         default:
             return state
     }

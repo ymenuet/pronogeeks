@@ -4,17 +4,17 @@ import { connect } from "react-redux"
 import { updatePhoto } from '../services/auth'
 import { fetchPlayers, deleteUserAccount } from '../services/user'
 import axios from 'axios'
-import { Loader, RankGeeks } from '../components'
+import { Loader, RankGeeks, ErrorNotification } from '../components'
 import { Spin, Space } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons'
 import { Context } from '../context'
-import { errorNotification, isConnected, openNotification, rankGeeks } from '../helpers'
+import { isConnected, openNotification, rankGeeks } from '../helpers'
 import { EditIcon, WarningIcon } from '../components/Icons'
 import '../styles/profile.css'
 
 import * as authActions from '../actions/authActions'
 
-const Profile = ({ loading, history, user, authError, usernameLoading, updateUsername }) => {
+const Profile = ({ loading, history, user, usernameLoading, updateUsername }) => {
     const { loginUser, logoutUser } = useContext(Context)
     const [photoLoading, setPhotoLoading] = useState(false)
     const [showModal, setShowModal] = useState(false)
@@ -49,10 +49,6 @@ const Profile = ({ loading, history, user, authError, usernameLoading, updateUse
             setUsernameInput(user.username)
         }
     }, [user])
-
-    useEffect(() => {
-        if (authError) errorNotification(authError)
-    }, [authError])
 
     const uploadPhoto = async e => {
         const file = e.target.files[0]
@@ -406,6 +402,8 @@ const Profile = ({ loading, history, user, authError, usernameLoading, updateUse
                     </div>
 
                 </div>}
+
+                <ErrorNotification />
 
             </div>
         )

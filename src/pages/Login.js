@@ -1,24 +1,20 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { Form, Input } from 'antd'
 import { Redirect } from 'react-router-dom'
-import { errorNotification, isConnected } from '../helpers'
+import { isConnected } from '../helpers'
 import '../styles/connectPages.css'
-import { SocialLogins } from '../components'
+import { SocialLogins, ErrorNotification } from '../components'
 
 import * as mapDispatchToProps from '../actions/authActions'
 
-const Login = ({ user, login, error }) => {
+const Login = ({ user, login }) => {
     const [form] = Form.useForm()
 
     const onFinish = async ({ email, password }) => {
         await login({ email, password })
     }
-
-    useEffect(() => {
-        if (error) errorNotification(error)
-    }, [error])
 
     return isConnected(user) ? <Redirect to='/profile' /> : (
 
@@ -99,6 +95,8 @@ const Login = ({ user, login, error }) => {
                 </Link>
 
             </div>
+
+            <ErrorNotification />
 
         </div>
     )

@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Redirect, Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { Form, Input } from 'antd'
 import axios from 'axios'
-import { Loader, SocialLogins } from '../components'
-import { openNotification, isConnected, errorNotification } from '../helpers'
+import { Loader, SocialLogins, ErrorNotification } from '../components'
+import { openNotification, isConnected } from '../helpers'
 import '../styles/connectPages.css'
 
 import * as mapDispatchToProps from '../actions/authActions'
@@ -26,10 +26,6 @@ const Signup = ({ signup, error, loading, user, signedup }) => {
             signup({ ...values, photo: photoUrl })
         }
     }
-
-    useEffect(() => {
-        if (error) errorNotification(error)
-    }, [error])
 
     const uploadPhoto = e => {
         if (e.target.files.length > 0) {
@@ -170,6 +166,7 @@ const Signup = ({ signup, error, loading, user, signedup }) => {
 
                     </div>
         }
+        <ErrorNotification />
     </div>
 }
 

@@ -15,10 +15,6 @@ export const openNotification = (type, title, message) => {
     })
 }
 
-export const errorNotification = (error) => {
-    openNotification('error', error)
-}
-
 export const dateTransform = (date) => {
     date = new Date(date)
     let weekDay = date.getDay()
