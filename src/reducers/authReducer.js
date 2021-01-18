@@ -4,7 +4,8 @@ import {
     SIGNUP,
     LOGIN,
     LOGOUT,
-    RESET_ERROR
+    RESET_ERROR,
+    USERNAME_LOADING
 } from "../types/authTypes"
 
 const INITIAL_STATE = {
@@ -12,11 +13,13 @@ const INITIAL_STATE = {
     signedup: false,
     loading: false,
     error: false,
+    usernameLoading: false
 }
 
 const done = {
     loading: false,
-    error: false
+    error: false,
+    usernameLoading: false
 }
 
 const authReducer = (state = INITIAL_STATE, action) => {
@@ -47,6 +50,12 @@ const authReducer = (state = INITIAL_STATE, action) => {
             }
         case LOGOUT:
             return {}
+        case USERNAME_LOADING:
+            return {
+                ...state,
+                usernameLoading: true,
+                error: false
+            }
         case RESET_ERROR:
             return {
                 ...state,

@@ -403,7 +403,7 @@ const Profile = ({ loading, history, user, usernameLoading, updateUsername }) =>
 
                 </div>}
 
-                <ErrorNotification />
+                <ErrorNotification types={['auth']} />
 
             </div>
         )
@@ -411,7 +411,7 @@ const Profile = ({ loading, history, user, usernameLoading, updateUsername }) =>
 
 const mapStateToProps = state => ({
     user: state.authReducer.user,
-    usernameLoading: state.authReducer.loading,
+    usernameLoading: state.authReducer.usernameLoading,
     authError: state.authReducer.error,
 })
 

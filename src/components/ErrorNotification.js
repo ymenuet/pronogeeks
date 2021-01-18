@@ -2,20 +2,38 @@ import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import { openNotification } from '../helpers'
 
-import * as mapDispatchToProps from '../actions/authActions'
+import * as authActions from '../actions/authActions'
 
-const ErrorNotification = ({ error, resetError }) => {
+const ErrorNotification = (props) => {
+
+    const { types } = props
+
+    const errors = {
+        auth: props.authError
+    }
+
+    const resets = {
+        auth: props.resetAuthError
+    }
 
     useEffect(() => {
-        if (error) {
-            openNotification('error', error)
-            resetError()
+        for (let type of types) {
+            if (errors[type]) {
+                openNotification('error', errors[type])
+                resets[type]()
+            }
         }
-    }, [error, resetError])
+    }, [props])
 
     return <div></div>
 }
 
-const mapStateToProps = ({ authReducer }) => authReducer
+const mapStateToProps = state => ({
+    authError: state.authReducer.error
+})
+
+const mapDispatchToProps = {
+    ...authActions
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(ErrorNotification)

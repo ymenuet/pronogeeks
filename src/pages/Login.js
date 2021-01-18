@@ -96,7 +96,7 @@ const Login = ({ user, login }) => {
 
             </div>
 
-            <ErrorNotification />
+            <ErrorNotification types={['auth']} />
 
         </div>
     )

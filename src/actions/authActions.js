@@ -5,7 +5,8 @@ import {
     SIGNUP,
     LOGIN,
     LOGOUT,
-    RESET_ERROR
+    RESET_ERROR,
+    USERNAME_LOADING
 } from "../types/authTypes"
 
 const baseURL = process.env.NODE_ENV === 'production' ?
@@ -103,7 +104,7 @@ export const setProfile = () => async dispatch => {
 
 export const updateUsername = newUsername => async dispatch => {
     dispatch({
-        type: LOADING
+        type: USERNAME_LOADING
     })
     try {
         const {
@@ -125,7 +126,7 @@ export const updateUsername = newUsername => async dispatch => {
     }
 }
 
-export const resetError = () => dispatch => {
+export const resetAuthError = () => dispatch => {
     dispatch({
         type: RESET_ERROR
     })

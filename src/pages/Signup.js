@@ -164,9 +164,10 @@ const Signup = ({ signup, error, loading, user, signedup }) => {
                             Politique de confidentialité
                         </Link>
 
-                    </div>
-        }
-        <ErrorNotification />
+                    </div>}
+
+        <ErrorNotification types={['auth']} />
+
     </div>
 }
 
