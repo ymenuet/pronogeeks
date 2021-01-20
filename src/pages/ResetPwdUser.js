@@ -1,45 +1,39 @@
-import React, { useContext, useState } from 'react'
+import React, { useEffect } from 'react'
 import { Redirect } from 'react-router-dom'
+import { connect } from 'react-redux'
 import { Form, Input } from 'antd'
-import { updatePwd } from '../services/auth'
-import { Context } from '../context'
-import { Loader } from '../components'
-import { openNotification } from '../helpers'
+import { Loader, ErrorNotification } from '../components'
+import { openNotification, isConnected } from '../helpers'
 
-const ResetPwd = ({ match: { params: { userID, renewToken } }, history }) => {
+import * as mapDispatchToProps from '../actions/authActions'
 
-    const { user } = useContext(Context)
-    const [loading, setLoading] = useState(false)
+const ResetPwd = ({ match: { params: { userID, renewToken } }, history, user, loading, pwdUpdated, updatePwd }) => {
+
     const [form] = Form.useForm()
 
     const onFinish = async ({ password, passwordCopy }) => {
         if (password !== passwordCopy) return openNotification('warning', 'Les mots de passe sont différents.')
-        setLoading(true)
-        const passwordUpdated = await updatePwd(userID, renewToken, password).catch(err => {
-            openNotification('error', 'Erreur', err.response.data.message.fr)
-            setLoading(false)
-        })
-        if (passwordUpdated) {
-            openNotification('success', 'Mot de passe actualisé.')
-            history.push('/login')
-            setLoading(false)
-        }
+        updatePwd(userID, renewToken, password)
     }
 
-    return user ? <Redirect to='/profile' /> :
+    useEffect(() => {
+        if (pwdUpdated) {
+            openNotification('success', 'Mot de passe actualisé.')
+            history.push('/login')
+        }
+    }, [pwdUpdated, history])
 
-        loading ? (
+    return isConnected(user) ? <Redirect to='/profile' /> :
 
-            <div className='register-pages'>
+        <div className='register-pages'>
+            {loading ? (
+
                 <Loader
                     tip="Enregistrement du mot de passe..."
                     color='rgb(4, 78, 199)'
                 />
-            </div>
 
-        ) : (
-                <div className='register-pages'>
-
+            ) : (
                     <div className='row signup-form'>
 
                         <div className='col-10 offset-1 col-sm-8 offset-sm-2 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4'>
@@ -103,8 +97,11 @@ const ResetPwd = ({ match: { params: { userID, renewToken } }, history }) => {
 
                     </div>
 
-                </div>
-            )
+                )}
+            <ErrorNotification types={['auth']} />
+        </div>
 }
 
-export default ResetPwd
+const mapStateToProps = ({ authReducer }) => authReducer
+
+export default connect(mapStateToProps, mapDispatchToProps)(ResetPwd)

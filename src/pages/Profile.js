@@ -1,12 +1,9 @@
 import React, { useContext, useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from "react-redux"
-import { updatePhoto } from '../services/auth'
 import { fetchPlayers, deleteUserAccount } from '../services/user'
 import axios from 'axios'
 import { Loader, RankGeeks, ErrorNotification } from '../components'
-import { Spin, Space } from 'antd'
-import { LoadingOutlined } from '@ant-design/icons'
 import { Context } from '../context'
 import { isConnected, openNotification, rankGeeks } from '../helpers'
 import { EditIcon, WarningIcon } from '../components/Icons'
@@ -14,9 +11,9 @@ import '../styles/profile.css'
 
 import * as authActions from '../actions/authActions'
 
-const Profile = ({ loading, history, user, usernameLoading, updateUsername }) => {
-    const { loginUser, logoutUser } = useContext(Context)
-    const [photoLoading, setPhotoLoading] = useState(false)
+const Profile = ({ loading, history, user, usernameLoading, updateUsername, photoLoading, updatePhoto }) => {
+    const { logoutUser } = useContext(Context)
+    const [cloudinaryLoading, setCloudinaryLoading] = useState(false)
     const [showModal, setShowModal] = useState(false)
     const [deleteAccount, setDeleteAccount] = useState(false)
     const [usernameInput, setUsernameInput] = useState('')
@@ -54,14 +51,13 @@ const Profile = ({ loading, history, user, usernameLoading, updateUsername }) =>
         const file = e.target.files[0]
         if (file.size > 1000000) return openNotification('warning', 'Attention', 'La taille du fichier ne peux pas excéder 1Mo. La photo de profil reste inchangée.')
         if (file.type !== 'image/jpeg' && file.type !== 'image/png' && file.type !== 'image/jpg') return openNotification('warning', 'Attention', 'Le fichier doit être au format JPG ou PNG. La photo de profil reste inchangée.')
-        setPhotoLoading(true)
+        setCloudinaryLoading(true)
         const data = new FormData()
         data.append('file', e.target.files[0])
         data.append('upload_preset', 'pronogeeks')
         const { data: { secure_url } } = await axios.post(process.env.REACT_APP_CLOUDINARY_URL, data)
-        const user = await updatePhoto({ photo: secure_url })
-        loginUser(user)
-        setPhotoLoading(false)
+        updatePhoto(secure_url)
+        setCloudinaryLoading(false)
     }
 
     const saveUsername = () => {
@@ -92,6 +88,8 @@ const Profile = ({ loading, history, user, usernameLoading, updateUsername }) =>
         }).map(player => player._id).indexOf(user._id) + 1
     }
 
+    const photoLoader = () => photoLoading || cloudinaryLoading
+
     const printEditIcon = () => usernameLoading ? <Loader
         container={false}
         tip=''
@@ -118,25 +116,22 @@ const Profile = ({ loading, history, user, usernameLoading, updateUsername }) =>
 
                             <div className='profile-picture-container'>
 
-                                {!photoLoading && <img
+                                {!photoLoader() && <img
                                     src={user.photo}
                                     alt="Profile pic"
                                     className='profile-pic'
                                 />}
 
-                                {photoLoading && <div className='profile-pic'>
+                                {photoLoader() && <div className='profile-pic'>
 
-                                    <Space size='medium'>
-                                        <Spin
-                                            size='medium'
-                                            tip='Chargement de la photo...'
-                                            style={{ color: 'rgb(26, 145, 254)' }}
-                                            indicator={<LoadingOutlined
-                                                style={{ color: 'rgb(26, 145, 254)', fontSize: '2rem', marginBottom: 8 }}
-                                                spin
-                                            />}
-                                        />
-                                    </Space>
+                                    <Loader
+                                        container={false}
+                                        size='medium'
+                                        tip='Chargement de la photo...'
+                                        tipSize='1rem'
+                                        color='rgb(26, 145, 254)'
+                                        fontSize='2rem'
+                                    />
 
                                 </div>}
 
@@ -195,17 +190,10 @@ const Profile = ({ loading, history, user, usernameLoading, updateUsername }) =>
 
                             {seasonID && !seasonRankingFull && <div className='pt-4'>
 
-                                <Space size='large'>
-                                    <Spin
-                                        size='large'
-                                        tip='Chargement des ligues...'
-                                        style={{ color: 'white', fontSize: '1.2rem' }}
-                                        indicator={<LoadingOutlined
-                                            style={{ color: 'white', fontSize: '3rem', marginBottom: 8 }}
-                                            spin
-                                        />}
-                                    />
-                                </Space>
+                                <Loader
+                                    tip='Chargement des ligues...'
+                                    container={false}
+                                />
 
                             </div>}
 
@@ -241,17 +229,10 @@ const Profile = ({ loading, history, user, usernameLoading, updateUsername }) =>
 
                         {!seasonRanking && <div>
 
-                            <Space size='large'>
-                                <Spin
-                                    size='large'
-                                    tip='Chargement du classement...'
-                                    style={{ color: 'white', fontSize: '1.2rem' }}
-                                    indicator={<LoadingOutlined
-                                        style={{ color: 'white', fontSize: '3rem', marginBottom: 8 }}
-                                        spin
-                                    />}
-                                />
-                            </Space>
+                            <Loader
+                                tip='Chargement du classement...'
+                                container={false}
+                            />
 
                         </div>}
 
@@ -412,6 +393,7 @@ const Profile = ({ loading, history, user, usernameLoading, updateUsername }) =>
 const mapStateToProps = state => ({
     user: state.authReducer.user,
     usernameLoading: state.authReducer.usernameLoading,
+    photoLoading: state.authReducer.photoLoading,
     authError: state.authReducer.error,
 })
 

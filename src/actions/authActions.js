@@ -6,7 +6,10 @@ import {
     LOGIN,
     LOGOUT,
     RESET_ERROR,
-    USERNAME_LOADING
+    USERNAME_LOADING,
+    PHOTO_LOADING,
+    RESET_PWD,
+    UPDATE_PWD
 } from "../types/authTypes"
 
 const baseURL = process.env.NODE_ENV === 'production' ?
@@ -88,6 +91,9 @@ export const logout = () => async dispatch => {
 }
 
 export const setProfile = () => async dispatch => {
+    dispatch({
+        type: LOADING
+    })
     try {
         const user = await getProfile()
         dispatch({
@@ -117,6 +123,68 @@ export const updateUsername = newUsername => async dispatch => {
         dispatch({
             type: LOGIN,
             payload: user
+        })
+    } catch (error) {
+        dispatch({
+            type: ERROR,
+            payload: error.response.data.message.fr
+        })
+    }
+}
+
+export const updatePhoto = newPhoto => async dispatch => {
+    dispatch({
+        type: PHOTO_LOADING
+    })
+    try {
+        const {
+            data: {
+                user
+            }
+        } = await authService.put('/editPic', {
+            photo: newPhoto
+        })
+        dispatch({
+            type: LOGIN,
+            payload: user
+        })
+    } catch (error) {
+        dispatch({
+            type: ERROR,
+            payload: error.response.data.message.fr
+        })
+    }
+}
+
+export const resetPwd = email => async dispatch => {
+    dispatch({
+        type: LOADING
+    })
+    try {
+        await authService.put(`/reset-pwd`, {
+            email
+        })
+        dispatch({
+            type: RESET_PWD
+        })
+    } catch (error) {
+        dispatch({
+            type: ERROR,
+            payload: error.response.data.message.fr
+        })
+    }
+}
+
+export const updatePwd = (userID, renewToken, password) => async dispatch => {
+    dispatch({
+        type: LOADING
+    })
+    try {
+        await authService.put(`/new-pwd/${userID}/${renewToken}`, {
+            password
+        })
+        dispatch({
+            type: UPDATE_PWD
         })
     } catch (error) {
         dispatch({

@@ -6,10 +6,11 @@ export const isConnected = user => {
     return user ? Object.keys(user).length : null
 }
 
-export const openNotification = (type, title, message) => {
+export const openNotification = (type, title, message, duration = 6) => {
     notification[type]({
         message: title,
         description: message,
+        duration: duration,
         placement: 'bottomRight',
         className: 'notification-box'
     })

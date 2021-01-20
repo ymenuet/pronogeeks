@@ -5,37 +5,32 @@ import {
     LOGIN,
     LOGOUT,
     RESET_ERROR,
-    USERNAME_LOADING
+    USERNAME_LOADING,
+    PHOTO_LOADING,
+    RESET_PWD,
+    UPDATE_PWD
 } from "../types/authTypes"
 
 const INITIAL_STATE = {
     user: {},
     signedup: false,
+    pwdToReset: false,
+    pwdUpdated: false,
     loading: false,
+    usernameLoading: false,
+    photoLoading: false,
     error: false,
-    usernameLoading: false
 }
 
 const done = {
     loading: false,
+    usernameLoading: false,
+    photoLoading: false,
     error: false,
-    usernameLoading: false
 }
 
 const authReducer = (state = INITIAL_STATE, action) => {
     switch (action.type) {
-        case LOADING:
-            return {
-                ...state,
-                loading: true,
-                error: false
-            }
-        case ERROR:
-            return {
-                ...state,
-                error: action.payload,
-                loading: false
-            }
         case SIGNUP:
             return {
                 ...state,
@@ -48,13 +43,45 @@ const authReducer = (state = INITIAL_STATE, action) => {
                 user: action.payload,
                 ...done
             }
+        case RESET_PWD:
+            return {
+                ...state,
+                pwdToReset: true,
+                ...done
+            }
+        case UPDATE_PWD:
+            return {
+                ...state,
+                pwdUpdated: true,
+                ...done
+            }
         case LOGOUT:
             return {}
+        case LOADING:
+            return {
+                ...state,
+                loading: true,
+                error: false
+            }
         case USERNAME_LOADING:
             return {
                 ...state,
                 usernameLoading: true,
                 error: false
+            }
+        case PHOTO_LOADING:
+            return {
+                ...state,
+                photoLoading: true,
+                error: false
+            }
+        case ERROR:
+            return {
+                ...state,
+                error: action.payload,
+                loading: false,
+                usernameLoading: false,
+                photoLoading: false,
             }
         case RESET_ERROR:
             return {

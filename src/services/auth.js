@@ -9,11 +9,6 @@ const authService = axios.create({
     withCredentials: true
 })
 
-export const updatePhoto = async(userData) => {
-    await authService.put('/editPic', userData)
-    return getProfile()
-}
-
 export const getProfile = async() => {
     const {
         data: {
@@ -21,18 +16,4 @@ export const getProfile = async() => {
         }
     } = await authService.get('/profile')
     return user
-}
-
-export const changePwd = async(email) => {
-    await authService.put(`/reset-pwd`, {
-        email
-    })
-    return true
-}
-
-export const updatePwd = async(userID, renewToken, password) => {
-    await authService.put(`/new-pwd/${userID}/${renewToken}`, {
-        password
-    })
-    return true
 }

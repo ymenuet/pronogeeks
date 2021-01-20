@@ -1,45 +1,38 @@
-import React, { useContext, useState } from 'react'
+import React, { useEffect } from 'react'
 import { Redirect } from 'react-router-dom'
+import { connect } from 'react-redux'
 import { Form, Input } from 'antd'
-import { changePwd } from '../services/auth'
-import { Context } from '../context'
-import { Loader } from '../components'
-import { openNotification } from '../helpers'
+import { Loader, ErrorNotification } from '../components'
+import { openNotification, isConnected } from '../helpers'
 
-const ResetPwd = ({ history }) => {
+import * as mapDispatchToProps from '../actions/authActions'
 
-    const { user } = useContext(Context)
-    const [loading, setLoading] = useState(false)
+const ResetPwd = ({ history, user, loading, pwdToReset, resetPwd }) => {
+
     const [form] = Form.useForm()
 
     const onFinish = async ({ email }) => {
-        setLoading(true)
-        const emailSent = await changePwd(email).catch(err => {
-            openNotification('warning', 'Attention', err.response.data.message.fr)
-            setLoading(false)
-        })
-        if (emailSent) {
-            openNotification('success', 'Email envoyé', 'Un email a été envoyé à ton adresse mail pour renouveler ton mot de passe.')
-            history.push('/login')
-            setLoading(false)
-        }
+        resetPwd(email)
     }
 
-    return user ? <Redirect to='/profile' /> :
+    useEffect(() => {
+        if (pwdToReset) {
+            openNotification('success', 'Email envoyé', 'Un email a été envoyé à ton adresse mail pour renouveler ton mot de passe.')
+            history.push('/login')
+        }
+    }, [pwdToReset, history])
 
-        loading ? (
+    return isConnected(user) ? <Redirect to='/profile' /> :
 
-            <div className='register-pages'>
+        <div className='register-pages'>
+            {loading ? (
+
                 <Loader
                     tip="Envoi de l'email..."
                     color='rgb(4, 78, 199)'
                 />
-            </div>
 
-        ) : (
-
-                <div className='register-pages'>
-
+            ) : (
                     <div className='row signup-form'>
 
                         <div className='col-10 offset-1 col-sm-8 offset-sm-2 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4'>
@@ -85,8 +78,11 @@ const ResetPwd = ({ history }) => {
                             </Form>
                         </div>
                     </div>
-                </div>
-            )
+                )}
+            <ErrorNotification types={['auth']} />
+        </div>
 }
 
-export default ResetPwd
+const mapStateToProps = ({ authReducer }) => authReducer
+
+export default connect(mapStateToProps, mapDispatchToProps)(ResetPwd)

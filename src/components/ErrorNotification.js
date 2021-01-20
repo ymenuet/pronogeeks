@@ -23,7 +23,7 @@ const ErrorNotification = (props) => {
                 resets[type]()
             }
         }
-    }, [props])
+    }, [props, errors, resets, types])
 
     return <div></div>
 }
