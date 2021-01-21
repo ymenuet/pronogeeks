@@ -1,19 +1,18 @@
-import React, { useContext, useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from "react-redux"
-import { fetchPlayers, deleteUserAccount } from '../services/user'
+import { fetchPlayers } from '../services/user'
 import axios from 'axios'
 import { Loader, RankGeeks, ErrorNotification } from '../components'
-import { Context } from '../context'
-import { isConnected, openNotification, rankGeeks } from '../helpers'
+import { appendPhoto, isConnected, rankGeeks, openNotification } from '../helpers'
 import { EditIcon, WarningIcon } from '../components/Icons'
 import '../styles/profile.css'
 
 import * as authActions from '../actions/authActions'
 
-const Profile = ({ loading, history, user, usernameLoading, updateUsername, photoLoading, updatePhoto }) => {
-    const { logoutUser } = useContext(Context)
+const Profile = ({ loading, user, usernameLoading, updateUsername, photoLoading, updatePhoto, deleteUserAccount, logout }) => {
     const [cloudinaryLoading, setCloudinaryLoading] = useState(false)
+    const [cloudinaryError, setCloudinaryError] = useState(false)
     const [showModal, setShowModal] = useState(false)
     const [deleteAccount, setDeleteAccount] = useState(false)
     const [usernameInput, setUsernameInput] = useState('')
@@ -48,16 +47,19 @@ const Profile = ({ loading, history, user, usernameLoading, updateUsername, phot
     }, [user])
 
     const uploadPhoto = async e => {
-        const file = e.target.files[0]
-        if (file.size > 1000000) return openNotification('warning', 'Attention', 'La taille du fichier ne peux pas excéder 1Mo. La photo de profil reste inchangée.')
-        if (file.type !== 'image/jpeg' && file.type !== 'image/png' && file.type !== 'image/jpg') return openNotification('warning', 'Attention', 'Le fichier doit être au format JPG ou PNG. La photo de profil reste inchangée.')
-        setCloudinaryLoading(true)
-        const data = new FormData()
-        data.append('file', e.target.files[0])
-        data.append('upload_preset', 'pronogeeks')
-        const { data: { secure_url } } = await axios.post(process.env.REACT_APP_CLOUDINARY_URL, data)
-        updatePhoto(secure_url)
-        setCloudinaryLoading(false)
+        const photo = appendPhoto(e)
+        if (photo) {
+            setCloudinaryLoading(true)
+            const { data: { secure_url } } = await axios.post(process.env.REACT_APP_CLOUDINARY_URL, photo).catch(error => {
+                setCloudinaryError(true)
+                setCloudinaryLoading(false)
+                openNotification('error', "Une erreur a eu lieu lors de l'import de la photo. Merci de réessayer.")
+            })
+            if (!cloudinaryError) {
+                updatePhoto(secure_url)
+                setCloudinaryLoading(false)
+            }
+        }
     }
 
     const saveUsername = () => {
@@ -65,11 +67,9 @@ const Profile = ({ loading, history, user, usernameLoading, updateUsername, phot
         updateUsername(usernameInput)
     }
 
-    const removeAccount = async () => {
-        const userID = user._id
-        logoutUser()
-        history.push('/')
-        await deleteUserAccount(userID)
+    const removeAccount = () => {
+        logout()
+        deleteUserAccount()
     }
 
     const setRank = (num) => {

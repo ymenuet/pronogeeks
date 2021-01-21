@@ -12,7 +12,7 @@ const PrivateRoute = ({ component: Component, user, ...rest }) => {
             render={props => isConnected(user) === 0 ? (
                 <Component {...props} loading />
             ) : isConnected(user) && !user.confirmed ? (
-                <Signup signedup={true} />
+                <Signup emailToConfirm={true} />
             ) : isConnected(user) ? (
                 <Component {...props} />
             ) : (

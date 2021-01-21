@@ -8,7 +8,8 @@ import {
     USERNAME_LOADING,
     PHOTO_LOADING,
     RESET_PWD,
-    UPDATE_PWD
+    UPDATE_PWD,
+    DELETE_ACCOUNT
 } from "../types/authTypes"
 
 const INITIAL_STATE = {
@@ -16,6 +17,7 @@ const INITIAL_STATE = {
     signedup: false,
     pwdToReset: false,
     pwdUpdated: false,
+    accountDeleted: false,
     loading: false,
     usernameLoading: false,
     photoLoading: false,
@@ -57,6 +59,10 @@ const authReducer = (state = INITIAL_STATE, action) => {
             }
         case LOGOUT:
             return {}
+        case DELETE_ACCOUNT:
+            return {
+                accountDeleted: true
+            }
         case LOADING:
             return {
                 ...state,

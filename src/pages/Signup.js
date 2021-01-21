@@ -4,51 +4,59 @@ import { connect } from 'react-redux'
 import { Form, Input } from 'antd'
 import axios from 'axios'
 import { Loader, SocialLogins, ErrorNotification } from '../components'
-import { openNotification, isConnected } from '../helpers'
+import { openNotification, isConnected, appendPhoto } from '../helpers'
 import '../styles/connectPages.css'
 
 import * as mapDispatchToProps from '../actions/authActions'
 
-const Signup = ({ signup, error, loading, user, signedup }) => {
+const Signup = ({ signup, loading, user, signedup, emailToConfirm }) => {
     const [form] = Form.useForm()
+    const [cloudinaryLoading, setCloudinaryLoading] = useState(false)
+    const [cloudinaryError, setCloudinaryError] = useState(false)
     const [photo, setPhoto] = useState(null)
+    const [photoUploading, setPhotoUploading] = useState(false)
     const [fileName, setFileName] = useState('Charger une photo')
 
     const onFinish = async (values) => {
         const emailCorrect = (/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@(([[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/).test(String(values.email).toLowerCase())
         if (!emailCorrect) openNotification('warning', 'Attention', `Je crois qu'il y a une faute de frappe dans ton email...`)
         else {
+            setCloudinaryLoading(true)
             let photoUrl = null
             if (photo) {
                 const { data: { secure_url } } = await axios.post(process.env.REACT_APP_CLOUDINARY_URL, photo)
+                    .catch(error => {
+                        setCloudinaryError(true)
+                        setCloudinaryLoading(false)
+                        openNotification('error', "Une erreur a eu lieu lors de l'import de la photo. Merci de réessayer.")
+                    })
                 photoUrl = secure_url
             }
-            signup({ ...values, photo: photoUrl })
+            if (!cloudinaryError) {
+                signup({ ...values, photo: photoUrl })
+                setCloudinaryLoading(false)
+            }
         }
     }
 
     const uploadPhoto = e => {
         if (e.target.files.length > 0) {
-            const file = e.target.files[0]
-            if (file.size > 1000000) return openNotification('warning', 'Attention', 'La taille du fichier ne peux pas excéder 1Mo.')
-            if (file.type !== 'image/jpeg' && file.type !== 'image/png' && file.type !== 'image/jpg') return openNotification('warning', 'Attention', 'La photo doit être au format JPG ou PNG.')
-            setFileName(file.name)
-            const data = new FormData()
-            data.append('file', e.target.files[0])
-            data.append('upload_preset', 'pronogeeks')
-            setPhoto(data)
+            setPhotoUploading(true)
+            const photo = appendPhoto(e, setFileName)
+            setPhoto(photo)
+            setPhotoUploading(false)
         }
     }
 
     return <div className='register-pages'>
-        {loading ? (
+        {loading || cloudinaryLoading ? (
 
             <Loader
                 tip='Enregistrement du compte...'
                 color='rgb(4, 78, 199)'
             />
 
-        ) : signedup ? (
+        ) : signedup || emailToConfirm ? (
 
             <div className='row signup-form'>
                 <div className='col-10 offset-1 col-sm-8 offset-sm-2 col-xl-6 offset-xl-3'>
@@ -146,6 +154,7 @@ const Signup = ({ signup, error, loading, user, signedup }) => {
                                         type='submit'
                                         className='btn my-btn submit-btn register-btn'
                                         style={{ marginTop: 10 }}
+                                        disabled={photoUploading}
                                     >
                                         Créer mon compte
                                     </button>

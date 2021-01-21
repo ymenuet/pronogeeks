@@ -70,15 +70,3 @@ export const saveUserProvRanking = async(seasonID, userProvRanking) => {
     })
     return true
 }
-
-export const confirmEmail = async(userID, confirmToken) => {
-    let confirmed = false
-    await userService.put(`/${userID}/${confirmToken}`)
-    confirmed = true
-    return confirmed
-}
-
-export const deleteUserAccount = async() => {
-    await userService.delete(`/`)
-    return true
-}

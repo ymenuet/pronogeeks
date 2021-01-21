@@ -17,3 +17,10 @@ export const getProfile = async() => {
     } = await authService.get('/profile')
     return user
 }
+
+export const confirmEmail = async(userID, confirmToken) => {
+    let confirmed = false
+    await authService.put(`/confirm/${userID}/${confirmToken}`)
+    confirmed = true
+    return confirmed
+}

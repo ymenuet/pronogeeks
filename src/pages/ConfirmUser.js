@@ -1,13 +1,16 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { Link, Redirect } from 'react-router-dom'
-import { getUser, confirmEmail } from '../services/user'
-import { getProfile } from '../services/auth'
+import { connect } from 'react-redux'
+import { getUser } from '../services/user'
+import { getProfile, confirmEmail } from '../services/auth'
 import { openNotification } from '../helpers'
 import { Context } from '../context'
 import { Loader } from '../components'
 
-const ConfirmUser = ({ match: { params: { userID, confirmToken } } }) => {
-    const { user, loginUser } = useContext(Context)
+import * as authActions from '../actions/authActions'
+
+const ConfirmUser = ({ match: { params: { userID, confirmToken } }, user }) => {
+    const { loginUser } = useContext(Context)
 
     const [username, setUsername] = useState(null)
     const [error, setError] = useState(false)
@@ -82,4 +85,12 @@ const ConfirmUser = ({ match: { params: { userID, confirmToken } } }) => {
     </div>
 }
 
-export default ConfirmUser
+const mapStateToProps = state => ({
+    user: state.authReducer.user,
+})
+
+const mapDispatchToProps = {
+    ...authActions,
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ConfirmUser)

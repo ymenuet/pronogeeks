@@ -9,7 +9,8 @@ import {
     USERNAME_LOADING,
     PHOTO_LOADING,
     RESET_PWD,
-    UPDATE_PWD
+    UPDATE_PWD,
+    DELETE_ACCOUNT
 } from "../types/authTypes"
 
 const baseURL = process.env.NODE_ENV === 'production' ?
@@ -108,6 +109,10 @@ export const setProfile = () => async dispatch => {
     }
 }
 
+export const confirmEmail = (userID, confirmToken) => async dispatch => {
+
+}
+
 export const updateUsername = newUsername => async dispatch => {
     dispatch({
         type: USERNAME_LOADING
@@ -190,6 +195,20 @@ export const updatePwd = (userID, renewToken, password) => async dispatch => {
         dispatch({
             type: ERROR,
             payload: error.response.data.message.fr
+        })
+    }
+}
+
+export const deleteUserAccount = () => async dispatch => {
+    try {
+        await authService.delete(`/`)
+        dispatch({
+            type: DELETE_ACCOUNT
+        })
+    } catch (error) {
+        dispatch({
+            type: ERROR,
+            payload: 'Erreur lors de la suppression du compte. Réessaye plus tard.'
         })
     }
 }

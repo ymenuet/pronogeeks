@@ -2,16 +2,20 @@ import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { HomeIcon } from './Icons'
-import { isConnected } from '../helpers'
+import { isConnected, openNotification } from '../helpers'
 import '../styles/appLayout.css'
 
 import * as mapDispatchToProps from '../actions/authActions'
 
-const AppLayout = ({ children, user, logout, setProfile }) => {
+const AppLayout = ({ children, user, logout, setProfile, accountDeleted }) => {
 
     useEffect(() => {
         if (!isConnected(user)) setProfile()
     }, [user, setProfile])
+
+    useEffect(() => {
+        if (accountDeleted) openNotification('success', 'Ton compte a bien été supprimé.')
+    }, [accountDeleted])
 
     return <>
 
