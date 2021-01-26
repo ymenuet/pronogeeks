@@ -2,25 +2,24 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { Form, Input } from 'antd'
-import { Redirect } from 'react-router-dom'
-import { isConnected } from '../helpers'
 import '../styles/connectPages.css'
-import { SocialLogins, ErrorNotification } from '../components'
+import { SocialLogins, ErrorNotification, Loader } from '../components'
 
 import * as mapDispatchToProps from '../actions/authActions'
 
-const Login = ({ user, login }) => {
+const Login = ({ loadingUser, user, login }) => {
     const [form] = Form.useForm()
 
     const onFinish = async ({ email, password }) => {
         await login({ email, password })
     }
 
-    return isConnected(user) ? <Redirect to='/profile' /> : (
+    return <div className='register-pages'>
 
-        <div className='register-pages'>
-
-            <div className='row signup-form'>
+        {loadingUser ? <Loader
+            tip='Chargement...'
+            color='rgb(4, 78, 199)'
+        /> : <div className='row signup-form'>
 
                 <div className='col-10 offset-1 col-sm-8 offset-sm-2 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4'>
 
@@ -94,12 +93,11 @@ const Login = ({ user, login }) => {
                     Politique de confidentialité
                 </Link>
 
-            </div>
+            </div>}
 
-            <ErrorNotification types={['auth']} />
+        <ErrorNotification types={['auth']} />
 
-        </div>
-    )
+    </div>
 }
 
 const mapStateToProps = ({ authReducer }) => authReducer

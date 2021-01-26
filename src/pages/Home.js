@@ -1,18 +1,16 @@
-import React, { useContext } from 'react'
-import { Context } from '../context'
-import { Redirect, Link } from 'react-router-dom'
+import React from 'react'
+import { Link } from 'react-router-dom'
 import '../styles/homePage.css'
-import { SocialLogins } from '../components'
+import { SocialLogins, Loader } from '../components'
 
-const Home = () => {
+const Home = ({ loadingUser }) => {
 
-    const { user } = useContext(Context)
+    return <div className='my-content-homepage'>
 
-    return user ? <Redirect to='/profile' /> : (
-
-        <div className='my-content-homepage'>
-
-            <div className='row'>
+        {loadingUser ? <Loader
+            tip='Chargement...'
+            color='rgb(4, 78, 199)'
+        /> : <div className='row'>
 
                 <div className='col-10 offset-1 col-sm-8 offset-sm-2 col-lg-6 offset-lg-3'>
 
@@ -55,10 +53,9 @@ const Home = () => {
 
                 </div>
 
-            </div>
+            </div>}
 
-        </div>
-    )
+    </div>
 }
 
 export default Home

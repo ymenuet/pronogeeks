@@ -1,13 +1,12 @@
 import React, { useEffect } from 'react'
-import { Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { Form, Input } from 'antd'
 import { Loader, ErrorNotification } from '../components'
-import { openNotification, isConnected } from '../helpers'
+import { openNotification } from '../helpers'
 
 import * as mapDispatchToProps from '../actions/authActions'
 
-const ResetPwd = ({ history, user, loading, pwdToReset, resetPwd }) => {
+const ResetPwd = ({ history, loadingUser, loading, pwdToReset, resetPwd }) => {
 
     const [form] = Form.useForm()
 
@@ -22,17 +21,22 @@ const ResetPwd = ({ history, user, loading, pwdToReset, resetPwd }) => {
         }
     }, [pwdToReset, history])
 
-    return isConnected(user) ? <Redirect to='/profile' /> :
+    return <div className='register-pages'>
+        {loadingUser ? (
 
-        <div className='register-pages'>
-            {loading ? (
+            <Loader
+                tip="Chargement..."
+                color='rgb(4, 78, 199)'
+            />
 
-                <Loader
-                    tip="Envoi de l'email..."
-                    color='rgb(4, 78, 199)'
-                />
+        ) : loading ? (
 
-            ) : (
+            <Loader
+                tip="Envoi de l'email..."
+                color='rgb(4, 78, 199)'
+            />
+
+        ) : (
                     <div className='row signup-form'>
 
                         <div className='col-10 offset-1 col-sm-8 offset-sm-2 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4'>
@@ -79,8 +83,8 @@ const ResetPwd = ({ history, user, loading, pwdToReset, resetPwd }) => {
                         </div>
                     </div>
                 )}
-            <ErrorNotification types={['auth']} />
-        </div>
+        <ErrorNotification types={['auth']} />
+    </div>
 }
 
 const mapStateToProps = ({ authReducer }) => authReducer

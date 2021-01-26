@@ -3,6 +3,7 @@ import {
     LOADING,
     ERROR,
     SIGNUP,
+    CONFIRM_EMAIL,
     LOGIN,
     LOGOUT,
     RESET_ERROR,
@@ -92,9 +93,6 @@ export const logout = () => async dispatch => {
 }
 
 export const setProfile = () => async dispatch => {
-    dispatch({
-        type: LOADING
-    })
     try {
         const user = await getProfile()
         dispatch({
@@ -110,7 +108,25 @@ export const setProfile = () => async dispatch => {
 }
 
 export const confirmEmail = (userID, confirmToken) => async dispatch => {
-
+    dispatch({
+        type: LOADING
+    })
+    try {
+        const {
+            data: {
+                username
+            }
+        } = await authService.put(`/confirm/${userID}/${confirmToken}`)
+        dispatch({
+            type: CONFIRM_EMAIL,
+            payload: username
+        })
+    } catch (error) {
+        dispatch({
+            type: ERROR,
+            payload: error.response.data.message.fr || 'Il y a eu une erreur lors de la confirmation de ton email. Merci de réessayer.'
+        })
+    }
 }
 
 export const updateUsername = newUsername => async dispatch => {

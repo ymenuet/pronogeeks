@@ -1,15 +1,15 @@
 import React, { useState } from 'react'
-import { Redirect, Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { Form, Input } from 'antd'
 import axios from 'axios'
 import { Loader, SocialLogins, ErrorNotification } from '../components'
-import { openNotification, isConnected, appendPhoto } from '../helpers'
+import { openNotification, appendPhoto } from '../helpers'
 import '../styles/connectPages.css'
 
 import * as mapDispatchToProps from '../actions/authActions'
 
-const Signup = ({ signup, loading, user, signedup, emailToConfirm }) => {
+const Signup = ({ loadingUser, signup, loading, signedup, emailToConfirm }) => {
     const [form] = Form.useForm()
     const [cloudinaryLoading, setCloudinaryLoading] = useState(false)
     const [cloudinaryError, setCloudinaryError] = useState(false)
@@ -21,9 +21,9 @@ const Signup = ({ signup, loading, user, signedup, emailToConfirm }) => {
         const emailCorrect = (/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@(([[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/).test(String(values.email).toLowerCase())
         if (!emailCorrect) openNotification('warning', 'Attention', `Je crois qu'il y a une faute de frappe dans ton email...`)
         else {
-            setCloudinaryLoading(true)
             let photoUrl = null
             if (photo) {
+                setCloudinaryLoading(true)
                 const { data: { secure_url } } = await axios.post(process.env.REACT_APP_CLOUDINARY_URL, photo)
                     .catch(error => {
                         setCloudinaryError(true)
@@ -49,7 +49,14 @@ const Signup = ({ signup, loading, user, signedup, emailToConfirm }) => {
     }
 
     return <div className='register-pages'>
-        {loading || cloudinaryLoading ? (
+        {loadingUser ? (
+
+            <Loader
+                tip='Chargement...'
+                color='rgb(4, 78, 199)'
+            />
+
+        ) : loading || cloudinaryLoading ? (
 
             <Loader
                 tip='Enregistrement du compte...'
@@ -63,10 +70,6 @@ const Signup = ({ signup, loading, user, signedup, emailToConfirm }) => {
                     <h3>Merci pour ton inscription ! Un mail t'a été envoyé pour confirmer ton adresse email.</h3>
                 </div>
             </div>
-
-        ) : isConnected(user) ? (
-
-            <Redirect to='/profile' />
 
         ) : <div className='row signup-form'>
 

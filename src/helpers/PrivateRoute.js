@@ -4,14 +4,14 @@ import { connect } from 'react-redux'
 import { isConnected } from '../helpers'
 import { Signup } from '../pages'
 
-const PrivateRoute = ({ component: Component, user, ...rest }) => {
+const PrivateRoute = ({ component: Component, user, usernameConfirmed, ...rest }) => {
 
     return (
         <Route
             {...rest}
             render={props => isConnected(user) === 0 ? (
                 <Component {...props} loading />
-            ) : isConnected(user) && !user.confirmed ? (
+            ) : isConnected(user) && !user.confirmed && !usernameConfirmed ? (
                 <Signup emailToConfirm={true} />
             ) : isConnected(user) ? (
                 <Component {...props} />

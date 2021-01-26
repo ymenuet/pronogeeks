@@ -2,6 +2,7 @@ import {
     LOADING,
     ERROR,
     SIGNUP,
+    CONFIRM_EMAIL,
     LOGIN,
     LOGOUT,
     RESET_ERROR,
@@ -15,6 +16,7 @@ import {
 const INITIAL_STATE = {
     user: {},
     signedup: false,
+    usernameConfirmed: false,
     pwdToReset: false,
     pwdUpdated: false,
     accountDeleted: false,
@@ -39,6 +41,12 @@ const authReducer = (state = INITIAL_STATE, action) => {
                 signedup: true,
                 ...done
             }
+        case CONFIRM_EMAIL:
+            return {
+                ...state,
+                usernameConfirmed: action.payload,
+                ...done
+            }
         case LOGIN:
             return {
                 ...state,
@@ -58,7 +66,7 @@ const authReducer = (state = INITIAL_STATE, action) => {
                 ...done
             }
         case LOGOUT:
-            return {}
+            return INITIAL_STATE
         case DELETE_ACCOUNT:
             return {
                 accountDeleted: true
