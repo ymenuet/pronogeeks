@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { connect } from 'react-redux'
 import { getSeasonData } from '../services/seasons'
-import { Context } from '../context'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import { Loader } from '../components'
 import { DragIcon, SaveIcon, ListIcon } from '../components/Icons'
@@ -10,13 +10,12 @@ import { closeProvRankings } from '../services/seasons'
 import { openNotification } from '../helpers'
 import '../styles/seasonRanking.css'
 
-const SeasonRanking = ({ match: { params: { seasonID, matchweekNumber } } }) => {
+const SeasonRanking = ({ match: { params: { seasonID, matchweekNumber } }, user }) => {
 
     const [season, setSeason] = useState(null)
     const [userProvRanking, setUserProvRanking] = useState(null)
     const [userWithoutRanking, setUserWithoutRanking] = useState(false)
     const [provRankingOpen, setProvRankingOpen] = useState(false)
-    const { user } = useContext(Context)
 
     useEffect(() => {
         const fetchSeasonData = async () => {
@@ -222,4 +221,8 @@ const SeasonRanking = ({ match: { params: { seasonID, matchweekNumber } } }) => 
 
 }
 
-export default SeasonRanking
+const mapStateToProps = state => ({
+    user: state.authReducer.user
+})
+
+export default connect(mapStateToProps)(SeasonRanking)

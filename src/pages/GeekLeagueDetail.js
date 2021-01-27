@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { Context } from '../context'
+import { connect } from 'react-redux'
 import { getSeasonData, getMatchweekFixtures } from '../services/seasons'
 import { fetchLeague } from '../services/geekLeague'
 import { Loader, InputMatchweek, RankGeeks } from '../components'
@@ -8,8 +8,7 @@ import { matchFinished, resetMatchweek } from '../helpers'
 import { GoBackIcon, GoNextIcon } from '../components/Icons'
 import '../styles/detailGeekleague.css'
 
-const GeekLeagueDetail = ({ match: { params: { geekLeagueID, seasonID, matchweekNumber } }, loading }) => {
-    const { user } = useContext(Context)
+const GeekLeagueDetail = ({ match: { params: { geekLeagueID, seasonID, matchweekNumber } }, loading, user }) => {
     const [season, setSeason] = useState(null)
     const [matchweek, setMatchweek] = useState(parseInt(matchweekNumber))
     const [lastMatchweek, setLastMatchweek] = useState(null)
@@ -166,4 +165,8 @@ const GeekLeagueDetail = ({ match: { params: { geekLeagueID, seasonID, matchweek
     </div>
 }
 
-export default GeekLeagueDetail
+const mapStateToProps = state => ({
+    user: state.authReducer.user
+})
+
+export default connect(mapStateToProps)(GeekLeagueDetail)

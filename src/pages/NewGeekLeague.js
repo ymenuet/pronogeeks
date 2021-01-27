@@ -1,17 +1,18 @@
 import React, { useEffect, useState, useContext } from 'react'
+import { connect } from 'react-redux'
 import { Form, Input, Select } from 'antd'
 import { createLeague } from '../services/geekLeague'
 import { getUsers } from '../services/user'
 import { getProfile } from '../services/auth'
 import { Context } from '../context'
 import { Loader } from '../components'
-import { openNotification } from '../helpers'
+import { openNotification, isConnected } from '../helpers'
 import '../styles/newGeekleague.css'
 
 const { Option } = Select
 
-const NewGeekLeague = ({ history, loading }) => {
-    const { user, loginUser } = useContext(Context)
+const NewGeekLeague = ({ history, loading, user }) => {
+    const { loginUser } = useContext(Context)
     const [form] = Form.useForm()
     const [users, setUsers] = useState(null)
     const [creating, setCreating] = useState(false)
@@ -19,10 +20,10 @@ const NewGeekLeague = ({ history, loading }) => {
     useEffect(() => {
         const fetchUsers = async () => {
             const allUsers = await getUsers()
-            const users = allUsers.filter(oneUser => oneUser._id !== user?._id)
+            const users = allUsers.filter(oneUser => oneUser._id !== user._id)
             setUsers(users)
         }
-        fetchUsers()
+        if (isConnected(user)) fetchUsers()
     }, [user])
 
     const newLeague = async (values) => {
@@ -141,4 +142,8 @@ const NewGeekLeague = ({ history, loading }) => {
     </div>
 }
 
-export default NewGeekLeague
+const mapStateToProps = state => ({
+    user: state.authReducer.user
+})
+
+export default connect(mapStateToProps)(NewGeekLeague)

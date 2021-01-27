@@ -110,7 +110,7 @@ export const getGeeksProno = (user, fixture, setHomeScore, setAwayScore, setMatc
     };
     let pronogeekFound = [];
     let matchweekIndex = 0;
-    if (season.matchweeks.length > 0) {
+    if (season.matchweeks && season.matchweeks.length > 0) {
         season.matchweeks.map((matchweek, i) => {
             if (matchweek.number.toString() === matchweekNumber.toString()) matchweekIndex = i
             return matchweek
@@ -170,9 +170,10 @@ export const getUserSeasonFromProfile = (user, seasonID) => {
 }
 
 export const getUserMatchweekFromProfile = (userSeason, matchweekNumber) => {
-    const matchweekFiltered = userSeason.matchweeks.filter(matchweek => matchweek.number.toString() === matchweekNumber.toString())
-    if (matchweekFiltered.length > 0) return matchweekFiltered[0]
-    else return null
+    let matchweekFiltered = null
+    if (userSeason && userSeason.matchweeks) matchweekFiltered = userSeason.matchweeks.filter(matchweek => matchweek.number.toString() === matchweekNumber.toString())
+    if (matchweekFiltered && matchweekFiltered.length > 0) matchweekFiltered = matchweekFiltered[0]
+    return matchweekFiltered
 }
 
 export const appendPhoto = (event, setFileName = null) => {

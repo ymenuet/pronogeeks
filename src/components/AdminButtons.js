@@ -1,13 +1,14 @@
 import React, { useContext } from 'react'
+import { connect } from 'react-redux'
 import { updateFixturesStatus, updateOdds } from '../services/apiFootball'
 import { getProfile } from '../services/auth'
 import { openNotification } from '../helpers'
 import { Context } from '../context'
 import '../styles/adminButtons.css'
 
-const AdminButtons = ({ season, matchweekNumber, userMatchweek, setFixtures, setPoints, setMatchweekFixtures }) => {
+const AdminButtons = ({ user, season, matchweekNumber, userMatchweek, setFixtures, setPoints, setMatchweekFixtures }) => {
 
-    const { user, loginUser } = useContext(Context)
+    const { loginUser } = useContext(Context)
 
     const getStatus = async () => {
         const data = await updateFixturesStatus(season._id, matchweekNumber)
@@ -50,4 +51,8 @@ const AdminButtons = ({ season, matchweekNumber, userMatchweek, setFixtures, set
     </div>
 }
 
-export default AdminButtons
+const mapStateToProps = state => ({
+    user: state.authReducer.user
+})
+
+export default connect(mapStateToProps)(AdminButtons)

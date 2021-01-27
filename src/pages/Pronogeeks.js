@@ -1,15 +1,16 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { Link } from 'react-router-dom'
+import { connect } from 'react-redux'
 import { updateProfileWithMatchweek, updateProfileWithSeason } from '../services/user'
 import { updateFixturesStatus, updateOdds } from '../services/apiFootball'
 import { getProfile } from '../services/auth'
 import { Fixture, Loader, MatchweekNavigation, AdminButtons, RulesProno, InputMatchweek } from '../components'
-import { openNotification, resetMatchweek, getUserSeasonFromProfile, getUserMatchweekFromProfile } from '../helpers'
+import { openNotification, resetMatchweek, getUserSeasonFromProfile, getUserMatchweekFromProfile, isConnected } from '../helpers'
 import { Context } from '../context'
 import { QuestionIcon, SaveIcon, RankingIcon } from '../components/Icons'
 import '../styles/pronogeeks.css'
 
-const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history, loading }) => {
+const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history, loading, user }) => {
     const [season, setSeason] = useState(null)
     const [userMatchweek, setUserMatchweek] = useState(null)
     const [fixtures, setFixtures] = useState(null)
@@ -25,7 +26,7 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
     const [showLeaguePronos, setShowLeaguePronos] = useState(false)
     const [matchweekFromInput, setMatchweekFromInput] = useState(matchweekNumber)
 
-    const { loginUser, user } = useContext(Context)
+    const { loginUser } = useContext(Context)
 
     const setMatchweekFixtures = (season, matchweekNumber) => {
         setFixtures(null)
@@ -108,27 +109,26 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
         const setUserDataAndSeasonAndFixtures = async user => {
             let updatedUser = user
             let userSeason = getUserSeasonFromProfile(user, seasonID)
-            let userMatchweek
             if (!userSeason) {
                 await updateProfile(seasonID, matchweekNumber)
                 updatedUser = await getProfile()
                 loginUser(updatedUser)
                 userSeason = getUserSeasonFromProfile(updatedUser, seasonID)
-            } else {
-                userMatchweek = getUserMatchweekFromProfile(userSeason, matchweekNumber)
-                if (!userMatchweek) {
-                    await updateProfileWithMatchweek(seasonID, matchweekNumber)
-                    updatedUser = await getProfile()
-                    loginUser(updatedUser)
-                    userMatchweek = getUserMatchweekFromProfile(userSeason, matchweekNumber)
-                }
+            }
+            let userMatchweek = getUserMatchweekFromProfile(userSeason, matchweekNumber)
+            if (!userMatchweek) {
+                await updateProfileWithMatchweek(seasonID, matchweekNumber)
+                updatedUser = await getProfile()
+                loginUser(updatedUser)
+                const newUserSeason = getUserSeasonFromProfile(updatedUser, seasonID)
+                userMatchweek = getUserMatchweekFromProfile(newUserSeason, matchweekNumber)
             }
             setUserMatchweek(userMatchweek)
             setSeason(userSeason.season)
             setMatchweekFixtures(userSeason.season, matchweekNumber)
             setPoints(userMatchweek)
         }
-        if (user) setUserDataAndSeasonAndFixtures(user)
+        if (isConnected(user)) setUserDataAndSeasonAndFixtures(user)
 
     }, [matchweekNumber, seasonID, user])
 
@@ -299,4 +299,8 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
         )
 }
 
-export default Pronogeeks
+const mapStateToProps = state => ({
+    user: state.authReducer.user
+})
+
+export default connect(mapStateToProps)(Pronogeeks)

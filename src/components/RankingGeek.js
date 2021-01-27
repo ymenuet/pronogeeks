@@ -19,7 +19,8 @@ const RankingGeek = ({ user, geek, rank, seasonID, matchweek, header }) => {
 
         const geekPlaysSeason = geek.seasons.length > 0 &&
             geek.seasons.filter(seas => getSeasonID(seas) === seasonID.toString()).length > 0
-        const geekPlaysMatchweek = matchweek &&
+        let geekPlaysMatchweek = false
+        if (geekPlaysSeason) geekPlaysMatchweek = matchweek &&
             geek.seasons.filter(seas => getSeasonID(seas) === seasonID.toString())[0].matchweeks.length > 0 &&
             geek.seasons.filter(seas => getSeasonID(seas) === seasonID.toString())[0].matchweeks.filter(oneMatchweek => oneMatchweek.number.toString() === matchweek.toString()).length > 0
 

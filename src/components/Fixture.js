@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
+import { connect } from 'react-redux'
 import { savePronogeeks } from '../services/pronogeeks'
 import { Skeleton } from 'antd'
 import { Context } from '../context'
@@ -9,7 +10,7 @@ import PreviewPronos from './PreviewPronos'
 import { FavTeamIcon } from '../components/Icons'
 import '../styles/fixture.css'
 
-const Fixture = ({ fixture, saveAll, showLeaguePronos, setShowLeaguePronos }) => {
+const Fixture = ({ user, fixture, saveAll, showLeaguePronos, setShowLeaguePronos }) => {
     const [pronogeek, setPronogeek] = useState(null)
     const [matchStarted, setMatchStarted] = useState(false)
     const [homeScore, setHomeScore] = useState(null)
@@ -17,7 +18,7 @@ const Fixture = ({ fixture, saveAll, showLeaguePronos, setShowLeaguePronos }) =>
     const [saving, setSaving] = useState(false)
     const [saveSuccess, setSaveSuccess] = useState(false)
     const [showLeagues, setShowLeagues] = useState(false)
-    const { user, loginUser } = useContext(Context)
+    const { loginUser } = useContext(Context)
 
     const saveProno = async (bool = true, time = 4500) => {
         setSaveSuccess(false)
@@ -240,4 +241,8 @@ const Fixture = ({ fixture, saveAll, showLeaguePronos, setShowLeaguePronos }) =>
         )
 }
 
-export default Fixture
+const mapStateToProps = state => ({
+    user: state.authReducer.user
+})
+
+export default connect(mapStateToProps)(Fixture)

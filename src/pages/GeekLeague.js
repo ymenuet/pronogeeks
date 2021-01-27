@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
+import { connect } from 'react-redux'
 import { Context } from '../context'
 import { fetchLeague, editGeekLeague, deleteGeekLeague, outGeekLeague } from '../services/geekLeague'
 import { getProfile } from '../services/auth'
@@ -12,8 +13,8 @@ import '../styles/detailGeekleague.css'
 
 const { Option } = Select
 
-const GeekLeague = ({ match: { params: { geekLeagueID } }, history, loading }) => {
-    const { user, loginUser } = useContext(Context)
+const GeekLeague = ({ match: { params: { geekLeagueID } }, history, loading, user }) => {
+    const { loginUser } = useContext(Context)
     const [geekLeague, setGeekLeague] = useState(null)
     const [seasons, setSeasons] = useState(null)
     const [showModal, setShowModal] = useState(false)
@@ -306,4 +307,8 @@ const GeekLeague = ({ match: { params: { geekLeagueID } }, history, loading }) =
     </div>
 }
 
-export default GeekLeague
+const mapStateToProps = state => ({
+    user: state.authReducer.user
+})
+
+export default connect(mapStateToProps)(GeekLeague)

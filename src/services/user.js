@@ -1,10 +1,10 @@
 import axios from 'axios'
 
 const baseURL = process.env.NODE_ENV === 'production' ?
-    `/api/user` :
-    `${process.env.REACT_APP_BACKENDPOINT}/api/user`
+    `/api/geek` :
+    `${process.env.REACT_APP_BACKENDPOINT}/api/geek`
 
-const userService = axios.create({
+const geekService = axios.create({
     baseURL,
     withCredentials: true
 })
@@ -12,19 +12,19 @@ const userService = axios.create({
 export const getUsers = async() => {
     const {
         data: {
-            users
+            geeks
         }
-    } = await userService.get('/users')
-    return users
+    } = await geekService.get('/')
+    return geeks
 }
 
 export const getUser = async(userID) => {
     const {
         data: {
-            user
+            geek
         }
-    } = await userService.get(`/geek/${userID}`)
-    return user
+    } = await geekService.get(`/${userID}`)
+    return geek
 }
 
 export const updateProfileWithSeason = async seasonID => {
@@ -32,7 +32,7 @@ export const updateProfileWithSeason = async seasonID => {
         data: {
             newSeason
         }
-    } = await userService.get(`/${seasonID}`)
+    } = await geekService.get(`/season/${seasonID}`)
     return newSeason
 }
 
@@ -41,31 +41,31 @@ export const updateProfileWithMatchweek = async(seasonID, matchweekNumber) => {
         data: {
             matchweek
         }
-    } = await userService.get(`/${seasonID}/${matchweekNumber}`)
+    } = await geekService.get(`/season/${seasonID}/matchweek/${matchweekNumber}`)
     return matchweek
 }
 
 export const updateFavTeam = async(seasonID, favTeam) => {
-    await userService.put(`/${seasonID}/favTeam`, favTeam)
+    await geekService.put(`/favTeam/${seasonID}`, favTeam)
     return true
 }
 
 export const fetchPlayers = async(seasonID) => {
     const {
         data: {
-            users
+            geeks
         }
-    } = await userService.get(`/players/${seasonID}`)
-    return users
+    } = await geekService.get(`/players/${seasonID}`)
+    return geeks
 }
 
 export const saveGeekLeagueHistory = async(userID, geekLeagueID) => {
-    await userService.put(`/geekLeagueHistory/${userID}/${geekLeagueID}`)
+    await geekService.put(`/geekLeagueHistory/${userID}/${geekLeagueID}`)
     return true
 }
 
 export const saveUserProvRanking = async(seasonID, userProvRanking) => {
-    await userService.put(`/provisionalRanking/${seasonID}`, {
+    await geekService.put(`/provisionalRanking/${seasonID}`, {
         userProvRanking
     })
     return true
