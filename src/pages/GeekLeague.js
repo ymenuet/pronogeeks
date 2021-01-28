@@ -1,26 +1,28 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { connect } from 'react-redux'
 import { Context } from '../context'
+import { isEmpty } from '../helpers'
 import { fetchLeague, editGeekLeague, deleteGeekLeague, outGeekLeague } from '../services/geekLeague'
 import { getProfile } from '../services/auth'
 import { getSeasons } from '../services/seasons'
-import { getUsers } from '../services/user'
-import { Loader, RankGeeks } from '../components'
+import { Loader, RankGeeks, ErrorMessage } from '../components'
 import { Form, Input, Select } from 'antd'
 import { Link } from 'react-router-dom'
 import { EditIcon, DeleteIcon, RemoveIcon, WarningIcon } from '../components/Icons'
 import '../styles/detailGeekleague.css'
 
+import * as geekActions from '../actions/geekActions'
+
 const { Option } = Select
 
-const GeekLeague = ({ match: { params: { geekLeagueID } }, history, loading, user }) => {
+const GeekLeague = ({ match: { params: { geekLeagueID } }, history, loading, user, allGeeks, geekError, getAllGeeks }) => {
     const { loginUser } = useContext(Context)
     const [geekLeague, setGeekLeague] = useState(null)
     const [seasons, setSeasons] = useState(null)
     const [showModal, setShowModal] = useState(false)
     const [showDelete, setShowDelete] = useState(false)
     const [showOut, setShowOut] = useState(false)
-    const [users, setUsers] = useState(null)
+    const [filteredGeeks, setFilteredGeeks] = useState(null)
     const [form] = Form.useForm()
 
     useEffect(() => {
@@ -32,27 +34,32 @@ const GeekLeague = ({ match: { params: { geekLeagueID } }, history, loading, use
     }, [geekLeagueID])
 
     useEffect(() => {
+        if (isEmpty(allGeeks)) {
+            getAllGeeks()
+        }
+    }, [allGeeks, getAllGeeks])
+
+    useEffect(() => {
+        if (!isEmpty(allGeeks) && geekLeague) {
+            const filteredGeeks = Object.values(allGeeks).filter(geek => {
+                let result = true
+                geekLeague.geeks.map(leagueGeek => {
+                    if (leagueGeek._id.toString() === geek._id.toString()) result = false
+                    return leagueGeek
+                })
+                return result
+            })
+            setFilteredGeeks(filteredGeeks)
+        }
+    }, [allGeeks, geekLeague])
+
+    useEffect(() => {
         const getAllSeasons = async () => {
             const seasons = await getSeasons()
             setSeasons(seasons)
         }
         getAllSeasons()
-        const fetchUsers = async () => {
-            if (geekLeague) {
-                const allUsers = await getUsers()
-                const users = allUsers.filter(oneUser => {
-                    let result = true
-                    geekLeague.geeks.map(geek => {
-                        if (geek._id.toString() === oneUser._id.toString()) result = false
-                        return geek
-                    })
-                    return result
-                })
-                setUsers(users)
-            }
-        }
-        fetchUsers()
-    }, [geekLeague])
+    }, [])
 
     const editLeague = async values => {
         const geekLeague = await editGeekLeague(geekLeagueID, values.name, values.geeks)
@@ -184,9 +191,8 @@ const GeekLeague = ({ match: { params: { geekLeagueID } }, history, loading, use
                                     type='text'
                                     label="Ajoute d'autres geeks :"
                                     name="geeks"
-
                                 >
-                                    <Select
+                                    {filteredGeeks ? <Select
                                         mode="multiple"
                                         style={{ width: '100%', borderRadius: 15.8, overflow: 'hidden', textAlign: 'left', outline: 'none' }}
                                         placeholder="Ajoute des geeks à ta ligue !"
@@ -194,26 +200,26 @@ const GeekLeague = ({ match: { params: { geekLeagueID } }, history, loading, use
                                         optionFilterProp='label'
                                     >
 
-                                        {users?.map(user => <Option
-                                            key={user._id}
-                                            value={user._id}
-                                            label={user.username}
+                                        {filteredGeeks.map(geek => <Option
+                                            key={geek._id}
+                                            value={geek._id}
+                                            label={geek.username}
                                         >
 
                                             <div className="demo-option-label-item">
-                                                <span role="img" aria-label={user.username}>
+                                                <span role="img" aria-label={geek.username}>
                                                     <img
-                                                        src={user.photo}
+                                                        src={geek.photo}
                                                         alt="profile"
                                                         className='profile-pic-preview'
                                                     />
                                                 </span>
-                                                &nbsp;&nbsp;{user.username}
+                                                &nbsp;&nbsp;{geek.username}
                                             </div>
 
                                         </Option>)}
 
-                                    </Select>
+                                    </Select> : <ErrorMessage>{geekError}</ErrorMessage>}
                                 </Form.Item>
 
                                 <button type="submit" className=" my-btn save">Enregistrer</button>
@@ -308,7 +314,11 @@ const GeekLeague = ({ match: { params: { geekLeagueID } }, history, loading, use
 }
 
 const mapStateToProps = state => ({
-    user: state.authReducer.user
+    user: state.authReducer.user,
+    allGeeks: state.geekReducer.allGeeks,
+    geekError: state.geekReducer.error
 })
 
-export default connect(mapStateToProps)(GeekLeague)
+const mapDispatchToProps = { ...geekActions }
+
+export default connect(mapStateToProps, mapDispatchToProps)(GeekLeague)

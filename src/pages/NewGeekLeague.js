@@ -2,29 +2,24 @@ import React, { useEffect, useState, useContext } from 'react'
 import { connect } from 'react-redux'
 import { Form, Input, Select } from 'antd'
 import { createLeague } from '../services/geekLeague'
-import { getUsers } from '../services/user'
 import { getProfile } from '../services/auth'
 import { Context } from '../context'
-import { Loader } from '../components'
-import { openNotification, isConnected } from '../helpers'
+import { ErrorMessage, Loader } from '../components'
+import { openNotification, isEmpty } from '../helpers'
 import '../styles/newGeekleague.css'
+
+import * as geekActions from '../actions/geekActions'
 
 const { Option } = Select
 
-const NewGeekLeague = ({ history, loading, user }) => {
+const NewGeekLeague = ({ history, loading, user, allGeeks, geekError, geekLoading, getAllGeeks }) => {
     const { loginUser } = useContext(Context)
     const [form] = Form.useForm()
-    const [users, setUsers] = useState(null)
     const [creating, setCreating] = useState(false)
 
     useEffect(() => {
-        const fetchUsers = async () => {
-            const allUsers = await getUsers()
-            const users = allUsers.filter(oneUser => oneUser._id !== user._id)
-            setUsers(users)
-        }
-        if (isConnected(user)) fetchUsers()
-    }, [user])
+        if (isEmpty(allGeeks)) getAllGeeks()
+    }, [allGeeks, getAllGeeks])
 
     const newLeague = async (values) => {
         if (!values.name || !values.geeks || values.geeks.length < 1) return openNotification('warning', 'Attention', 'Tous les champs sont requis.')
@@ -38,7 +33,7 @@ const NewGeekLeague = ({ history, loading, user }) => {
     }
 
     return <div className='geekleague-bg'>
-        {!users || creating || loading ? (
+        {creating || loading || geekLoading ? (
 
             <Loader />
 
@@ -91,7 +86,7 @@ const NewGeekLeague = ({ history, loading, user }) => {
                                 ]}
                             >
 
-                                <Select
+                                {!isEmpty(allGeeks) ? <Select
                                     mode="multiple"
                                     style={{ width: '100%', borderRadius: 15.8, overflow: 'hidden', textAlign: 'left' }}
                                     placeholder="Ajoute des geeks à ta ligue !"
@@ -99,26 +94,26 @@ const NewGeekLeague = ({ history, loading, user }) => {
                                     optionFilterProp='label'
                                 >
 
-                                    {users?.map(user => <Option
-                                        key={user._id}
-                                        value={user._id}
-                                        label={user.username}
+                                    {Object.values(allGeeks).filter(geek => geek._id !== user._id).map(geek => <Option
+                                        key={geek._id}
+                                        value={geek._id}
+                                        label={geek.username}
                                     >
 
                                         <div className="demo-option-label-item">
-                                            <span role="img" aria-label={user.username}>
+                                            <span role="img" aria-label={geek.username}>
                                                 <img
-                                                    src={user.photo}
+                                                    src={geek.photo}
                                                     alt="profile"
                                                     className='profile-pic-preview'
                                                 />
                                             </span>
-                                            &nbsp;&nbsp;{user.username}
+                                            &nbsp;&nbsp;{geek.username}
                                         </div>
 
                                     </Option>)}
 
-                                </Select>
+                                </Select> : <ErrorMessage>{geekError}</ErrorMessage>}
 
                             </Form.Item>
 
@@ -143,7 +138,12 @@ const NewGeekLeague = ({ history, loading, user }) => {
 }
 
 const mapStateToProps = state => ({
-    user: state.authReducer.user
+    user: state.authReducer.user,
+    allGeeks: state.geekReducer.allGeeks,
+    geekError: state.geekReducer.error,
+    geekLoading: state.geekReducer.loading
 })
 
-export default connect(mapStateToProps)(NewGeekLeague)
+const mapDispatchToProps = { ...geekActions }
+
+export default connect(mapStateToProps, mapDispatchToProps)(NewGeekLeague)

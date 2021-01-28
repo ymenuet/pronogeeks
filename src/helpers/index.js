@@ -2,6 +2,12 @@ import {
     notification
 } from 'antd'
 
+export const isEmpty = myObject => {
+    let result = null
+    if (myObject) result = !(Object.keys(myObject).length)
+    return result
+}
+
 export const isConnected = user => {
     return user ? Object.keys(user).length : null
 }

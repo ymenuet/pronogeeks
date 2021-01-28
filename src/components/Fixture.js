@@ -64,7 +64,7 @@ const Fixture = ({ user, fixture, saveAll, showLeaguePronos, setShowLeaguePronos
             let pronogeek = { homeProno: '', awayProno: '' };
             let pronogeekFound = [];
             let userMatchweek = getUserMatchweekFromProfile(userSeason, matchweekNumber)
-            if (userMatchweek && userMatchweek.pronogeeks.length > 0) pronogeekFound = userMatchweek.pronogeeks.filter(pronogeek => pronogeek.fixture._id === fixture._id)
+            if (userMatchweek && userMatchweek.pronogeeks?.length > 0) pronogeekFound = userMatchweek.pronogeeks.filter(pronogeek => pronogeek.fixture._id === fixture._id)
             if (pronogeekFound.length > 0) pronogeek = pronogeekFound[0]
             setPronogeek(pronogeek)
             setHomeScore(pronogeek.homeProno)

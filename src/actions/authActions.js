@@ -1,17 +1,17 @@
 import axios from 'axios'
 import {
-    LOADING,
-    ERROR,
     SIGNUP,
     CONFIRM_EMAIL,
     LOGIN,
     LOGOUT,
-    RESET_ERROR,
-    USERNAME_LOADING,
-    PHOTO_LOADING,
     RESET_PWD,
     UPDATE_PWD,
-    DELETE_ACCOUNT
+    DELETE_ACCOUNT,
+    LOADING,
+    LOADING_USERNAME,
+    LOADING_PHOTO,
+    ERROR,
+    ERROR_RESET
 } from "../types/authTypes"
 
 const baseURL = process.env.NODE_ENV === 'production' ?
@@ -131,7 +131,7 @@ export const confirmEmail = (userID, confirmToken) => async dispatch => {
 
 export const updateUsername = newUsername => async dispatch => {
     dispatch({
-        type: USERNAME_LOADING
+        type: LOADING_USERNAME
     })
     try {
         const {
@@ -155,7 +155,7 @@ export const updateUsername = newUsername => async dispatch => {
 
 export const updatePhoto = newPhoto => async dispatch => {
     dispatch({
-        type: PHOTO_LOADING
+        type: LOADING_PHOTO
     })
     try {
         const {
@@ -231,7 +231,7 @@ export const deleteUserAccount = () => async dispatch => {
 
 export const resetAuthError = () => dispatch => {
     dispatch({
-        type: RESET_ERROR
+        type: ERROR_RESET
     })
 }
 

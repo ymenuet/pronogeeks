@@ -10,7 +10,7 @@ import '../styles/profile.css'
 
 import * as authActions from '../actions/authActions'
 
-const Profile = ({ loading, user, usernameLoading, updateUsername, photoLoading, updatePhoto, deleteUserAccount, logout }) => {
+const Profile = ({ loading, user, loadingUsername, updateUsername, loadingPhoto, updatePhoto, deleteUserAccount, logout }) => {
     const [cloudinaryLoading, setCloudinaryLoading] = useState(false)
     const [cloudinaryError, setCloudinaryError] = useState(false)
     const [showModal, setShowModal] = useState(false)
@@ -88,9 +88,9 @@ const Profile = ({ loading, user, usernameLoading, updateUsername, photoLoading,
         }).map(player => player._id).indexOf(user._id) + 1
     }
 
-    const photoLoader = () => photoLoading || cloudinaryLoading
+    const photoLoader = () => loadingPhoto || cloudinaryLoading
 
-    const printEditIcon = () => usernameLoading ? <Loader
+    const printEditIcon = () => loadingUsername ? <Loader
         container={false}
         tip=''
         fontSize='2.5rem'
@@ -392,8 +392,8 @@ const Profile = ({ loading, user, usernameLoading, updateUsername, photoLoading,
 
 const mapStateToProps = state => ({
     user: state.authReducer.user,
-    usernameLoading: state.authReducer.usernameLoading,
-    photoLoading: state.authReducer.photoLoading,
+    loadingUsername: state.authReducer.loadingUsername,
+    loadingPhoto: state.authReducer.loadingPhoto,
     authError: state.authReducer.error,
 })
 

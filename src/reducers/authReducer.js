@@ -5,13 +5,24 @@ import {
     CONFIRM_EMAIL,
     LOGIN,
     LOGOUT,
-    RESET_ERROR,
-    USERNAME_LOADING,
-    PHOTO_LOADING,
+    ERROR_RESET,
+    LOADING_USERNAME,
+    LOADING_PHOTO,
     RESET_PWD,
     UPDATE_PWD,
     DELETE_ACCOUNT
 } from "../types/authTypes"
+
+const notLoading = {
+    loading: false,
+    loadingUsername: false,
+    loadingPhoto: false,
+}
+
+const done = {
+    error: false,
+    ...notLoading
+}
 
 const INITIAL_STATE = {
     user: {},
@@ -20,17 +31,7 @@ const INITIAL_STATE = {
     pwdToReset: false,
     pwdUpdated: false,
     accountDeleted: false,
-    loading: false,
-    usernameLoading: false,
-    photoLoading: false,
-    error: false,
-}
-
-const done = {
-    loading: false,
-    usernameLoading: false,
-    photoLoading: false,
-    error: false,
+    ...done
 }
 
 const authReducer = (state = INITIAL_STATE, action) => {
@@ -77,27 +78,25 @@ const authReducer = (state = INITIAL_STATE, action) => {
                 loading: true,
                 error: false
             }
-        case USERNAME_LOADING:
+        case LOADING_USERNAME:
             return {
                 ...state,
-                usernameLoading: true,
+                loadingUsername: true,
                 error: false
             }
-        case PHOTO_LOADING:
+        case LOADING_PHOTO:
             return {
                 ...state,
-                photoLoading: true,
+                loadingPhoto: true,
                 error: false
             }
         case ERROR:
             return {
                 ...state,
                 error: action.payload,
-                loading: false,
-                usernameLoading: false,
-                photoLoading: false,
+                ...notLoading
             }
-        case RESET_ERROR:
+        case ERROR_RESET:
             return {
                 ...state,
                 error: false

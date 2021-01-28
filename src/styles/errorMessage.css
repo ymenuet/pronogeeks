@@ -1,0 +1,6 @@
+.error-message-component {
+    background-color: var(--color-white-cream);
+    padding: 5px;
+    border-radius: 10px;
+    color: rgb(253, 0, 7);
+}
