@@ -12,6 +12,7 @@ import '../styles/pronogeeks.css'
 
 const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history, loading, user }) => {
     const [season, setSeason] = useState(null)
+    const [newSeason, setNewSeason] = useState(true)
     const [userMatchweek, setUserMatchweek] = useState(null)
     const [fixtures, setFixtures] = useState(null)
     const [matchweekPoints, setMatchweekPoints] = useState(null)
@@ -43,6 +44,16 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
     }
 
     useEffect(() => {
+        if (isConnected(user)) {
+            const userSeason = getUserSeasonFromProfile(user, seasonID)
+            if (!userSeason || !userSeason.favTeam) {
+                history.push(`/pronogeeks/${seasonID}`)
+            }
+            else setNewSeason(false)
+        }
+    }, [history, seasonID, user, newSeason])
+
+    useEffect(() => {
 
         const fetchStatus = async () => {
             const { fixtures } = await updateFixturesStatus(seasonID, matchweekNumber)
@@ -62,7 +73,7 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
             openNotification('success', 'Cotes actualisées')
         }
 
-        if (fixtures && userMatchweek) {
+        if (!newSeason && fixtures && userMatchweek) {
             const fixtureDates = fixtures.map(fixture => new Date(fixture.date).getTime())
             const minDate = Math.min(...fixtureDates)
             const maxDate = Math.max(...fixtureDates)
@@ -97,7 +108,7 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
             }
         }
 
-    }, [fixtures, scoresUpdated, oddsUpdated, matchweekNumber, seasonID, user, userMatchweek])
+    }, [fixtures, scoresUpdated, oddsUpdated, matchweekNumber, seasonID, user, userMatchweek, newSeason])
 
     useEffect(() => {
 
@@ -128,9 +139,9 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
             setMatchweekFixtures(userSeason.season, matchweekNumber)
             setPoints(userMatchweek)
         }
-        if (isConnected(user)) setUserDataAndSeasonAndFixtures(user)
+        if (isConnected(user) && !newSeason) setUserDataAndSeasonAndFixtures(user)
 
-    }, [matchweekNumber, seasonID, user])
+    }, [matchweekNumber, seasonID, user, newSeason])
 
     const saveAllPronos = () => {
         const fixtureDates = fixtures.map(fixture => new Date(fixture.date).getTime())
@@ -162,7 +173,7 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
         history.push(`/pronogeeks/${seasonID}/matchweek/${matchweek}`)
     }
 
-    return !fixtures || !season || !userMatchweek || loading ? (
+    return !fixtures || !season || !userMatchweek || loading || newSeason ? (
 
         <div className='pronogeeks-bg'>
             <Loader color='rgb(4, 78, 199)' />

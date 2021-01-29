@@ -121,6 +121,26 @@ export const createGeekMatchweek = (seasonID, matchweekNumber) => async(dispatch
     dispatch({
         type: LOADING
     })
+
+    const {
+        user
+    } = getState().authReducer
+
+    try {
+        const {
+            data: {
+                matchweek
+            }
+        } = await geekService.put(`/season/${seasonID}/matchweek/${matchweekNumber}`)
+
+        // Modifier le controller pour récupérer la journée et l'ajouter au user
+
+    } catch (error) {
+        dispatch({
+            type: ERROR,
+            payload: `Erreur lors de l'ajout de la journée au profil. Recharge la page ou réessaye plus tard.`
+        })
+    }
 }
 
 export const saveFavTeam = (seasonID, teamID) => async(dispatch, getState) => {

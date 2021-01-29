@@ -23,7 +23,7 @@ export const updateProfileWithMatchweek = async(seasonID, matchweekNumber) => {
         data: {
             matchweek
         }
-    } = await geekService.get(`/season/${seasonID}/matchweek/${matchweekNumber}`)
+    } = await geekService.put(`/season/${seasonID}/matchweek/${matchweekNumber}`)
     return matchweek
 }
 
