@@ -1,6 +1,6 @@
 import axios from 'axios'
 import {
-    GET_SEASON,
+    ADD_SEASON,
     LOADING,
     ERROR
 } from '../types/seasonTypes'
@@ -35,7 +35,7 @@ export const getSeason = seasonID => async(dispatch, getState) => {
         newDetailedSeasons[season._id] = season
 
         dispatch({
-            type: GET_SEASON,
+            type: ADD_SEASON,
             payload: newDetailedSeasons
         })
     } catch (error) {

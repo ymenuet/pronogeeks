@@ -1,5 +1,5 @@
 import {
-    GET_SEASON,
+    ADD_SEASON,
     LOADING,
     ERROR
 } from '../types/seasonTypes'
@@ -16,7 +16,7 @@ const INITIAL_STATE = {
 
 const seasonReducer = (state = INITIAL_STATE, action) => {
     switch (action.type) {
-        case GET_SEASON:
+        case ADD_SEASON:
             return {
                 ...state,
                 detailedSeasons: action.payload,

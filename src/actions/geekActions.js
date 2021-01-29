@@ -13,7 +13,7 @@ import {
     LOGIN
 } from '../types/authTypes'
 import {
-    GET_SEASON
+    ADD_SEASON
 } from '../types/seasonTypes'
 
 const baseURL = process.env.NODE_ENV === 'production' ?
@@ -104,7 +104,7 @@ export const createGeekSeason = seasonID => async(dispatch, getState) => {
         newDetailedSeasons[season._id] = season
 
         dispatch({
-            type: GET_SEASON,
+            type: ADD_SEASON,
             payload: newDetailedSeasons
         })
         dispatch({
