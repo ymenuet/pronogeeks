@@ -12,6 +12,9 @@ import {
 import {
     LOGIN
 } from '../types/authTypes'
+import {
+    GET_SEASON
+} from '../types/seasonTypes'
 
 const baseURL = process.env.NODE_ENV === 'production' ?
     `/api/geek` :
@@ -44,7 +47,7 @@ export const getAllGeeks = () => async dispatch => {
     } catch (error) {
         dispatch({
             type: ERROR,
-            payload: 'Erreur lors du chargement des joueurs. Réessaye plus tard.'
+            payload: 'Erreur lors du chargement des joueurs. Recharge la page ou réessaye plus tard.'
         })
     }
 }
@@ -75,7 +78,7 @@ export const getDetailsGeek = geekID => async(dispatch, getState) => {
     } catch (error) {
         dispatch({
             type: ERROR,
-            payload: 'Erreur lors du chargement des pronos. Réessaye plus tard.'
+            payload: 'Erreur lors du chargement des pronos. Recharge la page ou réessaye plus tard.'
         })
     }
 }
@@ -85,25 +88,24 @@ export const createGeekSeason = seasonID => async(dispatch, getState) => {
         type: LOADING
     })
 
-    const {
-        user
-    } = getState().authReducer
-
     try {
         const {
             data: {
-                geekSeason
+                season
             }
         } = await geekService.put(`/season/${seasonID}`)
 
-        const newUser = {
-            ...user
+        const {
+            detailedSeasons
+        } = getState().seasonReducer
+        const newDetailedSeasons = {
+            ...detailedSeasons
         }
-        newUser.seasons.push(geekSeason)
+        newDetailedSeasons[season._id] = season
 
         dispatch({
-            type: LOGIN,
-            payload: newUser
+            type: GET_SEASON,
+            payload: newDetailedSeasons
         })
         dispatch({
             type: DONE
@@ -112,7 +114,7 @@ export const createGeekSeason = seasonID => async(dispatch, getState) => {
     } catch (error) {
         dispatch({
             type: ERROR,
-            payload: `Erreur lors de l'ajout de la saison au profil. Recharge la page ou réessaye plus tard.`
+            payload: error.message || `Erreur lors de l'ajout de la saison au profil. Recharge la page ou réessaye plus tard.`
         })
     }
 }

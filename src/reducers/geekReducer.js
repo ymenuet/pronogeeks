@@ -9,13 +9,9 @@ import {
     ERROR_RESET
 } from '../types/geekTypes'
 
-const notLoading = {
-    loading: false,
-}
-
 const done = {
     error: false,
-    ...notLoading
+    loading: false,
 }
 
 const INITIAL_STATE = {
@@ -49,7 +45,8 @@ const geekReducer = (state = INITIAL_STATE, action) => {
         case SAVE_FAV_TEAM_RESET:
             return {
                 ...state,
-                favTeamAdded: false
+                favTeamAdded: false,
+                ...done
             }
         case DONE:
             return {

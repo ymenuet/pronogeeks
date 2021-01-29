@@ -8,10 +8,11 @@ import { WarningIcon } from '../components/Icons'
 import '../styles/pronogeeks.css'
 
 import * as geekActions from '../actions/geekActions'
+import * as seasonActions from '../actions/seasonActions'
 
 const MILLISECONDS_IN_3_HOURS = 1000 * 60 * 60 * 3
 
-const PronogeeksSearch = ({ match: { params: { seasonID } }, loading, loadingGeek, user, favTeamAdded, errorGeek, createGeekSeason, saveFavTeam, resetFavTeamAdded }) => {
+const PronogeeksSearch = ({ match: { params: { seasonID } }, loading, loadingGeek, loadingSeason, user, favTeamAdded, errorGeek, errorSeason, createGeekSeason, saveFavTeam, resetFavTeamAdded, detailedSeasons, getSeason }) => {
 
     const [seasonTeams, setSeasonTeams] = useState(null)
     const [newSeason, setNewSeason] = useState(null)
@@ -28,20 +29,27 @@ const PronogeeksSearch = ({ match: { params: { seasonID } }, loading, loadingGee
 
     useEffect(() => {
         if (isConnected(user)) {
+
             const userSeason = getUserSeasonFromProfile(user, seasonID)
-            if (!userSeason) {
+
+            if (!userSeason && !loadingGeek && !detailedSeasons[seasonID]) {
                 setNewSeason(true)
                 createGeekSeason(seasonID)
-            } else if (!userSeason.favTeam) {
-                const seasonTeams = userSeason.season.rankedTeams.sort((a, b) => {
+
+            } else if (!detailedSeasons[seasonID] && !loadingSeason) {
+                getSeason(seasonID)
+
+            } else if (!userSeason || !userSeason.favTeam) {
+                const seasonTeams = detailedSeasons[seasonID].rankedTeams.sort((a, b) => {
                     if (a.name > b.name) return 1
                     else return -1
                 })
                 setSeasonTeams(seasonTeams)
                 setNewSeason(true)
+
             } else {
                 setNewSeason(false)
-                const fixturesToCome = userSeason.season.fixtures.filter(fixture => new Date(fixture.date).getTime() > (Date.now() - MILLISECONDS_IN_3_HOURS))
+                const fixturesToCome = detailedSeasons[seasonID].fixtures.filter(fixture => new Date(fixture.date).getTime() > (Date.now() - MILLISECONDS_IN_3_HOURS))
                 const nextFixture = fixturesToCome.reduce((earliestFixture, fixture) => {
                     if (fixture.date < earliestFixture.date) return fixture
                     else return earliestFixture
@@ -49,7 +57,7 @@ const PronogeeksSearch = ({ match: { params: { seasonID } }, loading, loadingGee
                 setMatchweek(nextFixture.matchweek)
             }
         }
-    }, [user, seasonID, createGeekSeason])
+    }, [user, seasonID, detailedSeasons, loadingGeek, loadingSeason, createGeekSeason, getSeason])
 
     const saveNewFavTeam = async () => {
         if (favTeam.value === '') return openNotification('warning', 'Attention', 'Tu dois choisir une équipe de coeur avant de continuer.')
@@ -60,7 +68,7 @@ const PronogeeksSearch = ({ match: { params: { seasonID } }, loading, loadingGee
 
     return <div className='pronogeeks-bg'>
 
-        {errorGeek ?
+        {errorGeek || errorSeason ?
 
             <ErrorMessage>{errorGeek}</ErrorMessage>
 
@@ -99,13 +107,13 @@ const PronogeeksSearch = ({ match: { params: { seasonID } }, loading, loadingGee
                             onClick={saveNewFavTeam}
                         >
                             Confirmer
-                    </button>
+                        </button>
 
                     </div>
 
                 </div>
 
-                : loading || loadingGeek || !matchweek || newSeason === null ?
+                : loading || loadingGeek || loadingSeason || !matchweek || newSeason === null ?
 
                     <Loader color='rgb(4, 78, 199)' />
 
@@ -118,11 +126,15 @@ const mapStateToProps = state => ({
     user: state.authReducer.user,
     favTeamAdded: state.geekReducer.favTeamAdded,
     loadingGeek: state.geekReducer.loading,
-    errorGeek: state.geekReducer.error
+    errorGeek: state.geekReducer.error,
+    detailedSeasons: state.seasonReducer.detailedSeasons,
+    loadingSeason: state.seasonReducer.loading,
+    errorSeason: state.seasonReducer.error
 })
 
 const mapDispatchToProps = {
-    ...geekActions
+    ...geekActions,
+    ...seasonActions
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(PronogeeksSearch)
