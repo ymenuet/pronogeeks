@@ -70,6 +70,7 @@ const authReducer = (state = INITIAL_STATE, action) => {
             return INITIAL_STATE
         case DELETE_ACCOUNT:
             return {
+                ...INITIAL_STATE,
                 accountDeleted: true
             }
         case LOADING:

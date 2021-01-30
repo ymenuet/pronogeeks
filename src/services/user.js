@@ -9,24 +9,6 @@ const geekService = axios.create({
     withCredentials: true
 })
 
-export const updateProfileWithSeason = async seasonID => {
-    const {
-        data: {
-            newSeason
-        }
-    } = await geekService.get(`/season/${seasonID}`)
-    return newSeason
-}
-
-export const updateProfileWithMatchweek = async(seasonID, matchweekNumber) => {
-    const {
-        data: {
-            matchweek
-        }
-    } = await geekService.put(`/season/${seasonID}/matchweek/${matchweekNumber}`)
-    return matchweek
-}
-
 export const fetchPlayers = async(seasonID) => {
     const {
         data: {

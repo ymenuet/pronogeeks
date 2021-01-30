@@ -3,14 +3,14 @@ import { connect } from 'react-redux'
 import { savePronogeeks } from '../services/pronogeeks'
 import { Skeleton } from 'antd'
 import { Context } from '../context'
-import { openNotification, dateTransform, statusTranform, getUserSeasonFromProfile, getUserMatchweekFromProfile } from '../helpers'
+import { openNotification, dateTransform, statusTranform } from '../helpers'
 import { getProfile } from '../services/auth'
 import SavePronoButton from './SavePronoButton'
 import PreviewPronos from './PreviewPronos'
 import { FavTeamIcon } from '../components/Icons'
 import '../styles/fixture.css'
 
-const Fixture = ({ user, fixture, saveAll, showLeaguePronos, setShowLeaguePronos }) => {
+const Fixture = ({ user, fixture, saveAll, showLeaguePronos, setShowLeaguePronos, userPronogeeks }) => {
     const [pronogeek, setPronogeek] = useState(null)
     const [matchStarted, setMatchStarted] = useState(false)
     const [homeScore, setHomeScore] = useState(null)
@@ -24,10 +24,7 @@ const Fixture = ({ user, fixture, saveAll, showLeaguePronos, setShowLeaguePronos
         setSaveSuccess(false)
 
         // Error message if someone takes out the "disabled" property of a passed game to change their pronostics
-        if (
-            new Date(fixture.date).getTime() - Date.now() < 0 &&
-            fixture.statusShort !== 'PST'
-        ) return openNotification('error', 'Erreur', 'Ce match est déjà commencé ou fini. Tu ne peux plus changer ton prono.')
+        if (matchStarted) return openNotification('error', 'Erreur', 'Ce match est déjà commencé ou fini. Tu ne peux plus changer ton prono.')
 
         // Warning message if one of the inputs doesn't have a number
         if (
@@ -53,26 +50,20 @@ const Fixture = ({ user, fixture, saveAll, showLeaguePronos, setShowLeaguePronos
     }
 
     useEffect(() => {
-        const setFixtureAndOdds = () => {
-            const seasonID = fixture.season
-            const matchweekNumber = fixture.matchweek
-            if (
-                new Date(fixture.date) - Date.now() < 0 &&
-                fixture.statusShort !== 'PST'
-            ) setMatchStarted(true)
-            let userSeason = getUserSeasonFromProfile(user, seasonID)
-            let pronogeek = { homeProno: '', awayProno: '' };
-            let pronogeekFound = [];
-            let userMatchweek = getUserMatchweekFromProfile(userSeason, matchweekNumber)
-            if (userMatchweek && userMatchweek.pronogeeks?.length > 0) pronogeekFound = userMatchweek.pronogeeks.filter(pronogeek => pronogeek.fixture._id === fixture._id)
-            if (pronogeekFound.length > 0) pronogeek = pronogeekFound[0]
-            setPronogeek(pronogeek)
-            setHomeScore(pronogeek.homeProno)
-            setAwayScore(pronogeek.awayProno)
-        }
-        setFixtureAndOdds()
-    }, [fixture, user])
+        let pronogeek = { homeProno: '', awayProno: '' }
+        const { _id, season, matchweek } = fixture
+        if (userPronogeeks[`${season}-${matchweek}`] && userPronogeeks[`${season}-${matchweek}`][_id]) pronogeek = userPronogeeks[`${season}-${matchweek}`][_id]
+        setPronogeek(pronogeek)
+        setHomeScore(pronogeek.homeProno)
+        setAwayScore(pronogeek.awayProno)
+    }, [fixture, userPronogeeks])
 
+    useEffect(() => {
+        if (
+            new Date(fixture.date) - Date.now() < 0 &&
+            fixture.statusShort !== 'PST'
+        ) setMatchStarted(true)
+    }, [fixture])
 
     useEffect(() => {
         if (
@@ -242,7 +233,8 @@ const Fixture = ({ user, fixture, saveAll, showLeaguePronos, setShowLeaguePronos
 }
 
 const mapStateToProps = state => ({
-    user: state.authReducer.user
+    user: state.authReducer.user,
+    userPronogeeks: state.pronogeekReducer.userPronogeeks
 })
 
 export default connect(mapStateToProps)(Fixture)

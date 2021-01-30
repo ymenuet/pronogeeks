@@ -3,11 +3,14 @@ import {
     DETAILS_GEEK,
     SAVE_FAV_TEAM,
     SAVE_FAV_TEAM_RESET,
-    DONE,
     LOADING,
     ERROR,
     ERROR_RESET
 } from '../types/geekTypes'
+import {
+    LOGOUT,
+    DELETE_ACCOUNT
+} from "../types/authTypes"
 
 const done = {
     error: false,
@@ -48,11 +51,6 @@ const geekReducer = (state = INITIAL_STATE, action) => {
                 favTeamAdded: false,
                 ...done
             }
-        case DONE:
-            return {
-                ...state,
-                ...done
-            }
         case LOADING:
             return {
                 ...state,
@@ -70,6 +68,10 @@ const geekReducer = (state = INITIAL_STATE, action) => {
                 ...state,
                 error: false
             }
+        case LOGOUT:
+            return INITIAL_STATE
+        case DELETE_ACCOUNT:
+            return INITIAL_STATE
         default:
             return state
     }

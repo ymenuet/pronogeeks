@@ -26,7 +26,7 @@ const Profile = ({ loading, user, loadingUsername, updateUsername, loadingPhoto,
             const getPlayers = async () => {
                 if (user.seasons.length > 0) {
                     const seasonID = user.seasons[user.seasons.length - 1].season._id.toString()
-                    setSeasonID(user.seasons[user.seasons.length - 1].season._id.toString())
+                    setSeasonID(seasonID)
                     const players = await fetchPlayers(seasonID)
                     const rankedPlayers = rankGeeks(players, seasonID)
                     const userRanking = rankedPlayers.map(player => player._id).indexOf(user._id)

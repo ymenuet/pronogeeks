@@ -4,7 +4,6 @@ import {
     DETAILS_GEEK,
     SAVE_FAV_TEAM,
     SAVE_FAV_TEAM_RESET,
-    DONE,
     LOADING,
     ERROR,
     ERROR_RESET
@@ -12,9 +11,6 @@ import {
 import {
     LOGIN
 } from '../types/authTypes'
-import {
-    ADD_SEASON
-} from '../types/seasonTypes'
 
 const baseURL = process.env.NODE_ENV === 'production' ?
     `/api/geek` :
@@ -83,97 +79,27 @@ export const getDetailsGeek = geekID => async(dispatch, getState) => {
     }
 }
 
-export const createGeekSeason = seasonID => async(dispatch, getState) => {
-    dispatch({
-        type: LOADING
-    })
-
-    try {
-        const {
-            data: {
-                season
-            }
-        } = await geekService.put(`/season/${seasonID}`)
-
-        const {
-            detailedSeasons
-        } = getState().seasonReducer
-        const newDetailedSeasons = {
-            ...detailedSeasons
-        }
-        newDetailedSeasons[season._id] = season
-
-        dispatch({
-            type: ADD_SEASON,
-            payload: newDetailedSeasons
-        })
-        dispatch({
-            type: DONE
-        })
-
-    } catch (error) {
-        dispatch({
-            type: ERROR,
-            payload: error.message || `Erreur lors de l'ajout de la saison au profil. Recharge la page ou réessaye plus tard.`
-        })
-    }
-}
-
-export const createGeekMatchweek = (seasonID, matchweekNumber) => async(dispatch, getState) => {
-    dispatch({
-        type: LOADING
-    })
-
-    const {
-        user
-    } = getState().authReducer
-
-    try {
-        const {
-            data: {
-                matchweek
-            }
-        } = await geekService.put(`/season/${seasonID}/matchweek/${matchweekNumber}`)
-
-        // Modifier le controller pour récupérer la journée et l'ajouter au user
-
-    } catch (error) {
-        dispatch({
-            type: ERROR,
-            payload: `Erreur lors de l'ajout de la journée au profil. Recharge la page ou réessaye plus tard.`
-        })
-    }
-}
-
 export const saveFavTeam = (seasonID, teamID) => async(dispatch, getState) => {
     dispatch({
         type: LOADING
     })
 
-    const {
-        user
-    } = getState().authReducer
-
     try {
         const {
             data: {
-                userFavTeam
+                geekSeason
             }
         } = await geekService.put(`/favTeam/${seasonID}`, {
             teamID
         })
 
+        const {
+            user
+        } = getState().authReducer
         const newUser = {
             ...user
         }
-        const updatedSeasons = newUser.seasons.map(oneSeason => {
-            if (oneSeason.season._id.toString() === seasonID) return {
-                ...oneSeason,
-                favTeam: userFavTeam
-            }
-            return oneSeason
-        })
-        newUser.seasons = updatedSeasons
+        newUser.seasons.push(geekSeason)
 
         dispatch({
             type: LOGIN,

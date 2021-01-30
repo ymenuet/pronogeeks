@@ -12,7 +12,7 @@ import * as seasonActions from '../actions/seasonActions'
 
 const MILLISECONDS_IN_3_HOURS = 1000 * 60 * 60 * 3
 
-const PronogeeksSearch = ({ match: { params: { seasonID } }, loading, loadingGeek, loadingSeason, user, favTeamAdded, errorGeek, errorSeason, createGeekSeason, saveFavTeam, resetFavTeamAdded, detailedSeasons, getSeason }) => {
+const PronogeeksSearch = ({ match: { params: { seasonID } }, loading, loadingGeek, loadingSeason, user, favTeamAdded, errorGeek, errorSeason, saveFavTeam, resetFavTeamAdded, detailedSeasons, getSeason }) => {
 
     const [seasonTeams, setSeasonTeams] = useState(null)
     const [newSeason, setNewSeason] = useState(null)
@@ -29,17 +29,12 @@ const PronogeeksSearch = ({ match: { params: { seasonID } }, loading, loadingGee
 
     useEffect(() => {
         if (isConnected(user)) {
-
             const userSeason = getUserSeasonFromProfile(user, seasonID)
 
-            if (!userSeason && !loadingGeek && !detailedSeasons[seasonID]) {
-                setNewSeason(true)
-                createGeekSeason(seasonID)
-
-            } else if (!detailedSeasons[seasonID] && !loadingSeason) {
+            if (!detailedSeasons[seasonID] && !loadingSeason) {
                 getSeason(seasonID)
 
-            } else if (!userSeason || !userSeason.favTeam) {
+            } else if (detailedSeasons[seasonID] && (!userSeason || !userSeason.favTeam)) {
                 const seasonTeams = detailedSeasons[seasonID].rankedTeams.sort((a, b) => {
                     if (a.name > b.name) return 1
                     else return -1
@@ -47,7 +42,7 @@ const PronogeeksSearch = ({ match: { params: { seasonID } }, loading, loadingGee
                 setSeasonTeams(seasonTeams)
                 setNewSeason(true)
 
-            } else {
+            } else if (detailedSeasons[seasonID]) {
                 setNewSeason(false)
                 const fixturesToCome = detailedSeasons[seasonID].fixtures.filter(fixture => new Date(fixture.date).getTime() > (Date.now() - MILLISECONDS_IN_3_HOURS))
                 const nextFixture = fixturesToCome.reduce((earliestFixture, fixture) => {
@@ -57,7 +52,7 @@ const PronogeeksSearch = ({ match: { params: { seasonID } }, loading, loadingGee
                 setMatchweek(nextFixture.matchweek)
             }
         }
-    }, [user, seasonID, detailedSeasons, loadingGeek, loadingSeason, createGeekSeason, getSeason])
+    }, [user, seasonID, detailedSeasons, loadingSeason, getSeason])
 
     const saveNewFavTeam = async () => {
         if (favTeam.value === '') return openNotification('warning', 'Attention', 'Tu dois choisir une équipe de coeur avant de continuer.')
@@ -70,7 +65,7 @@ const PronogeeksSearch = ({ match: { params: { seasonID } }, loading, loadingGee
 
         {errorGeek || errorSeason ?
 
-            <ErrorMessage>{errorGeek}</ErrorMessage>
+            <ErrorMessage>{errorGeek || errorSeason}</ErrorMessage>
 
             : newSeason && seasonTeams ?
 

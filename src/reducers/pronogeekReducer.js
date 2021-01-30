@@ -1,8 +1,8 @@
 import {
-    ADD_SEASON,
+    ADD_PRONOGEEKS,
     LOADING,
     ERROR
-} from '../types/seasonTypes'
+} from '../types/pronogeekTypes'
 import {
     LOGOUT,
     DELETE_ACCOUNT
@@ -14,16 +14,16 @@ const done = {
 }
 
 const INITIAL_STATE = {
-    detailedSeasons: {},
+    userPronogeeks: {},
     ...done
 }
 
-const seasonReducer = (state = INITIAL_STATE, action) => {
+const pronogeekReducer = (state = INITIAL_STATE, action) => {
     switch (action.type) {
-        case ADD_SEASON:
+        case ADD_PRONOGEEKS:
             return {
                 ...state,
-                detailedSeasons: action.payload,
+                userPronogeeks: action.payload,
                 ...done
             }
         case LOADING:
@@ -47,4 +47,4 @@ const seasonReducer = (state = INITIAL_STATE, action) => {
     }
 }
 
-export default seasonReducer
+export default pronogeekReducer

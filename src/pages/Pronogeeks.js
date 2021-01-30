@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { updateProfileWithMatchweek, updateProfileWithSeason } from '../services/user'
 import { updateFixturesStatus, updateOdds } from '../services/apiFootball'
 import { getProfile } from '../services/auth'
 import { Fixture, Loader, MatchweekNavigation, AdminButtons, RulesProno, InputMatchweek } from '../components'
@@ -10,7 +9,10 @@ import { Context } from '../context'
 import { QuestionIcon, SaveIcon, RankingIcon } from '../components/Icons'
 import '../styles/pronogeeks.css'
 
-const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history, loading, user }) => {
+import * as seasonActions from '../actions/seasonActions'
+import * as pronogeekActions from '../actions/pronogeekActions'
+
+const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history, loading, loadingSeason, loadingPronogeek, user, detailedSeasons, userPronogeeks, getSeason, getMatchweekPronos, errorSeason, errorPronogeek }) => {
     const [season, setSeason] = useState(null)
     const [newSeason, setNewSeason] = useState(true)
     const [userMatchweek, setUserMatchweek] = useState(null)
@@ -25,6 +27,7 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
     const [lastScoresUpdated, setLastScoresUpdated] = useState(null)
     const [saveAll, setSaveAll] = useState(false)
     const [showLeaguePronos, setShowLeaguePronos] = useState(false)
+    const [disableSaveAllBtn, setDisableSaveAllBtn] = useState(true)
     const [matchweekFromInput, setMatchweekFromInput] = useState(matchweekNumber)
 
     const { loginUser } = useContext(Context)
@@ -46,12 +49,46 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
     useEffect(() => {
         if (isConnected(user)) {
             const userSeason = getUserSeasonFromProfile(user, seasonID)
+
             if (!userSeason || !userSeason.favTeam) {
                 history.push(`/pronogeeks/${seasonID}`)
+
+            } else {
+                setNewSeason(false)
+                const userMatchweek = getUserMatchweekFromProfile(userSeason, matchweekNumber)
+                if (userMatchweek) {
+                    setUserMatchweek(userMatchweek)
+                    setPoints(userMatchweek)
+                }
             }
-            else setNewSeason(false)
         }
-    }, [history, seasonID, user, newSeason])
+    }, [history, seasonID, matchweekNumber, user, newSeason])
+
+    useEffect(() => {
+        if (
+            !detailedSeasons[seasonID] &&
+            !loadingSeason
+        ) getSeason(seasonID)
+
+        else if (detailedSeasons[seasonID]) {
+            setSeason(detailedSeasons[seasonID])
+            setMatchweekFixtures(detailedSeasons[seasonID], matchweekNumber)
+        }
+
+    }, [seasonID, matchweekNumber, detailedSeasons, loadingSeason, getSeason])
+
+    useEffect(() => {
+        if (
+            isConnected(user) &&
+            !userPronogeeks[`${seasonID}-${matchweekNumber}`] &&
+            !loadingPronogeek
+        ) getMatchweekPronos(user._id, seasonID, matchweekNumber)
+
+    }, [user, userPronogeeks, loadingPronogeek, seasonID, matchweekNumber, getMatchweekPronos])
+
+    useEffect(() => {
+        if (userPronogeeks[`${seasonID}-${matchweekNumber}`] && Object.keys(userPronogeeks[`${seasonID}-${matchweekNumber}`]).length) setDisableSaveAllBtn(false)
+    }, [userPronogeeks, seasonID, matchweekNumber])
 
     useEffect(() => {
 
@@ -110,39 +147,6 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
 
     }, [fixtures, scoresUpdated, oddsUpdated, matchweekNumber, seasonID, user, userMatchweek, newSeason])
 
-    useEffect(() => {
-
-        const updateProfile = async (season, matchweek) => {
-            await updateProfileWithSeason(season)
-            await updateProfileWithMatchweek(season, matchweek)
-        }
-
-        const setUserDataAndSeasonAndFixtures = async user => {
-            let updatedUser = user
-            let userSeason = getUserSeasonFromProfile(user, seasonID)
-            if (!userSeason) {
-                await updateProfile(seasonID, matchweekNumber)
-                updatedUser = await getProfile()
-                loginUser(updatedUser)
-                userSeason = getUserSeasonFromProfile(updatedUser, seasonID)
-            }
-            let userMatchweek = getUserMatchweekFromProfile(userSeason, matchweekNumber)
-            if (!userMatchweek) {
-                await updateProfileWithMatchweek(seasonID, matchweekNumber)
-                updatedUser = await getProfile()
-                loginUser(updatedUser)
-                const newUserSeason = getUserSeasonFromProfile(updatedUser, seasonID)
-                userMatchweek = getUserMatchweekFromProfile(newUserSeason, matchweekNumber)
-            }
-            setUserMatchweek(userMatchweek)
-            setSeason(userSeason.season)
-            setMatchweekFixtures(userSeason.season, matchweekNumber)
-            setPoints(userMatchweek)
-        }
-        if (isConnected(user) && !newSeason) setUserDataAndSeasonAndFixtures(user)
-
-    }, [matchweekNumber, seasonID, user, newSeason])
-
     const saveAllPronos = () => {
         const fixtureDates = fixtures.map(fixture => new Date(fixture.date).getTime())
         const maxDate = Math.max(...fixtureDates)
@@ -173,7 +177,7 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
         history.push(`/pronogeeks/${seasonID}/matchweek/${matchweek}`)
     }
 
-    return !fixtures || !season || !userMatchweek || loading || newSeason ? (
+    return !fixtures || !season || loading || newSeason ? (
 
         <div className='pronogeeks-bg'>
             <Loader color='rgb(4, 78, 199)' />
@@ -204,6 +208,7 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
                     <button
                         onClick={saveAllPronos}
                         className='btn my-btn save-all-btn'
+                        disabled={disableSaveAllBtn}
                     >
                         <SaveIcon size='40px' />
                         &nbsp;
@@ -311,7 +316,18 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
 }
 
 const mapStateToProps = state => ({
-    user: state.authReducer.user
+    user: state.authReducer.user,
+    detailedSeasons: state.seasonReducer.detailedSeasons,
+    loadingSeason: state.seasonReducer.loading,
+    errorSeason: state.seasonReducer.error,
+    userPronogeeks: state.pronogeekReducer.userPronogeeks,
+    loadingPronogeek: state.pronogeekReducer.loading,
+    errorPronogeek: state.pronogeekReducer.error,
 })
 
-export default connect(mapStateToProps)(Pronogeeks)
+const mapDispatchToProps = {
+    ...seasonActions,
+    ...pronogeekActions
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Pronogeeks)
