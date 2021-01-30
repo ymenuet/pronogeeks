@@ -1,21 +1,22 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from "react-redux"
-import { fetchPlayers } from '../services/user'
 import axios from 'axios'
-import { Loader, RankGeeks, ErrorNotification } from '../components'
-import { appendPhoto, isConnected, rankGeeks, openNotification } from '../helpers'
+import { Loader, RankGeeks, ErrorNotification, ErrorMessage } from '../components'
+import { appendPhoto, isConnected, openNotification } from '../helpers'
 import { EditIcon, WarningIcon } from '../components/Icons'
 import '../styles/profile.css'
 
 import * as authActions from '../actions/authActions'
+import { getSeasonPlayers } from '../actions/geekActions'
 
-const Profile = ({ loading, user, loadingUsername, updateUsername, loadingPhoto, updatePhoto, deleteUserAccount, logout }) => {
+const Profile = ({ loading, loadingUsername, loadingPhoto, loadingGeek, user, seasonGeeksRankings, updateUsername, updatePhoto, deleteUserAccount, logout, getSeasonPlayers, errorGeek }) => {
     const [cloudinaryLoading, setCloudinaryLoading] = useState(false)
     const [cloudinaryError, setCloudinaryError] = useState(false)
     const [showModal, setShowModal] = useState(false)
     const [deleteAccount, setDeleteAccount] = useState(false)
     const [usernameInput, setUsernameInput] = useState('')
+    const [season, setSeason] = useState(null)
     const [seasonID, setSeasonID] = useState(null)
     const [seasonRankingFull, setSeasonRankingFull] = useState(null)
     const [seasonRanking, setSeasonRanking] = useState(null)
@@ -23,28 +24,34 @@ const Profile = ({ loading, user, loadingUsername, updateUsername, loadingPhoto,
 
     useEffect(() => {
         if (isConnected(user)) {
-            const getPlayers = async () => {
-                if (user.seasons.length > 0) {
-                    const seasonID = user.seasons[user.seasons.length - 1].season._id.toString()
-                    setSeasonID(seasonID)
-                    const players = await fetchPlayers(seasonID)
-                    const rankedPlayers = rankGeeks(players, seasonID)
-                    const userRanking = rankedPlayers.map(player => player._id).indexOf(user._id)
-                    const rankedPlayers20 = rankedPlayers.slice(0, 20)
-                    setUserRanking(userRanking)
-                    setSeasonRankingFull(rankedPlayers)
-                    setSeasonRanking(rankedPlayers20)
-                }
-            }
-            getPlayers()
+            setUsernameInput(user.username)
         }
     }, [user])
 
     useEffect(() => {
-        if (isConnected(user)) {
-            setUsernameInput(user.username)
+        if (isConnected(user) && user.seasons.length > 0) {
+            const season = user.seasons[user.seasons.length - 1].season
+            const seasonID = season._id.toString()
+            setSeason(season)
+            setSeasonID(seasonID)
         }
     }, [user])
+
+    useEffect(() => {
+        if (seasonID && !seasonGeeksRankings[seasonID] && !loadingGeek && !errorGeek) {
+            getSeasonPlayers(seasonID)
+        }
+
+        else if (seasonID && seasonGeeksRankings[seasonID]) {
+            const rankedGeeks = seasonGeeksRankings[seasonID]
+            const userRanking = rankedGeeks.map(geek => geek._id).indexOf(user._id)
+            const rankedGeeks20 = rankedGeeks.slice(0, 20)
+            setUserRanking(userRanking)
+            setSeasonRankingFull(rankedGeeks)
+            setSeasonRanking(rankedGeeks20)
+        }
+
+    }, [user, seasonID, seasonGeeksRankings, loadingGeek, errorGeek, getSeasonPlayers])
 
     const uploadPhoto = async e => {
         const photo = appendPhoto(e)
@@ -225,30 +232,30 @@ const Profile = ({ loading, user, loadingUsername, updateUsername, loadingPhoto,
                     style={{ paddingLeft: 0, paddingRight: 0 }}
                 >
 
-                    {seasonID && <section className='my-profile-ranking pt-4'>
+                    {season && <section className='my-profile-ranking pt-4'>
 
-                        {!seasonRanking && <div>
+                        <h2 style={{ marginTop: 0 }}>{season.leagueName} saison {season.year}<br />Classement général</h2>
+
+                        {errorGeek ? (
+
+                            <ErrorMessage>{errorGeek}</ErrorMessage>
+
+                        ) : !seasonRanking || loadingGeek ? (
 
                             <Loader
                                 tip='Chargement du classement...'
                                 container={false}
                             />
 
-                        </div>}
+                        ) : <RankGeeks
+                                    user={user}
+                                    userRanking={userRanking}
+                                    players={seasonRanking}
+                                    seasonID={seasonID}
+                                    generalRanking
+                                />
 
-                        {seasonRanking && <>
-
-                            <h2 style={{ marginTop: 0 }}>{user.seasons[user.seasons.length - 1].season.leagueName} saison {user.seasons[user.seasons.length - 1].season.year}<br />Classement général</h2>
-
-                            <RankGeeks
-                                user={user}
-                                userRanking={userRanking}
-                                players={seasonRanking}
-                                seasonID={seasonID}
-                                generalRanking
-                            />
-
-                        </>}
+                        }
 
                     </section>}
 
@@ -394,9 +401,14 @@ const mapStateToProps = state => ({
     user: state.authReducer.user,
     loadingUsername: state.authReducer.loadingUsername,
     loadingPhoto: state.authReducer.loadingPhoto,
-    authError: state.authReducer.error,
+    seasonGeeksRankings: state.geekReducer.seasonGeeksRankings,
+    loadingGeek: state.geekReducer.loading,
+    errorGeek: state.geekReducer.error
 })
 
-const mapDispatchToProps = authActions
+const mapDispatchToProps = {
+    ...authActions,
+    getSeasonPlayers
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(Profile)

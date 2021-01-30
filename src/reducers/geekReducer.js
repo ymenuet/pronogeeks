@@ -1,8 +1,12 @@
 import {
     ALL_GEEKS,
     DETAILS_GEEK,
+    SEASON_GEEKS,
     SAVE_FAV_TEAM,
     SAVE_FAV_TEAM_RESET,
+    SAVE_RANKING,
+    SAVE_RANKING_RESET,
+    DONE,
     LOADING,
     ERROR,
     ERROR_RESET
@@ -20,7 +24,9 @@ const done = {
 const INITIAL_STATE = {
     allGeeks: {},
     detailedGeeks: {},
+    seasonGeeksRankings: {},
     favTeamAdded: false,
+    rankingSaved: false,
     ...done
 }
 
@@ -39,6 +45,12 @@ const geekReducer = (state = INITIAL_STATE, action) => {
                 detailedGeeks: action.payload,
                 ...done
             }
+        case SEASON_GEEKS:
+            return {
+                ...state,
+                seasonGeeksRankings: action.payload,
+                ...done
+            }
         case SAVE_FAV_TEAM:
             return {
                 ...state,
@@ -49,6 +61,23 @@ const geekReducer = (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 favTeamAdded: false,
+                ...done
+            }
+        case SAVE_RANKING:
+            return {
+                ...state,
+                rankingSaved: true,
+                ...done
+            }
+        case SAVE_RANKING_RESET:
+            return {
+                ...state,
+                rankingSaved: false,
+                ...done
+            }
+        case DONE:
+            return {
+                ...state,
                 ...done
             }
         case LOADING:

@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react'
 import { Link } from 'react-router-dom'
+import { connect } from 'react-redux'
 import { getProfile } from '../services/auth'
-import { saveGeekLeagueHistory } from '../services/user'
 import { fetchLeague } from '../services/geekLeague'
 import Loader from './Loader'
 import GeekProno from './GeekProno'
@@ -10,7 +10,9 @@ import { Context } from '../context'
 import { CloseIcon } from './Icons'
 import '../styles/previewPronos.css'
 
-const PreviewPronos = ({ user, fixture, setShowLeagues }) => {
+import { saveGeekLeagueHistory } from '../actions/geekActions'
+
+const PreviewPronos = ({ user, fixture, setShowLeagues, saveGeekLeagueHistory }) => {
 
     const [geekLeague, setGeekLeague] = useState(user.geekLeagueHistory || user.geekLeagues[0]._id)
     const [geekLeagueDetails, setGeekLeagueDetails] = useState(null)
@@ -57,7 +59,7 @@ const PreviewPronos = ({ user, fixture, setShowLeagues }) => {
         const geekLeagueID = e.target.value
         setGeekLeagueDetails(null)
         setGeekLeague(geekLeagueID)
-        await saveGeekLeagueHistory(user._id, geekLeagueID)
+        saveGeekLeagueHistory(geekLeagueID)
     }
 
     return (
@@ -174,4 +176,8 @@ const PreviewPronos = ({ user, fixture, setShowLeagues }) => {
     )
 }
 
-export default PreviewPronos
+const mapDispatchToProps = {
+    saveGeekLeagueHistory
+}
+
+export default connect(null, mapDispatchToProps)(PreviewPronos)

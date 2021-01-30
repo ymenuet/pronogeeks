@@ -2,18 +2,21 @@ import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import { openNotification } from '../helpers'
 
-import * as authActions from '../actions/authActions'
+import { resetAuthError } from '../actions/authActions'
+import { resetGeekError } from '../actions/geekActions'
 
 const ErrorNotification = (props) => {
 
     const { types } = props
 
     const errors = {
-        auth: props.authError
+        auth: props.authError,
+        geek: props.geekError
     }
 
     const resets = {
-        auth: props.resetAuthError
+        auth: props.resetAuthError,
+        geek: props.resetGeekError
     }
 
     useEffect(() => {
@@ -29,11 +32,13 @@ const ErrorNotification = (props) => {
 }
 
 const mapStateToProps = state => ({
-    authError: state.authReducer.error
+    authError: state.authReducer.error,
+    geekError: state.geekReducer.error
 })
 
 const mapDispatchToProps = {
-    ...authActions
+    resetAuthError,
+    resetGeekError
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ErrorNotification)

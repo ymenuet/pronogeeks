@@ -1,21 +1,28 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { getSeasonData } from '../services/seasons'
+import { getSeasonData, closeProvRankings } from '../services/seasons'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
-import { Loader } from '../components'
+import { Loader, ErrorNotification } from '../components'
 import { DragIcon, SaveIcon, ListIcon } from '../components/Icons'
-import { saveUserProvRanking } from '../services/user'
-import { closeProvRankings } from '../services/seasons'
 import { openNotification } from '../helpers'
 import '../styles/seasonRanking.css'
 
-const SeasonRanking = ({ match: { params: { seasonID, matchweekNumber } }, user }) => {
+import { saveUserProvRanking, resetRankingSaved } from '../actions/geekActions'
+
+const SeasonRanking = ({ match: { params: { seasonID, matchweekNumber } }, user, loadingGeek, rankingSaved, saveUserProvRanking, resetRankingSaved }) => {
 
     const [season, setSeason] = useState(null)
     const [userProvRanking, setUserProvRanking] = useState(null)
     const [userWithoutRanking, setUserWithoutRanking] = useState(false)
     const [provRankingOpen, setProvRankingOpen] = useState(false)
+
+    useEffect(() => {
+        if (rankingSaved) {
+            openNotification('success', 'Classement enregistré')
+            resetRankingSaved()
+        }
+    }, [rankingSaved, resetRankingSaved])
 
     useEffect(() => {
         const fetchSeasonData = async () => {
@@ -61,18 +68,18 @@ const SeasonRanking = ({ match: { params: { seasonID, matchweekNumber } }, user 
     }
 
     const saveRanking = async () => {
-        const teamRankingArr = userProvRanking.map(team => team._id)
-        const rankingSaved = await saveUserProvRanking(seasonID, teamRankingArr)
-        if (rankingSaved) openNotification('success', 'Classement enregistré')
+        saveUserProvRanking(seasonID, userProvRanking)
     }
 
     const infoProvRanking = (provRankingOpen) => {
         return provRankingOpen ? <p>Tu as jusqu'avant le début de la <b>journée 7</b> pour modifier ton classement prévisionnel. Il pourra te rapporter des points bonus à la fin de la saison.
         <br />
         Les équipes bien classées par rapport au classement actuel apparaissent en vert. Mais tout le monde sait que le classement peut beaucoup bouger d'ici à la fin de la saison, donc réfléchis bien !</p>
+
             : !userWithoutRanking ? <p>Ton classement prévisionnel n'est plus modifiable. Mais n'hésite pas à le consulter de temps en temps pour voir si tu te rapproches des points bonus ! (Clique <Link to='/rules#link-to-provisional-ranking'>ici</Link> pour plus de détails)
             <br />
             Les clubs qui apparaissent sur fond vert sont ceux qui sont bien positionnés par rapport au classement actuel.</p>
+
                 : <p>Il est trop tard pour faire ton classement prévisionnel... Tu avais jusqu'avant le début de la journée 7.
                 <br />
                 RDV la saison prochaine !</p>
@@ -156,7 +163,7 @@ const SeasonRanking = ({ match: { params: { seasonID, matchweekNumber } }, user 
 
                     {infoProvRanking()}
 
-                    {provRankingOpen && <button className='btn my-btn save-prono save-ranking-btn' onClick={saveRanking}><SaveIcon /> Sauver classement</button>
+                    {true && <button className='btn my-btn save-prono save-ranking-btn' onClick={saveRanking}><SaveIcon /> Sauver classement</button>
                     }
                     <DragDropContext onDragEnd={handleDragEnd}>
 
@@ -176,7 +183,7 @@ const SeasonRanking = ({ match: { params: { seasonID, matchweekNumber } }, user 
                                     key={team._id}
                                     draggableId={team._id}
                                     index={index}
-                                    isDragDisabled={!provRankingOpen}
+                                    isDragDisabled={!true}
                                 >
                                     {provided => <li
                                         ref={provided.innerRef}
@@ -196,7 +203,7 @@ const SeasonRanking = ({ match: { params: { seasonID, matchweekNumber } }, user 
                                                 {team.name}
                                             </span>
                                         </div>
-                                        {provRankingOpen && <span><DragIcon color={index + 1 === team.rank ? '#F0F7F4' : 'rgb(4, 78, 199)'} /></span>}
+                                        {true && <span><DragIcon color={index + 1 === team.rank ? '#F0F7F4' : 'rgb(4, 78, 199)'} /></span>}
                                     </li>}
 
                                 </Draggable>)}
@@ -217,12 +224,21 @@ const SeasonRanking = ({ match: { params: { seasonID, matchweekNumber } }, user 
 
         </> : <Loader color='rgb(4, 78, 199)' />}
 
+        <ErrorNotification types={['geek']} />
+
     </div>
 
 }
 
 const mapStateToProps = state => ({
-    user: state.authReducer.user
+    user: state.authReducer.user,
+    rankingSaved: state.geekReducer.rankingSaved,
+    loadingGeek: state.geekReducer.loading,
 })
 
-export default connect(mapStateToProps)(SeasonRanking)
+const mapDispatchToProps = {
+    saveUserProvRanking,
+    resetRankingSaved
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SeasonRanking)
