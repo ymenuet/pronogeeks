@@ -47,6 +47,11 @@
     transform: scale(1.1)
 }
 
+.geekleague-btns h4 .margin-small {
+    display: inline-block;
+    margin-bottom: 9px!important;
+}
+
 .my-modal-edit-geekleague {
     position: fixed;
     min-height: 350px;

@@ -12,7 +12,7 @@ import '../styles/pronogeeks.css'
 import * as seasonActions from '../actions/seasonActions'
 import * as pronogeekActions from '../actions/pronogeekActions'
 
-const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history, loading, loadingSeason, loadingPronogeek, user, detailedSeasons, seasonMatchweeks, userPronogeeks, getSeason, getMatchweekFixtures, getMatchweekPronos, errorSeason, errorPronogeek }) => {
+const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history, loading, loadingSeason, loadingPronogeek, user, detailedSeasons, seasonMatchweeks, userPronogeeks, getSeason, getMatchweekFixtures, getUserMatchweekPronos, errorSeason, errorPronogeek }) => {
     const [season, setSeason] = useState(null)
     const [newSeason, setNewSeason] = useState(true)
     const [userMatchweek, setUserMatchweek] = useState(null)
@@ -66,32 +66,38 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
 
     useEffect(() => {
         const seasonDetails = detailedSeasons[seasonID]
-        if (!seasonDetails && !loadingSeason) getSeason(seasonID)
+        if (
+            !seasonDetails &&
+            !loadingSeason &&
+            !errorSeason
+        ) getSeason(seasonID)
 
         else if (seasonDetails) setSeason(seasonDetails)
 
-    }, [seasonID, matchweekNumber, detailedSeasons, loadingSeason, getSeason])
+    }, [seasonID, matchweekNumber, detailedSeasons, loadingSeason, getSeason, errorSeason])
 
     useEffect(() => {
         const matchweekDetails = seasonMatchweeks[`${seasonID}-${matchweekNumber}`]
         if (
             season &&
             !matchweekDetails &&
-            !loadingSeason
+            !loadingSeason &&
+            !errorSeason
         ) getMatchweekFixtures(season, matchweekNumber)
 
-        else if (matchweekDetails) setFixtures(matchweekDetails)
+        else if (matchweekDetails) setFixtures(matchweekDetails.fixtures)
 
-    }, [seasonID, matchweekNumber, season, seasonMatchweeks, loadingSeason, getMatchweekFixtures])
+    }, [seasonID, matchweekNumber, season, seasonMatchweeks, loadingSeason, getMatchweekFixtures, errorSeason])
 
     useEffect(() => {
         if (
             isConnected(user) &&
             !userPronogeeks[`${seasonID}-${matchweekNumber}`] &&
-            !loadingPronogeek
-        ) getMatchweekPronos(user._id, seasonID, matchweekNumber)
+            !loadingPronogeek &&
+            !errorPronogeek
+        ) getUserMatchweekPronos(user._id, seasonID, matchweekNumber)
 
-    }, [user, userPronogeeks, loadingPronogeek, seasonID, matchweekNumber, getMatchweekPronos])
+    }, [user, userPronogeeks, loadingPronogeek, seasonID, matchweekNumber, getUserMatchweekPronos, errorPronogeek])
 
     useEffect(() => {
         const pronogeeks = userPronogeeks[`${seasonID}-${matchweekNumber}`]

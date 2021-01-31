@@ -1,6 +1,7 @@
 import axios from 'axios'
 import {
     ADD_PRONOGEEKS,
+    ADD_GEEK_PRONOGEEKS,
     LOADING,
     ERROR
 } from '../types/pronogeekTypes'
@@ -14,7 +15,7 @@ const pronogeekService = axios.create({
     withCredentials: true
 })
 
-export const getMatchweekPronos = (geekID, seasonID, matchweekNumber) => async(dispatch, getState) => {
+export const getUserMatchweekPronos = (userID, seasonID, matchweekNumber) => async(dispatch, getState) => {
     dispatch({
         type: LOADING
     })
@@ -24,7 +25,7 @@ export const getMatchweekPronos = (geekID, seasonID, matchweekNumber) => async(d
             data: {
                 pronogeeks
             }
-        } = await pronogeekService.get(`/geek/${geekID}/season/${seasonID}/matchweek/${matchweekNumber}`)
+        } = await pronogeekService.get(`/geek/${userID}/season/${seasonID}/matchweek/${matchweekNumber}`)
 
         const {
             userPronogeeks
@@ -40,6 +41,43 @@ export const getMatchweekPronos = (geekID, seasonID, matchweekNumber) => async(d
         })
         dispatch({
             type: ADD_PRONOGEEKS,
+            payload: newPronogeeks
+        })
+
+    } catch (error) {
+        dispatch({
+            type: ERROR,
+            payload: 'Erreur lors du chargement des pronogeeks. Recharge la page ou réessaye plus tard.'
+        })
+    }
+}
+
+export const getGeekMatchweekPronos = (geekID, seasonID, matchweekNumber) => async(dispatch, getState) => {
+    dispatch({
+        type: LOADING
+    })
+
+    try {
+        const {
+            data: {
+                pronogeeks
+            }
+        } = await pronogeekService.get(`/geek/${geekID}/season/${seasonID}/matchweek/${matchweekNumber}`)
+
+        const {
+            geeksPronogeeks
+        } = getState().pronogeekReducer
+
+        const newPronogeeks = {
+            ...geeksPronogeeks
+        }
+        newPronogeeks[`${geekID}-${seasonID}-${matchweekNumber}`] = {}
+        pronogeeks.map(pronogeek => {
+            newPronogeeks[`${geekID}-${seasonID}-${matchweekNumber}`][pronogeek.fixture] = pronogeek
+            return pronogeek
+        })
+        dispatch({
+            type: ADD_GEEK_PRONOGEEKS,
             payload: newPronogeeks
         })
 

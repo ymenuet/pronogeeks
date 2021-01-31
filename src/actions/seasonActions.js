@@ -7,6 +7,10 @@ import {
     LOADING,
     ERROR
 } from '../types/seasonTypes'
+import {
+    matchFinished
+} from '../helpers'
+
 
 const MILLISECONDS_IN_3_HOURS = 1000 * 60 * 60 * 3
 
@@ -61,8 +65,12 @@ export const getMatchweekFixtures = (season, matchweekNumber) => (dispatch, getS
     } = season
 
     const matchweekFixtures = fixtures
-        .filter(fixture => `${fixture.matchweek}` === matchweekNumber)
+        .filter(fixture => `${fixture.matchweek}` === `${matchweekNumber}`)
         .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+
+    const totalGames = matchweekFixtures.length
+    const gamesFinished = matchweekFixtures.filter(fixture => matchFinished(fixture.statusShort)).length
+    const hasStarted = new Date(matchweekFixtures[0].date).getTime() <= Date.now()
 
     const {
         seasonMatchweeks
@@ -70,7 +78,12 @@ export const getMatchweekFixtures = (season, matchweekNumber) => (dispatch, getS
     const newMatchweeks = {
         ...seasonMatchweeks
     }
-    newMatchweeks[`${_id}-${matchweekNumber}`] = matchweekFixtures
+    newMatchweeks[`${_id}-${matchweekNumber}`] = {
+        totalGames,
+        gamesFinished,
+        hasStarted,
+        fixtures: matchweekFixtures
+    }
 
     dispatch({
         type: ADD_MATCHWEEK,

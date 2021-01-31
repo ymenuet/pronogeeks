@@ -117,7 +117,7 @@ export const getDetailsGeek = geekID => async(dispatch, getState) => {
     } catch (error) {
         dispatch({
             type: ERROR,
-            payload: 'Erreur lors du chargement des pronos. Recharge la page ou réessaye plus tard.'
+            payload: 'Erreur lors du chargement du profil geek. Recharge la page ou réessaye plus tard.'
         })
     }
 }

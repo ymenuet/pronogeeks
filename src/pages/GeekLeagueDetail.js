@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { fetchLeague } from '../services/geekLeague'
 import { Loader, InputMatchweek, RankGeeks } from '../components'
-import { matchFinished, resetMatchweek } from '../helpers'
+import { resetMatchweek } from '../helpers'
 import { GoBackIcon, GoNextIcon } from '../components/Icons'
 import '../styles/detailGeekleague.css'
 
 import * as seasonActions from '../actions/seasonActions'
+import * as geekleagueActions from '../actions/geekleagueActions'
 
-const GeekLeagueDetail = ({ match: { params: { geekLeagueID, seasonID, matchweekNumber } }, loading, loadingSeason, user, detailedSeasons, seasonMatchweeks, lastMatchweeks, nextMatchweeks, getSeason, getMatchweekFixtures, setLastMatchweek, setNextMatchweek, errorSeason }) => {
+const GeekLeagueDetail = ({ match: { params: { geekLeagueID, seasonID, matchweekNumber } }, loading, loadingSeason, loadingLeague, user, detailedSeasons, seasonMatchweeks, lastMatchweeks, nextMatchweeks, geekleagues, getSeason, getMatchweekFixtures, setLastMatchweek, getLeague, setNextMatchweek, errorSeason, errorLeague }) => {
     const [season, setSeason] = useState(null)
     const [matchweek, setMatchweek] = useState(parseInt(matchweekNumber))
     const [lastMatchweek, setLastMatchweekLocal] = useState(null)
@@ -17,6 +17,7 @@ const GeekLeagueDetail = ({ match: { params: { geekLeagueID, seasonID, matchweek
     const [totalGames, setTotalGames] = useState(null)
     const [gamesFinished, setGamesFinished] = useState(null)
     const [matchweekFromInput, setMatchweekFromInput] = useState(matchweekNumber)
+
 
     useEffect(() => {
         if (
@@ -48,26 +49,30 @@ const GeekLeagueDetail = ({ match: { params: { geekLeagueID, seasonID, matchweek
 
     useEffect(() => {
         if (matchweek) {
-            const fixtures = seasonMatchweeks[`${seasonID}-${matchweek}`]
+            const matchweekDetails = seasonMatchweeks[`${seasonID}-${matchweek}`]
 
-            if (season && !fixtures && !loadingSeason) getMatchweekFixtures(season, matchweek)
+            if (season && !matchweekDetails && !loadingSeason) getMatchweekFixtures(season, matchweek)
 
-            else if (fixtures) {
-                const gamesFinished = fixtures.filter(fixture => matchFinished(fixture.statusShort))
-                setTotalGames(fixtures.length)
-                setGamesFinished(gamesFinished.length)
+            else if (matchweekDetails) {
+                const { totalGames, gamesFinished } = matchweekDetails
+                setTotalGames(totalGames)
+                setGamesFinished(gamesFinished)
             }
         }
     }, [matchweek, seasonID, season, seasonMatchweeks, loadingSeason, getMatchweekFixtures])
 
 
     useEffect(() => {
-        const getGeekLeague = async (geekLeagueID) => {
-            const geekLeague = await fetchLeague(geekLeagueID)
-            setGeekLeague(geekLeague)
-        }
-        getGeekLeague(geekLeagueID)
-    }, [geekLeagueID, seasonID, matchweekNumber])
+        const geekleague = geekleagues[geekLeagueID]
+        if (
+            !geekleague &&
+            !loadingLeague &&
+            !errorLeague
+        ) getLeague(geekLeagueID)
+
+        else if (geekleague) setGeekLeague(geekleague)
+
+    }, [geekLeagueID, loadingLeague, geekleagues, getLeague, errorLeague])
 
 
     const resetComponent = () => {
@@ -145,12 +150,12 @@ const GeekLeagueDetail = ({ match: { params: { geekLeagueID, seasonID, matchweek
                                                 <Loader
                                                     size='small'
                                                     tip={null}
-                                                    fontSize='1.6rem'
+                                                    fontSize='1.2rem'
                                                     container={false}
                                                     style={{ display: 'inline' }}
                                                 />
                                             </small> :
-                                                <small>{gamesFinished === totalGames ? 'Journée terminée' : `Matchs joués : ${gamesFinished}/${totalGames}`}</small>}
+                                                <small className='margin-small'>{gamesFinished === totalGames ? 'Journée terminée' : `Matchs joués : ${gamesFinished}/${totalGames}`}</small>}
                                         </h4>
 
                                         {matchweek < lastMatchweek && <div>
@@ -190,11 +195,15 @@ const mapStateToProps = state => ({
     lastMatchweeks: state.seasonReducer.lastMatchweeks,
     nextMatchweeks: state.seasonReducer.nextMatchweeks,
     loadingSeason: state.seasonReducer.loading,
-    errorSeason: state.seasonReducer.error
+    errorSeason: state.seasonReducer.error,
+    geekleagues: state.geekleagueReducer.geekleagues,
+    loadingLeague: state.geekleagueReducer.loading,
+    errorLeague: state.geekleagueReducer.error
 })
 
 const mapDispatchToProps = {
-    ...seasonActions
+    ...seasonActions,
+    ...geekleagueActions
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(GeekLeagueDetail)
