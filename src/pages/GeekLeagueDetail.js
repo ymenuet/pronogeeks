@@ -1,38 +1,46 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { getSeasonData, getMatchweekFixtures } from '../services/seasons'
+import { getMatchweekFixtures } from '../services/seasons'
 import { fetchLeague } from '../services/geekLeague'
 import { Loader, InputMatchweek, RankGeeks } from '../components'
 import { matchFinished, resetMatchweek } from '../helpers'
 import { GoBackIcon, GoNextIcon } from '../components/Icons'
 import '../styles/detailGeekleague.css'
 
-const GeekLeagueDetail = ({ match: { params: { geekLeagueID, seasonID, matchweekNumber } }, loading, user }) => {
+import * as seasonActions from '../actions/seasonActions'
+
+const GeekLeagueDetail = ({ match: { params: { geekLeagueID, seasonID, matchweekNumber } }, loading, loadingSeason, user, detailedSeasons, lastMatchweeks, nextMatchweeks, getSeason, setLastMatchweek, setNextMatchweek, errorSeason }) => {
     const [season, setSeason] = useState(null)
     const [matchweek, setMatchweek] = useState(parseInt(matchweekNumber))
-    const [lastMatchweek, setLastMatchweek] = useState(null)
+    const [lastMatchweek, setLastMatchweekLocal] = useState(null)
     const [geekLeague, setGeekLeague] = useState(null)
     const [totalGames, setTotalGames] = useState(null)
     const [gamesFinished, setGamesFinished] = useState(null)
     const [matchweekFromInput, setMatchweekFromInput] = useState(matchweekNumber)
 
     useEffect(() => {
-        const setNextMatchweek = async (seasonID) => {
-            const season = await getSeasonData(seasonID)
-            setSeason(season)
-            const lastFixtures = season.fixtures.filter(fixture => new Date(fixture.date).getTime() < Date.now())
-            if (lastFixtures.length > 0) {
-                const lastMatchweek = lastFixtures[lastFixtures.length - 1].matchweek
-                if (!matchweekNumber) setMatchweek(lastMatchweek)
-                setLastMatchweek(lastMatchweek)
-            } else {
-                if (!matchweekNumber) setMatchweek(1)
-                setLastMatchweek(1)
-            }
-        }
-        setNextMatchweek(seasonID)
+        if (!detailedSeasons[seasonID] && !loadingSeason) getSeason(seasonID)
 
+        else if (detailedSeasons[seasonID]) setSeason(detailedSeasons[seasonID])
+
+    }, [seasonID, loadingSeason, detailedSeasons, getSeason])
+
+    useEffect(() => {
+        if (season && !lastMatchweeks[seasonID] && !loadingSeason) setLastMatchweek(season)
+
+        else if (lastMatchweeks[seasonID]) setLastMatchweekLocal(lastMatchweeks[seasonID])
+
+    }, [seasonID, loadingSeason, season, lastMatchweeks, getSeason, setLastMatchweek])
+
+    useEffect(() => {
+        if (season && !nextMatchweeks[seasonID] && !loadingSeason) setNextMatchweek(season)
+
+        else if (nextMatchweeks[seasonID] && lastMatchweek) setMatchweek(Math.min(nextMatchweeks[seasonID], lastMatchweek))
+
+    }, [seasonID, loadingSeason, season, nextMatchweeks, lastMatchweek, getSeason, setNextMatchweek])
+
+    useEffect(() => {
         const getGeekLeague = async (geekLeagueID) => {
             const geekLeague = await fetchLeague(geekLeagueID)
             setGeekLeague(geekLeague)
@@ -166,7 +174,16 @@ const GeekLeagueDetail = ({ match: { params: { geekLeagueID, seasonID, matchweek
 }
 
 const mapStateToProps = state => ({
-    user: state.authReducer.user
+    user: state.authReducer.user,
+    detailedSeasons: state.seasonReducer.detailedSeasons,
+    lastMatchweeks: state.seasonReducer.lastMatchweeks,
+    nextMatchweeks: state.seasonReducer.nextMatchweeks,
+    loadingSeason: state.seasonReducer.loading,
+    errorSeason: state.seasonReducer.error
 })
 
-export default connect(mapStateToProps)(GeekLeagueDetail)
+const mapDispatchToProps = {
+    ...seasonActions
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(GeekLeagueDetail)

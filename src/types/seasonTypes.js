@@ -1,3 +1,5 @@
 export const ADD_SEASON = 'season_detailed_season'
+export const SET_NEXT_MATCHWEEK = 'season_set_next_matchweek'
+export const SET_LAST_MATCHWEEK = 'season_set_last_matchweek'
 export const LOADING = 'season_loading'
 export const ERROR = 'season_error'
