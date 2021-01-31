@@ -1,5 +1,6 @@
 import {
     ADD_SEASON,
+    ADD_MATCHWEEK,
     SET_NEXT_MATCHWEEK,
     SET_LAST_MATCHWEEK,
     LOADING,
@@ -17,6 +18,7 @@ const done = {
 
 const INITIAL_STATE = {
     detailedSeasons: {},
+    seasonMatchweeks: {},
     nextMatchweeks: {},
     lastMatchweeks: {},
     ...done
@@ -28,6 +30,12 @@ const seasonReducer = (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 detailedSeasons: action.payload,
+                ...done
+            }
+        case ADD_MATCHWEEK:
+            return {
+                ...state,
+                seasonMatchweeks: action.payload,
                 ...done
             }
         case SET_NEXT_MATCHWEEK:

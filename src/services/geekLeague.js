@@ -4,7 +4,7 @@ const baseURL = process.env.NODE_ENV === 'production' ?
     `/api/geekLeagues` :
     `${process.env.REACT_APP_BACKENDPOINT}/api/geekLeagues`
 
-const geekLeagueService = axios.create({
+const geekleagueService = axios.create({
     baseURL,
     withCredentials: true
 })
@@ -14,7 +14,7 @@ export const createLeague = async values => {
         data: {
             geekLeague
         }
-    } = await geekLeagueService.post('/', values)
+    } = await geekleagueService.post('/', values)
     return geekLeague
 }
 
@@ -23,7 +23,7 @@ export const fetchLeague = async leagueID => {
         data: {
             geekLeague
         }
-    } = await geekLeagueService.get(`/${leagueID}`)
+    } = await geekleagueService.get(`/${leagueID}`)
     return geekLeague
 }
 
@@ -32,7 +32,7 @@ export const getUserLeagues = async() => {
         data: {
             geekLeagues
         }
-    } = await geekLeagueService.get('/')
+    } = await geekleagueService.get('/')
     return geekLeagues
 }
 
@@ -41,7 +41,7 @@ export const editGeekLeague = async(geekLeagueID, name, geeks) => {
         data: {
             geekLeague
         }
-    } = await geekLeagueService.put(`/${geekLeagueID}`, {
+    } = await geekleagueService.put(`/${geekLeagueID}`, {
         name,
         geeks
     })
@@ -49,11 +49,11 @@ export const editGeekLeague = async(geekLeagueID, name, geeks) => {
 }
 
 export const outGeekLeague = async(geekLeagueID) => {
-    await geekLeagueService.get(`out/${geekLeagueID}`)
+    await geekleagueService.get(`out/${geekLeagueID}`)
     return true
 }
 
 export const deleteGeekLeague = async geekLeagueID => {
-    await geekLeagueService.delete(`/${geekLeagueID}`)
+    await geekleagueService.delete(`/${geekLeagueID}`)
     return true
 }

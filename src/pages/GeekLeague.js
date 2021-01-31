@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react'
 import { connect } from 'react-redux'
 import { Context } from '../context'
 import { isEmpty } from '../helpers'
-import { fetchLeague, editGeekLeague, deleteGeekLeague, outGeekLeague } from '../services/geekLeague'
+import { editGeekLeague, deleteGeekLeague, outGeekLeague } from '../services/geekLeague'
 import { getProfile } from '../services/auth'
 import { getSeasons } from '../services/seasons'
 import { Loader, RankGeeks, ErrorMessage } from '../components'
@@ -12,10 +12,11 @@ import { EditIcon, DeleteIcon, RemoveIcon, WarningIcon } from '../components/Ico
 import '../styles/detailGeekleague.css'
 
 import * as geekActions from '../actions/geekActions'
+import * as geekleagueActions from '../actions/geekleagueActions'
 
 const { Option } = Select
 
-const GeekLeague = ({ match: { params: { geekLeagueID } }, history, loading, user, allGeeks, geekError, getAllGeeks }) => {
+const GeekLeague = ({ match: { params: { geekLeagueID } }, history, loading, loadingLeague, user, allGeeks, geekleagues, errorGeek, errorLeague, getAllGeeks, getLeague }) => {
     const { loginUser } = useContext(Context)
     const [geekLeague, setGeekLeague] = useState(null)
     const [seasons, setSeasons] = useState(null)
@@ -26,12 +27,16 @@ const GeekLeague = ({ match: { params: { geekLeagueID } }, history, loading, use
     const [form] = Form.useForm()
 
     useEffect(() => {
-        const getLeague = async () => {
-            const geekLeague = await fetchLeague(geekLeagueID)
-            setGeekLeague(geekLeague)
-        }
-        getLeague()
-    }, [geekLeagueID])
+        const geekleague = geekleagues[geekLeagueID]
+        if (
+            !geekleague &&
+            !loadingLeague &&
+            !errorLeague
+        ) getLeague(geekLeagueID)
+
+        else if (geekleague) setGeekLeague(geekleague)
+
+    }, [geekLeagueID, loadingLeague, geekleagues, errorLeague, getLeague])
 
     useEffect(() => {
         if (isEmpty(allGeeks)) {
@@ -219,7 +224,7 @@ const GeekLeague = ({ match: { params: { geekLeagueID } }, history, loading, use
 
                                         </Option>)}
 
-                                    </Select> : <ErrorMessage>{geekError}</ErrorMessage>}
+                                    </Select> : <ErrorMessage>{errorGeek}</ErrorMessage>}
                                 </Form.Item>
 
                                 <button type="submit" className=" my-btn save">Enregistrer</button>
@@ -316,9 +321,15 @@ const GeekLeague = ({ match: { params: { geekLeagueID } }, history, loading, use
 const mapStateToProps = state => ({
     user: state.authReducer.user,
     allGeeks: state.geekReducer.allGeeks,
-    geekError: state.geekReducer.error
+    errorGeek: state.geekReducer.error,
+    geekleagues: state.geekleagueReducer.geekleagues,
+    loadingLeague: state.geekleagueReducer.loading,
+    errorLeague: state.geekleagueReducer.error
 })
 
-const mapDispatchToProps = { ...geekActions }
+const mapDispatchToProps = {
+    ...geekActions,
+    ...geekleagueActions
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(GeekLeague)

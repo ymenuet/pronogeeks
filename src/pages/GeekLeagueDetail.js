@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { getMatchweekFixtures } from '../services/seasons'
 import { fetchLeague } from '../services/geekLeague'
 import { Loader, InputMatchweek, RankGeeks } from '../components'
 import { matchFinished, resetMatchweek } from '../helpers'
@@ -10,7 +9,7 @@ import '../styles/detailGeekleague.css'
 
 import * as seasonActions from '../actions/seasonActions'
 
-const GeekLeagueDetail = ({ match: { params: { geekLeagueID, seasonID, matchweekNumber } }, loading, loadingSeason, user, detailedSeasons, lastMatchweeks, nextMatchweeks, getSeason, setLastMatchweek, setNextMatchweek, errorSeason }) => {
+const GeekLeagueDetail = ({ match: { params: { geekLeagueID, seasonID, matchweekNumber } }, loading, loadingSeason, user, detailedSeasons, seasonMatchweeks, lastMatchweeks, nextMatchweeks, getSeason, getMatchweekFixtures, setLastMatchweek, setNextMatchweek, errorSeason }) => {
     const [season, setSeason] = useState(null)
     const [matchweek, setMatchweek] = useState(parseInt(matchweekNumber))
     const [lastMatchweek, setLastMatchweekLocal] = useState(null)
@@ -20,11 +19,16 @@ const GeekLeagueDetail = ({ match: { params: { geekLeagueID, seasonID, matchweek
     const [matchweekFromInput, setMatchweekFromInput] = useState(matchweekNumber)
 
     useEffect(() => {
-        if (!detailedSeasons[seasonID] && !loadingSeason) getSeason(seasonID)
+        if (
+            !detailedSeasons[seasonID] &&
+            !loadingSeason &&
+            !errorSeason
+        ) getSeason(seasonID)
 
         else if (detailedSeasons[seasonID]) setSeason(detailedSeasons[seasonID])
 
-    }, [seasonID, loadingSeason, detailedSeasons, getSeason])
+    }, [seasonID, loadingSeason, detailedSeasons, getSeason, errorSeason])
+
 
     useEffect(() => {
         if (season && !lastMatchweeks[seasonID] && !loadingSeason) setLastMatchweek(season)
@@ -33,12 +37,29 @@ const GeekLeagueDetail = ({ match: { params: { geekLeagueID, seasonID, matchweek
 
     }, [seasonID, loadingSeason, season, lastMatchweeks, getSeason, setLastMatchweek])
 
+
     useEffect(() => {
         if (season && !nextMatchweeks[seasonID] && !loadingSeason) setNextMatchweek(season)
 
         else if (nextMatchweeks[seasonID] && lastMatchweek) setMatchweek(Math.min(nextMatchweeks[seasonID], lastMatchweek))
 
     }, [seasonID, loadingSeason, season, nextMatchweeks, lastMatchweek, getSeason, setNextMatchweek])
+
+
+    useEffect(() => {
+        if (matchweek) {
+            const fixtures = seasonMatchweeks[`${seasonID}-${matchweek}`]
+
+            if (season && !fixtures && !loadingSeason) getMatchweekFixtures(season, matchweek)
+
+            else if (fixtures) {
+                const gamesFinished = fixtures.filter(fixture => matchFinished(fixture.statusShort))
+                setTotalGames(fixtures.length)
+                setGamesFinished(gamesFinished.length)
+            }
+        }
+    }, [matchweek, seasonID, season, seasonMatchweeks, loadingSeason, getMatchweekFixtures])
+
 
     useEffect(() => {
         const getGeekLeague = async (geekLeagueID) => {
@@ -48,17 +69,6 @@ const GeekLeagueDetail = ({ match: { params: { geekLeagueID, seasonID, matchweek
         getGeekLeague(geekLeagueID)
     }, [geekLeagueID, seasonID, matchweekNumber])
 
-    useEffect(() => {
-        if (matchweek) {
-            const fetchMatchweekFixtures = async () => {
-                const fixtures = await getMatchweekFixtures(seasonID, matchweek)
-                setTotalGames(fixtures.length)
-                const gamesFinished = fixtures.filter(fixture => matchFinished(fixture.statusShort))
-                setGamesFinished(gamesFinished.length)
-            }
-            fetchMatchweekFixtures()
-        }
-    }, [matchweek, seasonID])
 
     const resetComponent = () => {
         setMatchweek(null)
@@ -176,6 +186,7 @@ const GeekLeagueDetail = ({ match: { params: { geekLeagueID, seasonID, matchweek
 const mapStateToProps = state => ({
     user: state.authReducer.user,
     detailedSeasons: state.seasonReducer.detailedSeasons,
+    seasonMatchweeks: state.seasonReducer.seasonMatchweeks,
     lastMatchweeks: state.seasonReducer.lastMatchweeks,
     nextMatchweeks: state.seasonReducer.nextMatchweeks,
     loadingSeason: state.seasonReducer.loading,

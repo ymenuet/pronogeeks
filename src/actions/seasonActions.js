@@ -1,6 +1,7 @@
 import axios from 'axios'
 import {
     ADD_SEASON,
+    ADD_MATCHWEEK,
     SET_NEXT_MATCHWEEK,
     SET_LAST_MATCHWEEK,
     LOADING,
@@ -48,6 +49,33 @@ export const getSeason = seasonID => async(dispatch, getState) => {
             payload: 'Erreur lors du chargement des données de la saison. Recharge la page ou réessaye plus tard.'
         })
     }
+}
+
+export const getMatchweekFixtures = (season, matchweekNumber) => (dispatch, getState) => {
+    dispatch({
+        type: LOADING
+    })
+    const {
+        _id,
+        fixtures
+    } = season
+
+    const matchweekFixtures = fixtures
+        .filter(fixture => `${fixture.matchweek}` === matchweekNumber)
+        .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+
+    const {
+        seasonMatchweeks
+    } = getState().seasonReducer
+    const newMatchweeks = {
+        ...seasonMatchweeks
+    }
+    newMatchweeks[`${_id}-${matchweekNumber}`] = matchweekFixtures
+
+    dispatch({
+        type: ADD_MATCHWEEK,
+        payload: newMatchweeks
+    })
 }
 
 export const setNextMatchweek = season => (dispatch, getState) => {

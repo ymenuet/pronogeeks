@@ -12,7 +12,7 @@ import '../styles/pronogeeks.css'
 import * as seasonActions from '../actions/seasonActions'
 import * as pronogeekActions from '../actions/pronogeekActions'
 
-const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history, loading, loadingSeason, loadingPronogeek, user, detailedSeasons, userPronogeeks, getSeason, getMatchweekPronos, errorSeason, errorPronogeek }) => {
+const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history, loading, loadingSeason, loadingPronogeek, user, detailedSeasons, seasonMatchweeks, userPronogeeks, getSeason, getMatchweekFixtures, getMatchweekPronos, errorSeason, errorPronogeek }) => {
     const [season, setSeason] = useState(null)
     const [newSeason, setNewSeason] = useState(true)
     const [userMatchweek, setUserMatchweek] = useState(null)
@@ -65,17 +65,24 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
     }, [history, seasonID, matchweekNumber, user, newSeason])
 
     useEffect(() => {
-        if (
-            !detailedSeasons[seasonID] &&
-            !loadingSeason
-        ) getSeason(seasonID)
+        const seasonDetails = detailedSeasons[seasonID]
+        if (!seasonDetails && !loadingSeason) getSeason(seasonID)
 
-        else if (detailedSeasons[seasonID]) {
-            setSeason(detailedSeasons[seasonID])
-            setMatchweekFixtures(detailedSeasons[seasonID], matchweekNumber)
-        }
+        else if (seasonDetails) setSeason(seasonDetails)
 
     }, [seasonID, matchweekNumber, detailedSeasons, loadingSeason, getSeason])
+
+    useEffect(() => {
+        const matchweekDetails = seasonMatchweeks[`${seasonID}-${matchweekNumber}`]
+        if (
+            season &&
+            !matchweekDetails &&
+            !loadingSeason
+        ) getMatchweekFixtures(season, matchweekNumber)
+
+        else if (matchweekDetails) setFixtures(matchweekDetails)
+
+    }, [seasonID, matchweekNumber, season, seasonMatchweeks, loadingSeason, getMatchweekFixtures])
 
     useEffect(() => {
         if (
@@ -87,7 +94,9 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
     }, [user, userPronogeeks, loadingPronogeek, seasonID, matchweekNumber, getMatchweekPronos])
 
     useEffect(() => {
-        if (userPronogeeks[`${seasonID}-${matchweekNumber}`] && Object.keys(userPronogeeks[`${seasonID}-${matchweekNumber}`]).length) setDisableSaveAllBtn(false)
+        const pronogeeks = userPronogeeks[`${seasonID}-${matchweekNumber}`]
+        if (pronogeeks && Object.keys(pronogeeks).length) setDisableSaveAllBtn(false)
+
     }, [userPronogeeks, seasonID, matchweekNumber])
 
     useEffect(() => {
@@ -318,6 +327,7 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
 const mapStateToProps = state => ({
     user: state.authReducer.user,
     detailedSeasons: state.seasonReducer.detailedSeasons,
+    seasonMatchweeks: state.seasonReducer.seasonMatchweeks,
     loadingSeason: state.seasonReducer.loading,
     errorSeason: state.seasonReducer.error,
     userPronogeeks: state.pronogeekReducer.userPronogeeks,
