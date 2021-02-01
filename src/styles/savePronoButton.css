@@ -8,6 +8,7 @@
     height: 43px;
     border-right: 1px solid rgb(0, 0, 187);
     border-bottom: 2px solid rgb(0, 0, 187);
+    position: relative;
 }
 
 .save-prono:hover {
@@ -22,6 +23,21 @@
 .save-prono>svg {
     position: relative;
     bottom: 2px;
+}
+
+.save-prono.pending-save::before,
+.save-prono.pending-save:hover::before {
+    content: '!';
+    font-size: 0.9rem;
+    width: 16px;
+    height: 16px;
+    line-height: 16px;
+    position: absolute;
+    background-color: var(--color-red-rp);
+    border-radius: 50%;
+    top: 0;
+    right: -3px;
+    padding: 0;
 }
 
 .saved-prono {

@@ -3,7 +3,7 @@ import { SaveIcon, ValidateIcon, ViewPronoIcon } from './Icons'
 import Loader from './Loader'
 import '../styles/savePronoButton.css'
 
-const SavePronoButton = ({ user, saveSuccess, matchStarted, saveProno, saving, homeScore, awayScore, seeLeaguePronos }) => {
+const SavePronoButton = ({ user, modified, saveSuccess, matchStarted, saveProno, saving, homeScore, awayScore, seeLeaguePronos }) => {
 
     const disabled = matchStarted || (!homeScore && parseInt(homeScore) !== 0) || (!awayScore && parseInt(awayScore) !== 0)
 
@@ -22,7 +22,7 @@ const SavePronoButton = ({ user, saveSuccess, matchStarted, saveProno, saving, h
 
         <small className='legend-save-btn'>Enregistrer prono</small>
         <button
-            className='btn my-btn save-prono'
+            className={`btn my-btn save-prono ${modified ? 'pending-save' : ''}`}
             disabled={disabled}
             onClick={saveProno}
         >

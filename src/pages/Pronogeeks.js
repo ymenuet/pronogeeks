@@ -29,6 +29,7 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
     const [showLeaguePronos, setShowLeaguePronos] = useState(false)
     const [disableSaveAllBtn, setDisableSaveAllBtn] = useState(true)
     const [matchweekFromInput, setMatchweekFromInput] = useState(matchweekNumber)
+    const [modifiedTotal, setModifiedTotal] = useState(0)
 
     const { loginUser } = useContext(Context)
 
@@ -107,6 +108,26 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
         const pronogeeks = userPronogeeks[`${seasonID}-${matchweekNumber}`]
         if (pronogeeks && Object.keys(pronogeeks).length) setDisableSaveAllBtn(false)
         else setDisableSaveAllBtn(true)
+
+    }, [userPronogeeks, seasonID, matchweekNumber])
+
+
+    useEffect(() => {
+        const pronogeeks = userPronogeeks[`${seasonID}-${matchweekNumber}`]
+        if (
+            pronogeeks &&
+            pronogeeks.modified &&
+            Object.keys(pronogeeks.modified).length
+        ) {
+            const modifiedTotal = Object.values(pronogeeks.modified).reduce((total, currentProno) => {
+                if (currentProno) return total + 1
+                else return total
+            }, 0)
+            setModifiedTotal(modifiedTotal)
+
+        } else {
+            setModifiedTotal(0)
+        }
 
     }, [userPronogeeks, seasonID, matchweekNumber])
 
@@ -231,9 +252,11 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
                         className='btn my-btn save-all-btn'
                         disabled={disableSaveAllBtn}
                     >
+                        {modifiedTotal > 0 && <small className='pronos-to-save large-screen-icon'>{modifiedTotal}</small>}
                         <SaveIcon size='40px' />
                         &nbsp;
-                        <span>Enregistrer tout</span>
+                        <span>{modifiedTotal > 0 && <small className='pronos-to-save'>{modifiedTotal}</small>}Enregistrer tout</span>
+
                     </button>
 
                     <div className='save-all-info'>

@@ -17,6 +17,7 @@ const Fixture = ({ user, fixture, saveAll, showLeaguePronos, setShowLeaguePronos
     const [saving, setSaving] = useState(false)
     const [saveSuccess, setSaveSuccess] = useState(false)
     const [showLeagues, setShowLeagues] = useState(false)
+    const [modified, setModified] = useState(false)
 
     const saveProno = () => {
         setSaveSuccess(false)
@@ -41,6 +42,20 @@ const Fixture = ({ user, fixture, saveAll, showLeaguePronos, setShowLeaguePronos
         setPronogeek(pronogeek)
         setHomeScore(parseInt(pronogeek.homeProno) >= 0 ? pronogeek.homeProno : '')
         setAwayScore(parseInt(pronogeek.awayProno) >= 0 ? pronogeek.awayProno : '')
+
+    }, [fixture, userPronogeeks])
+
+    useEffect(() => {
+        const { _id, season, matchweek } = fixture
+        const userMatchweekPronogeeks = userPronogeeks[`${season}-${matchweek}`]
+        if (
+            userMatchweekPronogeeks &&
+            userMatchweekPronogeeks.modified &&
+            Object.keys(userMatchweekPronogeeks.modified).length
+        ) {
+            if (userMatchweekPronogeeks.modified[_id]) setModified(true)
+            else setModified(false)
+        }
 
     }, [fixture, userPronogeeks])
 
@@ -178,6 +193,7 @@ const Fixture = ({ user, fixture, saveAll, showLeaguePronos, setShowLeaguePronos
 
                                 <SavePronoButton
                                     user={user}
+                                    modified={modified}
                                     saveSuccess={saveSuccess}
                                     matchStarted={matchStarted}
                                     saveProno={saveProno}

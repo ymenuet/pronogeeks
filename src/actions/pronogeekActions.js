@@ -100,6 +100,8 @@ export const handleInputHomeProno = (homeProno, fixture) => (dispatch, getState)
 
     const newPronogeeks = createCopyMatchweekPronos(getState, fixture)
 
+    newPronogeeks[`${season}-${matchweek}`].modified[_id] = true
+
     newPronogeeks[`${season}-${matchweek}`][_id] = {
         ...newPronogeeks[`${season}-${matchweek}`][_id],
         homeProno
@@ -120,6 +122,8 @@ export const handleInputAwayProno = (awayProno, fixture) => (dispatch, getState)
     awayProno = parseInt(awayProno)
 
     const newPronogeeks = createCopyMatchweekPronos(getState, fixture)
+
+    newPronogeeks[`${season}-${matchweek}`].modified[_id] = true
 
     newPronogeeks[`${season}-${matchweek}`][_id] = {
         ...newPronogeeks[`${season}-${matchweek}`][_id],
@@ -164,6 +168,8 @@ export const savePronogeek = (homeProno, awayProno, fixture) => async(dispatch, 
         })
 
         const newPronogeeks = createCopyMatchweekPronos(getState, fixture)
+
+        newPronogeeks[`${season}-${matchweek}`].modified[_id] = false
 
         newPronogeeks[`${season}-${matchweek}`][_id] = {
             ...pronogeek,
@@ -264,8 +270,17 @@ function createCopyMatchweekPronos(getState, fixture) {
         } else {
             newPronogeeks[`${season}-${matchweek}`][_id] = {}
         }
+        if (userPronogeeks[`${season}-${matchweek}`].modified) {
+            newPronogeeks[`${season}-${matchweek}`].modified = {
+                ...userPronogeeks[`${season}-${matchweek}`].modified,
+            }
+        } else {
+            newPronogeeks[`${season}-${matchweek}`].modified = {}
+        }
     } else {
-        newPronogeeks[`${season}-${matchweek}`] = {}
+        newPronogeeks[`${season}-${matchweek}`] = {
+            modified: {}
+        }
         newPronogeeks[`${season}-${matchweek}`][_id] = {}
     }
 

@@ -95,6 +95,7 @@
     border-radius: 50%;
     outline: none;
     border: 1px solid var(--color-white-cream);
+    position: relative;
 }
 
 .go-to-ranking-btn {
@@ -155,6 +156,19 @@
     margin: 0;
 }
 
+.pronos-to-save {
+    font-size: 0.9rem;
+    width: 22px;
+    height: 22px;
+    line-height: 22px;
+    position: absolute;
+    background-color: var(--color-red-rp);
+    border-radius: 50%;
+    top: -1px;
+    right: -1px;
+    padding: 0;
+}
+
 @media (max-width: 768px) {
     .go-to-ranking {
         top: var(--navbar-height);
@@ -193,6 +207,7 @@
     .go-to-ranking-btn span {
         display: inline;
         transition: all 0.3s;
+        position: relative;
     }
     .save-all-btn svg,
     .go-to-ranking-btn svg {
@@ -204,6 +219,18 @@
     }
     .offset-for-btn {
         margin-top: 60px;
+    }
+    .pronos-to-save {
+        display: inline-block;
+        right: unset;
+        top: -8px;
+        left: -44px;
+        width: 18px;
+        height: 18px;
+        line-height: 18px;
+    }
+    .pronos-to-save.large-screen-icon {
+        display: none;
     }
 }
 
