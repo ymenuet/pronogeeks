@@ -12,7 +12,7 @@ import '../styles/pronogeeks.css'
 import * as seasonActions from '../actions/seasonActions'
 import * as pronogeekActions from '../actions/pronogeekActions'
 
-const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history, loading, loadingSeason, loadingPronogeek, user, detailedSeasons, seasonMatchweeks, userPronogeeks, getSeason, getMatchweekFixtures, getUserMatchweekPronos, errorSeason, errorPronogeek }) => {
+const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history, loading, loadingSeason, loadingPronogeek, user, detailedSeasons, seasonMatchweeks, userPronogeeks, getSeason, getMatchweekFixtures, getUserMatchweekPronos, saveAllPronogeeks, errorSeason, errorPronogeek }) => {
     const [season, setSeason] = useState(null)
     const [newSeason, setNewSeason] = useState(true)
     const [userMatchweek, setUserMatchweek] = useState(null)
@@ -227,7 +227,7 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
                 <div className='save-all'>
 
                     <button
-                        onClick={saveAllPronos}
+                        onClick={() => saveAllPronogeeks(seasonID, matchweekNumber)}
                         className='btn my-btn save-all-btn'
                         disabled={disableSaveAllBtn}
                     >

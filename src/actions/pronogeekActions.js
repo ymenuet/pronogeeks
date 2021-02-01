@@ -2,6 +2,7 @@ import axios from 'axios'
 import {
     ADD_PRONOGEEKS,
     ADD_GEEK_PRONOGEEKS,
+    SAVING_ALL,
     LOADING,
     ERROR
 } from '../types/pronogeekTypes'
@@ -89,6 +90,48 @@ export const getGeekMatchweekPronos = (geekID, seasonID, matchweekNumber) => asy
     }
 }
 
+export const handleInputHomeProno = (homeProno, fixture) => (dispatch, getState) => {
+    const {
+        _id,
+        season,
+        matchweek
+    } = fixture
+    homeProno = parseInt(homeProno)
+
+    const newPronogeeks = createCopyMatchweekPronos(getState, fixture)
+
+    newPronogeeks[`${season}-${matchweek}`][_id] = {
+        ...newPronogeeks[`${season}-${matchweek}`][_id],
+        homeProno
+    }
+
+    dispatch({
+        type: ADD_PRONOGEEKS,
+        payload: newPronogeeks
+    })
+}
+
+export const handleInputAwayProno = (awayProno, fixture) => (dispatch, getState) => {
+    const {
+        _id,
+        season,
+        matchweek
+    } = fixture
+    awayProno = parseInt(awayProno)
+
+    const newPronogeeks = createCopyMatchweekPronos(getState, fixture)
+
+    newPronogeeks[`${season}-${matchweek}`][_id] = {
+        ...newPronogeeks[`${season}-${matchweek}`][_id],
+        awayProno
+    }
+
+    dispatch({
+        type: ADD_PRONOGEEKS,
+        payload: newPronogeeks
+    })
+}
+
 export const savePronogeek = (homeProno, awayProno, fixture) => async(dispatch, getState) => {
     const {
         _id,
@@ -96,19 +139,10 @@ export const savePronogeek = (homeProno, awayProno, fixture) => async(dispatch, 
         matchweek
     } = fixture
 
-    const {
-        userPronogeeks
-    } = getState().pronogeekReducer
-    const newPronogeeks = {
-        ...userPronogeeks
-    }
-    newPronogeeks[`${season}-${matchweek}`] = {
-        ...userPronogeeks[`${season}-${matchweek}`]
-    }
+    const newPronogeeks = createCopyMatchweekPronos(getState, fixture)
+
     newPronogeeks[`${season}-${matchweek}`][_id] = {
-        ...userPronogeeks[`${season}-${matchweek}`][_id],
-        homeProno,
-        awayProno,
+        ...newPronogeeks[`${season}-${matchweek}`][_id],
         saving: true,
         saved: false,
         error: false
@@ -129,12 +163,8 @@ export const savePronogeek = (homeProno, awayProno, fixture) => async(dispatch, 
             awayProno
         })
 
-        const newPronogeeks = {
-            ...userPronogeeks
-        }
-        newPronogeeks[`${season}-${matchweek}`] = {
-            ...userPronogeeks[`${season}-${matchweek}`]
-        }
+        const newPronogeeks = createCopyMatchweekPronos(getState, fixture)
+
         newPronogeeks[`${season}-${matchweek}`][_id] = {
             ...pronogeek,
             saved: true,
@@ -148,14 +178,10 @@ export const savePronogeek = (homeProno, awayProno, fixture) => async(dispatch, 
         })
 
     } catch (error) {
-        const newPronogeeks = {
-            ...userPronogeeks
-        }
-        newPronogeeks[`${season}-${matchweek}`] = {
-            ...userPronogeeks[`${season}-${matchweek}`]
-        }
+        const newPronogeeks = createCopyMatchweekPronos(getState, fixture)
+
         newPronogeeks[`${season}-${matchweek}`][_id] = {
-            ...userPronogeeks[`${season}-${matchweek}`][_id],
+            ...newPronogeeks[`${season}-${matchweek}`][_id],
             error: true,
             saving: false,
             saved: false
@@ -167,7 +193,53 @@ export const savePronogeek = (homeProno, awayProno, fixture) => async(dispatch, 
     }
 }
 
+export const saveAllPronogeeks = (seasonID, matchweekNumber) => async(dispatch, getState) => {
+    dispatch({
+        type: SAVING_ALL
+    })
+
+    const {
+        userPronogeeks
+    } = getState().pronogeekReducer
+
+    if (!userPronogeeks[`${seasonID}-${matchweekNumber}`]) return dispatch({
+        type: ERROR,
+        payload: `Auncun pronogeek à enregistrer`
+    })
+
+    try {
+        console.log(userPronogeeks[`${seasonID}-${matchweekNumber}`])
+
+    } catch (error) {
+        dispatch({
+            type: ERROR,
+            payload: `Erreur lors de la sauvegarde des pronos. Réessaye plus tard ou tente de les enregistrer un par un.`
+        })
+    }
+}
+
 export const resetSaveAndErrorState = fixture => (dispatch, getState) => {
+    const {
+        _id,
+        season,
+        matchweek
+    } = fixture
+
+    const newPronogeeks = createCopyMatchweekPronos(getState, fixture)
+
+    newPronogeeks[`${season}-${matchweek}`][_id] = {
+        ...newPronogeeks[`${season}-${matchweek}`][_id],
+        saving: false,
+        saved: false,
+        error: false
+    }
+    dispatch({
+        type: ADD_PRONOGEEKS,
+        payload: newPronogeeks
+    })
+}
+
+function createCopyMatchweekPronos(getState, fixture) {
     const {
         _id,
         season,
@@ -180,17 +252,22 @@ export const resetSaveAndErrorState = fixture => (dispatch, getState) => {
     const newPronogeeks = {
         ...userPronogeeks
     }
-    newPronogeeks[`${season}-${matchweek}`] = {
-        ...userPronogeeks[`${season}-${matchweek}`]
+
+    if (userPronogeeks[`${season}-${matchweek}`]) {
+        newPronogeeks[`${season}-${matchweek}`] = {
+            ...userPronogeeks[`${season}-${matchweek}`]
+        }
+        if (userPronogeeks[`${season}-${matchweek}`][_id]) {
+            newPronogeeks[`${season}-${matchweek}`][_id] = {
+                ...userPronogeeks[`${season}-${matchweek}`][_id],
+            }
+        } else {
+            newPronogeeks[`${season}-${matchweek}`][_id] = {}
+        }
+    } else {
+        newPronogeeks[`${season}-${matchweek}`] = {}
+        newPronogeeks[`${season}-${matchweek}`][_id] = {}
     }
-    newPronogeeks[`${season}-${matchweek}`][_id] = {
-        ...userPronogeeks[`${season}-${matchweek}`][_id],
-        saving: false,
-        saved: false,
-        error: false
-    }
-    dispatch({
-        type: ADD_PRONOGEEKS,
-        payload: newPronogeeks
-    })
+
+    return newPronogeeks
 }

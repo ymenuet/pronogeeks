@@ -7,9 +7,9 @@ import PreviewPronos from './PreviewPronos'
 import { FavTeamIcon } from '../components/Icons'
 import '../styles/fixture.css'
 
-import { savePronogeek, resetSaveAndErrorState } from '../actions/pronogeekActions'
+import * as pronogeekActions from '../actions/pronogeekActions'
 
-const Fixture = ({ user, fixture, saveAll, showLeaguePronos, setShowLeaguePronos, userPronogeeks, savePronogeek, resetSaveAndErrorState }) => {
+const Fixture = ({ user, fixture, saveAll, showLeaguePronos, setShowLeaguePronos, userPronogeeks, savePronogeek, resetSaveAndErrorState, handleInputHomeProno, handleInputAwayProno }) => {
     const [pronogeek, setPronogeek] = useState(null)
     const [matchStarted, setMatchStarted] = useState(false)
     const [homeScore, setHomeScore] = useState(null)
@@ -39,8 +39,8 @@ const Fixture = ({ user, fixture, saveAll, showLeaguePronos, setShowLeaguePronos
         const userMatchweekPronogeeks = userPronogeeks[`${season}-${matchweek}`]
         if (userMatchweekPronogeeks && userMatchweekPronogeeks[_id]) pronogeek = userMatchweekPronogeeks[_id]
         setPronogeek(pronogeek)
-        setHomeScore(pronogeek.homeProno)
-        setAwayScore(pronogeek.awayProno)
+        setHomeScore(parseInt(pronogeek.homeProno) >= 0 ? pronogeek.homeProno : '')
+        setAwayScore(parseInt(pronogeek.awayProno) >= 0 ? pronogeek.awayProno : '')
 
     }, [fixture, userPronogeeks])
 
@@ -168,7 +168,7 @@ const Fixture = ({ user, fixture, saveAll, showLeaguePronos, setShowLeaguePronos
                                     name='homeProno'
                                     value={homeScore}
                                     min={0}
-                                    onChange={e => setHomeScore(e.target.value)}
+                                    onChange={e => handleInputHomeProno(e.target.value, fixture)}
                                     placeholder='Prono'
                                     disabled={matchStarted}
                                 />
@@ -197,7 +197,7 @@ const Fixture = ({ user, fixture, saveAll, showLeaguePronos, setShowLeaguePronos
                                     name='awayProno'
                                     value={awayScore}
                                     min={0}
-                                    onChange={e => setAwayScore(e.target.value)}
+                                    onChange={e => handleInputAwayProno(e.target.value, fixture)}
                                     placeholder='Prono'
                                     disabled={matchStarted}
                                 />
@@ -246,8 +246,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = {
-    savePronogeek,
-    resetSaveAndErrorState
+    ...pronogeekActions
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Fixture)
