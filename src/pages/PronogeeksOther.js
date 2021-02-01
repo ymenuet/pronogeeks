@@ -105,7 +105,7 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID, geekID } }, 
     return loading || !season || !fixtures || !geek ? (
 
         <div className='pronogeeks-bg'>
-            {(errorSeason || errorGeek || errorPronogeek) ? <ErrorMessage>{errorSeason || errorGeek || errorPronogeek}</ErrorMessage> : <Loader color='rgb(4, 78, 199)' />}
+            {errorSeason || errorGeek || errorPronogeek ? <ErrorMessage>{errorSeason || errorGeek || errorPronogeek}</ErrorMessage> : <Loader color='rgb(4, 78, 199)' />}
         </div>
 
     ) : <div className='pronogeeks-bg matchweek-page'>
@@ -155,8 +155,8 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID, geekID } }, 
                             style={{ background: 'none' }}
                         >
                             <FixtureOther
-                                fixtureID={fixture._id}
-                                user={geek}
+                                fixture={fixture}
+                                geek={geek}
                             />
                         </li>
                     ))}

@@ -64,6 +64,7 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
         }
     }, [history, seasonID, matchweekNumber, user, newSeason])
 
+
     useEffect(() => {
         const seasonDetails = detailedSeasons[seasonID]
         if (
@@ -75,6 +76,7 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
         else if (seasonDetails) setSeason(seasonDetails)
 
     }, [seasonID, matchweekNumber, detailedSeasons, loadingSeason, getSeason, errorSeason])
+
 
     useEffect(() => {
         const matchweekDetails = seasonMatchweeks[`${seasonID}-${matchweekNumber}`]
@@ -89,6 +91,7 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
 
     }, [seasonID, matchweekNumber, season, seasonMatchweeks, loadingSeason, getMatchweekFixtures, errorSeason])
 
+
     useEffect(() => {
         if (
             isConnected(user) &&
@@ -99,11 +102,14 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
 
     }, [user, userPronogeeks, loadingPronogeek, seasonID, matchweekNumber, getUserMatchweekPronos, errorPronogeek])
 
+
     useEffect(() => {
         const pronogeeks = userPronogeeks[`${seasonID}-${matchweekNumber}`]
         if (pronogeeks && Object.keys(pronogeeks).length) setDisableSaveAllBtn(false)
+        else setDisableSaveAllBtn(true)
 
     }, [userPronogeeks, seasonID, matchweekNumber])
+
 
     useEffect(() => {
 

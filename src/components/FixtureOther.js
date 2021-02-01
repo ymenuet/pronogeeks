@@ -1,26 +1,35 @@
 import React, { useState, useEffect } from 'react'
-import { getFixture } from '../services/fixtures'
+import { connect } from 'react-redux'
 import { Skeleton } from 'antd'
-import { dateTransform, statusTranform, getGeeksProno } from '../helpers'
+import { dateTransform, statusTranform } from '../helpers'
 import { FavTeamIcon } from './Icons'
 import '../styles/fixture.css'
 
-const Fixture = ({ fixtureID, user }) => {
-    const [fixture, setFixture] = useState(null)
+const FixtureOther = ({ fixture, geek, geeksPronogeeks }) => {
     const [pronogeek, setPronogeek] = useState(null)
     const [matchStarted, setMatchStarted] = useState(false)
     const [homeScore, setHomeScore] = useState(null)
     const [awayScore, setAwayScore] = useState(null)
 
     useEffect(() => {
-        if (user && user.seasons.length > 0) {
-            const fetchFixture = async () => {
-                const fixture = await getFixture(fixtureID)
-                getGeeksProno(user, fixture, setHomeScore, setAwayScore, setMatchStarted, setPronogeek, setFixture)
-            }
-            fetchFixture()
-        }
-    }, [fixtureID, user])
+        if (
+            new Date(fixture.date) < Date.now() &&
+            fixture.statusShort !== 'PST'
+        ) setMatchStarted(true)
+
+    }, [fixture])
+
+
+    useEffect(() => {
+        let pronogeek = { homeProno: '', awayProno: '' }
+        const { _id, season, matchweek } = fixture
+        const geekPronogeeks = geeksPronogeeks[`${geek._id}-${season}-${matchweek}`]
+        if (geekPronogeeks && geekPronogeeks[_id]) pronogeek = geekPronogeeks[_id]
+        setPronogeek(pronogeek)
+        setHomeScore(pronogeek.homeProno)
+        setAwayScore(pronogeek.awayProno)
+
+    }, [fixture, geek, geeksPronogeeks])
 
 
     return !fixture || homeScore == null || awayScore == null ? (
@@ -102,7 +111,7 @@ const Fixture = ({ fixtureID, user }) => {
                             <td className='prono-input-col'>
                                 {pronogeek.points > 0 && pronogeek.bonusFavTeam && (
                                     <div style={{ margin: '0 10px' }}>
-                                        {user.username} a scoré {pronogeek.points}pts<br />
+                                        {geek.username} a scoré {pronogeek.points}pts<br />
                                         (bonus {pronogeek.exact && 'score exact'}{pronogeek.exact && <br />}
                                         {pronogeek.exact && 'et '}<FavTeamIcon size='20px' />)
                                     </div>
@@ -110,7 +119,7 @@ const Fixture = ({ fixtureID, user }) => {
 
                                 {pronogeek.points > 0 && !pronogeek.bonusFavTeam && (
                                     <div style={{ margin: '0 10px' }}>
-                                        {user.username} a scoré {pronogeek.points}pts<br />
+                                        {geek.username} a scoré {pronogeek.points}pts<br />
                                         {pronogeek.exact && '(bonus score exact)'}
                                     </div>
                                 )}
@@ -150,4 +159,8 @@ const Fixture = ({ fixtureID, user }) => {
         )
 }
 
-export default Fixture
+const mapStateToProps = state => ({
+    geeksPronogeeks: state.pronogeekReducer.geeksPronogeeks,
+})
+
+export default connect(mapStateToProps)(FixtureOther)

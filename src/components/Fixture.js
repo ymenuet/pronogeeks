@@ -1,16 +1,15 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
-import { savePronogeeks } from '../services/pronogeeks'
 import { Skeleton } from 'antd'
-import { Context } from '../context'
 import { openNotification, dateTransform, statusTranform } from '../helpers'
-import { getProfile } from '../services/auth'
 import SavePronoButton from './SavePronoButton'
 import PreviewPronos from './PreviewPronos'
 import { FavTeamIcon } from '../components/Icons'
 import '../styles/fixture.css'
 
-const Fixture = ({ user, fixture, saveAll, showLeaguePronos, setShowLeaguePronos, userPronogeeks }) => {
+import { savePronogeek, resetSaveAndErrorState } from '../actions/pronogeekActions'
+
+const Fixture = ({ user, fixture, saveAll, showLeaguePronos, setShowLeaguePronos, userPronogeeks, savePronogeek, resetSaveAndErrorState }) => {
     const [pronogeek, setPronogeek] = useState(null)
     const [matchStarted, setMatchStarted] = useState(false)
     const [homeScore, setHomeScore] = useState(null)
@@ -18,9 +17,8 @@ const Fixture = ({ user, fixture, saveAll, showLeaguePronos, setShowLeaguePronos
     const [saving, setSaving] = useState(false)
     const [saveSuccess, setSaveSuccess] = useState(false)
     const [showLeagues, setShowLeagues] = useState(false)
-    const { loginUser } = useContext(Context)
 
-    const saveProno = async (bool = true, time = 4500) => {
+    const saveProno = () => {
         setSaveSuccess(false)
 
         // Error message if someone takes out the "disabled" property of a passed game to change their pronostics
@@ -32,37 +30,47 @@ const Fixture = ({ user, fixture, saveAll, showLeaguePronos, setShowLeaguePronos
             (!awayScore && parseInt(awayScore) !== 0)
         ) return openNotification('warning', 'Attention', `Tu n'as pas défini de score pour le match ${fixture.homeTeam.name} - ${fixture.awayTeam.name}. Prono non enregistré.`)
 
-        let error = false
-        setSaving(true)
-        await savePronogeeks(homeScore, awayScore, fixture._id).catch(err => {
-            openNotification('warning', 'Attention', err.response.data.message.fr)
-            error = true
-            setSaving(false)
-        })
-        if (!error) {
-            if (bool) openNotification('success', 'Enregistré', `Pronogeek enregistré pour ${fixture.homeTeam.name} - ${fixture.awayTeam.name}`)
-            setSaving(false)
-            setSaveSuccess(true)
-            setTimeout(() => setSaveSuccess(false), time)
-            const user = await getProfile()
-            loginUser(user)
-        }
+        savePronogeek(homeScore, awayScore, fixture)
     }
 
     useEffect(() => {
         let pronogeek = { homeProno: '', awayProno: '' }
         const { _id, season, matchweek } = fixture
-        if (userPronogeeks[`${season}-${matchweek}`] && userPronogeeks[`${season}-${matchweek}`][_id]) pronogeek = userPronogeeks[`${season}-${matchweek}`][_id]
+        const userMatchweekPronogeeks = userPronogeeks[`${season}-${matchweek}`]
+        if (userMatchweekPronogeeks && userMatchweekPronogeeks[_id]) pronogeek = userMatchweekPronogeeks[_id]
         setPronogeek(pronogeek)
         setHomeScore(pronogeek.homeProno)
         setAwayScore(pronogeek.awayProno)
+
     }, [fixture, userPronogeeks])
 
     useEffect(() => {
+        if (pronogeek) {
+            if (pronogeek.saving) setSaving(true)
+
+            if (pronogeek.saved) {
+                resetSaveAndErrorState(fixture)
+                setSaving(false)
+                setSaveSuccess(true)
+                setTimeout(() => setSaveSuccess(false), 4000)
+                openNotification('success', 'Enregistré', `Pronogeek enregistré pour ${fixture.homeTeam.name} - ${fixture.awayTeam.name}`)
+            }
+
+            if (pronogeek.error) {
+                resetSaveAndErrorState(fixture)
+                setSaving(false)
+                openNotification('error', 'Erreur', `Une erreur a eu lieu lors de l'enregistrement du match ${fixture.homeTeam.name} - ${fixture.awayTeam.name}. Réessaye plus tard.`)
+            }
+        }
+
+    }, [pronogeek, fixture, resetSaveAndErrorState])
+
+    useEffect(() => {
         if (
-            new Date(fixture.date) - Date.now() < 0 &&
+            new Date(fixture.date) < Date.now() &&
             fixture.statusShort !== 'PST'
         ) setMatchStarted(true)
+
     }, [fixture])
 
     useEffect(() => {
@@ -237,4 +245,9 @@ const mapStateToProps = state => ({
     userPronogeeks: state.pronogeekReducer.userPronogeeks
 })
 
-export default connect(mapStateToProps)(Fixture)
+const mapDispatchToProps = {
+    savePronogeek,
+    resetSaveAndErrorState
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Fixture)
