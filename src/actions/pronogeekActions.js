@@ -98,14 +98,20 @@ export const handleInputHomeProno = (homeProno, fixture) => (dispatch, getState)
     } = fixture
     homeProno = parseInt(homeProno)
 
-    const newPronogeeks = createCopyMatchweekPronos(getState, fixture)
+    const newPronogeeks = createCopyUserPronos(getState, fixture)
 
-    newPronogeeks[`${season}-${matchweek}`].modified[_id] = true
+    const awayProno = newPronogeeks[`${season}-${matchweek}`][_id].awayProno
+    const isAwayPronoSet = parseInt(awayProno) >= 0
 
-    newPronogeeks[`${season}-${matchweek}`][_id] = {
-        ...newPronogeeks[`${season}-${matchweek}`][_id],
-        homeProno
-    }
+    const awayPronoDB = newPronogeeks[`${season}-${matchweek}`][_id].awayPronoDB || awayProno
+    let homePronoDB = newPronogeeks[`${season}-${matchweek}`][_id].homePronoDB
+    if (!newPronogeeks[`${season}-${matchweek}`][_id].modified) homePronoDB = newPronogeeks[`${season}-${matchweek}`][_id].homeProno
+    const isSamePronoAsInDB = awayProno === awayPronoDB && homeProno === homePronoDB
+
+    newPronogeeks[`${season}-${matchweek}`][_id].fixture = _id
+    newPronogeeks[`${season}-${matchweek}`][_id].homeProno = homeProno
+    newPronogeeks[`${season}-${matchweek}`][_id].modified = isAwayPronoSet && !isSamePronoAsInDB && homeProno >= 0
+    if (homePronoDB) newPronogeeks[`${season}-${matchweek}`][_id].homePronoDB = homePronoDB
 
     dispatch({
         type: ADD_PRONOGEEKS,
@@ -121,14 +127,20 @@ export const handleInputAwayProno = (awayProno, fixture) => (dispatch, getState)
     } = fixture
     awayProno = parseInt(awayProno)
 
-    const newPronogeeks = createCopyMatchweekPronos(getState, fixture)
+    const newPronogeeks = createCopyUserPronos(getState, fixture)
 
-    newPronogeeks[`${season}-${matchweek}`].modified[_id] = true
+    const homeProno = newPronogeeks[`${season}-${matchweek}`][_id].homeProno
+    const isHomePronoSet = parseInt(newPronogeeks[`${season}-${matchweek}`][_id].homeProno) >= 0
 
-    newPronogeeks[`${season}-${matchweek}`][_id] = {
-        ...newPronogeeks[`${season}-${matchweek}`][_id],
-        awayProno
-    }
+    const homePronoDB = newPronogeeks[`${season}-${matchweek}`][_id].homePronoDB || homeProno
+    let awayPronoDB = newPronogeeks[`${season}-${matchweek}`][_id].awayPronoDB
+    if (!newPronogeeks[`${season}-${matchweek}`][_id].modified) awayPronoDB = newPronogeeks[`${season}-${matchweek}`][_id].awayProno
+    const isSamePronoAsInDB = homeProno === homePronoDB && awayProno === awayPronoDB
+
+    newPronogeeks[`${season}-${matchweek}`][_id].fixture = _id
+    newPronogeeks[`${season}-${matchweek}`][_id].awayProno = awayProno
+    newPronogeeks[`${season}-${matchweek}`][_id].modified = isHomePronoSet && !isSamePronoAsInDB && awayProno >= 0
+    if (awayPronoDB) newPronogeeks[`${season}-${matchweek}`][_id].awayPronoDB = awayPronoDB
 
     dispatch({
         type: ADD_PRONOGEEKS,
@@ -143,7 +155,7 @@ export const savePronogeek = (homeProno, awayProno, fixture) => async(dispatch, 
         matchweek
     } = fixture
 
-    const newPronogeeks = createCopyMatchweekPronos(getState, fixture)
+    const newPronogeeks = createCopyUserPronos(getState, fixture)
 
     newPronogeeks[`${season}-${matchweek}`][_id] = {
         ...newPronogeeks[`${season}-${matchweek}`][_id],
@@ -167,15 +179,14 @@ export const savePronogeek = (homeProno, awayProno, fixture) => async(dispatch, 
             awayProno
         })
 
-        const newPronogeeks = createCopyMatchweekPronos(getState, fixture)
-
-        newPronogeeks[`${season}-${matchweek}`].modified[_id] = false
+        const newPronogeeks = createCopyUserPronos(getState, fixture)
 
         newPronogeeks[`${season}-${matchweek}`][_id] = {
             ...pronogeek,
             saved: true,
             saving: false,
-            error: false
+            error: false,
+            modified: false
         }
 
         dispatch({
@@ -184,7 +195,7 @@ export const savePronogeek = (homeProno, awayProno, fixture) => async(dispatch, 
         })
 
     } catch (error) {
-        const newPronogeeks = createCopyMatchweekPronos(getState, fixture)
+        const newPronogeeks = createCopyUserPronos(getState, fixture)
 
         newPronogeeks[`${season}-${matchweek}`][_id] = {
             ...newPronogeeks[`${season}-${matchweek}`][_id],
@@ -210,11 +221,52 @@ export const saveAllPronogeeks = (seasonID, matchweekNumber) => async(dispatch, 
 
     if (!userPronogeeks[`${seasonID}-${matchweekNumber}`]) return dispatch({
         type: ERROR,
-        payload: `Auncun pronogeek à enregistrer`
+        payload: `Aucun pronogeek à enregistrer pour la journée ${matchweekNumber}.`
+    })
+
+    const pronogeeksToSave = Object.values(userPronogeeks[`${seasonID}-${matchweekNumber}`])
+        .filter(({
+            modified
+        }) => modified === true)
+        .map(({
+            fixture,
+            homeProno,
+            awayProno
+        }) => ({
+            fixture,
+            homeProno,
+            awayProno
+        }))
+
+    if (!pronogeeksToSave.length) return dispatch({
+        type: ERROR,
+        payload: `Tous tes pronogeeks de la journée ${matchweekNumber} sont à jour.`
     })
 
     try {
-        console.log(userPronogeeks[`${seasonID}-${matchweekNumber}`])
+        const {
+            data: {
+                pronogeeks
+            }
+        } = await pronogeekService.put(`/season/${seasonID}/matchweek/${matchweekNumber}`, {
+            pronogeeksToSave
+        })
+
+        const pronogeeksSaved = {}
+        pronogeeks.map(pronogeek => {
+            pronogeeksSaved[pronogeek.fixture] = pronogeek
+            return pronogeek
+        })
+
+        const newPronogeeks = {
+            ...userPronogeeks
+        }
+        newPronogeeks[`${seasonID}-${matchweekNumber}`] = pronogeeksSaved
+
+        dispatch({
+            type: ADD_PRONOGEEKS,
+            payload: newPronogeeks
+        })
 
     } catch (error) {
         dispatch({
@@ -231,7 +283,7 @@ export const resetSaveAndErrorState = fixture => (dispatch, getState) => {
         matchweek
     } = fixture
 
-    const newPronogeeks = createCopyMatchweekPronos(getState, fixture)
+    const newPronogeeks = createCopyUserPronos(getState, fixture)
 
     newPronogeeks[`${season}-${matchweek}`][_id] = {
         ...newPronogeeks[`${season}-${matchweek}`][_id],
@@ -245,7 +297,7 @@ export const resetSaveAndErrorState = fixture => (dispatch, getState) => {
     })
 }
 
-function createCopyMatchweekPronos(getState, fixture) {
+function createCopyUserPronos(getState, fixture) {
     const {
         _id,
         season,
@@ -270,17 +322,8 @@ function createCopyMatchweekPronos(getState, fixture) {
         } else {
             newPronogeeks[`${season}-${matchweek}`][_id] = {}
         }
-        if (userPronogeeks[`${season}-${matchweek}`].modified) {
-            newPronogeeks[`${season}-${matchweek}`].modified = {
-                ...userPronogeeks[`${season}-${matchweek}`].modified,
-            }
-        } else {
-            newPronogeeks[`${season}-${matchweek}`].modified = {}
-        }
     } else {
-        newPronogeeks[`${season}-${matchweek}`] = {
-            modified: {}
-        }
+        newPronogeeks[`${season}-${matchweek}`] = {}
         newPronogeeks[`${season}-${matchweek}`][_id] = {}
     }
 

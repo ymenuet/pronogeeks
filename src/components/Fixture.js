@@ -9,7 +9,7 @@ import '../styles/fixture.css'
 
 import * as pronogeekActions from '../actions/pronogeekActions'
 
-const Fixture = ({ user, fixture, saveAll, showLeaguePronos, setShowLeaguePronos, userPronogeeks, savePronogeek, resetSaveAndErrorState, handleInputHomeProno, handleInputAwayProno }) => {
+const Fixture = ({ user, fixture, showLeaguePronos, setShowLeaguePronos, userPronogeeks, savePronogeek, resetSaveAndErrorState, handleInputHomeProno, handleInputAwayProno }) => {
     const [pronogeek, setPronogeek] = useState(null)
     const [matchStarted, setMatchStarted] = useState(false)
     const [homeScore, setHomeScore] = useState(null)
@@ -42,22 +42,10 @@ const Fixture = ({ user, fixture, saveAll, showLeaguePronos, setShowLeaguePronos
         setPronogeek(pronogeek)
         setHomeScore(parseInt(pronogeek.homeProno) >= 0 ? pronogeek.homeProno : '')
         setAwayScore(parseInt(pronogeek.awayProno) >= 0 ? pronogeek.awayProno : '')
+        setModified(pronogeek.modified ? true : false)
 
     }, [fixture, userPronogeeks])
 
-    useEffect(() => {
-        const { _id, season, matchweek } = fixture
-        const userMatchweekPronogeeks = userPronogeeks[`${season}-${matchweek}`]
-        if (
-            userMatchweekPronogeeks &&
-            userMatchweekPronogeeks.modified &&
-            Object.keys(userMatchweekPronogeeks.modified).length
-        ) {
-            if (userMatchweekPronogeeks.modified[_id]) setModified(true)
-            else setModified(false)
-        }
-
-    }, [fixture, userPronogeeks])
 
     useEffect(() => {
         if (pronogeek) {
@@ -87,15 +75,6 @@ const Fixture = ({ user, fixture, saveAll, showLeaguePronos, setShowLeaguePronos
         ) setMatchStarted(true)
 
     }, [fixture])
-
-    useEffect(() => {
-        if (
-            saveAll &&
-            (new Date(fixture.date).getTime() - Date.now() > 0) &&
-            (homeScore || parseInt(homeScore) === 0) &&
-            (awayScore || parseInt(awayScore) === 0)
-        ) saveProno(false, 10000)
-    }, [saveAll, awayScore, homeScore, fixture])
 
 
     useEffect(() => {

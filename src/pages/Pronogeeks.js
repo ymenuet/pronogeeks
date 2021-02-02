@@ -25,7 +25,6 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
     const [oddsUpdated, setOddsUpdated] = useState(false)
     const [lastOddsUpdated, setLastOddsUpdated] = useState(null)
     const [lastScoresUpdated, setLastScoresUpdated] = useState(null)
-    const [saveAll, setSaveAll] = useState(false)
     const [showLeaguePronos, setShowLeaguePronos] = useState(false)
     const [disableSaveAllBtn, setDisableSaveAllBtn] = useState(true)
     const [matchweekFromInput, setMatchweekFromInput] = useState(matchweekNumber)
@@ -116,11 +115,10 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
         const pronogeeks = userPronogeeks[`${seasonID}-${matchweekNumber}`]
         if (
             pronogeeks &&
-            pronogeeks.modified &&
-            Object.keys(pronogeeks.modified).length
+            Object.keys(pronogeeks).length
         ) {
-            const modifiedTotal = Object.values(pronogeeks.modified).reduce((total, currentProno) => {
-                if (currentProno) return total + 1
+            const modifiedTotal = Object.values(pronogeeks).reduce((total, currentProno) => {
+                if (currentProno.modified) return total + 1
                 else return total
             }, 0)
             setModifiedTotal(modifiedTotal)
@@ -189,13 +187,6 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
 
     }, [fixtures, scoresUpdated, oddsUpdated, matchweekNumber, seasonID, user, userMatchweek, newSeason])
 
-    const saveAllPronos = () => {
-        const fixtureDates = fixtures.map(fixture => new Date(fixture.date).getTime())
-        const maxDate = Math.max(...fixtureDates)
-        if (maxDate < Date.now()) return openNotification('warning', 'Pronos terminés pour cette journée.')
-        setSaveAll(true)
-        setTimeout(() => setSaveAll(false), 1000)
-    }
 
     const resetHeader = () => {
         setFixtures(null)
@@ -317,7 +308,6 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
                         >
                             <Fixture
                                 fixture={fixture}
-                                saveAll={saveAll}
                                 showLeaguePronos={showLeaguePronos}
                                 setShowLeaguePronos={setShowLeaguePronos}
                             />
