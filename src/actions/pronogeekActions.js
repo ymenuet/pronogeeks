@@ -2,7 +2,6 @@ import axios from 'axios'
 import {
     ADD_PRONOGEEKS,
     ADD_GEEK_PRONOGEEKS,
-    SAVING_ALL,
     LOADING,
     ERROR
 } from '../types/pronogeekTypes'
@@ -211,18 +210,28 @@ export const savePronogeek = (homeProno, awayProno, fixture) => async(dispatch, 
 }
 
 export const saveAllPronogeeks = (seasonID, matchweekNumber) => async(dispatch, getState) => {
-    dispatch({
-        type: SAVING_ALL
-    })
-
     const {
         userPronogeeks
     } = getState().pronogeekReducer
 
-    if (!userPronogeeks[`${seasonID}-${matchweekNumber}`]) return dispatch({
-        type: ERROR,
-        payload: `Aucun pronogeek à enregistrer pour la journée ${matchweekNumber}.`
-    })
+    const newPronogeeks = {
+        ...userPronogeeks
+    }
+    newPronogeeks[`${seasonID}-${matchweekNumber}`] = {
+        ...userPronogeeks[`${seasonID}-${matchweekNumber}`],
+    }
+
+    if (!Object.keys(userPronogeeks[`${seasonID}-${matchweekNumber}`]).filter(key => key !== 'error' && key !== 'saving' && key !== 'saved').length) {
+        newPronogeeks[`${seasonID}-${matchweekNumber}`].error = {
+            type: 'warning',
+            title: 'Pas de pronos',
+            message: `Aucun nouveau pronogeek à enregistrer pour la journée ${matchweekNumber}.`
+        }
+        return dispatch({
+            type: ADD_PRONOGEEKS,
+            payload: newPronogeeks
+        })
+    }
 
     const pronogeeksToSave = Object.values(userPronogeeks[`${seasonID}-${matchweekNumber}`])
         .filter(({
@@ -238,10 +247,24 @@ export const saveAllPronogeeks = (seasonID, matchweekNumber) => async(dispatch, 
             awayProno
         }))
 
-    if (!pronogeeksToSave.length) return dispatch({
-        type: ERROR,
-        payload: `Tous tes pronogeeks de la journée ${matchweekNumber} sont à jour.`
-    })
+    if (!pronogeeksToSave.length) {
+        newPronogeeks[`${seasonID}-${matchweekNumber}`].error = {
+            type: 'success',
+            title: 'Pronos à jour',
+            message: `Tes pronogeeks de la journée ${matchweekNumber} sont déjà à jour.`
+        }
+        return dispatch({
+            type: ADD_PRONOGEEKS,
+            payload: newPronogeeks
+        })
+    }
+
+    newPronogeeks[`${seasonID}-${matchweekNumber}`] = {
+        ...userPronogeeks[`${seasonID}-${matchweekNumber}`],
+        saving: true,
+        saved: false,
+        error: false
+    }
 
     try {
         const {
@@ -261,7 +284,13 @@ export const saveAllPronogeeks = (seasonID, matchweekNumber) => async(dispatch, 
         const newPronogeeks = {
             ...userPronogeeks
         }
-        newPronogeeks[`${seasonID}-${matchweekNumber}`] = pronogeeksSaved
+        newPronogeeks[`${seasonID}-${matchweekNumber}`] = {
+            ...userPronogeeks[`${seasonID}-${matchweekNumber}`],
+            ...pronogeeksSaved,
+            saved: true,
+            saving: false,
+            error: false
+        }
 
         dispatch({
             type: ADD_PRONOGEEKS,
@@ -269,9 +298,23 @@ export const saveAllPronogeeks = (seasonID, matchweekNumber) => async(dispatch, 
         })
 
     } catch (error) {
+        const newPronogeeks = {
+            ...userPronogeeks
+        }
+        newPronogeeks[`${seasonID}-${matchweekNumber}`] = {
+            ...userPronogeeks[`${seasonID}-${matchweekNumber}`],
+            error: {
+                type: 'error',
+                title: 'Erreur',
+                message: `Une erreur a eu lieu lors de l'enregistrement de tes pronogeeks de la journée ${matchweekNumber}. Tente de les enregistrer un par un ou réessaye plus tard.`,
+            },
+            saved: false,
+            saving: false,
+        }
+
         dispatch({
-            type: ERROR,
-            payload: `Erreur lors de la sauvegarde des pronos. Réessaye plus tard ou tente de les enregistrer un par un.`
+            type: ADD_PRONOGEEKS,
+            payload: newPronogeeks
         })
     }
 }
@@ -287,6 +330,27 @@ export const resetSaveAndErrorState = fixture => (dispatch, getState) => {
 
     newPronogeeks[`${season}-${matchweek}`][_id] = {
         ...newPronogeeks[`${season}-${matchweek}`][_id],
+        saving: false,
+        saved: false,
+        error: false
+    }
+    dispatch({
+        type: ADD_PRONOGEEKS,
+        payload: newPronogeeks
+    })
+}
+
+export const resetMatchweekSaveAndErrorState = (seasonID, matchweekNumber) => (dispatch, getState) => {
+    const {
+        userPronogeeks
+    } = getState().pronogeekReducer
+
+    const newPronogeeks = {
+        ...userPronogeeks
+    }
+
+    newPronogeeks[`${seasonID}-${matchweekNumber}`] = {
+        ...userPronogeeks[`${seasonID}-${matchweekNumber}`],
         saving: false,
         saved: false,
         error: false

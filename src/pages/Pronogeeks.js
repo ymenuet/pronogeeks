@@ -6,13 +6,13 @@ import { getProfile } from '../services/auth'
 import { Fixture, Loader, MatchweekNavigation, AdminButtons, RulesProno, InputMatchweek } from '../components'
 import { openNotification, resetMatchweek, getUserSeasonFromProfile, getUserMatchweekFromProfile, isConnected } from '../helpers'
 import { Context } from '../context'
-import { QuestionIcon, SaveIcon, RankingIcon } from '../components/Icons'
+import { QuestionIcon, SaveIcon, RankingIcon, ValidateIcon } from '../components/Icons'
 import '../styles/pronogeeks.css'
 
 import * as seasonActions from '../actions/seasonActions'
 import * as pronogeekActions from '../actions/pronogeekActions'
 
-const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history, loading, loadingSeason, loadingPronogeek, user, detailedSeasons, seasonMatchweeks, userPronogeeks, getSeason, getMatchweekFixtures, getUserMatchweekPronos, saveAllPronogeeks, errorSeason, errorPronogeek }) => {
+const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history, loading, loadingSeason, loadingPronogeek, user, detailedSeasons, seasonMatchweeks, userPronogeeks, getSeason, getMatchweekFixtures, getUserMatchweekPronos, saveAllPronogeeks, resetMatchweekSaveAndErrorState, errorSeason, errorPronogeek }) => {
     const [season, setSeason] = useState(null)
     const [newSeason, setNewSeason] = useState(true)
     const [userMatchweek, setUserMatchweek] = useState(null)
@@ -26,7 +26,8 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
     const [lastOddsUpdated, setLastOddsUpdated] = useState(null)
     const [lastScoresUpdated, setLastScoresUpdated] = useState(null)
     const [showLeaguePronos, setShowLeaguePronos] = useState(false)
-    const [disableSaveAllBtn, setDisableSaveAllBtn] = useState(true)
+    const [savingAll, setSavingAll] = useState(false)
+    const [saveAllSuccess, setSaveAllSuccess] = useState(false)
     const [matchweekFromInput, setMatchweekFromInput] = useState(matchweekNumber)
     const [modifiedTotal, setModifiedTotal] = useState(0)
 
@@ -105,14 +106,6 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
 
     useEffect(() => {
         const pronogeeks = userPronogeeks[`${seasonID}-${matchweekNumber}`]
-        if (pronogeeks && Object.keys(pronogeeks).length) setDisableSaveAllBtn(false)
-        else setDisableSaveAllBtn(true)
-
-    }, [userPronogeeks, seasonID, matchweekNumber])
-
-
-    useEffect(() => {
-        const pronogeeks = userPronogeeks[`${seasonID}-${matchweekNumber}`]
         if (
             pronogeeks &&
             Object.keys(pronogeeks).length
@@ -128,6 +121,29 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
         }
 
     }, [userPronogeeks, seasonID, matchweekNumber])
+
+
+    useEffect(() => {
+        const pronogeeks = userPronogeeks[`${seasonID}-${matchweekNumber}`]
+        if (pronogeeks) {
+            if (pronogeeks.saving) setSavingAll(true)
+
+            if (pronogeeks.saved) {
+                resetMatchweekSaveAndErrorState(seasonID, matchweekNumber)
+                setSavingAll(false)
+                setSaveAllSuccess(true)
+                setTimeout(() => setSaveAllSuccess(false), 4000)
+                openNotification('success', 'Sauvegarde réussie', `Pronogeeks de la journée ${matchweekNumber} enregistrés.`)
+            }
+
+            if (pronogeeks.error) {
+                const { type, title, message } = pronogeeks.error
+                resetMatchweekSaveAndErrorState(seasonID, matchweekNumber)
+                setSavingAll(false)
+                openNotification(type, title, message)
+            }
+        }
+    }, [userPronogeeks, seasonID, matchweekNumber, resetMatchweekSaveAndErrorState])
 
 
     useEffect(() => {
@@ -240,11 +256,13 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
 
                     <button
                         onClick={() => saveAllPronogeeks(seasonID, matchweekNumber)}
-                        className='btn my-btn save-all-btn'
-                        disabled={disableSaveAllBtn}
+                        className={`btn my-btn save-all-btn ${saveAllSuccess ? 'all-saved' : ''}`}
+                        disabled={savingAll}
                     >
                         {modifiedTotal > 0 && <small className='pronos-to-save large-screen-icon'>{modifiedTotal}</small>}
-                        <SaveIcon size='40px' />
+                        {savingAll ? <Loader fontSize='2rem' tip='' container={false} /> :
+                            saveAllSuccess ? <ValidateIcon size='40px' /> :
+                                <SaveIcon size='40px' />}
                         &nbsp;
                         <span>{modifiedTotal > 0 && <small className='pronos-to-save'>{modifiedTotal}</small>}Enregistrer tout</span>
 

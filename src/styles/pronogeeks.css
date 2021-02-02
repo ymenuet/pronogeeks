@@ -98,6 +98,14 @@
     position: relative;
 }
 
+.save-all-btn.all-saved {
+    background-color: var(--color-light-green-gb);
+}
+
+.save-all-btn.all-saved:hover {
+    background-color: rgb(96, 224, 57);
+}
+
 .go-to-ranking-btn {
     font-size: 1rem;
     background-color: var(--color-dark-blue-bp);
