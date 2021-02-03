@@ -9,15 +9,6 @@ const seasonService = axios.create({
     withCredentials: true
 })
 
-export const getSeasonData = async(seasonID) => {
-    const {
-        data: {
-            season
-        }
-    } = await seasonService.get(`/${seasonID}`)
-    return season
-}
-
 export const getSeasons = async() => {
     const {
         data: {
@@ -25,18 +16,4 @@ export const getSeasons = async() => {
         }
     } = await seasonService.get('/')
     return seasons
-}
-
-export const getMatchweekFixtures = async(seasonID, matchweekNum) => {
-    const {
-        data: {
-            fixtures
-        }
-    } = await seasonService.get(`/${seasonID}/${matchweekNum}`)
-    return fixtures
-}
-
-export const closeProvRankings = async(seasonID) => {
-    await seasonService.put(`/closeRankings/${seasonID}`)
-    return true
 }

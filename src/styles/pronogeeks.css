@@ -134,10 +134,16 @@
     left: 2px;
 }
 
-.save-all-btn span,
+.save-all-btn>span,
 .go-to-ranking-btn span {
     display: none;
     font-size: 1.2rem;
+}
+
+.saving-all-loader {
+    position: relative;
+    top: 16px;
+    right: 2px;
 }
 
 .save-all-info,
@@ -211,7 +217,15 @@
         background-size: 100%;
         transition: background 0s;
     }
-    .save-all-btn span,
+    .save-all-btn.all-saved:hover {
+        background: var(--color-light-green-gb) radial-gradient(circle, transparent 1%, rgb(96, 224, 57) 1%) center/15000%;
+    }
+    .save-all-btn.all-saved:active {
+        background-color: var(--color-light-green-gb);
+        background-size: 100%;
+        transition: background 0s;
+    }
+    .save-all-btn>span,
     .go-to-ranking-btn span {
         display: inline;
         transition: all 0.3s;
@@ -239,6 +253,11 @@
     }
     .pronos-to-save.large-screen-icon {
         display: none;
+    }
+    .saving-all-loader {
+        top: 2px;
+        right: 8px;
+        display: inline;
     }
 }
 

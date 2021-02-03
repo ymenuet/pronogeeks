@@ -155,6 +155,38 @@ export const setLastMatchweek = season => (dispatch, getState) => {
     })
 }
 
+export const closeProvRankings = seasonID => async(dispatch, getState) => {
+    dispatch({
+        type: LOADING
+    })
+
+    try {
+        await seasonService.put(`/closeRankings/${seasonID}`)
+        const {
+            detailedSeasons
+        } = getState().seasonReducer
+
+        const newDetailedSeasons = {
+            ...detailedSeasons
+        }
+        newDetailedSeasons[seasonID] = {
+            ...detailedSeasons[seasonID],
+            provRankingOpen: false
+        }
+
+        dispatch({
+            type: ADD_SEASON,
+            payload: newDetailedSeasons
+        })
+
+    } catch (error) {
+        dispatch({
+            type: ERROR,
+            payload: `Erreur lors de la fermeture du classement de la saison.`
+        })
+    }
+}
+
 function getLastMatchweek(fixtures) {
     return fixtures.map(fixture => fixture.matchweek).reduce((lastMatchweek, matchweek) => matchweek > lastMatchweek ? matchweek : lastMatchweek)
 }

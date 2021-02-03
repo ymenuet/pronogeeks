@@ -260,11 +260,16 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
                         disabled={savingAll}
                     >
                         {modifiedTotal > 0 && <small className='pronos-to-save large-screen-icon'>{modifiedTotal}</small>}
-                        {savingAll ? <Loader fontSize='2rem' tip='' container={false} /> :
+                        {savingAll ? <Loader
+                            tip=''
+                            fontSize='2.2rem'
+                            container={false}
+                            className='saving-all-loader'
+                        /> :
                             saveAllSuccess ? <ValidateIcon size='40px' /> :
                                 <SaveIcon size='40px' />}
                         &nbsp;
-                        <span>{modifiedTotal > 0 && <small className='pronos-to-save'>{modifiedTotal}</small>}Enregistrer tout</span>
+                        <span>{modifiedTotal > 0 && <small className='pronos-to-save'>{modifiedTotal}</small>}{savingAll ? 'Enregistrement...' : saveAllSuccess ? 'Enregistré' : 'Enregistrer tout'}</span>
 
                     </button>
 

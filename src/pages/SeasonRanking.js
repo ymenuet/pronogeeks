@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { getSeasonData, closeProvRankings } from '../services/seasons'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import { Loader, ErrorNotification } from '../components'
 import { DragIcon, SaveIcon, ListIcon } from '../components/Icons'
@@ -9,8 +8,9 @@ import { openNotification, isConnected } from '../helpers'
 import '../styles/seasonRanking.css'
 
 import { saveUserProvRanking, resetRankingSaved } from '../actions/geekActions'
+import { getSeason, closeProvRankings } from '../actions/seasonActions'
 
-const SeasonRanking = ({ match: { params: { seasonID, matchweekNumber } }, user, loadingGeek, rankingSaved, saveUserProvRanking, resetRankingSaved }) => {
+const SeasonRanking = ({ match: { params: { seasonID, matchweekNumber } }, loadingGeek, loadingSeason, user, rankingSaved, detailedSeasons, saveUserProvRanking, resetRankingSaved, getSeason, closeProvRankings, errorSeason }) => {
 
     const [season, setSeason] = useState(null)
     const [userProvRanking, setUserProvRanking] = useState(null)
@@ -24,13 +24,19 @@ const SeasonRanking = ({ match: { params: { seasonID, matchweekNumber } }, user,
         }
     }, [rankingSaved, resetRankingSaved])
 
+
     useEffect(() => {
-        const fetchSeasonData = async () => {
-            const season = await getSeasonData(seasonID)
-            setSeason(season)
-        }
-        fetchSeasonData()
-    }, [seasonID])
+        const seasonDetails = detailedSeasons[seasonID]
+        if (
+            !seasonDetails &&
+            !loadingSeason &&
+            !errorSeason
+        ) getSeason(seasonID)
+
+        else if (seasonDetails) setSeason(seasonDetails)
+
+    }, [seasonID, matchweekNumber, detailedSeasons, loadingSeason, getSeason, errorSeason])
+
 
     useEffect(() => {
         if (isConnected(user) && season) {
@@ -47,17 +53,21 @@ const SeasonRanking = ({ match: { params: { seasonID, matchweekNumber } }, user,
         }
     }, [user, season, seasonID])
 
+
     useEffect(() => {
         if (season && season.provRankingOpen) {
-            const checkIfProvRankingOpen = async () => {
-                const matchweek7Dates = season.fixtures.filter(({ matchweek }) => matchweek === 7).map(({ date }) => new Date(date))
-                const matchweek7HasStarted = Date.now() - Math.min(...matchweek7Dates) > 0
-                if (matchweek7HasStarted) await closeProvRankings(season._id)
-                else setProvRankingOpen(true)
-            }
-            checkIfProvRankingOpen()
+            const matchweek7Dates = season.fixtures.filter(({ matchweek }) => matchweek === 7).map(({ date }) => new Date(date))
+            const matchweek7HasStarted = Date.now() - Math.min(...matchweek7Dates) > 0
+
+            if (matchweek7HasStarted) {
+                if (!loadingSeason && !errorSeason) closeProvRankings(season._id)
+                setProvRankingOpen(false)
+
+            } else setProvRankingOpen(true)
         }
-    }, [season])
+
+    }, [season, closeProvRankings, loadingSeason, errorSeason])
+
 
     const handleDragEnd = result => {
         if (!result.destination) return
@@ -234,11 +244,16 @@ const mapStateToProps = state => ({
     user: state.authReducer.user,
     rankingSaved: state.geekReducer.rankingSaved,
     loadingGeek: state.geekReducer.loading,
+    detailedSeasons: state.seasonReducer.detailedSeasons,
+    loadingSeason: state.seasonReducer.loading,
+    errorSeason: state.seasonReducer.error
 })
 
 const mapDispatchToProps = {
     saveUserProvRanking,
-    resetRankingSaved
+    resetRankingSaved,
+    getSeason,
+    closeProvRankings
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(SeasonRanking)

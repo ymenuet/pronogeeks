@@ -20,10 +20,10 @@ const SavePronoButton = ({ user, modified, saveSuccess, matchStarted, saveProno,
 
     </> : !matchStarted ? <>
 
-        <small className='legend-save-btn'>Enregistrer prono</small>
+        <small className='legend-save-btn'>{saving ? 'Enregistrement...' : 'Enregistrer prono'}</small>
         <button
             className={`btn my-btn save-prono ${modified ? 'pending-save' : ''}`}
-            disabled={disabled}
+            disabled={disabled || saving}
             onClick={saveProno}
         >
             {!saving && <SaveIcon />}
