@@ -4,6 +4,7 @@ import { openNotification } from '../helpers'
 
 import { resetAuthError } from '../actions/authActions'
 import { resetGeekError } from '../actions/geekActions'
+import { resetGeekleagueError } from '../actions/geekleagueActions'
 
 const ErrorNotification = (props) => {
 
@@ -11,12 +12,14 @@ const ErrorNotification = (props) => {
 
     const errors = {
         auth: props.authError,
-        geek: props.geekError
+        geek: props.geekError,
+        geekleague: props.geekleagueError
     }
 
     const resets = {
         auth: props.resetAuthError,
-        geek: props.resetGeekError
+        geek: props.resetGeekError,
+        geekleague: props.resetGeekleagueError
     }
 
     useEffect(() => {
@@ -33,12 +36,14 @@ const ErrorNotification = (props) => {
 
 const mapStateToProps = state => ({
     authError: state.authReducer.error,
-    geekError: state.geekReducer.error
+    geekError: state.geekReducer.error,
+    geekleagueError: state.geekleagueReducer.error
 })
 
 const mapDispatchToProps = {
     resetAuthError,
-    resetGeekError
+    resetGeekError,
+    resetGeekleagueError
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ErrorNotification)

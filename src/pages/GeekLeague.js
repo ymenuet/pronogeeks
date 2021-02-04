@@ -1,22 +1,22 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { connect } from 'react-redux'
 import { Context } from '../context'
-import { isEmpty } from '../helpers'
+import { isEmpty, sortByUsername } from '../helpers'
 import { editGeekLeague, deleteGeekLeague, outGeekLeague } from '../services/geekLeague'
 import { getProfile } from '../services/auth'
-import { getSeasons } from '../services/seasons'
 import { Loader, RankGeeks, ErrorMessage } from '../components'
 import { Form, Input, Select } from 'antd'
 import { Link } from 'react-router-dom'
 import { EditIcon, DeleteIcon, RemoveIcon, WarningIcon } from '../components/Icons'
 import '../styles/detailGeekleague.css'
 
-import * as geekActions from '../actions/geekActions'
+import { getAllGeeks } from '../actions/geekActions'
 import * as geekleagueActions from '../actions/geekleagueActions'
+import { getUndergoingSeasons } from '../actions/seasonActions'
 
 const { Option } = Select
 
-const GeekLeague = ({ match: { params: { geekLeagueID } }, history, loading, loadingLeague, user, allGeeks, geekleagues, errorGeek, errorLeague, getAllGeeks, getLeague }) => {
+const GeekLeague = ({ match: { params: { geekLeagueID } }, history, loading, loadingLeague, loadingGeek, loadingSeason, user, allGeeks, geekleagues, undergoingSeasons, errorGeek, errorLeague, errorSeason, getAllGeeks, getLeague, getUndergoingSeasons }) => {
     const { loginUser } = useContext(Context)
     const [geekLeague, setGeekLeague] = useState(null)
     const [seasons, setSeasons] = useState(null)
@@ -38,33 +38,45 @@ const GeekLeague = ({ match: { params: { geekLeagueID } }, history, loading, loa
 
     }, [geekLeagueID, loadingLeague, geekleagues, errorLeague, getLeague])
 
+
     useEffect(() => {
-        if (isEmpty(allGeeks)) {
-            getAllGeeks()
-        }
-    }, [allGeeks, getAllGeeks])
+        if (
+            isEmpty(allGeeks) &&
+            !loadingGeek &&
+            !errorGeek
+        ) getAllGeeks()
+
+    }, [allGeeks, getAllGeeks, loadingGeek, errorGeek])
+
 
     useEffect(() => {
         if (!isEmpty(allGeeks) && geekLeague) {
-            const filteredGeeks = Object.values(allGeeks).filter(geek => {
-                let result = true
-                geekLeague.geeks.map(leagueGeek => {
-                    if (leagueGeek._id.toString() === geek._id.toString()) result = false
-                    return leagueGeek
+            let filteredGeeks = Object.values(allGeeks)
+                .filter(geek => {
+                    let result = true
+                    geekLeague.geeks.map(leagueGeek => {
+                        if (leagueGeek._id.toString() === geek._id.toString()) result = false
+                        return leagueGeek
+                    })
+                    return result
                 })
-                return result
-            })
+            filteredGeeks = sortByUsername(filteredGeeks)
             setFilteredGeeks(filteredGeeks)
         }
     }, [allGeeks, geekLeague])
 
+
     useEffect(() => {
-        const getAllSeasons = async () => {
-            const seasons = await getSeasons()
-            setSeasons(seasons)
-        }
-        getAllSeasons()
-    }, [])
+        if (
+            !undergoingSeasons.length &&
+            !loadingSeason &&
+            !errorSeason
+        ) getUndergoingSeasons()
+
+        else setSeasons(undergoingSeasons)
+
+    }, [undergoingSeasons, loadingSeason, errorSeason, getUndergoingSeasons])
+
 
     const editLeague = async values => {
         const geekLeague = await editGeekLeague(geekLeagueID, values.name, values.geeks)
@@ -320,16 +332,21 @@ const GeekLeague = ({ match: { params: { geekLeagueID } }, history, loading, loa
 
 const mapStateToProps = state => ({
     user: state.authReducer.user,
-    allGeeks: state.geekReducer.allGeeks,
-    errorGeek: state.geekReducer.error,
     geekleagues: state.geekleagueReducer.geekleagues,
     loadingLeague: state.geekleagueReducer.loading,
-    errorLeague: state.geekleagueReducer.error
+    errorLeague: state.geekleagueReducer.error,
+    allGeeks: state.geekReducer.allGeeks,
+    loadingGeek: state.geekReducer.loading,
+    errorGeek: state.geekReducer.error,
+    undergoingSeasons: state.seasonReducer.undergoingSeasons,
+    loadingSeason: state.seasonReducer.loading,
+    errorSeason: state.seasonReducer.error
 })
 
 const mapDispatchToProps = {
-    ...geekActions,
-    ...geekleagueActions
+    ...geekleagueActions,
+    getAllGeeks,
+    getUndergoingSeasons
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(GeekLeague)

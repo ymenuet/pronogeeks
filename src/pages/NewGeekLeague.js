@@ -1,39 +1,51 @@
-import React, { useEffect, useState, useContext } from 'react'
+import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import { Form, Input, Select } from 'antd'
-import { createLeague } from '../services/geekLeague'
-import { getProfile } from '../services/auth'
-import { Context } from '../context'
-import { ErrorMessage, Loader } from '../components'
-import { openNotification, isEmpty } from '../helpers'
+import { ErrorMessage, Loader, ErrorNotification } from '../components'
+import { openNotification, isEmpty, sortByUsername } from '../helpers'
 import '../styles/newGeekleague.css'
 
-import * as geekActions from '../actions/geekActions'
+import { getAllGeeks } from '../actions/geekActions'
+import { createLeague } from '../actions/geekleagueActions'
 
 const { Option } = Select
 
-const NewGeekLeague = ({ history, loading, user, allGeeks, geekError, geekLoading, getAllGeeks }) => {
-    const { loginUser } = useContext(Context)
+const NewGeekLeague = ({ history, loading, loadingGeek, loadingGeekleague, user, allGeeks, geekleagues, errorGeek, getAllGeeks, createLeague }) => {
     const [form] = Form.useForm()
-    const [creating, setCreating] = useState(false)
+    const [existingLeagues, setExistingLeagues] = useState(null)
+    const [newLeagueID, setNewLeagueID] = useState(null)
 
     useEffect(() => {
-        if (isEmpty(allGeeks)) getAllGeeks()
-    }, [allGeeks, getAllGeeks])
+        if (isEmpty(allGeeks) && !loadingGeek) getAllGeeks()
+    }, [allGeeks, getAllGeeks, loadingGeek])
 
-    const newLeague = async (values) => {
-        if (!values.name || !values.geeks || values.geeks.length < 1) return openNotification('warning', 'Attention', 'Tous les champs sont requis.')
-        setCreating(true)
-        const geekLeague = await createLeague(values)
-        openNotification('success', `Ligue "${values.name}" créée`)
-        history.push(`/myGeekLeagues/${geekLeague._id}`)
-        setCreating(false)
-        const user = await getProfile()
-        loginUser(user)
+    useEffect(() => {
+        if (!existingLeagues) setExistingLeagues(Object.keys(geekleagues))
+
+        else if (Object.keys(geekleagues).length > existingLeagues.length) {
+            const newLeagueID = Object.keys(geekleagues).filter(id => !existingLeagues.includes(id))[0]
+            setNewLeagueID(newLeagueID)
+        }
+
+    }, [geekleagues, existingLeagues])
+
+    useEffect(() => {
+        if (newLeagueID) {
+            openNotification('success', `Nouvelle ligue créée !`)
+            history.push(`/myGeekLeagues/${newLeagueID}`)
+        }
+
+    }, [history, newLeagueID])
+
+
+    const newLeague = async ({ name, geeks }) => {
+        if (!name || !geeks || !geeks.length) return openNotification('warning', 'Attention', 'Tous les champs sont requis.')
+        createLeague({ name, geeks })
     }
 
+
     return <div className='geekleague-bg'>
-        {creating || loading || geekLoading ? (
+        {loadingGeekleague || loading || loadingGeek ? (
 
             <Loader />
 
@@ -94,7 +106,7 @@ const NewGeekLeague = ({ history, loading, user, allGeeks, geekError, geekLoadin
                                     optionFilterProp='label'
                                 >
 
-                                    {Object.values(allGeeks).filter(geek => geek._id !== user._id).map(geek => <Option
+                                    {sortByUsername(Object.values(allGeeks)).filter(geek => geek._id !== user._id).map(geek => <Option
                                         key={geek._id}
                                         value={geek._id}
                                         label={geek.username}
@@ -113,7 +125,7 @@ const NewGeekLeague = ({ history, loading, user, allGeeks, geekError, geekLoadin
 
                                     </Option>)}
 
-                                </Select> : <ErrorMessage>{geekError}</ErrorMessage>}
+                                </Select> : <ErrorMessage>{errorGeek}</ErrorMessage>}
 
                             </Form.Item>
 
@@ -122,6 +134,7 @@ const NewGeekLeague = ({ history, loading, user, allGeeks, geekError, geekLoadin
                                     type='submit'
                                     className='btn my-btn create-league-btn'
                                     style={{ marginTop: 10 }}
+                                    disabled={loadingGeekleague}
                                 >
                                     Créer ligue
                                 </button>
@@ -134,16 +147,25 @@ const NewGeekLeague = ({ history, loading, user, allGeeks, geekError, geekLoadin
                 </div>
             )
         }
+
+        <ErrorNotification types={['geekleague']} />
+
     </div>
 }
 
 const mapStateToProps = state => ({
     user: state.authReducer.user,
     allGeeks: state.geekReducer.allGeeks,
-    geekError: state.geekReducer.error,
-    geekLoading: state.geekReducer.loading
+    errorGeek: state.geekReducer.error,
+    loadingGeek: state.geekReducer.loading,
+    geekleagues: state.geekleagueReducer.geekleagues,
+    loadingGeekleague: state.geekleagueReducer.loading,
+    errorGeekleague: state.geekleagueReducer.error
 })
 
-const mapDispatchToProps = { ...geekActions }
+const mapDispatchToProps = {
+    getAllGeeks,
+    createLeague
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(NewGeekLeague)

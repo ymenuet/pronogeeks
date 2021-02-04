@@ -1,7 +1,8 @@
 import {
     ADD_GEEKLEAGUE,
     LOADING,
-    ERROR
+    ERROR,
+    ERROR_RESET
 } from '../types/geekleagueTypes'
 import {
     LOGOUT,
@@ -37,6 +38,11 @@ const geekleagueReducer = (state = INITIAL_STATE, action) => {
                 ...state,
                 error: action.payload,
                 loading: false
+            }
+        case ERROR_RESET:
+            return {
+                ...state,
+                error: false
             }
         case LOGOUT:
             return INITIAL_STATE

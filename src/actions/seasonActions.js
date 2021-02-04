@@ -1,5 +1,6 @@
 import axios from 'axios'
 import {
+    GET_UNDERGOING_SEASONS,
     ADD_SEASON,
     ADD_MATCHWEEK,
     SET_NEXT_MATCHWEEK,
@@ -183,6 +184,31 @@ export const closeProvRankings = seasonID => async(dispatch, getState) => {
         dispatch({
             type: ERROR,
             payload: `Erreur lors de la fermeture du classement de la saison.`
+        })
+    }
+}
+
+export const getUndergoingSeasons = () => async dispatch => {
+    dispatch({
+        type: LOADING
+    })
+
+    try {
+        const {
+            data: {
+                seasons
+            }
+        } = await seasonService.get('/current')
+
+        dispatch({
+            type: GET_UNDERGOING_SEASONS,
+            payload: seasons
+        })
+
+    } catch (error) {
+        dispatch({
+            type: ERROR,
+            payload: `Erreur lors du chargement des saisons. Recharge la page ou réessaye plus tard.`
         })
     }
 }
