@@ -159,7 +159,7 @@ export const saveFavTeam = (seasonID, teamID) => async(dispatch, getState) => {
     }
 }
 
-export const saveGeekLeagueHistory = geekLeagueID => async(dispatch, getState) => {
+export const saveGeekleagueHistory = geekLeagueID => async(dispatch, getState) => {
     dispatch({
         type: LOADING
     })

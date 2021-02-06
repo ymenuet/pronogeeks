@@ -1,24 +1,21 @@
-import React, { useEffect, useState, useContext } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { getProfile } from '../services/auth'
-import { fetchLeague } from '../services/geekLeague'
 import Loader from './Loader'
 import GeekProno from './GeekProno'
-import { statusTranform } from '../helpers/index'
-import { Context } from '../context'
+import { isConnected, statusTranform } from '../helpers/index'
 import { CloseIcon } from './Icons'
 import '../styles/previewPronos.css'
 
-import { saveGeekLeagueHistory } from '../actions/geekActions'
+import { saveGeekleagueHistory } from '../actions/geekActions'
+import { getLeague } from '../actions/geekleagueActions'
+import { getGeekleagueFixturePronos } from '../actions/pronogeekActions'
 
-const PreviewPronos = ({ user, fixture, setShowLeagues, saveGeekLeagueHistory }) => {
+const PreviewPronos = ({ loadingGeekleague, loadingPronogeek, user, fixture, setShowLeagues, geekleagues, geeksFixturePronogeeks, saveGeekleagueHistory, getLeague, getGeekleagueFixturePronos }) => {
 
-    const [geekLeague, setGeekLeague] = useState(user.geekLeagueHistory || user.geekLeagues[0]._id)
-    const [geekLeagueDetails, setGeekLeagueDetails] = useState(null)
+    const [geekleague, setGeekleague] = useState(null)
+    const [geeksPronos, setGeeksPronos] = useState(null)
     const [winner, setWinner] = useState(null)
-
-    const { loginUser } = useContext(Context)
 
     const determineWinner = (goalsHome, goalsAway) => {
         return goalsHome > goalsAway ? 'Home' :
@@ -26,40 +23,50 @@ const PreviewPronos = ({ user, fixture, setShowLeagues, saveGeekLeagueHistory })
                 'Draw'
     }
 
+    const getGeekleague = (geekleagueID, geekleagues, loadingGeekleague, getLeague, setGeekleague) => {
+        const geekleague = geekleagues[geekleagueID]
+        if (
+            !geekleague &&
+            !loadingGeekleague
+        ) getLeague(geekleagueID)
+
+        else if (geekleague) {
+            setGeekleague(geekleague)
+        }
+    }
+
     useEffect(() => {
         const winner = determineWinner(fixture.goalsHomeTeam, fixture.goalsAwayTeam)
         setWinner(winner)
     }, [fixture])
 
-    useEffect(() => {
-
-        const getLeague = async () => {
-            const league = await fetchLeague(geekLeague)
-            league.geeks = league.geeks.sort((a, b) => {
-                const userA = a.username.toLowerCase()
-                const userB = b.username.toLowerCase()
-                if (userA >= userB) return 1
-                else return -1
-            })
-            setGeekLeagueDetails(league)
-        }
-        if (geekLeague) getLeague()
-
-    }, [geekLeague])
 
     useEffect(() => {
-        const fetchProfile = async () => {
-            const user = await getProfile()
-            loginUser(user)
+        if (isConnected(user)) {
+            const geekleagueID = user.geekLeagueHistory || user.geekLeagues[0]._id
+            getGeekleague(geekleagueID, geekleagues, loadingGeekleague, getLeague, setGeekleague)
         }
-        fetchProfile()
-    }, [geekLeagueDetails])
+
+    }, [user, geekleagues, loadingGeekleague, getLeague])
+
+
+    useEffect(() => {
+        if (geekleague) {
+            const geeksPronos = geeksFixturePronogeeks[`${fixture._id}-${geekleague._id}`]
+
+            if (!geeksPronos && !loadingPronogeek) getGeekleagueFixturePronos(geekleague._id, fixture._id)
+
+            else if (geeksPronos) setGeeksPronos(geeksPronos)
+        }
+
+    }, [geekleague, fixture, geeksFixturePronogeeks, loadingPronogeek, getGeekleagueFixturePronos])
+
 
     const changeLeague = async (e) => {
-        const geekLeagueID = e.target.value
-        setGeekLeagueDetails(null)
-        setGeekLeague(geekLeagueID)
-        saveGeekLeagueHistory(geekLeagueID)
+        const geekleagueID = e.target.value
+        setGeekleague(null)
+        getGeekleague(geekleagueID, geekleagues, loadingGeekleague, getLeague, setGeekleague)
+        saveGeekleagueHistory(geekleagueID)
     }
 
     return (
@@ -80,23 +87,23 @@ const PreviewPronos = ({ user, fixture, setShowLeagues, saveGeekLeagueHistory })
                     <div>
 
                         <select
-                            defaultValue={geekLeague}
+                            defaultValue={geekleague?._id}
                             onChange={changeLeague}
                         >
 
-                            {user.geekLeagues.map(oneGeekLeague =>
+                            {user.geekLeagues.map(oneGeekleague =>
                                 <option
-                                    key={oneGeekLeague._id}
-                                    value={oneGeekLeague._id}
+                                    key={oneGeekleague._id}
+                                    value={oneGeekleague._id}
                                 >
-                                    {oneGeekLeague.name}
+                                    {oneGeekleague.name}
                                 </option>
                             )}
 
                         </select>
 
 
-                        <p className='link-to-ranking-matchweek'><Link to={`/myGeekleagues/${geekLeague}/season/${fixture.season}/${fixture.matchweek}`}>Classement ligue</Link></p>
+                        <p className='link-to-ranking-matchweek'><Link to={`/myGeekleagues/${geekleague?._id}/season/${fixture.season}/${fixture.matchweek}`}>Classement ligue</Link></p>
 
                     </div>
 
@@ -150,17 +157,17 @@ const PreviewPronos = ({ user, fixture, setShowLeagues, saveGeekLeagueHistory })
             </div>
 
 
-            <div className={`${!geekLeagueDetails ? 'align-items-center' : ''} view-pronos-body`}>
-                {!geekLeagueDetails ? <Loader
+            <div className={`${!geeksPronos ? 'align-items-center' : ''} view-pronos-body`}>
+                {!geeksPronos ? <Loader
                     size='small'
                     tip='Chargement des pronos...'
                     fontSize='2.4rem'
                     container={false}
                 /> : <ul>
-                        {geekLeagueDetails.geeks.map(geek =>
+                        {geeksPronos.map(prono =>
                             <GeekProno
-                                key={geek._id}
-                                user={geek}
+                                key={prono._id}
+                                pronogeek={prono}
                                 fixture={fixture}
                                 winner={winner}
                                 determineWinner={determineWinner}
@@ -176,8 +183,20 @@ const PreviewPronos = ({ user, fixture, setShowLeagues, saveGeekLeagueHistory })
     )
 }
 
+const mapStateToProps = state => ({
+    user: state.authReducer.user,
+    geekleagues: state.geekleagueReducer.geekleagues,
+    loadingGeekleague: state.geekleagueReducer.loading,
+    errorGeekleague: state.geekleagueReducer.error,
+    geeksFixturePronogeeks: state.pronogeekReducer.geeksFixturePronogeeks,
+    loadingPronogeek: state.pronogeekReducer.loading,
+    errorPronogeek: state.pronogeekReducer.error,
+})
+
 const mapDispatchToProps = {
-    saveGeekLeagueHistory
+    saveGeekleagueHistory,
+    getLeague,
+    getGeekleagueFixturePronos
 }
 
-export default connect(null, mapDispatchToProps)(PreviewPronos)
+export default connect(mapStateToProps, mapDispatchToProps)(PreviewPronos)

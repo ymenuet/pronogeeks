@@ -9,15 +9,6 @@ const geekleagueService = axios.create({
     withCredentials: true
 })
 
-export const fetchLeague = async leagueID => {
-    const {
-        data: {
-            geekLeague
-        }
-    } = await geekleagueService.get(`/${leagueID}`)
-    return geekLeague
-}
-
 export const getUserLeagues = async() => {
     const {
         data: {

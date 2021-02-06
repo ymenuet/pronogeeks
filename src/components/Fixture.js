@@ -225,7 +225,6 @@ const Fixture = ({ user, fixture, showLeaguePronos, setShowLeaguePronos, userPro
                 )}
 
                 {showLeagues && <PreviewPronos
-                    user={user}
                     fixture={fixture}
                     setShowLeagues={setShowLeagues}
                 />}

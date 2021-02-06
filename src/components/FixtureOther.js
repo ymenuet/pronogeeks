@@ -5,7 +5,7 @@ import { dateTransform, statusTranform } from '../helpers'
 import { FavTeamIcon } from './Icons'
 import '../styles/fixture.css'
 
-const FixtureOther = ({ fixture, geek, geeksPronogeeks }) => {
+const FixtureOther = ({ fixture, geek, geeksMatchweekPronogeeks }) => {
     const [pronogeek, setPronogeek] = useState(null)
     const [matchStarted, setMatchStarted] = useState(false)
     const [homeScore, setHomeScore] = useState(null)
@@ -23,13 +23,13 @@ const FixtureOther = ({ fixture, geek, geeksPronogeeks }) => {
     useEffect(() => {
         let pronogeek = { homeProno: '', awayProno: '' }
         const { _id, season, matchweek } = fixture
-        const geekPronogeeks = geeksPronogeeks[`${geek._id}-${season}-${matchweek}`]
+        const geekPronogeeks = geeksMatchweekPronogeeks[`${geek._id}-${season}-${matchweek}`]
         if (geekPronogeeks && geekPronogeeks[_id]) pronogeek = geekPronogeeks[_id]
         setPronogeek(pronogeek)
         setHomeScore(pronogeek.homeProno)
         setAwayScore(pronogeek.awayProno)
 
-    }, [fixture, geek, geeksPronogeeks])
+    }, [fixture, geek, geeksMatchweekPronogeeks])
 
 
     return !fixture || homeScore == null || awayScore == null ? (
@@ -160,7 +160,7 @@ const FixtureOther = ({ fixture, geek, geeksPronogeeks }) => {
 }
 
 const mapStateToProps = state => ({
-    geeksPronogeeks: state.pronogeekReducer.geeksPronogeeks,
+    geeksMatchweekPronogeeks: state.pronogeekReducer.geeksMatchweekPronogeeks,
 })
 
 export default connect(mapStateToProps)(FixtureOther)

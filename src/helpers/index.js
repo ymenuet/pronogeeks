@@ -103,32 +103,6 @@ export const matchFinished = (statusShort) => {
         statusShort !== 'PST'
 }
 
-export const getGeeksProno = (user, fixture, setHomeScore, setAwayScore, setMatchStarted = null, setPronogeek = null, setFixture = null) => {
-    const seasonID = fixture.season
-    const matchweekNumber = fixture.matchweek
-    if (setMatchStarted && new Date(fixture.date) - Date.now() < 0) setMatchStarted(true)
-    if (setFixture) setFixture(fixture)
-    let season = user.seasons.filter(season => season.season._id || season.season === seasonID)
-    if (season.length > 0) season = season[0]
-    let pronogeek = {
-        homeProno: '',
-        awayProno: ''
-    };
-    let pronogeekFound = [];
-    let matchweekIndex = 0;
-    if (season.matchweeks && season.matchweeks.length > 0) {
-        season.matchweeks.map((matchweek, i) => {
-            if (matchweek.number.toString() === matchweekNumber.toString()) matchweekIndex = i
-            return matchweek
-        })
-        if (season.matchweeks[matchweekIndex].pronogeeks.length > 0) pronogeekFound = season.matchweeks[matchweekIndex].pronogeeks.filter(pronogeek => pronogeek.fixture === fixture._id)
-    }
-    if (pronogeekFound.length > 0) pronogeek = pronogeekFound[0]
-    if (setPronogeek) setPronogeek(pronogeek)
-    setHomeScore(pronogeek.homeProno)
-    setAwayScore(pronogeek.awayProno)
-}
-
 export const resetMatchweek = (e, matchweekInput, matchweekRef, setMatchweekInput) => {
     const clickOutsideInput = e.target.className ? typeof e.target.className === 'string' ? !e.target.className.includes('cancel-target') : true : true
     if (clickOutsideInput && matchweekInput !== matchweekRef) setMatchweekInput(matchweekRef)

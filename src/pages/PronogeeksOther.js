@@ -7,7 +7,7 @@ import * as geekActions from '../actions/geekActions'
 import * as seasonActions from '../actions/seasonActions'
 import * as pronogeekActions from '../actions/pronogeekActions'
 
-const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID, geekID } }, history, loading, loadingGeek, loadingSeason, loadingPronogeek, detailedGeeks, detailedSeasons, seasonMatchweeks, geeksPronogeeks, errorGeek, errorSeason, errorPronogeek, getDetailsGeek, getSeason, getMatchweekFixtures, getGeekMatchweekPronos }) => {
+const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID, geekID } }, history, loading, loadingGeek, loadingSeason, loadingPronogeek, detailedGeeks, detailedSeasons, seasonMatchweeks, geeksMatchweekPronogeeks, errorGeek, errorSeason, errorPronogeek, getDetailsGeek, getSeason, getMatchweekFixtures, getGeekMatchweekPronos }) => {
     const [season, setSeason] = useState(null)
     const [fixtures, setFixtures] = useState(null)
     const [matchweekPoints, setMatchweekPoints] = useState(null)
@@ -61,12 +61,12 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID, geekID } }, 
 
     useEffect(() => {
         if (
-            !geeksPronogeeks[`${geekID}-${seasonID}-${matchweekNumber}`] &&
+            !geeksMatchweekPronogeeks[`${geekID}-${seasonID}-${matchweekNumber}`] &&
             !loadingPronogeek &&
             !errorPronogeek
         ) getGeekMatchweekPronos(geekID, seasonID, matchweekNumber)
 
-    }, [geekID, seasonID, matchweekNumber, loadingPronogeek, geeksPronogeeks, getGeekMatchweekPronos, errorPronogeek])
+    }, [geekID, seasonID, matchweekNumber, loadingPronogeek, geeksMatchweekPronogeeks, getGeekMatchweekPronos, errorPronogeek])
 
 
     useEffect(() => {
@@ -183,7 +183,7 @@ const mapStateToProps = state => ({
     detailedGeeks: state.geekReducer.detailedGeeks,
     loadingGeek: state.geekReducer.loading,
     errorGeek: state.geekReducer.error,
-    geeksPronogeeks: state.pronogeekReducer.geeksPronogeeks,
+    geeksMatchweekPronogeeks: state.pronogeekReducer.geeksMatchweekPronogeeks,
     loadingPronogeek: state.pronogeekReducer.loading,
     errorPronogeek: state.pronogeekReducer.error,
 })

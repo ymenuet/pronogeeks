@@ -1,8 +1,9 @@
 import {
-    ADD_PRONOGEEKS,
-    ADD_GEEK_PRONOGEEKS,
+    ADD_USER_PRONOGEEKS,
+    ADD_GEEK_MATCHWEEK_PRONOGEEKS,
+    ADD_GEEKS_FIXTURE_PRONOGEEKS,
     LOADING,
-    ERROR
+    ERROR,
 } from '../types/pronogeekTypes'
 import {
     LOGOUT,
@@ -16,22 +17,29 @@ const done = {
 
 const INITIAL_STATE = {
     userPronogeeks: {},
-    geeksPronogeeks: {},
+    geeksMatchweekPronogeeks: {},
+    geeksFixturePronogeeks: {},
     ...done
 }
 
 const pronogeekReducer = (state = INITIAL_STATE, action) => {
     switch (action.type) {
-        case ADD_PRONOGEEKS:
+        case ADD_USER_PRONOGEEKS:
             return {
                 ...state,
                 userPronogeeks: action.payload,
                 ...done
             }
-        case ADD_GEEK_PRONOGEEKS:
+        case ADD_GEEK_MATCHWEEK_PRONOGEEKS:
             return {
                 ...state,
-                geeksPronogeeks: action.payload,
+                geeksMatchweekPronogeeks: action.payload,
+                ...done
+            }
+        case ADD_GEEKS_FIXTURE_PRONOGEEKS:
+            return {
+                ...state,
+                geeksFixturePronogeeks: action.payload,
                 ...done
             }
         case LOADING:

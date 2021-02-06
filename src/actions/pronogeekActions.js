@@ -1,7 +1,8 @@
 import axios from 'axios'
 import {
-    ADD_PRONOGEEKS,
-    ADD_GEEK_PRONOGEEKS,
+    ADD_USER_PRONOGEEKS,
+    ADD_GEEK_MATCHWEEK_PRONOGEEKS,
+    ADD_GEEKS_FIXTURE_PRONOGEEKS,
     LOADING,
     ERROR
 } from '../types/pronogeekTypes'
@@ -40,7 +41,7 @@ export const getUserMatchweekPronos = (userID, seasonID, matchweekNumber) => asy
             return pronogeek
         })
         dispatch({
-            type: ADD_PRONOGEEKS,
+            type: ADD_USER_PRONOGEEKS,
             payload: newPronogeeks
         })
 
@@ -65,11 +66,11 @@ export const getGeekMatchweekPronos = (geekID, seasonID, matchweekNumber) => asy
         } = await pronogeekService.get(`/geek/${geekID}/season/${seasonID}/matchweek/${matchweekNumber}`)
 
         const {
-            geeksPronogeeks
+            geeksMatchweekPronogeeks
         } = getState().pronogeekReducer
 
         const newPronogeeks = {
-            ...geeksPronogeeks
+            ...geeksMatchweekPronogeeks
         }
         newPronogeeks[`${geekID}-${seasonID}-${matchweekNumber}`] = {}
         pronogeeks.map(pronogeek => {
@@ -77,7 +78,7 @@ export const getGeekMatchweekPronos = (geekID, seasonID, matchweekNumber) => asy
             return pronogeek
         })
         dispatch({
-            type: ADD_GEEK_PRONOGEEKS,
+            type: ADD_GEEK_MATCHWEEK_PRONOGEEKS,
             payload: newPronogeeks
         })
 
@@ -85,6 +86,45 @@ export const getGeekMatchweekPronos = (geekID, seasonID, matchweekNumber) => asy
         dispatch({
             type: ERROR,
             payload: 'Erreur lors du chargement des pronogeeks. Recharge la page ou réessaye plus tard.'
+        })
+    }
+}
+
+export const getGeekleagueFixturePronos = (geekleagueID, fixtureID) => async(dispatch, getState) => {
+    dispatch({
+        type: LOADING
+    })
+
+    try {
+        const {
+            data: {
+                pronogeeks
+            }
+        } = await pronogeekService.get(`/${geekleagueID}/${fixtureID}`)
+
+        const {
+            geeksFixturePronogeeks
+        } = getState().pronogeekReducer
+
+        const newPronogeeks = {
+            ...geeksFixturePronogeeks
+        }
+        newPronogeeks[`${fixtureID}-${geekleagueID}`] = pronogeeks.sort((a, b) => {
+            const pronogeekA = a.geek.username.toLowerCase()
+            const pronogeekB = b.geek.username.toLowerCase()
+            if (pronogeekA >= pronogeekB) return 1
+            else return -1
+        })
+
+        dispatch({
+            type: ADD_GEEKS_FIXTURE_PRONOGEEKS,
+            payload: newPronogeeks
+        })
+
+    } catch (error) {
+        dispatch({
+            type: ERROR,
+            payload: 'Erreur lors du chargement des pronos de la ligue geek. Recharge la page ou réessaye plus tard.'
         })
     }
 }
@@ -113,7 +153,7 @@ export const handleInputHomeProno = (homeProno, fixture) => (dispatch, getState)
     if (homePronoDB) newPronogeeks[`${season}-${matchweek}`][_id].homePronoDB = homePronoDB
 
     dispatch({
-        type: ADD_PRONOGEEKS,
+        type: ADD_USER_PRONOGEEKS,
         payload: newPronogeeks
     })
 }
@@ -142,7 +182,7 @@ export const handleInputAwayProno = (awayProno, fixture) => (dispatch, getState)
     if (awayPronoDB) newPronogeeks[`${season}-${matchweek}`][_id].awayPronoDB = awayPronoDB
 
     dispatch({
-        type: ADD_PRONOGEEKS,
+        type: ADD_USER_PRONOGEEKS,
         payload: newPronogeeks
     })
 }
@@ -164,7 +204,7 @@ export const savePronogeek = (homeProno, awayProno, fixture) => async(dispatch, 
     }
 
     dispatch({
-        type: ADD_PRONOGEEKS,
+        type: ADD_USER_PRONOGEEKS,
         payload: newPronogeeks
     })
 
@@ -189,7 +229,7 @@ export const savePronogeek = (homeProno, awayProno, fixture) => async(dispatch, 
         }
 
         dispatch({
-            type: ADD_PRONOGEEKS,
+            type: ADD_USER_PRONOGEEKS,
             payload: newPronogeeks
         })
 
@@ -203,7 +243,7 @@ export const savePronogeek = (homeProno, awayProno, fixture) => async(dispatch, 
             saved: false
         }
         dispatch({
-            type: ADD_PRONOGEEKS,
+            type: ADD_USER_PRONOGEEKS,
             payload: newPronogeeks
         })
     }
@@ -228,7 +268,7 @@ export const saveAllPronogeeks = (seasonID, matchweekNumber) => async(dispatch, 
             message: `Aucun nouveau pronogeek à enregistrer pour la journée ${matchweekNumber}.`
         }
         return dispatch({
-            type: ADD_PRONOGEEKS,
+            type: ADD_USER_PRONOGEEKS,
             payload: newPronogeeks
         })
     }
@@ -254,7 +294,7 @@ export const saveAllPronogeeks = (seasonID, matchweekNumber) => async(dispatch, 
             message: `Tes pronogeeks de la journée ${matchweekNumber} sont déjà à jour.`
         }
         return dispatch({
-            type: ADD_PRONOGEEKS,
+            type: ADD_USER_PRONOGEEKS,
             payload: newPronogeeks
         })
     }
@@ -293,7 +333,7 @@ export const saveAllPronogeeks = (seasonID, matchweekNumber) => async(dispatch, 
         }
 
         dispatch({
-            type: ADD_PRONOGEEKS,
+            type: ADD_USER_PRONOGEEKS,
             payload: newPronogeeks
         })
 
@@ -313,7 +353,7 @@ export const saveAllPronogeeks = (seasonID, matchweekNumber) => async(dispatch, 
         }
 
         dispatch({
-            type: ADD_PRONOGEEKS,
+            type: ADD_USER_PRONOGEEKS,
             payload: newPronogeeks
         })
     }
@@ -335,7 +375,7 @@ export const resetSaveAndErrorState = fixture => (dispatch, getState) => {
         error: false
     }
     dispatch({
-        type: ADD_PRONOGEEKS,
+        type: ADD_USER_PRONOGEEKS,
         payload: newPronogeeks
     })
 }
@@ -356,7 +396,7 @@ export const resetMatchweekSaveAndErrorState = (seasonID, matchweekNumber) => (d
         error: false
     }
     dispatch({
-        type: ADD_PRONOGEEKS,
+        type: ADD_USER_PRONOGEEKS,
         payload: newPronogeeks
     })
 }
