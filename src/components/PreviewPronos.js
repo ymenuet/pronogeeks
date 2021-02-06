@@ -10,8 +10,9 @@ import '../styles/previewPronos.css'
 import { saveGeekleagueHistory } from '../actions/geekActions'
 import { getLeague } from '../actions/geekleagueActions'
 import { getGeekleagueFixturePronos } from '../actions/pronogeekActions'
+import ErrorMessage from './ErrorMessage'
 
-const PreviewPronos = ({ loadingGeekleague, loadingPronogeek, user, fixture, setShowLeagues, geekleagues, geeksFixturePronogeeks, saveGeekleagueHistory, getLeague, getGeekleagueFixturePronos }) => {
+const PreviewPronos = ({ loadingPronogeek, user, fixture, setShowLeagues, geekleagues, geeksFixturePronogeeks, saveGeekleagueHistory, getLeague, getGeekleagueFixturePronos }) => {
 
     const [geekleague, setGeekleague] = useState(null)
     const [geeksPronos, setGeeksPronos] = useState(null)
@@ -23,16 +24,13 @@ const PreviewPronos = ({ loadingGeekleague, loadingPronogeek, user, fixture, set
                 'Draw'
     }
 
-    const getGeekleague = (geekleagueID, geekleagues, loadingGeekleague, getLeague, setGeekleague) => {
+    const getGeekleague = (geekleagueID, geekleagues, getLeague, setGeekleague) => {
         const geekleague = geekleagues[geekleagueID]
-        if (
-            !geekleague &&
-            !loadingGeekleague
-        ) getLeague(geekleagueID)
 
-        else if (geekleague) {
-            setGeekleague(geekleague)
-        }
+        if (!geekleague) getLeague(geekleagueID)
+
+        else if (geekleague && !geekleague.loading) setGeekleague(geekleague)
+
     }
 
     useEffect(() => {
@@ -44,14 +42,14 @@ const PreviewPronos = ({ loadingGeekleague, loadingPronogeek, user, fixture, set
     useEffect(() => {
         if (isConnected(user)) {
             const geekleagueID = user.geekLeagueHistory || user.geekLeagues[0]._id
-            getGeekleague(geekleagueID, geekleagues, loadingGeekleague, getLeague, setGeekleague)
+            getGeekleague(geekleagueID, geekleagues, getLeague, setGeekleague)
         }
 
-    }, [user, geekleagues, loadingGeekleague, getLeague])
+    }, [user, geekleagues, getLeague])
 
 
     useEffect(() => {
-        if (geekleague) {
+        if (geekleague && !geekleague.error) {
             const geeksPronos = geeksFixturePronogeeks[`${fixture._id}-${geekleague._id}`]
 
             if (!geeksPronos && !loadingPronogeek) getGeekleagueFixturePronos(geekleague._id, fixture._id)
@@ -65,7 +63,7 @@ const PreviewPronos = ({ loadingGeekleague, loadingPronogeek, user, fixture, set
     const changeLeague = async (e) => {
         const geekleagueID = e.target.value
         setGeekleague(null)
-        getGeekleague(geekleagueID, geekleagues, loadingGeekleague, getLeague, setGeekleague)
+        getGeekleague(geekleagueID, geekleagues, getLeague, setGeekleague)
         saveGeekleagueHistory(geekleagueID)
     }
 
@@ -87,7 +85,7 @@ const PreviewPronos = ({ loadingGeekleague, loadingPronogeek, user, fixture, set
                     <div>
 
                         <select
-                            defaultValue={geekleague?._id}
+                            defaultValue={user?.geekLeagueHistory || user?.geekLeagues[0]._id}
                             onChange={changeLeague}
                         >
 
@@ -157,23 +155,27 @@ const PreviewPronos = ({ loadingGeekleague, loadingPronogeek, user, fixture, set
             </div>
 
 
-            <div className={`${!geeksPronos ? 'align-items-center' : ''} view-pronos-body`}>
-                {!geeksPronos ? <Loader
-                    size='small'
-                    tip='Chargement des pronos...'
-                    fontSize='2.4rem'
-                    container={false}
-                /> : <ul>
-                        {geeksPronos.map(prono =>
-                            <GeekProno
-                                key={prono._id}
-                                pronogeek={prono}
-                                fixture={fixture}
-                                winner={winner}
-                                determineWinner={determineWinner}
-                            />
-                        )}
-                    </ul>
+            <div className={`${!geeksPronos || geekleague?.error ? 'align-items-center' : ''} view-pronos-body`}>
+                {geekleague?.error ? <ErrorMessage>{geekleague.error}</ErrorMessage>
+
+                    : !geeksPronos ? <Loader
+                        size='small'
+                        tip='Chargement des pronos...'
+                        fontSize='2.4rem'
+                        container={false}
+                    />
+
+                        : <ul>
+                            {geeksPronos.map(prono =>
+                                <GeekProno
+                                    key={prono._id}
+                                    pronogeek={prono}
+                                    fixture={fixture}
+                                    winner={winner}
+                                    determineWinner={determineWinner}
+                                />
+                            )}
+                        </ul>
 
                 }
             </div>
@@ -186,8 +188,6 @@ const PreviewPronos = ({ loadingGeekleague, loadingPronogeek, user, fixture, set
 const mapStateToProps = state => ({
     user: state.authReducer.user,
     geekleagues: state.geekleagueReducer.geekleagues,
-    loadingGeekleague: state.geekleagueReducer.loading,
-    errorGeekleague: state.geekleagueReducer.error,
     geeksFixturePronogeeks: state.pronogeekReducer.geeksFixturePronogeeks,
     loadingPronogeek: state.pronogeekReducer.loading,
     errorPronogeek: state.pronogeekReducer.error,

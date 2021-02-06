@@ -1,22 +1,35 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { getUserLeagues } from '../services/geekLeague'
+import { connect } from 'react-redux'
 import { Loader } from '../components'
+import { isConnected, isEmpty } from '../helpers'
 import '../styles/geekleagues.css'
 
-const GeekLeagues = ({ loading }) => {
-    const [geekLeagues, setGeekLeagues] = useState(null)
+import { getUserLeagues } from '../actions/geekleagueActions'
+
+const GeekLeagues = ({ loading, loadingGeekleague, user, geekleagues, getUserLeagues, errorGeekleague }) => {
+    const [userGeekleagues, setUserGeekleagues] = useState(null)
 
     useEffect(() => {
-        const fetchUserLeagues = async () => {
-            const geekLeagues = await getUserLeagues()
-            setGeekLeagues(geekLeagues)
-        }
-        fetchUserLeagues()
-    }, [])
+        if (isEmpty(geekleagues)) getUserLeagues()
+
+        else if (
+            !isEmpty(geekleagues) &&
+            isConnected(user) &&
+            user.geekLeagues.length > Object.keys(geekleagues).length
+        ) getUserLeagues()
+
+        else if (
+            !isEmpty(geekleagues) &&
+            isConnected(user) &&
+            user.geekLeagues.length === Object.keys(geekleagues).length
+        ) setUserGeekleagues(Object.values(geekleagues))
+
+    }, [user, loadingGeekleague, geekleagues, getUserLeagues, errorGeekleague])
+
 
     return <div className='geekleague-bg geekleagues-list'>
-        {!geekLeagues || loading ? (
+        {!userGeekleagues || loading ? (
 
             <Loader />
 
@@ -28,7 +41,7 @@ const GeekLeagues = ({ loading }) => {
 
                     <div className='my-geekleagues row'>
 
-                        {geekLeagues.map(geekLeague => <div
+                        {userGeekleagues.map(geekLeague => <div
                             key={geekLeague._id}
                             className='col-10 col-lg-6 geekleague-card-container'
                         >
@@ -63,4 +76,13 @@ const GeekLeagues = ({ loading }) => {
     </div>
 }
 
-export default GeekLeagues
+const mapStateToProps = state => ({
+    user: state.authReducer.user,
+    geekleagues: state.geekleagueReducer.geekleagues,
+    loadingGeekleague: state.geekleagueReducer.loading,
+    errorGeekleague: state.geekleagueReducer.error
+})
+
+const mapDispatchToProps = { getUserLeagues }
+
+export default connect(mapStateToProps, mapDispatchToProps)(GeekLeagues)

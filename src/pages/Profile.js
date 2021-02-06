@@ -42,8 +42,11 @@ const Profile = ({ loading, loadingUsername, loadingPhoto, loadingGeek, user, se
             getSeasonPlayers(seasonID)
         }
 
-        else if (seasonID && seasonGeeksRankings[seasonID]) {
-            const rankedGeeks = seasonGeeksRankings[seasonID]
+        else if (isConnected(user) && seasonID && seasonGeeksRankings[seasonID]) {
+            const rankedGeeks = seasonGeeksRankings[seasonID].map(geek => {
+                if (geek._id === user._id) return user
+                return geek
+            })
             const userRanking = rankedGeeks.map(geek => geek._id).indexOf(user._id)
             const rankedGeeks20 = rankedGeeks.slice(0, 20)
             setUserRanking(userRanking)
@@ -85,14 +88,9 @@ const Profile = ({ loading, loadingUsername, loadingPhoto, loadingGeek, user, se
     }
 
     const defineUserRank = (seasonRanking, league) => {
-        return seasonRanking.filter(player => {
-            let result = false
-            league.geeks.map(geek => {
-                if (geek._id === player._id) result = true
-                return geek
-            })
-            return result
-        }).map(player => player._id).indexOf(user._id) + 1
+        return seasonRanking
+            .filter(({ _id }) => league.geeks.includes(_id))
+            .map(player => player._id).indexOf(user._id) + 1
     }
 
     const photoLoader = () => loadingPhoto || cloudinaryLoading

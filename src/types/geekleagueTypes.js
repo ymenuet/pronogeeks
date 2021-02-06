@@ -1,4 +1,6 @@
 export const ADD_GEEKLEAGUE = 'geekleague_add'
 export const LOADING = 'geekleague_loading'
+export const LOADING_LEAGUE = 'geekleague_loading_one'
 export const ERROR = 'geekleague_error'
+export const ERROR_LEAGUE = 'geekleague_error_one'
 export const ERROR_RESET = 'geekleague_error_reset'
