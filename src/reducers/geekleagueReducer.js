@@ -1,9 +1,7 @@
 import {
-    ADD_GEEKLEAGUE,
+    UPDATE_GEEKLEAGUES,
     LOADING,
-    LOADING_LEAGUE,
     ERROR,
-    ERROR_LEAGUE,
     ERROR_RESET
 } from '../types/geekleagueTypes'
 import {
@@ -23,7 +21,7 @@ const INITIAL_STATE = {
 
 const geekleagueReducer = (state = INITIAL_STATE, action) => {
     switch (action.type) {
-        case ADD_GEEKLEAGUE:
+        case UPDATE_GEEKLEAGUES:
             return {
                 ...state,
                 geekleagues: action.payload,
@@ -35,22 +33,10 @@ const geekleagueReducer = (state = INITIAL_STATE, action) => {
                 loading: true,
                 error: false
             }
-        case LOADING_LEAGUE:
-            return {
-                ...state,
-                geekleagues: action.payload,
-                loading: true,
-            }
         case ERROR:
             return {
                 ...state,
                 error: action.payload,
-                loading: false
-            }
-        case ERROR_LEAGUE:
-            return {
-                ...state,
-                geekleagues: action.payload,
                 loading: false
             }
         case ERROR_RESET:

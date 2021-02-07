@@ -10,7 +10,7 @@ import { createLeague } from '../actions/geekleagueActions'
 
 const { Option } = Select
 
-const NewGeekLeague = ({ history, loading, loadingGeek, loadingGeekleague, user, allGeeks, geekleagues, errorGeek, getAllGeeks, createLeague }) => {
+const NewGeekLeague = ({ history, loading, loadingGeek, creatingLeague, user, allGeeks, geekleagues, errorGeek, getAllGeeks, createLeague }) => {
     const [form] = Form.useForm()
     const [existingLeagues, setExistingLeagues] = useState(null)
     const [newLeagueID, setNewLeagueID] = useState(null)
@@ -45,7 +45,7 @@ const NewGeekLeague = ({ history, loading, loadingGeek, loadingGeekleague, user,
 
 
     return <div className='geekleague-bg'>
-        {loadingGeekleague || loading || loadingGeek ? (
+        {creatingLeague || loading || loadingGeek ? (
 
             <Loader />
 
@@ -134,7 +134,7 @@ const NewGeekLeague = ({ history, loading, loadingGeek, loadingGeekleague, user,
                                     type='submit'
                                     className='btn my-btn create-league-btn'
                                     style={{ marginTop: 10 }}
-                                    disabled={loadingGeekleague}
+                                    disabled={creatingLeague}
                                 >
                                     Créer ligue
                                 </button>
@@ -159,8 +159,7 @@ const mapStateToProps = state => ({
     errorGeek: state.geekReducer.error,
     loadingGeek: state.geekReducer.loading,
     geekleagues: state.geekleagueReducer.geekleagues,
-    loadingGeekleague: state.geekleagueReducer.loading,
-    errorGeekleague: state.geekleagueReducer.error
+    creatingLeague: state.geekleagueReducer.loading,
 })
 
 const mapDispatchToProps = {

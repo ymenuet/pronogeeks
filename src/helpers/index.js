@@ -12,6 +12,48 @@ export const isConnected = user => {
     return user ? Object.keys(user).length : null
 }
 
+export const copyObject1Layer = myObject => ({
+    ...myObject
+})
+
+export const copyObject2Layers = (myObject, myProp) => {
+    const result = {
+        ...myObject
+    }
+
+    if (myObject[myProp]) {
+        result[myProp] = {
+            ...myObject[myProp]
+        }
+    } else result[myProp] = {}
+
+    return result
+}
+
+export const copyObject3Layers = (myObject, prop1, prop2) => {
+    const result = {
+        ...myObject
+    }
+
+    if (myObject[prop1]) {
+        result[prop1] = {
+            ...myObject[prop1]
+        }
+        if (myObject[prop1][prop2]) {
+            result[prop1][prop2] = {
+                ...myObject[prop1][prop2],
+            }
+        } else {
+            result[prop1][prop2] = {}
+        }
+    } else {
+        result[prop1] = {}
+        result[prop1][prop2] = {}
+    }
+
+    return result
+}
+
 export const openNotification = (type, title, message, duration = 6) => {
     notification[type]({
         message: title,
