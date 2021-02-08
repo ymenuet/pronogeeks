@@ -134,6 +134,7 @@ const GeekLeague = ({ match: { params: { geekLeagueID } }, history, loading, loa
                     </>}
 
                     {geekLeague.creator._id.toString() !== user._id.toString() &&
+                        geekLeague.geeks.map(({ _id }) => _id).includes(user._id.toString()) &&
                         <button onClick={() => setShowOut(!showOut)}>
                             <RemoveIcon />
                         </button>
@@ -192,9 +193,6 @@ const GeekLeague = ({ match: { params: { geekLeagueID } }, history, loading, loa
                             layout='vertical'
                             name="basic"
                             onFinish={({ name, geeks }) => editLeague(geekLeagueID, { name, geeks })}
-                            initialValues={{
-                                remember: true,
-                            }}
                         >
 
                             <Form.Item

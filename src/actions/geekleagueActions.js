@@ -240,39 +240,12 @@ export const deleteLeague = geekleagueID => async(dispatch, getState) => {
     try {
         await geekleagueService.delete(`/${geekleagueID}`)
 
-        const {
-            geekleagues
-        } = getState().geekleagueReducer
-
-        const filteredArray = Object.values(copyObject1Layer(geekleagues)).filter(league => league._id !== geekleagueID)
-        const filteredLeagues = {}
-
-        for (let league of filteredArray) {
-            filteredLeagues[league._id] = league
-        }
-
-        dispatch({
+        deleteLeagueFromStore({
+            dispatch,
+            getState,
+            geekleagueID,
             type: DELETE_GEEKLEAGUE,
-            payload: filteredLeagues
-        })
-
-        setTimeout(() => {
-            dispatch({
-                type: RESET_DELETE_GEEKLEAGUE
-            })
-        }, resetTimeInMs)
-
-        const {
-            user
-        } = getState().authReducer
-        const newUser = {
-            ...user
-        }
-        newUser.geekLeagues = user.geekLeagues.filter(league => league._id !== geekleagueID)
-
-        dispatch({
-            type: LOGIN,
-            payload: newUser
+            resetType: RESET_DELETE_GEEKLEAGUE
         })
 
     } catch (error) {
@@ -292,39 +265,12 @@ export const outLeague = geekleagueID => async(dispatch, getState) => {
     try {
         await geekleagueService.get(`out/${geekleagueID}`)
 
-        const {
-            geekleagues
-        } = getState().geekleagueReducer
-
-        const filteredArray = Object.values(copyObject1Layer(geekleagues)).filter(league => league._id !== geekleagueID)
-        const filteredLeagues = {}
-
-        for (let league of filteredArray) {
-            filteredLeagues[league._id] = league
-        }
-
-        dispatch({
+        deleteLeagueFromStore({
+            dispatch,
+            getState,
+            geekleagueID,
             type: OUT_GEEKLEAGUE,
-            payload: filteredLeagues
-        })
-
-        setTimeout(() => {
-            dispatch({
-                type: RESET_OUT_GEEKLEAGUE
-            })
-        }, resetTimeInMs)
-
-        const {
-            user
-        } = getState().authReducer
-        const newUser = {
-            ...user
-        }
-        newUser.geekLeagues = user.geekLeagues.filter(league => league._id !== geekleagueID)
-
-        dispatch({
-            type: LOGIN,
-            payload: newUser
+            resetType: RESET_OUT_GEEKLEAGUE
         })
 
     } catch (error) {
@@ -339,5 +285,48 @@ export const outLeague = geekleagueID => async(dispatch, getState) => {
 export const resetGeekleagueError = () => dispatch => {
     dispatch({
         type: ERROR_RESET
+    })
+}
+
+function deleteLeagueFromStore({
+    dispatch,
+    getState,
+    geekleagueID,
+    type,
+    resetType
+}) {
+    const {
+        geekleagues
+    } = getState().geekleagueReducer
+
+    const filteredArray = Object.values(copyObject1Layer(geekleagues)).filter(league => league._id !== geekleagueID)
+    const filteredLeagues = {}
+
+    for (let league of filteredArray) {
+        filteredLeagues[league._id] = league
+    }
+
+    dispatch({
+        type: type,
+        payload: filteredLeagues
+    })
+
+    setTimeout(() => {
+        dispatch({
+            type: resetType
+        })
+    }, resetTimeInMs)
+
+    const {
+        user
+    } = getState().authReducer
+    const newUser = {
+        ...user
+    }
+    newUser.geekLeagues = user.geekLeagues.filter(league => league._id !== geekleagueID)
+
+    dispatch({
+        type: LOGIN,
+        payload: newUser
     })
 }
