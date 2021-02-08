@@ -1,17 +1,26 @@
 import axios from 'axios'
 import {
     UPDATE_GEEKLEAGUES,
+    EDIT_GEEKLEAGUE,
+    RESET_EDIT_GEEKLEAGUE,
+    DELETE_GEEKLEAGUE,
+    RESET_DELETE_GEEKLEAGUE,
+    OUT_GEEKLEAGUE,
+    RESET_OUT_GEEKLEAGUE,
     LOADING,
     ERROR,
-    ERROR_RESET
+    ERROR_RESET,
 } from '../types/geekleagueTypes'
 import {
     LOGIN
 } from '../types/authTypes'
 import {
+    printError,
     copyObject1Layer,
     copyObject2Layers
 } from '../helpers'
+
+const resetTimeInMs = 100
 
 const baseURL = process.env.NODE_ENV === 'production' ?
     `/api/geekLeagues` :
@@ -45,6 +54,7 @@ export const createLeague = ({
         } = getState().geekleagueReducer
         const newLeagues = copyObject1Layer(geekleagues)
         newLeagues[geekleague._id] = geekleague
+        delete newLeagues.empty
 
         dispatch({
             type: UPDATE_GEEKLEAGUES,
@@ -57,7 +67,7 @@ export const createLeague = ({
         const newUser = {
             ...user
         }
-        newUser.geekLeagues = [...user.geekLeagues, geekleague._id]
+        newUser.geekLeagues = [...user.geekLeagues, geekleague]
 
         dispatch({
             type: LOGIN,
@@ -65,9 +75,11 @@ export const createLeague = ({
         })
 
     } catch (error) {
+        console.error(error.message)
+
         dispatch({
             type: ERROR,
-            payload: `Erreur lors de la création de la ligue. Essaye encore.`
+            payload: printError('fr', error, `Erreur lors de la création de la ligue. Essaye encore.`)
         })
     }
 }
@@ -106,13 +118,15 @@ export const getLeague = leagueID => async(dispatch, getState) => {
         })
 
     } catch (error) {
+        console.error(error.message)
+
         const {
             geekleagues
         } = getState().geekleagueReducer
 
         const errorLeague = copyObject2Layers(geekleagues, leagueID)
         errorLeague[leagueID].loading = false
-        errorLeague[leagueID].error = `Erreur lors du chargement de la ligue. Recharge la page ou réessaye plus tard.`
+        errorLeague[leagueID].error = printError('fr', error, `Erreur lors du chargement de la ligue. Recharge la page ou réessaye plus tard.`)
 
         dispatch({
             type: UPDATE_GEEKLEAGUES,
@@ -143,12 +157,9 @@ export const getUserLeagues = () => async(dispatch, getState) => {
             }
         } = await geekleagueService.get('/')
 
-        const {
-            geekleagues
-        } = getState().geekleagueReducer
-        const newLeagues = copyObject1Layer(geekleagues)
-        delete newLeagues.loading
-        delete newLeagues.error
+        const newLeagues = {}
+
+        if (!userGeekleagues.length) newLeagues.empty = true
 
         for (let league of userGeekleagues) {
             newLeagues[league._id] = league
@@ -160,17 +171,167 @@ export const getUserLeagues = () => async(dispatch, getState) => {
         })
 
     } catch (error) {
+        console.error(error.message)
+
         const {
             geekleagues
         } = getState().geekleagueReducer
 
         const errorLeagues = copyObject1Layer(geekleagues)
         errorLeagues.loading = false
-        errorLeagues.error = `Erreur lors du chargement des ligues. Recharge la page ou réessaye plus tard.`
+        errorLeagues.error = printError('fr', error, `Erreur lors du chargement des ligues. Recharge la page ou réessaye plus tard.`)
 
         dispatch({
             type: UPDATE_GEEKLEAGUES,
             payload: errorLeagues
+        })
+    }
+}
+
+export const editLeague = (geekleagueID, {
+    name,
+    geeks
+}) => async(dispatch, getState) => {
+    dispatch({
+        type: LOADING
+    })
+
+    try {
+        const {
+            data: {
+                geekleague
+            }
+        } = await geekleagueService.put(`/${geekleagueID}`, {
+            name,
+            geeks
+        })
+
+        const {
+            geekleagues
+        } = getState().geekleagueReducer
+        const editedLeague = copyObject2Layers(geekleagues, geekleagueID)
+        editedLeague[geekleagueID] = geekleague
+
+        dispatch({
+            type: EDIT_GEEKLEAGUE,
+            payload: editedLeague
+        })
+
+        setTimeout(() => {
+            dispatch({
+                type: RESET_EDIT_GEEKLEAGUE
+            })
+        }, resetTimeInMs)
+
+    } catch (error) {
+        console.error(error.message)
+        dispatch({
+            type: ERROR,
+            payload: printError('fr', error, `Erreur lors de la sauvegarde de la ligue. Essaye encore.`)
+        })
+    }
+}
+
+export const deleteLeague = geekleagueID => async(dispatch, getState) => {
+    dispatch({
+        type: LOADING
+    })
+
+    try {
+        await geekleagueService.delete(`/${geekleagueID}`)
+
+        const {
+            geekleagues
+        } = getState().geekleagueReducer
+
+        const filteredArray = Object.values(copyObject1Layer(geekleagues)).filter(league => league._id !== geekleagueID)
+        const filteredLeagues = {}
+
+        for (let league of filteredArray) {
+            filteredLeagues[league._id] = league
+        }
+
+        dispatch({
+            type: DELETE_GEEKLEAGUE,
+            payload: filteredLeagues
+        })
+
+        setTimeout(() => {
+            dispatch({
+                type: RESET_DELETE_GEEKLEAGUE
+            })
+        }, resetTimeInMs)
+
+        const {
+            user
+        } = getState().authReducer
+        const newUser = {
+            ...user
+        }
+        newUser.geekLeagues = user.geekLeagues.filter(league => league._id !== geekleagueID)
+
+        dispatch({
+            type: LOGIN,
+            payload: newUser
+        })
+
+    } catch (error) {
+        console.error(error.message)
+        dispatch({
+            type: ERROR,
+            payload: printError('fr', error, `Erreur lors de la suppression de la ligue. Essaye encore.`)
+        })
+    }
+}
+
+export const outLeague = geekleagueID => async(dispatch, getState) => {
+    dispatch({
+        type: LOADING
+    })
+
+    try {
+        await geekleagueService.get(`out/${geekleagueID}`)
+
+        const {
+            geekleagues
+        } = getState().geekleagueReducer
+
+        const filteredArray = Object.values(copyObject1Layer(geekleagues)).filter(league => league._id !== geekleagueID)
+        const filteredLeagues = {}
+
+        for (let league of filteredArray) {
+            filteredLeagues[league._id] = league
+        }
+
+        dispatch({
+            type: OUT_GEEKLEAGUE,
+            payload: filteredLeagues
+        })
+
+        setTimeout(() => {
+            dispatch({
+                type: RESET_OUT_GEEKLEAGUE
+            })
+        }, resetTimeInMs)
+
+        const {
+            user
+        } = getState().authReducer
+        const newUser = {
+            ...user
+        }
+        newUser.geekLeagues = user.geekLeagues.filter(league => league._id !== geekleagueID)
+
+        dispatch({
+            type: LOGIN,
+            payload: newUser
+        })
+
+    } catch (error) {
+        console.error(error.message)
+        dispatch({
+            type: ERROR,
+            payload: printError('fr', error, `Erreur lors de ta sortie de la ligue. Essaye encore.`)
         })
     }
 }

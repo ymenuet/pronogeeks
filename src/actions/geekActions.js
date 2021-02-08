@@ -84,9 +84,10 @@ export const getSeasonPlayers = seasonID => async(dispatch, getState) => {
         })
 
     } catch (error) {
+        console.error(error.message)
         dispatch({
             type: ERROR,
-            payload: `Erreur lors du chargement du classement. Recharge la page ou réessaye plus tard.`
+            payload: error.response.data.message.fr || `Erreur lors du chargement du classement. Recharge la page ou réessaye plus tard.`
         })
     }
 }

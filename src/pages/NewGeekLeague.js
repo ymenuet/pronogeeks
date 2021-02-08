@@ -16,18 +16,23 @@ const NewGeekLeague = ({ history, loading, loadingGeek, creatingLeague, user, al
     const [newLeagueID, setNewLeagueID] = useState(null)
 
     useEffect(() => {
-        if (isEmpty(allGeeks) && !loadingGeek) getAllGeeks()
-    }, [allGeeks, getAllGeeks, loadingGeek])
+        if (isEmpty(allGeeks) && !loadingGeek && !errorGeek) getAllGeeks()
+
+    }, [allGeeks, getAllGeeks, loadingGeek, errorGeek])
+
 
     useEffect(() => {
-        if (!existingLeagues) setExistingLeagues(Object.keys(geekleagues))
+        const leaguesArray = Object.keys(geekleagues).filter(key => key !== 'empty')
 
-        else if (Object.keys(geekleagues).length > existingLeagues.length) {
+        if (!existingLeagues) setExistingLeagues(leaguesArray)
+
+        else if (leaguesArray.length > existingLeagues.length) {
             const newLeagueID = Object.keys(geekleagues).filter(id => !existingLeagues.includes(id))[0]
             setNewLeagueID(newLeagueID)
         }
 
     }, [geekleagues, existingLeagues])
+
 
     useEffect(() => {
         if (newLeagueID) {
@@ -45,7 +50,7 @@ const NewGeekLeague = ({ history, loading, loadingGeek, creatingLeague, user, al
 
 
     return <div className='geekleague-bg'>
-        {creatingLeague || loading || loadingGeek ? (
+        {creatingLeague || loading || (isEmpty(allGeeks) && !errorGeek) ? (
 
             <Loader />
 
@@ -86,7 +91,7 @@ const NewGeekLeague = ({ history, loading, loadingGeek, creatingLeague, user, al
 
                             </Form.Item>
 
-                            <Form.Item
+                            {!isEmpty(allGeeks) && <Form.Item
                                 type='text'
                                 label="Sélectionne d'autres geeks :"
                                 name="geeks"
@@ -98,7 +103,7 @@ const NewGeekLeague = ({ history, loading, loadingGeek, creatingLeague, user, al
                                 ]}
                             >
 
-                                {!isEmpty(allGeeks) ? <Select
+                                <Select
                                     mode="multiple"
                                     style={{ width: '100%', borderRadius: 15.8, overflow: 'hidden', textAlign: 'left' }}
                                     placeholder="Ajoute des geeks à ta ligue !"
@@ -125,9 +130,11 @@ const NewGeekLeague = ({ history, loading, loadingGeek, creatingLeague, user, al
 
                                     </Option>)}
 
-                                </Select> : <ErrorMessage>{errorGeek}</ErrorMessage>}
+                                </Select>
 
-                            </Form.Item>
+                            </Form.Item>}
+
+                            {errorGeek && <ErrorMessage>{errorGeek}</ErrorMessage>}
 
                             <div style={{ display: 'flex', justifyContent: 'center' }}>
                                 <button

@@ -1,10 +1,7 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
-import { Context } from '../context'
-import { isEmpty, sortByUsername } from '../helpers'
-import { editGeekLeague, deleteGeekLeague, outGeekLeague } from '../services/geekLeague'
-import { getProfile } from '../services/auth'
-import { Loader, RankGeeks, ErrorMessage } from '../components'
+import { isEmpty, openNotification, sortByUsername } from '../helpers'
+import { Loader, RankGeeks, ErrorMessage, ErrorNotification } from '../components'
 import { Form, Input, Select } from 'antd'
 import { Link } from 'react-router-dom'
 import { EditIcon, DeleteIcon, RemoveIcon, WarningIcon } from '../components/Icons'
@@ -16,24 +13,28 @@ import { getUndergoingSeasons } from '../actions/seasonActions'
 
 const { Option } = Select
 
-const GeekLeague = ({ match: { params: { geekLeagueID } }, history, loading, loadingGeek, loadingSeason, user, allGeeks, geekleagues, undergoingSeasons, errorGeek, errorSeason, getAllGeeks, getLeague, getUndergoingSeasons }) => {
-    const { loginUser } = useContext(Context)
+const GeekLeague = ({ match: { params: { geekLeagueID } }, history, loading, loadingGeek, loadingSeason, loadingGeekleague, user, allGeeks, geekleagues, geekleagueEdited, geekleagueDeleted, geekleagueOut, undergoingSeasons, errorGeek, errorSeason, getAllGeeks, getLeague, editLeague, deleteLeague, outLeague, getUndergoingSeasons }) => {
     const [geekLeague, setGeekLeague] = useState(null)
     const [seasons, setSeasons] = useState(null)
     const [showModal, setShowModal] = useState(false)
     const [showDelete, setShowDelete] = useState(false)
     const [showOut, setShowOut] = useState(false)
     const [filteredGeeks, setFilteredGeeks] = useState(null)
+    const [error, setError] = useState(null)
     const [form] = Form.useForm()
 
     useEffect(() => {
-        const geekleague = geekleagues[geekLeagueID]
+        if (!geekleagueDeleted && !geekleagueOut) {
+            const geekleague = geekleagues[geekLeagueID]
 
-        if (!geekleague) getLeague(geekLeagueID)
+            if (!geekleague) getLeague(geekLeagueID)
 
-        else if (geekleague && !geekleague.loading) setGeekLeague(geekleague)
+            else if (geekleague && !geekleague.loading && !geekleague.error) setGeekLeague(geekleague)
 
-    }, [geekLeagueID, geekleagues, getLeague])
+            else if (geekleague.error) setError(geekleague.error)
+        }
+
+    }, [geekLeagueID, geekleagues, getLeague, geekleagueDeleted, geekleagueOut])
 
 
     useEffect(() => {
@@ -75,34 +76,41 @@ const GeekLeague = ({ match: { params: { geekLeagueID } }, history, loading, loa
     }, [undergoingSeasons, loadingSeason, errorSeason, getUndergoingSeasons])
 
 
-    const editLeague = async values => {
-        const geekLeague = await editGeekLeague(geekLeagueID, values.name, values.geeks)
-        setShowModal(false)
-        setGeekLeague(geekLeague)
-        const user = await getProfile()
-        loginUser(user)
-    }
+    useEffect(() => {
+        if (geekleagueEdited) {
+            setShowModal(false)
+            openNotification('success', 'Ligue actualisée.')
+        }
 
-    const deleteLeague = async () => {
-        await deleteGeekLeague(geekLeagueID)
-        const user = await getProfile()
-        loginUser(user)
-        history.push('/myGeekLeagues')
-    }
+    }, [geekleagueEdited])
 
-    const outLeague = async () => {
-        await outGeekLeague(geekLeagueID)
-        const user = await getProfile()
-        loginUser(user)
-        history.push('/myGeekLeagues')
-    }
+
+    useEffect(() => {
+        if (geekleagueDeleted) {
+            setShowDelete(false)
+            openNotification('success', 'Ligue supprimée.')
+            history.push('/myGeekLeagues')
+        }
+
+    }, [geekleagueDeleted, history])
+
+
+    useEffect(() => {
+        if (geekleagueOut) {
+            setShowOut(false)
+            openNotification('success', `Tu as bien quitté la ligue "${geekLeague.name}".`)
+            history.push('/myGeekLeagues')
+        }
+
+    }, [geekleagueOut, history, geekLeague])
+
 
     return <div className='geekleague-bg geekleague-details'>
-        {!geekLeague || !seasons || loading ? (
+        {(!geekLeague && !error) || !seasons || loading || loadingGeekleague ? (
 
             <Loader />
 
-        ) : geekLeague.error ? <ErrorMessage>{geekLeague.error}</ErrorMessage> : (
+        ) : error ? <ErrorMessage>{error}</ErrorMessage> : (
 
             <div className='geekleague-page container'>
 
@@ -183,7 +191,7 @@ const GeekLeague = ({ match: { params: { geekLeagueID } }, history, loading, loa
                             form={form}
                             layout='vertical'
                             name="basic"
-                            onFinish={editLeague}
+                            onFinish={({ name, geeks }) => editLeague(geekLeagueID, { name, geeks })}
                             initialValues={{
                                 remember: true,
                             }}
@@ -194,6 +202,7 @@ const GeekLeague = ({ match: { params: { geekLeagueID } }, history, loading, loa
                                 label="Nom de la ligue :"
                                 name="name"
                                 color='black'
+                                initialValue={geekLeague.name}
                             >
                                 <Input
                                     style={{ borderRadius: 15.8 }}
@@ -236,7 +245,13 @@ const GeekLeague = ({ match: { params: { geekLeagueID } }, history, loading, loa
                                 </Select> : <ErrorMessage>{errorGeek}</ErrorMessage>}
                             </Form.Item>
 
-                            <button type="submit" className=" my-btn save">Enregistrer</button>
+                            <button
+                                type="submit"
+                                className=" my-btn save"
+                                disabled={loadingGeekleague}
+                            >
+                                Enregistrer
+                            </button>
 
                         </Form>
 
@@ -266,7 +281,8 @@ const GeekLeague = ({ match: { params: { geekLeagueID } }, history, loading, loa
                         <button
                             type="button"
                             className="my-btn delete"
-                            onClick={deleteLeague}
+                            onClick={() => deleteLeague(geekLeagueID)}
+                            disabled={loadingGeekleague}
                         >
                             Oui, supprimer
                             </button>
@@ -305,7 +321,8 @@ const GeekLeague = ({ match: { params: { geekLeagueID } }, history, loading, loa
                         <button
                             type="button"
                             className="my-btn delete"
-                            onClick={outLeague}
+                            onClick={() => outLeague(geekLeagueID)}
+                            disabled={loadingGeekleague}
                         >
                             Oui, sortir
                             </button>
@@ -324,12 +341,19 @@ const GeekLeague = ({ match: { params: { geekLeagueID } }, history, loading, loa
 
             </div>
         )}
+
+        <ErrorNotification types={['geekleague']} />
+
     </div>
 }
 
 const mapStateToProps = state => ({
     user: state.authReducer.user,
     geekleagues: state.geekleagueReducer.geekleagues,
+    geekleagueEdited: state.geekleagueReducer.geekleagueEdited,
+    geekleagueDeleted: state.geekleagueReducer.geekleagueDeleted,
+    geekleagueOut: state.geekleagueReducer.geekleagueOut,
+    loadingGeekleague: state.geekleagueReducer.loading,
     allGeeks: state.geekReducer.allGeeks,
     loadingGeek: state.geekReducer.loading,
     errorGeek: state.geekReducer.error,

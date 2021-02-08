@@ -12,23 +12,28 @@ const GeekLeagues = ({ loading, user, geekleagues, getUserLeagues }) => {
     const [error, setError] = useState(null)
 
     useEffect(() => {
-        if (isEmpty(geekleagues)) getUserLeagues()
+        if (isConnected(user)) {
+            const geekleaguesNotLoadingNorWithError = !isEmpty(geekleagues) &&
+                !geekleagues.loading &&
+                !geekleagues.error &&
+                !geekleagues.empty
 
-        else if (
-            !isEmpty(geekleagues) &&
-            !geekleagues.loading &&
-            !geekleagues.error &&
-            isConnected(user) &&
-            user.geekLeagues.length > Object.keys(geekleagues).length
-        ) getUserLeagues()
+            if (isEmpty(geekleagues)) getUserLeagues()
 
-        else if (
-            !isEmpty(geekleagues) &&
-            isConnected(user) &&
-            user.geekLeagues.length === Object.keys(geekleagues).length
-        ) setUserGeekleagues(Object.values(geekleagues))
+            else if (
+                geekleaguesNotLoadingNorWithError &&
+                user.geekLeagues.length !== Object.keys(geekleagues).length
+            ) getUserLeagues()
 
-        else if (geekleagues.error) setError(geekleagues.error)
+            else if (
+                geekleaguesNotLoadingNorWithError &&
+                user.geekLeagues.length === Object.keys(geekleagues).length
+            ) setUserGeekleagues(Object.values(geekleagues).filter(league => !!league._id))
+
+            else if (geekleagues.empty) setUserGeekleagues([])
+
+            else if (geekleagues.error) setError(geekleagues.error)
+        }
 
     }, [user, geekleagues, getUserLeagues])
 
@@ -53,7 +58,6 @@ const GeekLeagues = ({ loading, user, geekleagues, getUserLeagues }) => {
                                 className='col-10 col-lg-6 geekleague-card-container'
                             >
                                 <div className='geekleague-card'>
-
                                     <h4>{geekLeague.name}</h4>
 
                                     <h6>Créée par {geekLeague.creator.username} en {new Date(geekLeague.createdAt).getMonth() + 1 > 9 ? new Date(geekLeague.createdAt).getMonth() + 1 : `0${new Date(geekLeague.createdAt).getMonth() + 1}`}/{new Date(geekLeague.createdAt).getFullYear()}</h6>

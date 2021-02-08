@@ -1,5 +1,11 @@
 import {
     UPDATE_GEEKLEAGUES,
+    EDIT_GEEKLEAGUE,
+    RESET_EDIT_GEEKLEAGUE,
+    DELETE_GEEKLEAGUE,
+    RESET_DELETE_GEEKLEAGUE,
+    OUT_GEEKLEAGUE,
+    RESET_OUT_GEEKLEAGUE,
     LOADING,
     ERROR,
     ERROR_RESET
@@ -16,6 +22,9 @@ const done = {
 
 const INITIAL_STATE = {
     geekleagues: {},
+    geekleagueEdited: false,
+    geekleagueDeleted: false,
+    geekleagueOut: false,
     ...done
 }
 
@@ -26,6 +35,42 @@ const geekleagueReducer = (state = INITIAL_STATE, action) => {
                 ...state,
                 geekleagues: action.payload,
                 ...done
+            }
+        case EDIT_GEEKLEAGUE:
+            return {
+                ...state,
+                geekleagues: action.payload,
+                geekleagueEdited: true,
+                ...done
+            }
+        case RESET_EDIT_GEEKLEAGUE:
+            return {
+                ...state,
+                geekleagueEdited: false,
+            }
+        case DELETE_GEEKLEAGUE:
+            return {
+                ...state,
+                geekleagues: action.payload,
+                geekleagueDeleted: true,
+                ...done
+            }
+        case RESET_DELETE_GEEKLEAGUE:
+            return {
+                ...state,
+                geekleagueDeleted: false,
+            }
+        case OUT_GEEKLEAGUE:
+            return {
+                ...state,
+                geekleagues: action.payload,
+                geekleagueOut: true,
+                ...done
+            }
+        case RESET_OUT_GEEKLEAGUE:
+            return {
+                ...state,
+                geekleagueOut: false,
             }
         case LOADING:
             return {

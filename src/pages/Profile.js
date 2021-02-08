@@ -38,7 +38,7 @@ const Profile = ({ loading, loadingUsername, loadingPhoto, loadingGeek, user, se
     }, [user])
 
     useEffect(() => {
-        if (seasonID && !seasonGeeksRankings[seasonID] && !loadingGeek && !errorGeek) {
+        if (isConnected(user) && seasonID && !seasonGeeksRankings[seasonID] && !loadingGeek && !errorGeek) {
             getSeasonPlayers(seasonID)
         }
 
