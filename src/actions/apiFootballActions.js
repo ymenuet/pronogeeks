@@ -2,16 +2,22 @@ import axios from 'axios'
 import {
     STATUS_UPDATED,
     RESET_STATUS_UPDATED,
+    ODDS_UPDATED,
+    RESET_ODDS_UPDATED,
+    WARNING_MESSAGE,
+    RESET_WARNING_MESSAGE,
     LOADING,
     ERROR,
     ERROR_RESET,
-    ODDS_UPDATED,
-    RESET_ODDS_UPDATED
 } from '../types/apiFootballTypes'
+import {
+    ADD_MATCHWEEK
+} from '../types/seasonTypes'
 import {
     LOGIN
 } from '../types/authTypes'
 import {
+    copyObject2Layers,
     printError,
     updateMatchweekFixtures,
     updateMatchweekPronogeeks
@@ -43,7 +49,6 @@ export const updateFixturesStatus = (seasonID, matchweekNumber) => async(dispatc
                 message
             }
         } = await apiFootballService.get(`/fixtures/season/${seasonID}/matchweek/${matchweekNumber}`)
-        console.log(message); // Traiter le cas où les matchs sont déjà tous terminés
 
         if (fixtures) updateMatchweekFixtures({
             fixtures,
@@ -66,13 +71,18 @@ export const updateFixturesStatus = (seasonID, matchweekNumber) => async(dispatc
             payload: user
         })
 
-        dispatch({
-            type: STATUS_UPDATED
-        })
+        if (message) {
+            dispatchWarning(message, 'fr', dispatch)
 
-        setTimeout(() => dispatch({
-            type: RESET_STATUS_UPDATED
-        }), RESET_TIMEOUT_IN_MS)
+        } else {
+            dispatch({
+                type: STATUS_UPDATED
+            })
+
+            setTimeout(() => dispatch({
+                type: RESET_STATUS_UPDATED
+            }), RESET_TIMEOUT_IN_MS)
+        }
 
     } catch (error) {
         console.error(error.message)
@@ -95,19 +105,40 @@ export const updateOdds = (seasonID, matchweekNumber) => async(dispatch, getStat
                 message
             }
         } = await apiFootballService.get(`/odds/season/${seasonID}/matchweek/${matchweekNumber}`)
-        console.log(message); // Traiter le cas où les matchs sont déjà tous commencés
 
         if (fixtures) {
-            // Remplacer les matchs modifiés, et seulement ceux modifiés, dans le seasonReducer.seasonMatchweeks
+            const {
+                seasonMatchweeks
+            } = getState().seasonReducer
+
+            const newMatchweeks = copyObject2Layers(seasonMatchweeks, `${seasonID}-${matchweekNumber}`)
+            newMatchweeks[`${seasonID}-${matchweekNumber}`].fixtures = [...seasonMatchweeks[`${seasonID}-${matchweekNumber}`].fixtures]
+
+            for (let fixture of fixtures) {
+                newMatchweeks[`${seasonID}-${matchweekNumber}`].fixtures = newMatchweeks[`${seasonID}-${matchweekNumber}`].fixtures.map(stateFixture => {
+                    if (stateFixture._id.toString() === fixture._id.toString()) return fixture
+                    return stateFixture
+                })
+            }
+
+            dispatch({
+                type: ADD_MATCHWEEK,
+                payload: newMatchweeks
+            })
         }
 
-        dispatch({
-            type: ODDS_UPDATED
-        })
+        if (message) {
+            dispatchWarning(message, 'fr', dispatch)
 
-        setTimeout(() => dispatch({
-            type: RESET_ODDS_UPDATED
-        }), RESET_TIMEOUT_IN_MS)
+        } else {
+            dispatch({
+                type: ODDS_UPDATED
+            })
+
+            setTimeout(() => dispatch({
+                type: RESET_ODDS_UPDATED
+            }), RESET_TIMEOUT_IN_MS)
+        }
 
     } catch (error) {
         console.error(error.message)
@@ -122,4 +153,15 @@ export const resetApiFootballError = () => dispatch => {
     dispatch({
         type: ERROR_RESET
     })
+}
+
+function dispatchWarning(message, lang, dispatch) {
+    dispatch({
+        type: WARNING_MESSAGE,
+        payload: message[lang]
+    })
+
+    setTimeout(() => dispatch({
+        type: RESET_WARNING_MESSAGE
+    }), RESET_TIMEOUT_IN_MS)
 }

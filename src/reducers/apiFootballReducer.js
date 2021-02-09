@@ -3,6 +3,8 @@ import {
     RESET_STATUS_UPDATED,
     ODDS_UPDATED,
     RESET_ODDS_UPDATED,
+    WARNING_MESSAGE,
+    RESET_WARNING_MESSAGE,
     LOADING,
     ERROR,
     ERROR_RESET
@@ -20,6 +22,7 @@ const done = {
 const INITIAL_STATE = {
     statusUpdated: false,
     oddsUpdated: false,
+    warningMessage: false,
     ...done,
 }
 
@@ -46,6 +49,17 @@ const apiFootballReducer = (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 oddsUpdated: false
+            }
+        case WARNING_MESSAGE:
+            return {
+                ...state,
+                warningMessage: action.payload,
+                ...done
+            }
+        case RESET_WARNING_MESSAGE:
+            return {
+                ...state,
+                warningMessage: false
             }
         case LOADING:
             return {

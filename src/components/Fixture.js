@@ -9,7 +9,7 @@ import '../styles/fixture.css'
 
 import * as pronogeekActions from '../actions/pronogeekActions'
 
-const Fixture = ({ user, fixture, showLeaguePronos, setShowLeaguePronos, userPronogeeks, savePronogeek, resetSaveAndErrorState, handleInputHomeProno, handleInputAwayProno }) => {
+const Fixture = ({ user, fixture, showLeaguePronos, setShowLeaguePronos, userPronogeeks, savePronogeek, resetSaveAndErrorState, handleInputHomeProno, handleInputAwayProno, loadingApi }) => {
     const [pronogeek, setPronogeek] = useState(null)
     const [matchStarted, setMatchStarted] = useState(false)
     const [homeScore, setHomeScore] = useState(null)
@@ -91,7 +91,7 @@ const Fixture = ({ user, fixture, showLeaguePronos, setShowLeaguePronos, userPro
     }
 
 
-    return !fixture || homeScore == null || awayScore == null ? (
+    return !fixture || homeScore == null || awayScore == null || loadingApi ? (
 
         <div style={{ padding: 20, paddingTop: 0 }}>
             <Skeleton active />
@@ -236,7 +236,8 @@ const Fixture = ({ user, fixture, showLeaguePronos, setShowLeaguePronos, userPro
 
 const mapStateToProps = state => ({
     user: state.authReducer.user,
-    userPronogeeks: state.pronogeekReducer.userPronogeeks
+    userPronogeeks: state.pronogeekReducer.userPronogeeks,
+    loadingApi: state.apiFootballReducer.loading
 })
 
 const mapDispatchToProps = {

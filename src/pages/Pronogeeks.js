@@ -10,7 +10,7 @@ import * as seasonActions from '../actions/seasonActions'
 import * as pronogeekActions from '../actions/pronogeekActions'
 import * as apiFootballActions from '../actions/apiFootballActions'
 
-const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history, loading, loadingSeason, loadingPronogeek, loadingApi, user, detailedSeasons, seasonMatchweeks, userPronogeeks, statusUpdated, oddsUpdated, getSeason, getMatchweekFixtures, getUserMatchweekPronos, saveAllPronogeeks, resetMatchweekSaveAndErrorState, updateFixturesStatus, updateOdds, errorSeason, errorPronogeek }) => {
+const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history, loading, loadingSeason, loadingPronogeek, loadingApi, user, detailedSeasons, seasonMatchweeks, userPronogeeks, statusUpdated, oddsUpdated, warningMessage, getSeason, getMatchweekFixtures, getUserMatchweekPronos, saveAllPronogeeks, resetMatchweekSaveAndErrorState, updateFixturesStatus, updateOdds, errorSeason, errorPronogeek }) => {
     const [season, setSeason] = useState(null)
     const [newSeason, setNewSeason] = useState(true)
     const [userMatchweek, setUserMatchweek] = useState(null)
@@ -67,6 +67,7 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
 
     useEffect(() => {
         const matchweekDetails = seasonMatchweeks[`${seasonID}-${matchweekNumber}`]
+
         if (
             season &&
             !matchweekDetails &&
@@ -134,14 +135,17 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
 
     useEffect(() => {
         if (statusUpdated) openNotification('success', 'Scores et dates actualisés')
-
     }, [statusUpdated])
 
 
     useEffect(() => {
         if (oddsUpdated) openNotification('success', 'Cotes mises à jour')
-
     }, [oddsUpdated])
+
+
+    useEffect(() => {
+        if (warningMessage) openNotification('warning', 'Actualisation abortée', warningMessage)
+    }, [warningMessage])
 
 
     useEffect(() => {
@@ -203,7 +207,7 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
         history.push(`/pronogeeks/${seasonID}/matchweek/${matchweek}`)
     }
 
-    return !fixtures || !season || loading || newSeason || loadingApi ? (
+    return !fixtures || !season || loading || newSeason ? (
 
         <div className='pronogeeks-bg'>
             <Loader color='rgb(4, 78, 199)' />
@@ -354,6 +358,7 @@ const mapStateToProps = state => ({
     errorPronogeek: state.pronogeekReducer.error,
     statusUpdated: state.apiFootballReducer.statusUpdated,
     oddsUpdated: state.apiFootballReducer.oddsUpdated,
+    warningMessage: state.apiFootballReducer.warningMessage,
     loadingApi: state.apiFootballReducer.loading,
 })
 
