@@ -15,6 +15,9 @@ import {
 import {
     LOGIN
 } from '../types/authTypes'
+import {
+    RESET_TIMEOUT_IN_MS
+} from '../constants'
 
 import {
     rankGeeks
@@ -49,6 +52,7 @@ export const getAllGeeks = () => async dispatch => {
             payload: geeksObject
         })
     } catch (error) {
+        console.error('ERROR:', error.message)
         dispatch({
             type: ERROR,
             payload: 'Erreur lors du chargement des joueurs. Recharge la page ou réessaye plus tard.'
@@ -84,7 +88,7 @@ export const getSeasonPlayers = seasonID => async(dispatch, getState) => {
         })
 
     } catch (error) {
-        console.error(error.message)
+        console.error('ERROR:', error.message)
         dispatch({
             type: ERROR,
             payload: error.response.data.message.fr || `Erreur lors du chargement du classement. Recharge la page ou réessaye plus tard.`
@@ -116,6 +120,7 @@ export const getDetailsGeek = geekID => async(dispatch, getState) => {
             payload: newDetailedGeeks
         })
     } catch (error) {
+        console.error('ERROR:', error.message)
         dispatch({
             type: ERROR,
             payload: 'Erreur lors du chargement du profil geek. Recharge la page ou réessaye plus tard.'
@@ -152,7 +157,12 @@ export const saveFavTeam = (seasonID, teamID) => async(dispatch, getState) => {
         dispatch({
             type: SAVE_FAV_TEAM
         })
+        setTimeout(() => dispatch({
+            type: SAVE_FAV_TEAM_RESET
+        }), RESET_TIMEOUT_IN_MS)
+
     } catch (error) {
+        console.error('ERROR:', error.message)
         dispatch({
             type: ERROR,
             payload: "Erreur lors de l'enregistrement de l'équipe de coeur. Recharge la page ou réessaye plus tard."
@@ -183,6 +193,7 @@ export const saveGeekleagueHistory = geekLeagueID => async(dispatch, getState) =
         })
 
     } catch (error) {
+        console.error('ERROR:', error.message)
         dispatch({
             type: ERROR,
             payload: `Erreur lors de la sauvegarde de l'historique de ligue geek.`
@@ -220,25 +231,17 @@ export const saveUserProvRanking = (seasonID, userProvRanking) => async(dispatch
         dispatch({
             type: SAVE_RANKING
         })
+        setTimeout(() => dispatch({
+            type: SAVE_RANKING_RESET
+        }), RESET_TIMEOUT_IN_MS)
 
     } catch (error) {
+        console.error('ERROR:', error.message)
         dispatch({
             type: ERROR,
             payload: `Erreur lors de la sauvegarde de ton classement. Réessaye plus tard.`
         })
     }
-}
-
-export const resetFavTeamAdded = () => dispatch => {
-    dispatch({
-        type: SAVE_FAV_TEAM_RESET
-    })
-}
-
-export const resetRankingSaved = () => dispatch => {
-    dispatch({
-        type: SAVE_RANKING_RESET
-    })
 }
 
 export const resetGeekError = () => dispatch => {

@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import Loader from './Loader'
-import GeekProno from './GeekProno'
+import { Loader, ErrorMessage, GeekProno } from '.'
 import { isConnected, statusTranform } from '../helpers/index'
+import { readGeekLeagueState } from '../stateReaders/geekLeague'
 import { CloseIcon } from './Icons'
 import '../styles/previewPronos.css'
 
 import { saveGeekleagueHistory } from '../actions/geekActions'
 import { getLeague } from '../actions/geekleagueActions'
 import { getGeekleagueFixturePronos } from '../actions/pronogeekActions'
-import ErrorMessage from './ErrorMessage'
 
 const PreviewPronos = ({ loadingPronogeek, user, fixture, setShowLeagues, geekleagues, geeksFixturePronogeeks, saveGeekleagueHistory, getLeague, getGeekleagueFixturePronos }) => {
 
@@ -24,15 +23,6 @@ const PreviewPronos = ({ loadingPronogeek, user, fixture, setShowLeagues, geekle
                 'Draw'
     }
 
-    const getGeekleague = (geekleagueID, geekleagues, getLeague, setGeekleague) => {
-        const geekleague = geekleagues[geekleagueID]
-
-        if (!geekleague) getLeague(geekleagueID)
-
-        else if (geekleague && !geekleague.loading) setGeekleague(geekleague)
-
-    }
-
     useEffect(() => {
         const winner = determineWinner(fixture.goalsHomeTeam, fixture.goalsAwayTeam)
         setWinner(winner)
@@ -41,8 +31,13 @@ const PreviewPronos = ({ loadingPronogeek, user, fixture, setShowLeagues, geekle
 
     useEffect(() => {
         if (isConnected(user)) {
-            const geekleagueID = user.geekLeagueHistory || user.geekLeagues[0]._id
-            getGeekleague(geekleagueID, geekleagues, getLeague, setGeekleague)
+            const geekLeagueID = user.geekLeagueHistory || user.geekLeagues[0]._id
+            readGeekLeagueState({
+                geekleagues,
+                getLeague,
+                geekLeagueID,
+                setGeekLeague: setGeekleague
+            })
         }
 
     }, [user, geekleagues, getLeague])
@@ -61,10 +56,14 @@ const PreviewPronos = ({ loadingPronogeek, user, fixture, setShowLeagues, geekle
 
 
     const changeLeague = async (e) => {
-        const geekleagueID = e.target.value
-        setGeekleague(null)
-        getGeekleague(geekleagueID, geekleagues, getLeague, setGeekleague)
-        saveGeekleagueHistory(geekleagueID)
+        const geekLeagueID = e.target.value
+        readGeekLeagueState({
+            geekleagues,
+            getLeague,
+            geekLeagueID,
+            setGeekLeague: setGeekleague
+        })
+        saveGeekleagueHistory(geekLeagueID)
     }
 
     return (
@@ -155,10 +154,10 @@ const PreviewPronos = ({ loadingPronogeek, user, fixture, setShowLeagues, geekle
             </div>
 
 
-            <div className={`${!geeksPronos || geekleague?.error ? 'align-items-center' : ''} view-pronos-body`}>
+            <div className={`${!geeksPronos || loadingPronogeek || geekleague?.error ? 'align-items-center' : ''} view-pronos-body`}>
                 {geekleague?.error ? <ErrorMessage>{geekleague.error}</ErrorMessage>
 
-                    : !geeksPronos ? <Loader
+                    : loadingPronogeek || !geeksPronos ? <Loader
                         size='small'
                         tip='Chargement des pronos...'
                         fontSize='2.4rem'

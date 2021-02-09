@@ -10,7 +10,7 @@ import '../styles/pronogeeks.css'
 import * as geekActions from '../actions/geekActions'
 import * as seasonActions from '../actions/seasonActions'
 
-const PronogeeksSearch = ({ match: { params: { seasonID } }, loading, loadingGeek, loadingSeason, user, favTeamAdded, errorGeek, errorSeason, saveFavTeam, resetFavTeamAdded, detailedSeasons, nextMatchweeks, getSeason, setNextMatchweek }) => {
+const PronogeeksSearch = ({ match: { params: { seasonID } }, loading, loadingGeek, loadingSeason, user, favTeamAdded, errorGeek, errorSeason, saveFavTeam, detailedSeasons, nextMatchweeks, getSeason, setNextMatchweek }) => {
 
     const [seasonTeams, setSeasonTeams] = useState(null)
     const [newSeason, setNewSeason] = useState(null)
@@ -21,9 +21,8 @@ const PronogeeksSearch = ({ match: { params: { seasonID } }, loading, loadingGee
         if (favTeamAdded) {
             openNotification('success', 'Équipe de coeur enregistrée.')
             setNewSeason(false)
-            resetFavTeamAdded()
         }
-    }, [favTeamAdded, resetFavTeamAdded])
+    }, [favTeamAdded])
 
     useEffect(() => {
         if (isConnected(user)) {

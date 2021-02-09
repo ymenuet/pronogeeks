@@ -85,7 +85,7 @@ export const updateFixturesStatus = (seasonID, matchweekNumber) => async(dispatc
         }
 
     } catch (error) {
-        console.error(error.message)
+        console.error('ERROR:', error.message)
         dispatch({
             type: ERROR,
             payload: printError('fr', error, 'Une erreur a eu lieu lors de la mise à jour des scores.')
@@ -141,7 +141,7 @@ export const updateOdds = (seasonID, matchweekNumber) => async(dispatch, getStat
         }
 
     } catch (error) {
-        console.error(error.message)
+        console.error('ERROR:', error.message)
         dispatch({
             type: ERROR,
             payload: printError('fr', error, 'Une erreur a eu lieu lors de la mise à jour des cotes.')

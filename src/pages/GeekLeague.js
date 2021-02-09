@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { isEmpty, openNotification, sortByUsername } from '../helpers'
+import { readGeekLeagueState } from '../stateReaders/geekLeague'
 import { Loader, RankGeeks, ErrorMessage, ErrorNotification } from '../components'
 import { Form, Input, Select } from 'antd'
 import { Link } from 'react-router-dom'
@@ -20,18 +21,16 @@ const GeekLeague = ({ match: { params: { geekLeagueID } }, history, loading, loa
     const [showDelete, setShowDelete] = useState(false)
     const [showOut, setShowOut] = useState(false)
     const [filteredGeeks, setFilteredGeeks] = useState(null)
-    const [error, setError] = useState(null)
     const [form] = Form.useForm()
 
     useEffect(() => {
         if (!geekleagueDeleted && !geekleagueOut) {
-            const geekleague = geekleagues[geekLeagueID]
-
-            if (!geekleague) getLeague(geekLeagueID)
-
-            else if (geekleague && !geekleague.loading && !geekleague.error) setGeekLeague(geekleague)
-
-            else if (geekleague.error) setError(geekleague.error)
+            readGeekLeagueState({
+                geekleagues,
+                getLeague,
+                geekLeagueID,
+                setGeekLeague
+            })
         }
 
     }, [geekLeagueID, geekleagues, getLeague, geekleagueDeleted, geekleagueOut])
@@ -106,11 +105,11 @@ const GeekLeague = ({ match: { params: { geekLeagueID } }, history, loading, loa
 
 
     return <div className='geekleague-bg geekleague-details'>
-        {(!geekLeague && !error) || !seasons || loading || loadingGeekleague ? (
+        {!geekLeague || !seasons || loading || loadingGeekleague ? (
 
             <Loader />
 
-        ) : error ? <ErrorMessage>{error}</ErrorMessage> : (
+        ) : geekLeague.error ? <ErrorMessage>{geekLeague.error}</ErrorMessage> : (
 
             <div className='geekleague-page container'>
 

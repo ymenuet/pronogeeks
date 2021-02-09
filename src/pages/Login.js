@@ -7,19 +7,21 @@ import { SocialLogins, ErrorNotification, Loader } from '../components'
 
 import * as mapDispatchToProps from '../actions/authActions'
 
-const Login = ({ loadingUser, user, login }) => {
+const Login = ({ loadingUser, loadingState, login }) => {
     const [form] = Form.useForm()
-
-    const onFinish = async ({ email, password }) => {
-        await login({ email, password })
-    }
 
     return <div className='register-pages'>
 
-        {loadingUser ? <Loader
-            tip='Chargement...'
-            color='rgb(4, 78, 199)'
-        /> : <div className='row signup-form'>
+        {loadingUser || loadingState ?
+
+            <Loader
+                tip='Chargement...'
+                color='rgb(4, 78, 199)'
+            />
+
+            :
+
+            <div className='row signup-form'>
 
                 <div className='col-10 offset-1 col-sm-8 offset-sm-2 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4'>
 
@@ -27,9 +29,9 @@ const Login = ({ loadingUser, user, login }) => {
 
                     <Form
                         form={form}
+                        onFinish={({ email, password }) => login({ email, password })}
                         layout='vertical'
                         name="basic"
-                        onFinish={onFinish}
                         initialValues={{
                             remember: true,
                         }}
@@ -100,6 +102,6 @@ const Login = ({ loadingUser, user, login }) => {
     </div>
 }
 
-const mapStateToProps = ({ authReducer }) => authReducer
+const mapStateToProps = ({ authReducer }) => ({ loadingState: authReducer.loading })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login)

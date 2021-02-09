@@ -5,12 +5,13 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import { Loader, ErrorNotification } from '../components'
 import { DragIcon, SaveIcon, ListIcon } from '../components/Icons'
 import { openNotification, isConnected } from '../helpers'
+import { PROV_RANKING_MATCHWEEK_LIMIT } from '../constants'
 import '../styles/seasonRanking.css'
 
-import { saveUserProvRanking, resetRankingSaved } from '../actions/geekActions'
+import { saveUserProvRanking } from '../actions/geekActions'
 import { getSeason, closeProvRankings } from '../actions/seasonActions'
 
-const SeasonRanking = ({ match: { params: { seasonID, matchweekNumber } }, loadingGeek, loadingSeason, user, rankingSaved, detailedSeasons, saveUserProvRanking, resetRankingSaved, getSeason, closeProvRankings, errorSeason }) => {
+const SeasonRanking = ({ match: { params: { seasonID, matchweekNumber } }, loadingGeek, loadingSeason, user, rankingSaved, detailedSeasons, saveUserProvRanking, getSeason, closeProvRankings, errorSeason }) => {
 
     const [season, setSeason] = useState(null)
     const [userProvRanking, setUserProvRanking] = useState(null)
@@ -20,9 +21,8 @@ const SeasonRanking = ({ match: { params: { seasonID, matchweekNumber } }, loadi
     useEffect(() => {
         if (rankingSaved) {
             openNotification('success', 'Classement enregistré')
-            resetRankingSaved()
         }
-    }, [rankingSaved, resetRankingSaved])
+    }, [rankingSaved])
 
 
     useEffect(() => {
@@ -56,7 +56,7 @@ const SeasonRanking = ({ match: { params: { seasonID, matchweekNumber } }, loadi
 
     useEffect(() => {
         if (season && season.provRankingOpen) {
-            const matchweek7Dates = season.fixtures.filter(({ matchweek }) => matchweek === 7).map(({ date }) => new Date(date))
+            const matchweek7Dates = season.fixtures.filter(({ matchweek }) => matchweek === PROV_RANKING_MATCHWEEK_LIMIT).map(({ date }) => new Date(date))
             const matchweek7HasStarted = Date.now() - Math.min(...matchweek7Dates) > 0
 
             if (matchweek7HasStarted) {
@@ -173,8 +173,18 @@ const SeasonRanking = ({ match: { params: { seasonID, matchweekNumber } }, loadi
 
                     {infoProvRanking(provRankingOpen)}
 
-                    {provRankingOpen && <button className='btn my-btn save-prono save-ranking-btn' onClick={saveRanking}><SaveIcon /> Sauver classement</button>
-                    }
+                    {provRankingOpen && <button className='btn my-btn save-prono save-ranking-btn' onClick={saveRanking}>
+
+                        {loadingGeek ? <Loader
+                            tip=''
+                            size='small'
+                            fontSize='1.8rem'
+                            container={false}
+                        /> : <SaveIcon />}
+                        {!loadingGeek && 'Enregistrer classement'}
+
+                    </button>}
+
                     <DragDropContext onDragEnd={handleDragEnd}>
 
                         <Droppable droppableId='provisional-ranking'>
@@ -226,7 +236,17 @@ const SeasonRanking = ({ match: { params: { seasonID, matchweekNumber } }, loadi
 
                     </DragDropContext>
 
-                    {provRankingOpen && <button className='btn my-btn save-prono save-ranking-btn-bottom' onClick={saveRanking}><SaveIcon /> Sauver classement</button>}
+                    {provRankingOpen && <button className='btn my-btn save-prono save-ranking-btn-bottom' onClick={saveRanking}>
+
+                        {loadingGeek ? <Loader
+                            tip=''
+                            size='small'
+                            fontSize='1.8rem'
+                            container={false}
+                        /> : <SaveIcon />}
+                        {!loadingGeek && 'Enregistrer classement'}
+
+                    </button>}
 
                 </div>
 
@@ -251,7 +271,6 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
     saveUserProvRanking,
-    resetRankingSaved,
     getSeason,
     closeProvRankings
 }

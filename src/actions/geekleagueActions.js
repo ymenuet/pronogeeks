@@ -76,7 +76,7 @@ export const createLeague = ({
         })
 
     } catch (error) {
-        console.error(error.message)
+        console.error('ERROR:', error.message)
 
         dispatch({
             type: ERROR,
@@ -119,7 +119,7 @@ export const getLeague = leagueID => async(dispatch, getState) => {
         })
 
     } catch (error) {
-        console.error(error.message)
+        console.error('ERROR:', error.message)
 
         const {
             geekleagues
@@ -172,7 +172,7 @@ export const getUserLeagues = () => async(dispatch, getState) => {
         })
 
     } catch (error) {
-        console.error(error.message)
+        console.error('ERROR:', error.message)
 
         const {
             geekleagues
@@ -225,7 +225,7 @@ export const editLeague = (geekleagueID, {
         }, RESET_TIMEOUT_IN_MS)
 
     } catch (error) {
-        console.error(error.message)
+        console.error('ERROR:', error.message)
         dispatch({
             type: ERROR,
             payload: printError('fr', error, `Erreur lors de la sauvegarde de la ligue. Essaye encore.`)
@@ -250,7 +250,7 @@ export const deleteLeague = geekleagueID => async(dispatch, getState) => {
         })
 
     } catch (error) {
-        console.error(error.message)
+        console.error('ERROR:', error.message)
         dispatch({
             type: ERROR,
             payload: printError('fr', error, `Erreur lors de la suppression de la ligue. Essaye encore.`)
@@ -275,7 +275,7 @@ export const outLeague = geekleagueID => async(dispatch, getState) => {
         })
 
     } catch (error) {
-        console.error(error.message)
+        console.error('ERROR:', error.message)
         dispatch({
             type: ERROR,
             payload: printError('fr', error, `Erreur lors de ta sortie de la ligue. Essaye encore.`)

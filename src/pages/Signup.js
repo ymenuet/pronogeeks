@@ -26,6 +26,7 @@ const Signup = ({ loadingUser, signup, loading, signedup, emailToConfirm }) => {
                 setCloudinaryLoading(true)
                 const { data: { secure_url } } = await axios.post(process.env.REACT_APP_CLOUDINARY_URL, photo)
                     .catch(error => {
+                        console.error('ERROR:', error.message)
                         setCloudinaryError(true)
                         setCloudinaryLoading(false)
                         openNotification('error', "Une erreur a eu lieu lors de l'import de la photo. Merci de réessayer.")

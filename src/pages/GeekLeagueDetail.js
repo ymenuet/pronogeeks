@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { Loader, InputMatchweek, RankGeeks, ErrorMessage } from '../components'
 import { resetMatchweek } from '../helpers'
+import { readGeekLeagueState } from '../stateReaders/geekLeague'
 import { GoBackIcon, GoNextIcon } from '../components/Icons'
 import '../styles/detailGeekleague.css'
 
@@ -63,11 +64,12 @@ const GeekLeagueDetail = ({ match: { params: { geekLeagueID, seasonID, matchweek
 
 
     useEffect(() => {
-        const geekleague = geekleagues[geekLeagueID]
-
-        if (!geekleague) getLeague(geekLeagueID)
-
-        else if (geekleague && !geekleague.loading) setGeekLeague(geekleague)
+        readGeekLeagueState({
+            geekleagues,
+            getLeague,
+            geekLeagueID,
+            setGeekLeague
+        })
 
     }, [geekLeagueID, geekleagues, getLeague])
 
