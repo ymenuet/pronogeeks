@@ -1,49 +1,34 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
-import { updateFixturesStatus, updateOdds } from '../services/apiFootball'
-import { getProfile } from '../services/auth'
-import { openNotification } from '../helpers'
-import { Context } from '../context'
 import '../styles/adminButtons.css'
 
-const AdminButtons = ({ user, season, matchweekNumber, userMatchweek, setFixtures, setPoints, setMatchweekFixtures }) => {
+import * as mapDispatchToProps from '../actions/apiFootballActions'
 
-    const { loginUser } = useContext(Context)
+const AdminButtons = ({ user, loadingApi, season, matchweekNumber, updateFixturesStatus, updateOdds }) => {
 
-    const getStatus = async () => {
-        const data = await updateFixturesStatus(season._id, matchweekNumber)
-        if (data.message) return openNotification('warning', 'Actualisation abortée', data.message.fr)
-        else {
-            setFixtures(null)
-            setFixtures(data.fixtures)
-            openNotification('success', 'Scores et dates actualisés')
-            const user = await getProfile()
-            loginUser(user)
-            setPoints(userMatchweek)
-        }
-    }
-
-    const getOdds = async () => {
-        const message = await updateOdds(season._id, matchweekNumber)
-        if (message) return openNotification('warning', 'Actualisation abortée', message.fr)
-        else {
-            setMatchweekFixtures(season, matchweekNumber)
-            openNotification('success', 'Cotes actualisées')
-        }
-    }
+    // const getOdds = async () => {
+    //     const message = await updateOdds(season._id, matchweekNumber)
+    //     if (message) return openNotification('warning', 'Actualisation abortée', message.fr)
+    //     else {
+    //         setMatchweekFixtures(season, matchweekNumber)
+    //         openNotification('success', 'Cotes actualisées')
+    //     }
+    // }
 
     return user.role === 'GEEK ADMIN' && <div>
 
         <button
             className='btn my-btn admin-btn top'
-            onClick={getStatus}
+            onClick={() => updateFixturesStatus(season._id, matchweekNumber)}
+            disabled={loadingApi}
         >
             Actualiser les scores
         </button>
 
         <button
             className='btn my-btn admin-btn top'
-            onClick={getOdds}
+            onClick={() => updateOdds(season._id, matchweekNumber)}
+            disabled={loadingApi}
         >
             Actualiser les cotes
         </button>
@@ -52,7 +37,8 @@ const AdminButtons = ({ user, season, matchweekNumber, userMatchweek, setFixture
 }
 
 const mapStateToProps = state => ({
-    user: state.authReducer.user
+    user: state.authReducer.user,
+    loadingApi: state.apiFootballReducer.loading,
 })
 
-export default connect(mapStateToProps)(AdminButtons)
+export default connect(mapStateToProps, mapDispatchToProps)(AdminButtons)

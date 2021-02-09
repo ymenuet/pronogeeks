@@ -6,6 +6,9 @@ import {
     LOADING,
     ERROR
 } from '../types/pronogeekTypes'
+import {
+    updateMatchweekPronogeeks
+} from '../helpers'
 
 const baseURL = process.env.NODE_ENV === 'production' ?
     `/api/pronogeeks` :
@@ -28,21 +31,12 @@ export const getUserMatchweekPronos = (userID, seasonID, matchweekNumber) => asy
             }
         } = await pronogeekService.get(`/geek/${userID}/season/${seasonID}/matchweek/${matchweekNumber}`)
 
-        const {
-            userPronogeeks
-        } = getState().pronogeekReducer
-
-        const newPronogeeks = {
-            ...userPronogeeks
-        }
-        newPronogeeks[`${seasonID}-${matchweekNumber}`] = {}
-        pronogeeks.map(pronogeek => {
-            newPronogeeks[`${seasonID}-${matchweekNumber}`][pronogeek.fixture] = pronogeek
-            return pronogeek
-        })
-        dispatch({
-            type: ADD_USER_PRONOGEEKS,
-            payload: newPronogeeks
+        updateMatchweekPronogeeks({
+            pronogeeks,
+            seasonID,
+            matchweekNumber,
+            dispatch,
+            getState
         })
 
     } catch (error) {

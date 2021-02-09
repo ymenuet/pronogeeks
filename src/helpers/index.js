@@ -1,6 +1,12 @@
 import {
     notification
 } from 'antd'
+import {
+    ADD_MATCHWEEK
+} from '../types/seasonTypes'
+import {
+    ADD_USER_PRONOGEEKS
+} from '../types/pronogeekTypes'
 
 export const isEmpty = myObject => {
     let result = null
@@ -228,3 +234,63 @@ export const sortByUsername = geeks => geeks.sort((a, b) => {
     if (userA >= userB) return 1
     else return -1
 })
+
+export const updateMatchweekFixtures = ({
+    fixtures,
+    seasonID,
+    matchweekNumber,
+    dispatch,
+    getState,
+}) => {
+    const matchweekFixtures = fixtures
+        .filter(fixture => `${fixture.matchweek}` === `${matchweekNumber}`)
+        .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+
+    const totalGames = matchweekFixtures.length
+    const gamesFinished = matchweekFixtures.filter(fixture => matchFinished(fixture.statusShort)).length
+    const hasStarted = new Date(matchweekFixtures[0].date).getTime() <= Date.now()
+
+    const {
+        seasonMatchweeks
+    } = getState().seasonReducer
+    const newMatchweeks = {
+        ...seasonMatchweeks
+    }
+    newMatchweeks[`${seasonID}-${matchweekNumber}`] = {
+        totalGames,
+        gamesFinished,
+        hasStarted,
+        fixtures: matchweekFixtures
+    }
+
+    dispatch({
+        type: ADD_MATCHWEEK,
+        payload: newMatchweeks
+    })
+}
+
+export const updateMatchweekPronogeeks = ({
+    pronogeeks,
+    seasonID,
+    matchweekNumber,
+    dispatch,
+    getState
+}) => {
+    const {
+        userPronogeeks
+    } = getState().pronogeekReducer
+
+    const newPronogeeks = {
+        ...userPronogeeks
+    }
+    newPronogeeks[`${seasonID}-${matchweekNumber}`] = {}
+
+    for (let pronogeek of pronogeeks) {
+        newPronogeeks[`${seasonID}-${matchweekNumber}`][pronogeek.fixture] = pronogeek
+    }
+
+    dispatch({
+        type: ADD_USER_PRONOGEEKS,
+        payload: newPronogeeks
+    })
+}

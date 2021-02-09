@@ -1,0 +1,7 @@
+export const STATUS_UPDATED = 'api_football_status_updated'
+export const RESET_STATUS_UPDATED = 'api_football_reset_status_updated'
+export const ODDS_UPDATED = 'api_football_odds_updated'
+export const RESET_ODDS_UPDATED = 'api_football_reset_odds_updated'
+export const LOADING = 'api_football_loading'
+export const ERROR = 'api_football_error'
+export const ERROR_RESET = 'api_football_reset_error'

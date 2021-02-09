@@ -19,8 +19,9 @@ import {
     copyObject1Layer,
     copyObject2Layers
 } from '../helpers'
-
-const resetTimeInMs = 100
+import {
+    RESET_TIMEOUT_IN_MS
+} from '../constants'
 
 const baseURL = process.env.NODE_ENV === 'production' ?
     `/api/geekLeagues` :
@@ -221,7 +222,7 @@ export const editLeague = (geekleagueID, {
             dispatch({
                 type: RESET_EDIT_GEEKLEAGUE
             })
-        }, resetTimeInMs)
+        }, RESET_TIMEOUT_IN_MS)
 
     } catch (error) {
         console.error(error.message)
@@ -315,7 +316,7 @@ function deleteLeagueFromStore({
         dispatch({
             type: resetType
         })
-    }, resetTimeInMs)
+    }, RESET_TIMEOUT_IN_MS)
 
     const {
         user

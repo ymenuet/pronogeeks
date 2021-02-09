@@ -2,14 +2,13 @@ import axios from 'axios'
 import {
     GET_UNDERGOING_SEASONS,
     ADD_SEASON,
-    ADD_MATCHWEEK,
     SET_NEXT_MATCHWEEK,
     SET_LAST_MATCHWEEK,
     LOADING,
     ERROR
 } from '../types/seasonTypes'
 import {
-    matchFinished
+    updateMatchweekFixtures
 } from '../helpers'
 
 
@@ -65,30 +64,12 @@ export const getMatchweekFixtures = (season, matchweekNumber) => (dispatch, getS
         fixtures
     } = season
 
-    const matchweekFixtures = fixtures
-        .filter(fixture => `${fixture.matchweek}` === `${matchweekNumber}`)
-        .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
-
-    const totalGames = matchweekFixtures.length
-    const gamesFinished = matchweekFixtures.filter(fixture => matchFinished(fixture.statusShort)).length
-    const hasStarted = new Date(matchweekFixtures[0].date).getTime() <= Date.now()
-
-    const {
-        seasonMatchweeks
-    } = getState().seasonReducer
-    const newMatchweeks = {
-        ...seasonMatchweeks
-    }
-    newMatchweeks[`${_id}-${matchweekNumber}`] = {
-        totalGames,
-        gamesFinished,
-        hasStarted,
-        fixtures: matchweekFixtures
-    }
-
-    dispatch({
-        type: ADD_MATCHWEEK,
-        payload: newMatchweeks
+    updateMatchweekFixtures({
+        fixtures,
+        matchweekNumber,
+        dispatch,
+        getState,
+        seasonID: _id,
     })
 }
 
