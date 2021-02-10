@@ -1,26 +1,22 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
-import { isEmpty, openNotification, sortByUsername } from '../helpers'
+import { openNotification } from '../helpers'
 import { readGeekLeagueState } from '../stateReaders/geekLeague'
-import { Loader, RankGeeks, ErrorMessage, ErrorNotification } from '../components'
-import { Form, Input, Select } from 'antd'
+import { Loader, RankGeeks, ErrorMessage, ErrorNotification, GeekSelector } from '../components'
+import { Form, Input } from 'antd'
 import { Link } from 'react-router-dom'
 import { EditIcon, DeleteIcon, RemoveIcon, WarningIcon } from '../components/Icons'
 import '../styles/detailGeekleague.css'
 
-import { getAllGeeks } from '../actions/geekActions'
 import * as geekleagueActions from '../actions/geekleagueActions'
 import { getUndergoingSeasons } from '../actions/seasonActions'
 
-const { Option } = Select
-
-const GeekLeague = ({ match: { params: { geekLeagueID } }, history, loading, loadingGeek, loadingSeason, loadingGeekleague, user, allGeeks, geekleagues, geekleagueEdited, geekleagueDeleted, geekleagueOut, undergoingSeasons, errorGeek, errorSeason, getAllGeeks, getLeague, editLeague, deleteLeague, outLeague, getUndergoingSeasons }) => {
+const GeekLeague = ({ match: { params: { geekLeagueID } }, history, loading, loadingSeason, loadingGeekleague, user, geekleagues, geekleagueEdited, geekleagueDeleted, geekleagueOut, undergoingSeasons, errorSeason, getLeague, editLeague, deleteLeague, outLeague, getUndergoingSeasons }) => {
     const [geekLeague, setGeekLeague] = useState(null)
     const [seasons, setSeasons] = useState(null)
     const [showModal, setShowModal] = useState(false)
     const [showDelete, setShowDelete] = useState(false)
     const [showOut, setShowOut] = useState(false)
-    const [filteredGeeks, setFilteredGeeks] = useState(null)
     const [form] = Form.useForm()
 
     useEffect(() => {
@@ -34,33 +30,6 @@ const GeekLeague = ({ match: { params: { geekLeagueID } }, history, loading, loa
         }
 
     }, [geekLeagueID, geekleagues, getLeague, geekleagueDeleted, geekleagueOut])
-
-
-    useEffect(() => {
-        if (
-            isEmpty(allGeeks) &&
-            !loadingGeek &&
-            !errorGeek
-        ) getAllGeeks()
-
-    }, [allGeeks, getAllGeeks, loadingGeek, errorGeek])
-
-
-    useEffect(() => {
-        if (!isEmpty(allGeeks) && geekLeague && !geekLeague.error) {
-            let filteredGeeks = Object.values(allGeeks)
-                .filter(geek => {
-                    let result = true
-                    geekLeague.geeks.map(leagueGeek => {
-                        if (leagueGeek._id.toString() === geek._id.toString()) result = false
-                        return leagueGeek
-                    })
-                    return result
-                })
-            filteredGeeks = sortByUsername(filteredGeeks)
-            setFilteredGeeks(filteredGeeks)
-        }
-    }, [allGeeks, geekLeague])
 
 
     useEffect(() => {
@@ -207,40 +176,7 @@ const GeekLeague = ({ match: { params: { geekLeagueID } }, history, loading, loa
                                 />
                             </Form.Item>
 
-                            <Form.Item
-                                type='text'
-                                label="Ajoute d'autres geeks :"
-                                name="geeks"
-                            >
-                                {filteredGeeks ? <Select
-                                    mode="multiple"
-                                    style={{ width: '100%', borderRadius: 15.8, overflow: 'hidden', textAlign: 'left', outline: 'none' }}
-                                    placeholder="Ajoute des geeks à ta ligue !"
-                                    optionLabelProp="label"
-                                    optionFilterProp='label'
-                                >
-
-                                    {filteredGeeks.map(geek => <Option
-                                        key={geek._id}
-                                        value={geek._id}
-                                        label={geek.username}
-                                    >
-
-                                        <div className="demo-option-label-item">
-                                            <span role="img" aria-label={geek.username}>
-                                                <img
-                                                    src={geek.photo}
-                                                    alt="profile"
-                                                    className='profile-pic-preview'
-                                                />
-                                            </span>
-                                                &nbsp;&nbsp;{geek.username}
-                                        </div>
-
-                                    </Option>)}
-
-                                </Select> : <ErrorMessage>{errorGeek}</ErrorMessage>}
-                            </Form.Item>
+                            <GeekSelector geekLeague={geekLeague} />
 
                             <button
                                 type="submit"
@@ -352,8 +288,6 @@ const mapStateToProps = state => ({
     geekleagueOut: state.geekleagueReducer.geekleagueOut,
     loadingGeekleague: state.geekleagueReducer.loading,
     allGeeks: state.geekReducer.allGeeks,
-    loadingGeek: state.geekReducer.loading,
-    errorGeek: state.geekReducer.error,
     undergoingSeasons: state.seasonReducer.undergoingSeasons,
     loadingSeason: state.seasonReducer.loading,
     errorSeason: state.seasonReducer.error
@@ -361,7 +295,6 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
     ...geekleagueActions,
-    getAllGeeks,
     getUndergoingSeasons
 }
 

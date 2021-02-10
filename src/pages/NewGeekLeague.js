@@ -1,24 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
-import { Form, Input, Select } from 'antd'
-import { ErrorMessage, Loader, ErrorNotification } from '../components'
-import { openNotification, isEmpty, sortByUsername } from '../helpers'
+import { Form, Input } from 'antd'
+import { Loader, ErrorNotification, GeekSelector } from '../components'
+import { openNotification } from '../helpers'
 import '../styles/newGeekleague.css'
 
-import { getAllGeeks } from '../actions/geekActions'
 import { createLeague } from '../actions/geekleagueActions'
 
-const { Option } = Select
-
-const NewGeekLeague = ({ history, loading, loadingGeek, creatingLeague, user, allGeeks, geekleagues, errorGeek, getAllGeeks, createLeague }) => {
+const NewGeekLeague = ({ history, loading, creatingLeague, geekleagues, createLeague }) => {
     const [form] = Form.useForm()
     const [existingLeagues, setExistingLeagues] = useState(null)
     const [newLeagueID, setNewLeagueID] = useState(null)
-
-    useEffect(() => {
-        if (isEmpty(allGeeks) && !loadingGeek && !errorGeek) getAllGeeks()
-
-    }, [allGeeks, getAllGeeks, loadingGeek, errorGeek])
 
 
     useEffect(() => {
@@ -50,7 +42,7 @@ const NewGeekLeague = ({ history, loading, loadingGeek, creatingLeague, user, al
 
 
     return <div className='geekleague-bg'>
-        {creatingLeague || loading || (isEmpty(allGeeks) && !errorGeek) ? (
+        {creatingLeague || loading ? (
 
             <Loader />
 
@@ -91,50 +83,9 @@ const NewGeekLeague = ({ history, loading, loadingGeek, creatingLeague, user, al
 
                             </Form.Item>
 
-                            {!isEmpty(allGeeks) && <Form.Item
-                                type='text'
-                                label="Sélectionne d'autres geeks :"
-                                name="geeks"
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: `Tu ne peux pas créer de ligue sans autres geeks.`,
-                                    },
-                                ]}
-                            >
 
-                                <Select
-                                    mode="multiple"
-                                    style={{ width: '100%', borderRadius: 15.8, overflow: 'hidden', textAlign: 'left' }}
-                                    placeholder="Ajoute des geeks à ta ligue !"
-                                    optionLabelProp="label"
-                                    optionFilterProp='label'
-                                >
+                            <GeekSelector />
 
-                                    {sortByUsername(Object.values(allGeeks)).filter(geek => geek._id !== user._id).map(geek => <Option
-                                        key={geek._id}
-                                        value={geek._id}
-                                        label={geek.username}
-                                    >
-
-                                        <div className="demo-option-label-item">
-                                            <span role="img" aria-label={geek.username}>
-                                                <img
-                                                    src={geek.photo}
-                                                    alt="profile"
-                                                    className='profile-pic-preview'
-                                                />
-                                            </span>
-                                            &nbsp;&nbsp;{geek.username}
-                                        </div>
-
-                                    </Option>)}
-
-                                </Select>
-
-                            </Form.Item>}
-
-                            {errorGeek && <ErrorMessage>{errorGeek}</ErrorMessage>}
 
                             <div style={{ display: 'flex', justifyContent: 'center' }}>
                                 <button
@@ -164,13 +115,11 @@ const mapStateToProps = state => ({
     user: state.authReducer.user,
     allGeeks: state.geekReducer.allGeeks,
     errorGeek: state.geekReducer.error,
-    loadingGeek: state.geekReducer.loading,
     geekleagues: state.geekleagueReducer.geekleagues,
     creatingLeague: state.geekleagueReducer.loading,
 })
 
 const mapDispatchToProps = {
-    getAllGeeks,
     createLeague
 }
 

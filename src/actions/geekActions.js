@@ -20,7 +20,8 @@ import {
 } from '../constants'
 
 import {
-    rankGeeks
+    rankGeeks,
+    printError
 } from '../helpers'
 
 const baseURL = process.env.NODE_ENV === 'production' ?
@@ -34,28 +35,37 @@ const geekService = axios.create({
 
 export const getAllGeeks = () => async dispatch => {
     dispatch({
-        type: LOADING
+        type: ALL_GEEKS,
+        payload: {
+            loading: true,
+            error: false
+        }
     })
+
     try {
         const {
             data: {
                 geeks
             }
         } = await geekService.get('/')
+
         const geeksObject = {}
-        geeks.map(geek => {
-            geeksObject[geek._id] = geek
-            return geek
-        })
+
+        for (let geek of geeks) geeksObject[geek._id] = geek
+
         dispatch({
             type: ALL_GEEKS,
             payload: geeksObject
         })
+
     } catch (error) {
         console.error('ERROR:', error.message)
         dispatch({
-            type: ERROR,
-            payload: 'Erreur lors du chargement des joueurs. Recharge la page ou réessaye plus tard.'
+            type: ALL_GEEKS,
+            payload: {
+                loading: false,
+                error: printError('fr', error, 'Erreur lors du chargement des joueurs. Recharge la page ou réessaye plus tard.')
+            }
         })
     }
 }
