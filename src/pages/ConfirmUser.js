@@ -16,16 +16,16 @@ const ConfirmUser = ({ match: { params: { userID, confirmToken } }, user, userna
         style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
     >
 
-        {loading ? (
+        {error || user?.confirmed ? (
+
+            <Redirect to='/' />
+
+        ) : loading || !usernameConfirmed ? (
 
             <Loader
                 tip='Enregistrement du compte...'
                 color='rgb(4, 78, 199)'
             />
-
-        ) : error || user?.confirmed ? (
-
-            <Redirect to='/' />
 
         ) : <div style={{ padding: 30, background: 'rgba(4, 78, 199, 0.8)', borderRadius: 10, width: '80%' }}>
 

@@ -28,7 +28,7 @@ const ErrorNotification = (props) => {
     useEffect(() => {
         for (let type of types) {
             if (errors[type]) {
-                openNotification('error', errors[type])
+                openNotification('error', 'Erreur', errors[type])
                 resets[type]()
             }
         }
