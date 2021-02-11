@@ -9,7 +9,7 @@ import { resetApiFootballError } from '../actions/apiFootballActions'
 
 const ErrorNotification = (props) => {
 
-    const { types } = props
+    const types = ['auth', 'geek', 'geekleague', 'apiFootball']
 
     const errors = {
         auth: props.authError,

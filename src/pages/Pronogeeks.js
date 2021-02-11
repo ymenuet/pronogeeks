@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { Fixture, Loader, MatchweekNavigation, AdminButtons, RulesProno, InputMatchweek, ErrorNotification } from '../components'
+import { Fixture, Loader, MatchweekNavigation, AdminButtons, RulesProno, InputMatchweek } from '../components'
 import { openNotification, resetMatchweek, getUserSeasonFromProfile, getUserMatchweekFromProfile, isConnected, matchFinished } from '../helpers'
 import { QuestionIcon, SaveIcon, RankingIcon, ValidateIcon } from '../components/Icons'
 import '../styles/pronogeeks.css'
@@ -10,7 +10,7 @@ import * as seasonActions from '../actions/seasonActions'
 import * as pronogeekActions from '../actions/pronogeekActions'
 import * as apiFootballActions from '../actions/apiFootballActions'
 
-const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history, loading, loadingSeason, loadingPronogeek, loadingApi, user, detailedSeasons, seasonMatchweeks, userPronogeeks, statusUpdated, oddsUpdated, warningMessage, getSeason, getMatchweekFixtures, getUserMatchweekPronos, saveAllPronogeeks, resetMatchweekSaveAndErrorState, updateFixturesStatus, updateOdds, errorSeason, errorPronogeek }) => {
+const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history, loading, loadingSeason, loadingPronogeek, loadingApi, user, detailedSeasons, seasonMatchweeks, userPronogeeks, statusUpdated, oddsUpdated, warningMessage, getSeason, getMatchweekFixtures, getUserMatchweekPronos, saveAllPronogeeks, resetMatchweekSaveAndErrorState, updateFixturesStatus, updateOdds, errorSeason, errorPronogeek, errorApi }) => {
     const [season, setSeason] = useState(null)
     const [newSeason, setNewSeason] = useState(true)
     const [userMatchweek, setUserMatchweek] = useState(null)
@@ -26,6 +26,7 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
     const [saveAllSuccess, setSaveAllSuccess] = useState(false)
     const [matchweekFromInput, setMatchweekFromInput] = useState(matchweekNumber)
     const [modifiedTotal, setModifiedTotal] = useState(0)
+    const [errorFetch, setErrorFetch] = useState(false)
 
     const setPoints = userMatchweek => {
         setMatchweekPoints(userMatchweek.totalPoints)
@@ -149,8 +150,13 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
 
 
     useEffect(() => {
+        if (errorApi) setErrorFetch(true)
+    }, [errorApi])
 
-        if (isConnected(user) && !newSeason && fixtures && userMatchweek) {
+
+    useEffect(() => {
+
+        if (isConnected(user) && !newSeason && fixtures && userMatchweek && !loadingApi && !errorApi && !errorFetch) {
             const fixtureDates = fixtures.map(fixture => new Date(fixture.date).getTime())
             const minDate = Math.min(...fixtureDates)
             const maxDate = Math.max(...fixtureDates)
@@ -170,19 +176,19 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
                 const matchweekNotFinished = !!fixtures.filter(({ statusShort }) => !matchFinished(statusShort)).length
                 const fixturesUpdatedMoreThanThirtyMinutesAgo = Date.now() > lastUpdate + 1000 * 60 * 30
 
-                if (fixturesUpdatedMoreThanThirtyMinutesAgo && matchweekNotFinished && !loadingApi) updateFixturesStatus(seasonID, matchweekNumber)
+                if (fixturesUpdatedMoreThanThirtyMinutesAgo && matchweekNotFinished) updateFixturesStatus(seasonID, matchweekNumber)
 
                 // Update fixtures odds from API-football data if last update happened more than a day ago, first game of matchweek is in less than 1 week and last game of matchweek hasn't started yet
                 const allFixturesStarted = Date.now() > maxDate - 1000 * 60 * 30
                 const oddsUpdatedMoreThanOneDayAgo = Date.now() > lastOddsUpdate + 1000 * 60 * 60 * 24
 
-                if (!allFixturesStarted && oddsUpdatedMoreThanOneDayAgo && !loadingApi) updateOdds(seasonID, matchweekNumber)
+                if (!allFixturesStarted && oddsUpdatedMoreThanOneDayAgo) updateOdds(seasonID, matchweekNumber)
 
             }
 
         }
 
-    }, [fixtures, loadingApi, matchweekNumber, seasonID, user, userMatchweek, newSeason, updateFixturesStatus, updateOdds])
+    }, [fixtures, loadingApi, matchweekNumber, seasonID, user, userMatchweek, newSeason, updateFixturesStatus, updateOdds, errorApi, errorFetch])
 
 
     const resetHeader = () => {
@@ -340,8 +346,6 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
                     />
                 </div>}
 
-                <ErrorNotification types={['apiFootball']} />
-
             </div>
 
         )
@@ -360,6 +364,7 @@ const mapStateToProps = state => ({
     oddsUpdated: state.apiFootballReducer.oddsUpdated,
     warningMessage: state.apiFootballReducer.warningMessage,
     loadingApi: state.apiFootballReducer.loading,
+    errorApi: state.apiFootballReducer.error
 })
 
 const mapDispatchToProps = {

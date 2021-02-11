@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { Form, Input } from 'antd'
 import axios from 'axios'
-import { Loader, SocialLogins, ErrorNotification } from '../components'
+import { Loader, SocialLogins } from '../components'
 import { openNotification, appendPhoto } from '../helpers'
 import '../styles/connectPages.css'
 
@@ -178,8 +178,6 @@ const Signup = ({ loadingUser, signup, loading, signedup, emailToConfirm }) => {
                         </Link>
 
                     </div>}
-
-        <ErrorNotification types={['auth']} />
 
     </div>
 }

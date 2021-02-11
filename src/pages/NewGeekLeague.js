@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import { Form, Input } from 'antd'
-import { Loader, ErrorNotification, GeekSelector } from '../components'
+import { Loader, GeekSelector } from '../components'
 import { openNotification } from '../helpers'
 import '../styles/newGeekleague.css'
 
@@ -105,8 +105,6 @@ const NewGeekLeague = ({ history, loading, creatingLeague, geekleagues, createLe
                 </div>
             )
         }
-
-        <ErrorNotification types={['geekleague']} />
 
     </div>
 }

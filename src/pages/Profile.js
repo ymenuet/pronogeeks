@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from "react-redux"
 import axios from 'axios'
-import { Loader, RankGeeks, ErrorNotification, ErrorMessage } from '../components'
+import { Loader, RankGeeks, ErrorMessage } from '../components'
 import { appendPhoto, isConnected, openNotification } from '../helpers'
 import { EditIcon, WarningIcon } from '../components/Icons'
 import '../styles/profile.css'
@@ -388,8 +388,6 @@ const Profile = ({ loading, loadingUsername, loadingPhoto, loadingGeek, user, se
                     </div>
 
                 </div>}
-
-                <ErrorNotification types={['auth']} />
 
             </div>
         )

@@ -10,6 +10,7 @@ import {
     LOADING,
     LOADING_USERNAME,
     LOADING_PHOTO,
+    PROFILE_ERROR,
     ERROR,
     ERROR_RESET
 } from "../types/authTypes"
@@ -119,8 +120,8 @@ export const setProfile = () => async dispatch => {
     } catch (error) {
         console.error('ERROR:', error.message)
         dispatch({
-            type: ERROR,
-            payload: printError('fr', error, `Problème lors de la connexion. Réessaye plus tard.`)
+            type: PROFILE_ERROR,
+            payload: printError('fr', error, `Problème lors de la connexion au server. Recharge la page ou réessaye plus tard.`)
         })
     }
 }

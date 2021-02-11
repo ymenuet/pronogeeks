@@ -3,12 +3,12 @@ import { Redirect, Route } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { isConnected } from '../helpers'
 
-const PublicRoute = ({ component: Component, user, ...rest }) => {
+const PublicRoute = ({ component: Component, user, profileError, ...rest }) => {
 
     return (
         <Route
             {...rest}
-            render={props => isConnected(user) === 0 ? (
+            render={props => isConnected(user) === 0 && !profileError ? (
                 <Component {...props} loadingUser />
             ) : !isConnected(user) ? (
                 <Component {...props} />

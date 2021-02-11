@@ -8,5 +8,6 @@ export const CONFIRM_EMAIL = "auth_confirm_email"
 export const LOADING = "auth_loading"
 export const LOADING_USERNAME = "auth_username_loading"
 export const LOADING_PHOTO = "auth_photo_loading"
+export const PROFILE_ERROR = 'auth_set_profile_error'
 export const ERROR = "auth_error"
 export const ERROR_RESET = "auth_reset_error"

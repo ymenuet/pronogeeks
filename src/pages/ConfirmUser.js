@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { Link, Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { Loader, ErrorNotification } from '../components'
+import { Loader } from '../components'
 
 import * as authActions from '../actions/authActions'
 
@@ -42,8 +42,6 @@ const ConfirmUser = ({ match: { params: { userID, confirmToken } }, user, userna
 
                 </div>
         }
-
-        <ErrorNotification types={['auth']} />
 
     </div>
 }

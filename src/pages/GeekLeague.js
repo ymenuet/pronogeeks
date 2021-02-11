@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { openNotification } from '../helpers'
 import { readGeekLeagueState } from '../stateReaders/geekLeague'
-import { Loader, RankGeeks, ErrorMessage, ErrorNotification, GeekSelector } from '../components'
+import { Loader, RankGeeks, ErrorMessage, GeekSelector } from '../components'
 import { Form, Input } from 'antd'
 import { Link } from 'react-router-dom'
 import { EditIcon, DeleteIcon, RemoveIcon, WarningIcon } from '../components/Icons'
@@ -274,8 +274,6 @@ const GeekLeague = ({ match: { params: { geekLeagueID } }, history, loading, loa
 
             </div>
         )}
-
-        <ErrorNotification types={['geekleague']} />
 
     </div>
 }

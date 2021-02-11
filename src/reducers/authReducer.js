@@ -1,16 +1,17 @@
 import {
     LOADING,
-    ERROR,
     SIGNUP,
     CONFIRM_EMAIL,
     LOGIN,
     LOGOUT,
-    ERROR_RESET,
     LOADING_USERNAME,
     LOADING_PHOTO,
     RESET_PWD,
     UPDATE_PWD,
-    DELETE_ACCOUNT
+    DELETE_ACCOUNT,
+    PROFILE_ERROR,
+    ERROR,
+    ERROR_RESET,
 } from "../types/authTypes"
 
 const notLoading = {
@@ -21,6 +22,7 @@ const notLoading = {
 
 const done = {
     error: false,
+    profileError: false,
     ...notLoading
 }
 
@@ -90,6 +92,13 @@ const authReducer = (state = INITIAL_STATE, action) => {
                 ...state,
                 loadingPhoto: true,
                 error: false
+            }
+        case PROFILE_ERROR:
+            return {
+                ...state,
+                error: action.payload,
+                profileError: true,
+                ...notLoading
             }
         case ERROR:
             return {

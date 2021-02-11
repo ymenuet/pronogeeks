@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { Form, Input } from 'antd'
 import '../styles/connectPages.css'
-import { SocialLogins, ErrorNotification, Loader } from '../components'
+import { SocialLogins, Loader } from '../components'
 
 import * as mapDispatchToProps from '../actions/authActions'
 
@@ -96,8 +96,6 @@ const Login = ({ loadingUser, loadingState, login }) => {
                 </Link>
 
             </div>}
-
-        <ErrorNotification types={['auth']} />
 
     </div>
 }

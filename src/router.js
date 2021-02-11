@@ -1,6 +1,6 @@
 import React from 'react'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
-import { AppLayout } from './components'
+import { AppLayout, ErrorNotification } from './components'
 import { Login, Signup, Home, Profile, PronogeeksSearch, Pronogeeks, NewGeekLeague, GeekLeague, GeekLeagues, GeekLeagueDetail, PronogeeksOther, ConfirmUser, ResetPwd, ResetPwdUser, PrivacyPolicy, Rules, SeasonRanking } from './pages'
 import PrivateRoute from './helpers/PrivateRoute'
 import PublicRoute from './helpers/PublicRoute'
@@ -32,6 +32,7 @@ const router = () => {
                 <PrivateRoute component={SeasonRanking} exact path='/ranking/season/:seasonID' />
                 <Route component={NotFound} />
             </Switch>
+            <ErrorNotification />
         </AppLayout>
     </Router>
 }

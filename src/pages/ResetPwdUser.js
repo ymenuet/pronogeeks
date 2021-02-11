@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import { Form, Input } from 'antd'
-import { Loader, ErrorNotification } from '../components'
+import { Loader } from '../components'
 import { openNotification } from '../helpers'
 
 import * as mapDispatchToProps from '../actions/authActions'
@@ -102,7 +102,6 @@ const ResetPwd = ({ match: { params: { userID, renewToken } }, history, loadingU
                     </div>
 
                 )}
-        <ErrorNotification types={['auth']} />
     </div>
 }
 

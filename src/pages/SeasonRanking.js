@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
-import { Loader, ErrorNotification } from '../components'
+import { Loader } from '../components'
 import { DragIcon, SaveIcon, ListIcon } from '../components/Icons'
 import { openNotification, isConnected } from '../helpers'
 import { PROV_RANKING_MATCHWEEK_LIMIT } from '../constants'
@@ -253,8 +253,6 @@ const SeasonRanking = ({ match: { params: { seasonID, matchweekNumber } }, loadi
             </div>
 
         </> : <Loader color='rgb(4, 78, 199)' />}
-
-        <ErrorNotification types={['geek']} />
 
     </div>
 
