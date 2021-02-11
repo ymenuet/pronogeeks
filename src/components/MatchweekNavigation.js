@@ -2,7 +2,7 @@ import React from 'react'
 import { GoBackIcon, GoNextIcon } from './Icons'
 import '../styles/matchweekNavigation.css'
 
-const MatchweekNavigation = ({ matchweekNumber, matchweekPoints, matchweekCorrects, matchweekBonus, previousPage, nextPage, myClassName, noPronos }) => {
+const MatchweekNavigation = ({ matchweekNumber, matchweekPoints, matchweekCorrects, gamesFinished, matchweekBonus, previousPage, nextPage, myClassName, noPronos }) => {
 
     return <div className='previous-next-btns'>
 
@@ -16,10 +16,10 @@ const MatchweekNavigation = ({ matchweekNumber, matchweekPoints, matchweekCorrec
         </div>}
 
         {!noPronos && matchweekBonus > 0 && <div className={myClassName}>
-            <p>Total J{matchweekNumber} : {matchweekPoints} pts<br />dont {matchweekBonus} pts bonus ({matchweekCorrects}/10)</p>
+            <p>Total J{matchweekNumber} : {matchweekPoints} pts<br />dont {matchweekBonus} pts bonus ({matchweekCorrects}/{gamesFinished})</p>
         </div>}
         {!noPronos && !matchweekBonus && <div className={myClassName}>
-            <p>Total J{matchweekNumber} : {matchweekPoints} pts ({matchweekCorrects}/10)</p>
+            <p>Total J{matchweekNumber} : {matchweekPoints} pts ({matchweekCorrects}/{gamesFinished})</p>
         </div>}
 
         {noPronos && <div className='score-top'>
