@@ -10,7 +10,7 @@ import '../styles/profile.css'
 import * as authActions from '../actions/authActions'
 import { getSeasonPlayers } from '../actions/geekActions'
 
-const Profile = ({ loading, loadingUsername, loadingPhoto, loadingGeek, user, seasonGeeksRankings, updateUsername, updatePhoto, deleteUserAccount, logout, getSeasonPlayers, errorGeek }) => {
+const Profile = ({ loading, loadingUsername, loadingPhoto, user, seasonGeeksRankings, updateUsername, updatePhoto, deleteUserAccount, logout, getSeasonPlayers }) => {
     const [cloudinaryLoading, setCloudinaryLoading] = useState(false)
     const [cloudinaryError, setCloudinaryError] = useState(false)
     const [showModal, setShowModal] = useState(false)
@@ -21,6 +21,7 @@ const Profile = ({ loading, loadingUsername, loadingPhoto, loadingGeek, user, se
     const [seasonRankingFull, setSeasonRankingFull] = useState(null)
     const [seasonRanking, setSeasonRanking] = useState(null)
     const [userRanking, setUserRanking] = useState(null)
+    const [errorRanking, setErrorRanking] = useState(null)
 
     useEffect(() => {
         if (isConnected(user)) {
@@ -38,23 +39,27 @@ const Profile = ({ loading, loadingUsername, loadingPhoto, loadingGeek, user, se
     }, [user])
 
     useEffect(() => {
-        if (isConnected(user) && seasonID && !seasonGeeksRankings[seasonID] && !loadingGeek && !errorGeek) {
-            getSeasonPlayers(seasonID)
+        if (seasonID && isConnected(user) && user.seasons.length) {
+            const ranking = seasonGeeksRankings[seasonID]
+
+            if (!ranking) getSeasonPlayers(seasonID)
+
+            else if (ranking.error) setErrorRanking(ranking.error)
+
+            else if (!ranking.loading) {
+                const rankedGeeks = ranking.map(geek => {
+                    if (geek._id === user._id) return user
+                    return geek
+                })
+                const userRanking = rankedGeeks.map(geek => geek._id).indexOf(user._id)
+                const rankedGeeks20 = rankedGeeks.slice(0, 20)
+                setUserRanking(userRanking)
+                setSeasonRankingFull(rankedGeeks)
+                setSeasonRanking(rankedGeeks20)
+            }
         }
 
-        else if (isConnected(user) && seasonID && seasonGeeksRankings[seasonID]) {
-            const rankedGeeks = seasonGeeksRankings[seasonID].map(geek => {
-                if (geek._id === user._id) return user
-                return geek
-            })
-            const userRanking = rankedGeeks.map(geek => geek._id).indexOf(user._id)
-            const rankedGeeks20 = rankedGeeks.slice(0, 20)
-            setUserRanking(userRanking)
-            setSeasonRankingFull(rankedGeeks)
-            setSeasonRanking(rankedGeeks20)
-        }
-
-    }, [user, seasonID, seasonGeeksRankings, loadingGeek, errorGeek, getSeasonPlayers])
+    }, [user, seasonID, seasonGeeksRankings, getSeasonPlayers])
 
     const uploadPhoto = async e => {
         const photo = appendPhoto(e)
@@ -102,6 +107,7 @@ const Profile = ({ loading, loadingUsername, loadingPhoto, loadingGeek, user, se
     /> : <button onClick={() => setShowModal(!showModal)}>
             <EditIcon />
         </button>
+
 
     return loading ? (<div className='my-profile-page'>
         <Loader />
@@ -193,31 +199,35 @@ const Profile = ({ loading, loadingUsername, loadingPhoto, loadingGeek, user, se
 
                         {user.geekLeagues.length > 0 && <ul className='list-group list-group-flush geekleagues-list-profile mt-4'>
 
-                            {seasonID && !seasonRankingFull && <div className='pt-4'>
+                            {errorRanking ? (
+
+                                <ErrorMessage>{errorRanking}</ErrorMessage>
+
+                            ) : !seasonRankingFull ? <div className='pt-4'>
 
                                 <Loader
                                     tip='Chargement des ligues...'
                                     container={false}
                                 />
 
-                            </div>}
+                            </div> : <>
+                                        <li className='list-group-item d-flex justify-content-between align-items-center mb-2'>
+                                            <span className='username-ranking'><b>Ligues</b></span>
+                                            <span className='username-ranking'><b>Classement</b></span>
+                                        </li>
 
-                            {seasonRankingFull && <li className='list-group-item d-flex justify-content-between align-items-center mb-2'>
-                                <span className='username-ranking'><b>Ligues</b></span>
-                                <span className='username-ranking'><b>Classement</b></span>
-                            </li>}
+                                        {user.geekLeagues.map(league => <Link
+                                            to={`/myGeekLeagues/${league._id}`}
+                                            key={league._id}
+                                        >
+                                            <li className='list-group-item d-flex justify-content-between align-items-center'>
 
-                            {seasonRankingFull && user.geekLeagues.map(league => <Link
-                                to={`/myGeekLeagues/${league._id}`}
-                                key={league._id}
-                            >
-                                <li className='list-group-item d-flex justify-content-between align-items-center'>
+                                                <span className='username-ranking' style={{ color: 'rgb(4, 78, 199)' }}>{league.name}</span>
+                                                <span className='badge badge-success badge-pill my-badge my-badge-ranking my-badge-ranking-header'>{setRank(defineUserRank(seasonRankingFull, league))} / {league.geeks.length}</span>
 
-                                    <span className='username-ranking' style={{ color: 'rgb(4, 78, 199)' }}>{league.name}</span>
-                                    <span className='badge badge-success badge-pill my-badge my-badge-ranking my-badge-ranking-header'>{setRank(defineUserRank(seasonRankingFull, league))} / {league.geeks.length}</span>
-
-                                </li>
-                            </Link>)}
+                                            </li>
+                                        </Link>)}
+                                    </>}
 
                         </ul>}
 
@@ -234,11 +244,11 @@ const Profile = ({ loading, loadingUsername, loadingPhoto, loadingGeek, user, se
 
                         <h2 style={{ marginTop: 0 }}>{season.leagueName} saison {season.year}<br />Classement général</h2>
 
-                        {errorGeek ? (
+                        {errorRanking ? (
 
-                            <ErrorMessage>{errorGeek}</ErrorMessage>
+                            <ErrorMessage>{errorRanking}</ErrorMessage>
 
-                        ) : !seasonRanking || loadingGeek ? (
+                        ) : !seasonRanking ? (
 
                             <Loader
                                 tip='Chargement du classement...'
@@ -398,8 +408,6 @@ const mapStateToProps = state => ({
     loadingUsername: state.authReducer.loadingUsername,
     loadingPhoto: state.authReducer.loadingPhoto,
     seasonGeeksRankings: state.geekReducer.seasonGeeksRankings,
-    loadingGeek: state.geekReducer.loading,
-    errorGeek: state.geekReducer.error
 })
 
 const mapDispatchToProps = {

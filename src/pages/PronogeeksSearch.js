@@ -10,7 +10,7 @@ import '../styles/pronogeeks.css'
 import * as geekActions from '../actions/geekActions'
 import * as seasonActions from '../actions/seasonActions'
 
-const PronogeeksSearch = ({ match: { params: { seasonID } }, loading, loadingGeek, loadingSeason, user, favTeamAdded, errorGeek, errorSeason, saveFavTeam, detailedSeasons, nextMatchweeks, getSeason, setNextMatchweek }) => {
+const PronogeeksSearch = ({ match: { params: { seasonID } }, loading, loadingGeek, loadingSeason, user, favTeamAdded, errorSeason, saveFavTeam, detailedSeasons, nextMatchweeks, getSeason, setNextMatchweek }) => {
 
     const [seasonTeams, setSeasonTeams] = useState(null)
     const [newSeason, setNewSeason] = useState(null)
@@ -104,9 +104,9 @@ const PronogeeksSearch = ({ match: { params: { seasonID } }, loading, loadingGee
 
                 <Loader color='rgb(4, 78, 199)' />
 
-                : errorGeek || errorSeason ?
+                : errorSeason ?
 
-                    <ErrorMessage>{errorGeek || errorSeason}</ErrorMessage>
+                    <ErrorMessage>{errorSeason}</ErrorMessage>
 
                     : <Redirect to={`/pronogeeks/${seasonID}/matchweek/${matchweek}`} />}
 
@@ -117,7 +117,6 @@ const mapStateToProps = state => ({
     user: state.authReducer.user,
     favTeamAdded: state.geekReducer.favTeamAdded,
     loadingGeek: state.geekReducer.loading,
-    errorGeek: state.geekReducer.error,
     detailedSeasons: state.seasonReducer.detailedSeasons,
     nextMatchweeks: state.seasonReducer.nextMatchweeks,
     loadingSeason: state.seasonReducer.loading,

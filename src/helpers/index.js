@@ -68,6 +68,24 @@ export const copyObject3Layers = (myObject, prop1, prop2) => {
     return result
 }
 
+export const copyReducer = (getState, reducer, ...props) => {
+    if (!props.length) return getState()[reducer]
+
+    const newObject = getState()[reducer][props[0]]
+
+    switch (props.length) {
+        case 2:
+            return copyObject2Layers(newObject, props[1])
+        case 3:
+            return copyObject3Layers(newObject, props[1], props[2])
+        default:
+            return {
+                ...newObject
+            }
+    }
+
+}
+
 export const openNotification = (type, title, message, duration = 6) => {
     notification[type]({
         message: title,

@@ -325,6 +325,7 @@ function deleteLeagueFromStore({
         ...user
     }
     newUser.geekLeagues = user.geekLeagues.filter(league => league._id !== geekleagueID)
+    if (`${newUser.geekLeagueHistory}` === `${geekleagueID}`) newUser.geekLeagueHistory = null
 
     dispatch({
         type: LOGIN,

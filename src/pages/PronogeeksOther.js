@@ -7,7 +7,7 @@ import * as geekActions from '../actions/geekActions'
 import * as seasonActions from '../actions/seasonActions'
 import * as pronogeekActions from '../actions/pronogeekActions'
 
-const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID, geekID } }, history, loading, loadingGeek, loadingSeason, loadingPronogeek, detailedGeeks, detailedSeasons, seasonMatchweeks, geeksMatchweekPronogeeks, errorGeek, errorSeason, errorPronogeek, getDetailsGeek, getSeason, getMatchweekFixtures, getGeekMatchweekPronos }) => {
+const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID, geekID } }, history, loading, loadingSeason, loadingPronogeek, detailedGeeks, detailedSeasons, seasonMatchweeks, geeksMatchweekPronogeeks, errorSeason, errorPronogeek, getDetailsGeek, getSeason, getMatchweekFixtures, getGeekMatchweekPronos }) => {
     const [season, setSeason] = useState(null)
     const [fixtures, setFixtures] = useState(null)
     const [matchweekPoints, setMatchweekPoints] = useState(null)
@@ -16,17 +16,18 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID, geekID } }, 
     const [geek, setGeek] = useState(null)
     const [matchweekStarted, setMatchweekStarted] = useState(true)
     const [noPronogeeks, setNoPronogeeks] = useState(false)
+    const [errorGeek, setErrorGeek] = useState(0)
 
     useEffect(() => {
-        if (
-            !detailedGeeks[geekID] &&
-            !loadingGeek &&
-            !errorGeek
-        ) getDetailsGeek(geekID)
+        const geek = detailedGeeks[geekID]
 
-        else if (detailedGeeks[geekID]) setGeek(detailedGeeks[geekID])
+        if (!geek) getDetailsGeek(geekID)
 
-    }, [detailedGeeks, geekID, getDetailsGeek, loadingGeek, errorGeek])
+        else if (geek.error) setErrorGeek(geek.error)
+
+        else if (!geek.loading) setGeek(geek)
+
+    }, [detailedGeeks, geekID, getDetailsGeek])
 
 
     useEffect(() => {
@@ -136,6 +137,7 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID, geekID } }, 
                         matchweekNumber={matchweekNumber}
                         matchweekPoints={matchweekPoints}
                         matchweekCorrects={matchweekCorrects}
+                        gamesFinished={seasonMatchweeks[`${seasonID}-${matchweekNumber}`].gamesFinished}
                         matchweekBonus={matchweekBonus}
                         previousPage={previousPage}
                         nextPage={nextPage}
@@ -165,6 +167,7 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID, geekID } }, 
                         matchweekNumber={matchweekNumber}
                         matchweekPoints={matchweekPoints}
                         matchweekCorrects={matchweekCorrects}
+                        gamesFinished={seasonMatchweeks[`${seasonID}-${matchweekNumber}`].gamesFinished}
                         matchweekBonus={matchweekBonus}
                         previousPage={previousPage}
                         nextPage={nextPage}
@@ -181,8 +184,6 @@ const mapStateToProps = state => ({
     loadingSeason: state.seasonReducer.loading,
     errorSeason: state.seasonReducer.error,
     detailedGeeks: state.geekReducer.detailedGeeks,
-    loadingGeek: state.geekReducer.loading,
-    errorGeek: state.geekReducer.error,
     geeksMatchweekPronogeeks: state.pronogeekReducer.geeksMatchweekPronogeeks,
     loadingPronogeek: state.pronogeekReducer.loading,
     errorPronogeek: state.pronogeekReducer.error,
