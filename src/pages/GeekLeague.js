@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { openNotification } from '../helpers'
-import { readGeekLeagueState } from '../stateReaders/geekLeague'
+import { readGeekLeagueState } from '../stateHandlers/geekLeague'
 import { Loader, RankGeeks, ErrorMessage, GeekSelector } from '../components'
 import { Form, Input } from 'antd'
 import { Link } from 'react-router-dom'

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { Loader, InputMatchweek, RankGeeks, ErrorMessage } from '../components'
 import { resetMatchweek } from '../helpers'
-import { readGeekLeagueState } from '../stateReaders/geekLeague'
+import { readGeekLeagueState } from '../stateHandlers/geekLeague'
 import { GoBackIcon, GoNextIcon } from '../components/Icons'
 import '../styles/detailGeekleague.css'
 
