@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { Skeleton } from 'antd'
 import { openNotification, dateTransform, statusTranform } from '../helpers'
-import { SavePronoButton, PreviewPronos } from '.'
+import { SavePronoButton, PreviewPronos, ErrorMessage } from '.'
 import { FavTeamIcon } from './Icons'
 import '../styles/fixture.css'
 
@@ -17,6 +17,7 @@ const Fixture = ({ user, fixture, showLeaguePronos, setShowLeaguePronos, userPro
     const [saveSuccess, setSaveSuccess] = useState(false)
     const [showLeagues, setShowLeagues] = useState(false)
     const [modified, setModified] = useState(false)
+    const [errorProno, setErrorProno] = useState(false)
 
     const saveProno = () => {
         setSaveSuccess(false)
@@ -36,12 +37,20 @@ const Fixture = ({ user, fixture, showLeaguePronos, setShowLeaguePronos, userPro
     useEffect(() => {
         let pronogeek = { homeProno: '', awayProno: '' }
         const { _id, season, matchweek } = fixture
+
         const userMatchweekPronogeeks = userPronogeeks[`${season}-${matchweek}`]
-        if (userMatchweekPronogeeks && userMatchweekPronogeeks[_id]) pronogeek = userMatchweekPronogeeks[_id]
+        if (userMatchweekPronogeeks) {
+
+            if (userMatchweekPronogeeks.error) setErrorProno(userMatchweekPronogeeks.error)
+
+            if (userMatchweekPronogeeks[_id]) pronogeek = userMatchweekPronogeeks[_id]
+        }
+
         setPronogeek(pronogeek)
         setHomeScore(parseInt(pronogeek.homeProno) >= 0 ? pronogeek.homeProno : '')
         setAwayScore(parseInt(pronogeek.awayProno) >= 0 ? pronogeek.awayProno : '')
         setModified(pronogeek.modified ? true : false)
+
 
     }, [fixture, userPronogeeks])
 
@@ -152,51 +161,53 @@ const Fixture = ({ user, fixture, showLeaguePronos, setShowLeaguePronos, userPro
                             <td>{fixture.oddsWinAway}</td>
                         </tr>
 
-                        <tr className='prono-section'>
-                            <td className='prono-input-col'>
-                                <label>Buts domicile :</label>
-                                <input
-                                    className='prono-input'
-                                    type="number"
-                                    name='homeProno'
-                                    value={homeScore}
-                                    min={0}
-                                    onChange={e => handleInputHomeProno(e.target.value, fixture)}
-                                    placeholder='Prono'
-                                    disabled={matchStarted}
-                                />
-                            </td>
+                        {errorProno ? <ErrorMessage style={{ marginTop: 20 }}>{errorProno}</ErrorMessage>
 
-                            <td className='prono-input-col'>
+                            : <tr className='prono-section'>
+                                <td className='prono-input-col'>
+                                    <label>Buts domicile :</label>
+                                    <input
+                                        className='prono-input'
+                                        type="number"
+                                        name='homeProno'
+                                        value={homeScore}
+                                        min={0}
+                                        onChange={e => handleInputHomeProno(e.target.value, fixture)}
+                                        placeholder='Prono'
+                                        disabled={matchStarted}
+                                    />
+                                </td>
 
-                                <SavePronoButton
-                                    user={user}
-                                    modified={modified}
-                                    saveSuccess={saveSuccess}
-                                    matchStarted={matchStarted}
-                                    saveProno={saveProno}
-                                    saving={saving}
-                                    homeScore={homeScore}
-                                    awayScore={awayScore}
-                                    seeLeaguePronos={seeLeaguePronos}
-                                />
+                                <td className='prono-input-col'>
 
-                            </td>
+                                    <SavePronoButton
+                                        user={user}
+                                        modified={modified}
+                                        saveSuccess={saveSuccess}
+                                        matchStarted={matchStarted}
+                                        saveProno={saveProno}
+                                        saving={saving}
+                                        homeScore={homeScore}
+                                        awayScore={awayScore}
+                                        seeLeaguePronos={seeLeaguePronos}
+                                    />
 
-                            <td className='prono-input-col'>
-                                <label>Buts extérieur :</label>
-                                <input
-                                    className='prono-input'
-                                    type="number"
-                                    name='awayProno'
-                                    value={awayScore}
-                                    min={0}
-                                    onChange={e => handleInputAwayProno(e.target.value, fixture)}
-                                    placeholder='Prono'
-                                    disabled={matchStarted}
-                                />
-                            </td>
-                        </tr>
+                                </td>
+
+                                <td className='prono-input-col'>
+                                    <label>Buts extérieur :</label>
+                                    <input
+                                        className='prono-input'
+                                        type="number"
+                                        name='awayProno'
+                                        value={awayScore}
+                                        min={0}
+                                        onChange={e => handleInputAwayProno(e.target.value, fixture)}
+                                        placeholder='Prono'
+                                        disabled={matchStarted}
+                                    />
+                                </td>
+                            </tr>}
 
                     </tbody>
 

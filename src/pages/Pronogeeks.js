@@ -11,7 +11,7 @@ import * as seasonActions from '../actions/seasonActions'
 import * as pronogeekActions from '../actions/pronogeekActions'
 import * as apiFootballActions from '../actions/apiFootballActions'
 
-const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history, loading, loadingSeason, loadingPronogeek, loadingApi, user, detailedSeasons, seasonMatchweeks, userPronogeeks, statusUpdated, oddsUpdated, warningMessage, getSeason, getMatchweekFixtures, getUserMatchweekPronos, saveAllPronogeeks, resetMatchweekSaveAndErrorState, updateFixturesStatus, updateOdds, errorSeason, errorPronogeek }) => {
+const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history, loading, loadingSeason, loadingApi, user, detailedSeasons, seasonMatchweeks, userPronogeeks, statusUpdated, oddsUpdated, warningMessage, getSeason, getMatchweekFixtures, getUserMatchweekPronos, saveAllPronogeeks, resetMatchweekSaveAndErrorState, updateFixturesStatus, updateOdds, errorSeason }) => {
     const [season, setSeason] = useState(null)
     const [newSeason, setNewSeason] = useState(true)
     const [userMatchweek, setUserMatchweek] = useState(null)
@@ -84,19 +84,14 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
 
 
     useEffect(() => {
+        const pronogeeks = userPronogeeks[`${seasonID}-${matchweekNumber}`]
+
         if (
             isConnected(user) &&
-            !userPronogeeks[`${seasonID}-${matchweekNumber}`] &&
-            !loadingPronogeek &&
-            !errorPronogeek
+            !pronogeeks
         ) getUserMatchweekPronos(user._id, seasonID, matchweekNumber)
 
-    }, [user, userPronogeeks, loadingPronogeek, seasonID, matchweekNumber, getUserMatchweekPronos, errorPronogeek])
-
-
-    useEffect(() => {
-        const pronogeeks = userPronogeeks[`${seasonID}-${matchweekNumber}`]
-        if (
+        else if (
             pronogeeks &&
             Object.keys(pronogeeks).length
         ) {
@@ -106,16 +101,6 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
             }, 0)
             setModifiedTotal(modifiedTotal)
 
-        } else {
-            setModifiedTotal(0)
-        }
-
-    }, [userPronogeeks, seasonID, matchweekNumber])
-
-
-    useEffect(() => {
-        const pronogeeks = userPronogeeks[`${seasonID}-${matchweekNumber}`]
-        if (pronogeeks) {
             if (pronogeeks.saving) setSavingAll(true)
 
             if (pronogeeks.saved) {
@@ -126,14 +111,16 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
                 openNotification('success', 'Sauvegarde réussie', `Pronogeeks de la journée ${matchweekNumber} enregistrés.`)
             }
 
-            if (pronogeeks.error) {
+            if (pronogeeks.error && pronogeeks.error.type) {
                 const { type, title, message } = pronogeeks.error
                 resetMatchweekSaveAndErrorState(seasonID, matchweekNumber)
                 setSavingAll(false)
                 openNotification(type, title, message)
             }
-        }
-    }, [userPronogeeks, seasonID, matchweekNumber, resetMatchweekSaveAndErrorState])
+
+        } else setModifiedTotal(0)
+
+    }, [user, userPronogeeks, seasonID, matchweekNumber, getUserMatchweekPronos, resetMatchweekSaveAndErrorState])
 
 
     useEffect(() => {
@@ -371,8 +358,6 @@ const mapStateToProps = state => ({
     loadingSeason: state.seasonReducer.loading,
     errorSeason: state.seasonReducer.error,
     userPronogeeks: state.pronogeekReducer.userPronogeeks,
-    loadingPronogeek: state.pronogeekReducer.loading,
-    errorPronogeek: state.pronogeekReducer.error,
     statusUpdated: state.apiFootballReducer.statusUpdated,
     oddsUpdated: state.apiFootballReducer.oddsUpdated,
     warningMessage: state.apiFootballReducer.warningMessage,

@@ -7,7 +7,7 @@ import * as geekActions from '../actions/geekActions'
 import * as seasonActions from '../actions/seasonActions'
 import * as pronogeekActions from '../actions/pronogeekActions'
 
-const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID, geekID } }, history, loading, loadingSeason, loadingPronogeek, detailedGeeks, detailedSeasons, seasonMatchweeks, geeksMatchweekPronogeeks, errorSeason, errorPronogeek, getDetailsGeek, getSeason, getMatchweekFixtures, getGeekMatchweekPronos }) => {
+const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID, geekID } }, history, loading, loadingSeason, detailedGeeks, detailedSeasons, seasonMatchweeks, geeksMatchweekPronogeeks, errorSeason, getDetailsGeek, getSeason, getMatchweekFixtures, getGeekMatchweekPronos }) => {
     const [season, setSeason] = useState(null)
     const [fixtures, setFixtures] = useState(null)
     const [matchweekPoints, setMatchweekPoints] = useState(null)
@@ -61,13 +61,9 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID, geekID } }, 
 
 
     useEffect(() => {
-        if (
-            !geeksMatchweekPronogeeks[`${geekID}-${seasonID}-${matchweekNumber}`] &&
-            !loadingPronogeek &&
-            !errorPronogeek
-        ) getGeekMatchweekPronos(geekID, seasonID, matchweekNumber)
+        if (!geeksMatchweekPronogeeks[`${geekID}-${seasonID}-${matchweekNumber}`]) getGeekMatchweekPronos(geekID, seasonID, matchweekNumber)
 
-    }, [geekID, seasonID, matchweekNumber, loadingPronogeek, geeksMatchweekPronogeeks, getGeekMatchweekPronos, errorPronogeek])
+    }, [geekID, seasonID, matchweekNumber, geeksMatchweekPronogeeks, getGeekMatchweekPronos])
 
 
     useEffect(() => {
@@ -106,7 +102,7 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID, geekID } }, 
     return loading || !season || !fixtures || !geek ? (
 
         <div className='pronogeeks-bg'>
-            {errorSeason || errorGeek || errorPronogeek ? <ErrorMessage>{errorSeason || errorGeek || errorPronogeek}</ErrorMessage> : <Loader color='rgb(4, 78, 199)' />}
+            {errorSeason || errorGeek ? <ErrorMessage>{errorSeason || errorGeek}</ErrorMessage> : <Loader color='rgb(4, 78, 199)' />}
         </div>
 
     ) : <div className='pronogeeks-bg matchweek-page'>
@@ -185,8 +181,6 @@ const mapStateToProps = state => ({
     errorSeason: state.seasonReducer.error,
     detailedGeeks: state.geekReducer.detailedGeeks,
     geeksMatchweekPronogeeks: state.pronogeekReducer.geeksMatchweekPronogeeks,
-    loadingPronogeek: state.pronogeekReducer.loading,
-    errorPronogeek: state.pronogeekReducer.error,
 })
 
 const mapDispatchToProps = {

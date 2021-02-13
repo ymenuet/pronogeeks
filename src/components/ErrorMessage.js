@@ -2,9 +2,9 @@ import React from 'react'
 import { WarningIcon } from './Icons'
 import '../styles/errorMessage.css'
 
-const ErrorMessage = ({ children }) => {
+const ErrorMessage = ({ children, ...rest }) => {
     return (
-        <p className='error-message-component'><WarningIcon />&nbsp;{children}</p>
+        <p className='error-message-component' {...rest}><WarningIcon />&nbsp;{children}</p>
     )
 }
 

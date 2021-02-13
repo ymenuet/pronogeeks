@@ -11,11 +11,13 @@ import { saveGeekleagueHistory } from '../actions/geekActions'
 import { getLeague } from '../actions/geekleagueActions'
 import { getGeekleagueFixturePronos } from '../actions/pronogeekActions'
 
-const PreviewPronos = ({ loadingPronogeek, user, fixture, setShowLeagues, geekleagues, geeksFixturePronogeeks, saveGeekleagueHistory, getLeague, getGeekleagueFixturePronos }) => {
+const PreviewPronos = ({ user, fixture, setShowLeagues, geekleagues, geeksFixturePronogeeks, saveGeekleagueHistory, getLeague, getGeekleagueFixturePronos }) => {
 
     const [geekleague, setGeekleague] = useState(null)
     const [geeksPronos, setGeeksPronos] = useState(null)
+    const [loadingPronogeek, setLoadingPronogeek] = useState(false)
     const [winner, setWinner] = useState(null)
+    const [error, setError] = useState(false)
 
     const determineWinner = (goalsHome, goalsAway) => {
         return goalsHome > goalsAway ? 'Home' :
@@ -47,12 +49,23 @@ const PreviewPronos = ({ loadingPronogeek, user, fixture, setShowLeagues, geekle
         if (geekleague && !geekleague.error) {
             const geeksPronos = geeksFixturePronogeeks[`${fixture._id}-${geekleague._id}`]
 
-            if (!geeksPronos && !loadingPronogeek) getGeekleagueFixturePronos(geekleague._id, fixture._id)
+            if (!geeksPronos) getGeekleagueFixturePronos(geekleague._id, fixture._id)
 
-            else if (geeksPronos) setGeeksPronos(geeksPronos)
+            else if (geeksPronos.loading) {
+                setLoadingPronogeek(geeksPronos.loading)
+                setError(false)
+
+            } else if (geeksPronos.error) {
+                setError(geeksPronos.error)
+                setLoadingPronogeek(false)
+
+            } else {
+                setGeeksPronos(geeksPronos)
+                setLoadingPronogeek(false)
+            }
         }
 
-    }, [geekleague, fixture, geeksFixturePronogeeks, loadingPronogeek, getGeekleagueFixturePronos])
+    }, [geekleague, fixture, geeksFixturePronogeeks, getGeekleagueFixturePronos])
 
 
     const changeLeague = async (e) => {
@@ -154,8 +167,8 @@ const PreviewPronos = ({ loadingPronogeek, user, fixture, setShowLeagues, geekle
             </div>
 
 
-            <div className={`${!geeksPronos || loadingPronogeek || geekleague?.error ? 'align-items-center' : ''} view-pronos-body`}>
-                {geekleague?.error ? <ErrorMessage>{geekleague.error}</ErrorMessage>
+            <div className={`${!geeksPronos || loadingPronogeek || geekleague?.error || error ? 'align-items-center' : ''} view-pronos-body`}>
+                {geekleague?.error || error ? <ErrorMessage>{geekleague.error || error}</ErrorMessage>
 
                     : loadingPronogeek || !geeksPronos ? <Loader
                         size='small'
@@ -188,8 +201,6 @@ const mapStateToProps = state => ({
     user: state.authReducer.user,
     geekleagues: state.geekleagueReducer.geekleagues,
     geeksFixturePronogeeks: state.pronogeekReducer.geeksFixturePronogeeks,
-    loadingPronogeek: state.pronogeekReducer.loading,
-    errorPronogeek: state.pronogeekReducer.error,
 })
 
 const mapDispatchToProps = {

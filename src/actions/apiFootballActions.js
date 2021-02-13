@@ -17,7 +17,7 @@ import {
     LOGIN
 } from '../types/authTypes'
 import {
-    copyObject2Layers,
+    copyReducer,
     printError,
     updateMatchweekFixtures,
     updateMatchweekPronogeeks
@@ -107,12 +107,7 @@ export const updateOdds = (seasonID, matchweekNumber) => async(dispatch, getStat
         } = await apiFootballService.get(`/odds/season/${seasonID}/matchweek/${matchweekNumber}`)
 
         if (fixtures) {
-            const {
-                seasonMatchweeks
-            } = getState().seasonReducer
-
-            const newMatchweeks = copyObject2Layers(seasonMatchweeks, `${seasonID}-${matchweekNumber}`)
-            newMatchweeks[`${seasonID}-${matchweekNumber}`].fixtures = [...seasonMatchweeks[`${seasonID}-${matchweekNumber}`].fixtures]
+            const newMatchweeks = copyReducer(getState, 'seasonReducer', 'seasonMatchweeks', `${seasonID}-${matchweekNumber}`)
 
             for (let fixture of fixtures) {
                 newMatchweeks[`${seasonID}-${matchweekNumber}`].fixtures = newMatchweeks[`${seasonID}-${matchweekNumber}`].fixtures.map(stateFixture => {

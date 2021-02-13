@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { Skeleton } from 'antd'
 import { dateTransform, statusTranform } from '../helpers'
 import { FavTeamIcon } from './Icons'
+import { ErrorMessage } from '.'
 import '../styles/fixture.css'
 
 const FixtureOther = ({ fixture, geek, geeksMatchweekPronogeeks }) => {
@@ -10,6 +11,7 @@ const FixtureOther = ({ fixture, geek, geeksMatchweekPronogeeks }) => {
     const [matchStarted, setMatchStarted] = useState(false)
     const [homeScore, setHomeScore] = useState(null)
     const [awayScore, setAwayScore] = useState(null)
+    const [errorProno, setErrorProno] = useState(null)
 
     useEffect(() => {
         if (
@@ -23,8 +25,15 @@ const FixtureOther = ({ fixture, geek, geeksMatchweekPronogeeks }) => {
     useEffect(() => {
         let pronogeek = { homeProno: '', awayProno: '' }
         const { _id, season, matchweek } = fixture
+
         const geekPronogeeks = geeksMatchweekPronogeeks[`${geek._id}-${season}-${matchweek}`]
-        if (geekPronogeeks && geekPronogeeks[_id]) pronogeek = geekPronogeeks[_id]
+        if (geekPronogeeks) {
+
+            if (geekPronogeeks.error) setErrorProno(geekPronogeeks.error)
+
+            if (geekPronogeeks[_id]) pronogeek = geekPronogeeks[_id]
+        }
+
         setPronogeek(pronogeek)
         setHomeScore(pronogeek.homeProno)
         setAwayScore(pronogeek.awayProno)
@@ -96,52 +105,56 @@ const FixtureOther = ({ fixture, geek, geeksMatchweekPronogeeks }) => {
 
                         {matchStarted && fixture.statusShort !== 'PST' && <tr className='prono-section'>
 
-                            <td className='prono-input-col'>
-                                <label>Buts domicile :</label>
-                                <input
-                                    className='prono-input'
-                                    type="number"
-                                    name='homeProno'
-                                    value={homeScore}
-                                    placeholder='Prono'
-                                    disabled={true}
-                                />
-                            </td>
+                            {errorProno ? <ErrorMessage style={{ margin: '0 auto' }}>{errorProno}</ErrorMessage>
 
-                            <td className='prono-input-col'>
-                                {pronogeek.points > 0 && pronogeek.bonusFavTeam && (
-                                    <div style={{ margin: '0 10px' }}>
-                                        {geek.username} a scoré {pronogeek.points}pts<br />
+                                : <>
+                                    <td className='prono-input-col'>
+                                        <label>Buts domicile :</label>
+                                        <input
+                                            className='prono-input'
+                                            type="number"
+                                            name='homeProno'
+                                            value={homeScore}
+                                            placeholder='Prono'
+                                            disabled={true}
+                                        />
+                                    </td>
+
+                                    <td className='prono-input-col'>
+                                        {pronogeek.points > 0 && pronogeek.bonusFavTeam && (
+                                            <div style={{ margin: '0 10px' }}>
+                                                {geek.username} a scoré {pronogeek.points}pts<br />
                                         (bonus {pronogeek.exact && 'score exact'}{pronogeek.exact && <br />}
-                                        {pronogeek.exact && 'et '}<FavTeamIcon size='20px' />)
-                                    </div>
-                                )}
+                                                {pronogeek.exact && 'et '}<FavTeamIcon size='20px' />)
+                                            </div>
+                                        )}
 
-                                {pronogeek.points > 0 && !pronogeek.bonusFavTeam && (
-                                    <div style={{ margin: '0 10px' }}>
-                                        {geek.username} a scoré {pronogeek.points}pts<br />
-                                        {pronogeek.exact && '(bonus score exact)'}
-                                    </div>
-                                )}
+                                        {pronogeek.points > 0 && !pronogeek.bonusFavTeam && (
+                                            <div style={{ margin: '0 10px' }}>
+                                                {geek.username} a scoré {pronogeek.points}pts<br />
+                                                {pronogeek.exact && '(bonus score exact)'}
+                                            </div>
+                                        )}
 
-                                {pronogeek.points === 0 && pronogeek.addedToProfile && (
-                                    <div style={{ margin: '0 10px' }}>
-                                        Mauvais prono...
-                                    </div>
-                                )}
-                            </td>
+                                        {pronogeek.points === 0 && pronogeek.addedToProfile && (
+                                            <div style={{ margin: '0 10px' }}>
+                                                Mauvais prono...
+                                            </div>
+                                        )}
+                                    </td>
 
-                            <td className='prono-input-col'>
-                                <label>Buts extérieur :</label>
-                                <input
-                                    className='prono-input'
-                                    type="number"
-                                    name='awayProno'
-                                    value={awayScore}
-                                    placeholder='Prono'
-                                    disabled={true}
-                                />
-                            </td>
+                                    <td className='prono-input-col'>
+                                        <label>Buts extérieur :</label>
+                                        <input
+                                            className='prono-input'
+                                            type="number"
+                                            name='awayProno'
+                                            value={awayScore}
+                                            placeholder='Prono'
+                                            disabled={true}
+                                        />
+                                    </td>
+                                </>}
 
                         </tr>}
 

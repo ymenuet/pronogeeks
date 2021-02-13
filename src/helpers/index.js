@@ -268,12 +268,7 @@ export const updateMatchweekFixtures = ({
     const gamesFinished = matchweekFixtures.filter(fixture => matchFinished(fixture.statusShort)).length
     const hasStarted = new Date(matchweekFixtures[0].date).getTime() <= Date.now()
 
-    const {
-        seasonMatchweeks
-    } = getState().seasonReducer
-    const newMatchweeks = {
-        ...seasonMatchweeks
-    }
+    const newMatchweeks = copyReducer(getState, 'seasonReducer', 'seasonMatchweeks')
     newMatchweeks[`${seasonID}-${matchweekNumber}`] = {
         totalGames,
         gamesFinished,
@@ -294,13 +289,8 @@ export const updateMatchweekPronogeeks = ({
     dispatch,
     getState
 }) => {
-    const {
-        userPronogeeks
-    } = getState().pronogeekReducer
 
-    const newPronogeeks = {
-        ...userPronogeeks
-    }
+    const newPronogeeks = copyReducer(getState, 'pronogeekReducer', 'userPronogeeks')
     newPronogeeks[`${seasonID}-${matchweekNumber}`] = {}
 
     for (let pronogeek of pronogeeks) {
