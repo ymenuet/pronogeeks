@@ -19,6 +19,14 @@ import {
     copyReducer
 } from '../helpers'
 import {
+    geekleagueReducer,
+    geekleagues
+} from '../reducerKeys/geekleague'
+import {
+    authReducer,
+    user
+} from '../reducerKeys/auth'
+import {
     RESET_TIMEOUT_IN_MS
 } from '../constants'
 
@@ -49,7 +57,7 @@ export const createLeague = ({
             geeks
         })
 
-        const newLeagues = copyReducer(getState, 'geekleagueReducer', 'geekleagues')
+        const newLeagues = copyReducer(getState, geekleagueReducer, geekleagues)
 
         newLeagues[geekleague._id] = geekleague
         delete newLeagues.empty
@@ -59,13 +67,8 @@ export const createLeague = ({
             payload: newLeagues
         })
 
-        const {
-            user
-        } = getState().authReducer
-        const newUser = {
-            ...user
-        }
-        newUser.geekLeagues = [...user.geekLeagues, geekleague]
+        const newUser = copyReducer(getState, authReducer, user)
+        newUser.geekLeagues = [...newUser.geekLeagues, geekleague]
 
         dispatch({
             type: LOGIN,
@@ -84,7 +87,7 @@ export const createLeague = ({
 
 export const getLeague = leagueID => async(dispatch, getState) => {
 
-    const loadingLeague = copyReducer(getState, 'geekleagueReducer', 'geekleagues', leagueID)
+    const loadingLeague = copyReducer(getState, geekleagueReducer, geekleagues, leagueID)
     loadingLeague[leagueID].loading = true
     loadingLeague[leagueID].error = false
 
@@ -100,7 +103,7 @@ export const getLeague = leagueID => async(dispatch, getState) => {
             }
         } = await geekleagueService.get(`/${leagueID}`)
 
-        const newLeagues = copyReducer(getState, 'geekleagueReducer', 'geekleagues')
+        const newLeagues = copyReducer(getState, geekleagueReducer, geekleagues)
         newLeagues[leagueID] = geekleague
 
         dispatch({
@@ -111,7 +114,7 @@ export const getLeague = leagueID => async(dispatch, getState) => {
     } catch (error) {
         console.error('ERROR:', error.message)
 
-        const errorLeague = copyReducer(getState, 'geekleagueReducer', 'geekleagues', leagueID)
+        const errorLeague = copyReducer(getState, geekleagueReducer, geekleagues, leagueID)
         errorLeague[leagueID].loading = false
         errorLeague[leagueID].error = printError('fr', error, `Erreur lors du chargement de la ligue. Recharge la page ou réessaye plus tard.`)
 
@@ -124,7 +127,7 @@ export const getLeague = leagueID => async(dispatch, getState) => {
 
 export const getUserLeagues = () => async(dispatch, getState) => {
 
-    const loadingLeagues = copyReducer(getState, 'geekleagueReducer', 'geekleagues')
+    const loadingLeagues = copyReducer(getState, geekleagueReducer, geekleagues)
     loadingLeagues.loading = true
     loadingLeagues.error = false
 
@@ -157,7 +160,7 @@ export const getUserLeagues = () => async(dispatch, getState) => {
     } catch (error) {
         console.error('ERROR:', error.message)
 
-        const errorLeagues = copyReducer(getState, 'geekleagueReducer', 'geekleagues')
+        const errorLeagues = copyReducer(getState, geekleagueReducer, geekleagues)
         errorLeagues.loading = false
         errorLeagues.error = printError('fr', error, `Erreur lors du chargement des ligues. Recharge la page ou réessaye plus tard.`)
 
@@ -186,7 +189,7 @@ export const editLeague = (geekleagueID, {
             geeks
         })
 
-        const editedLeague = copyReducer(getState, 'geekleagueReducer', 'geekleagues', geekleagueID)
+        const editedLeague = copyReducer(getState, geekleagueReducer, geekleagues, geekleagueID)
         editedLeague[geekleagueID] = geekleague
 
         dispatch({
@@ -273,7 +276,7 @@ function deleteLeagueFromStore({
     resetType
 }) {
 
-    const filteredArray = Object.values(copyReducer(getState, 'geekleagueReducer', 'geekleagues')).filter(league => league._id !== geekleagueID)
+    const filteredArray = Object.values(copyReducer(getState, geekleagueReducer, geekleagues)).filter(league => league._id !== geekleagueID)
     const filteredLeagues = {}
 
     for (let league of filteredArray) {
@@ -291,7 +294,7 @@ function deleteLeagueFromStore({
         })
     }, RESET_TIMEOUT_IN_MS)
 
-    const newUser = copyReducer(getState, 'authReducer', 'user')
+    const newUser = copyReducer(getState, authReducer, user)
     newUser.geekLeagues = newUser.geekLeagues.filter(league => league._id !== geekleagueID)
     if (`${newUser.geekLeagueHistory}` === `${geekleagueID}`) newUser.geekLeagueHistory = null
 

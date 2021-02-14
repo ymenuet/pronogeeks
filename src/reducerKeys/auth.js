@@ -1,5 +1,5 @@
 module.exports = {
-    authReducer: 'auth',
+    authReducer: 'authReducer',
     user: 'user',
     signedup: 'signedup',
     usernameConfirmed: 'usernameConfirmed',

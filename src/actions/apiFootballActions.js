@@ -23,6 +23,10 @@ import {
     updateMatchweekPronogeeks
 } from '../helpers'
 import {
+    seasonReducer,
+    seasonMatchweeks
+} from '../reducerKeys/season'
+import {
     RESET_TIMEOUT_IN_MS
 } from '../constants'
 
@@ -107,7 +111,7 @@ export const updateOdds = (seasonID, matchweekNumber) => async(dispatch, getStat
         } = await apiFootballService.get(`/odds/season/${seasonID}/matchweek/${matchweekNumber}`)
 
         if (fixtures) {
-            const newMatchweeks = copyReducer(getState, 'seasonReducer', 'seasonMatchweeks', `${seasonID}-${matchweekNumber}`)
+            const newMatchweeks = copyReducer(getState, seasonReducer, seasonMatchweeks, `${seasonID}-${matchweekNumber}`)
 
             for (let fixture of fixtures) {
                 newMatchweeks[`${seasonID}-${matchweekNumber}`].fixtures = newMatchweeks[`${seasonID}-${matchweekNumber}`].fixtures.map(stateFixture => {

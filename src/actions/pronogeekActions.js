@@ -9,6 +9,12 @@ import {
     copyReducer,
     updateMatchweekPronogeeks
 } from '../helpers'
+import {
+    pronogeekReducer,
+    userPronogeeks,
+    geeksFixturePronogeeks,
+    geeksMatchweekPronogeeks
+} from '../reducerKeys/pronogeek'
 
 const baseURL = process.env.NODE_ENV === 'production' ?
     `/api/pronogeeks` :
@@ -20,7 +26,7 @@ const pronogeekService = axios.create({
 })
 
 export const getUserMatchweekPronos = (userID, seasonID, matchweekNumber) => async(dispatch, getState) => {
-    const newPronogeeks = copyReducer(getState, 'pronogeekReducer', 'userPronogeeks')
+    const newPronogeeks = copyReducer(getState, pronogeekReducer, userPronogeeks)
     newPronogeeks[`${seasonID}-${matchweekNumber}`] = {
         loading: true,
         error: false
@@ -49,7 +55,7 @@ export const getUserMatchweekPronos = (userID, seasonID, matchweekNumber) => asy
     } catch (error) {
         console.error('ERROR:', error.message)
 
-        const newPronogeeks = copyReducer(getState, 'pronogeekReducer', 'userPronogeeks')
+        const newPronogeeks = copyReducer(getState, pronogeekReducer, userPronogeeks)
         newPronogeeks[`${seasonID}-${matchweekNumber}`] = {
             loading: false,
             error: printError('fr', error, 'Erreur lors du chargement de tes pronogeeks. Recharge la page ou réessaye plus tard.')
@@ -62,7 +68,7 @@ export const getUserMatchweekPronos = (userID, seasonID, matchweekNumber) => asy
 }
 
 export const getGeekMatchweekPronos = (geekID, seasonID, matchweekNumber) => async(dispatch, getState) => {
-    const newPronogeeks = copyReducer(getState, 'pronogeekReducer', 'geeksMatchweekPronogeeks')
+    const newPronogeeks = copyReducer(getState, pronogeekReducer, geeksMatchweekPronogeeks)
     newPronogeeks[`${geekID}-${seasonID}-${matchweekNumber}`] = {
         loading: true,
         error: false
@@ -79,7 +85,7 @@ export const getGeekMatchweekPronos = (geekID, seasonID, matchweekNumber) => asy
             }
         } = await pronogeekService.get(`/geek/${geekID}/season/${seasonID}/matchweek/${matchweekNumber}`)
 
-        const newPronogeeks = copyReducer(getState, 'pronogeekReducer', 'geeksMatchweekPronogeeks')
+        const newPronogeeks = copyReducer(getState, pronogeekReducer, geeksMatchweekPronogeeks)
         newPronogeeks[`${geekID}-${seasonID}-${matchweekNumber}`] = {}
         pronogeeks.map(pronogeek => {
             newPronogeeks[`${geekID}-${seasonID}-${matchweekNumber}`][pronogeek.fixture] = pronogeek
@@ -93,7 +99,7 @@ export const getGeekMatchweekPronos = (geekID, seasonID, matchweekNumber) => asy
     } catch (error) {
         console.error('ERROR:', error.message)
 
-        const newPronogeeks = copyReducer(getState, 'pronogeekReducer', 'geeksMatchweekPronogeeks')
+        const newPronogeeks = copyReducer(getState, pronogeekReducer, geeksMatchweekPronogeeks)
         newPronogeeks[`${geekID}-${seasonID}-${matchweekNumber}`] = {
             loading: false,
             error: printError('fr', error, 'Erreur lors du chargement des pronogeeks. Recharge la page ou réessaye plus tard.')
@@ -106,7 +112,7 @@ export const getGeekMatchweekPronos = (geekID, seasonID, matchweekNumber) => asy
 }
 
 export const getGeekleagueFixturePronos = (geekleagueID, fixtureID) => async(dispatch, getState) => {
-    const newPronogeeks = copyReducer(getState, 'pronogeekReducer', 'geeksFixturePronogeeks')
+    const newPronogeeks = copyReducer(getState, pronogeekReducer, geeksFixturePronogeeks)
     newPronogeeks[`${fixtureID}-${geekleagueID}`] = {
         loading: true,
         error: false
@@ -123,7 +129,7 @@ export const getGeekleagueFixturePronos = (geekleagueID, fixtureID) => async(dis
             }
         } = await pronogeekService.get(`/${geekleagueID}/${fixtureID}`)
 
-        const newPronogeeks = copyReducer(getState, 'pronogeekReducer', 'geeksFixturePronogeeks')
+        const newPronogeeks = copyReducer(getState, pronogeekReducer, geeksFixturePronogeeks)
 
         if (pronogeeks) {
             newPronogeeks[`${fixtureID}-${geekleagueID}`] = pronogeeks.sort((a, b) => {
@@ -142,7 +148,7 @@ export const getGeekleagueFixturePronos = (geekleagueID, fixtureID) => async(dis
     } catch (error) {
         console.error('ERROR:', error.message)
 
-        const newPronogeeks = copyReducer(getState, 'pronogeekReducer', 'geeksFixturePronogeeks')
+        const newPronogeeks = copyReducer(getState, pronogeekReducer, geeksFixturePronogeeks)
         newPronogeeks[`${fixtureID}-${geekleagueID}`] = {
             loading: false,
             error: printError('fr', error, 'Erreur lors du chargement des pronos de la ligue geek. Recharge la page ou réessaye plus tard.')
@@ -279,7 +285,7 @@ export const savePronogeek = (homeProno, awayProno, fixture) => async(dispatch, 
 
 export const saveAllPronogeeks = (seasonID, matchweekNumber) => async(dispatch, getState) => {
 
-    const newPronogeeks = copyReducer(getState, 'pronogeekReducer', 'userPronogeeks', `${seasonID}-${matchweekNumber}`)
+    const newPronogeeks = copyReducer(getState, pronogeekReducer, userPronogeeks, `${seasonID}-${matchweekNumber}`)
 
     if (!Object.keys(newPronogeeks[`${seasonID}-${matchweekNumber}`]).filter(key => key !== 'error' && key !== 'saving' && key !== 'saved').length) {
         newPronogeeks[`${seasonID}-${matchweekNumber}`].error = {
@@ -341,7 +347,7 @@ export const saveAllPronogeeks = (seasonID, matchweekNumber) => async(dispatch, 
             return pronogeek
         })
 
-        const newPronogeeks = copyReducer(getState, 'pronogeekReducer', 'userPronogeeks', `${seasonID}-${matchweekNumber}`)
+        const newPronogeeks = copyReducer(getState, pronogeekReducer, userPronogeeks, `${seasonID}-${matchweekNumber}`)
         newPronogeeks[`${seasonID}-${matchweekNumber}`] = {
             ...newPronogeeks[`${seasonID}-${matchweekNumber}`],
             ...pronogeeksSaved,
@@ -358,7 +364,7 @@ export const saveAllPronogeeks = (seasonID, matchweekNumber) => async(dispatch, 
     } catch (error) {
         console.error('ERROR:', error.message)
 
-        const newPronogeeks = copyReducer(getState, 'pronogeekReducer', 'userPronogeeks', `${seasonID}-${matchweekNumber}`)
+        const newPronogeeks = copyReducer(getState, pronogeekReducer, userPronogeeks, `${seasonID}-${matchweekNumber}`)
         newPronogeeks[`${seasonID}-${matchweekNumber}`] = {
             ...newPronogeeks[`${seasonID}-${matchweekNumber}`],
             error: {
@@ -400,7 +406,7 @@ export const resetSaveAndErrorState = fixture => (dispatch, getState) => {
 
 export const resetMatchweekSaveAndErrorState = (seasonID, matchweekNumber) => (dispatch, getState) => {
 
-    const newPronogeeks = copyReducer(getState, 'pronogeekReducer', 'userPronogeeks')
+    const newPronogeeks = copyReducer(getState, pronogeekReducer, userPronogeeks)
 
     newPronogeeks[`${seasonID}-${matchweekNumber}`] = {
         ...newPronogeeks[`${seasonID}-${matchweekNumber}`],
@@ -421,7 +427,7 @@ function createCopyUserPronos(getState, fixture) {
         matchweek
     } = fixture
 
-    const newPronogeeks = copyReducer(getState, 'pronogeekReducer', 'userPronogeeks', `${season}-${matchweek}`, _id)
+    const newPronogeeks = copyReducer(getState, pronogeekReducer, userPronogeeks, `${season}-${matchweek}`, _id)
 
     return newPronogeeks
 }
