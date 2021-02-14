@@ -4,18 +4,32 @@ import { connect } from 'react-redux'
 import { useInput } from '../customHooks'
 import { ErrorMessage, Loader } from '../components'
 import { openNotification, getUserSeasonFromProfile, isConnected } from '../helpers'
+import { handleStateWithId } from '../stateHandlers'
 import { WarningIcon } from '../components/Icons'
 import '../styles/pronogeeks.css'
 
 import * as geekActions from '../actions/geekActions'
 import * as seasonActions from '../actions/seasonActions'
 
-const PronogeeksSearch = ({ match: { params: { seasonID } }, loading, loadingGeek, loadingSeason, user, favTeamAdded, errorSeason, saveFavTeam, detailedSeasons, nextMatchweeks, getSeason, setNextMatchweek }) => {
+const PronogeeksSearch = ({ match: { params: { seasonID } }, loading, loadingGeek, loadingSeason, user, favTeamAdded, saveFavTeam, detailedSeasons, nextMatchweeks, getSeason, setNextMatchweek }) => {
 
+    const [season, setSeason] = useState(null)
     const [seasonTeams, setSeasonTeams] = useState(null)
     const [newSeason, setNewSeason] = useState(null)
     const [matchweek, setMatchweek] = useState(null)
+    const [errorSeason, setErrorSeason] = useState(false)
     const favTeam = useInput('')
+
+    useEffect(() => {
+        handleStateWithId({
+            id: seasonID,
+            reducerData: detailedSeasons,
+            action: getSeason,
+            setResult: setSeason,
+            setError: setErrorSeason
+        })
+    }, [seasonID, detailedSeasons, getSeason])
+
 
     useEffect(() => {
         if (favTeamAdded) {
@@ -24,31 +38,29 @@ const PronogeeksSearch = ({ match: { params: { seasonID } }, loading, loadingGee
         }
     }, [favTeamAdded])
 
+
     useEffect(() => {
-        if (isConnected(user)) {
+        if (isConnected(user) && season) {
             const userSeason = getUserSeasonFromProfile(user, seasonID)
 
-            if (!detailedSeasons[seasonID] && !loadingSeason) {
-                getSeason(seasonID)
-
-            } else if (detailedSeasons[seasonID] && (!userSeason || !userSeason.favTeam)) {
-                const seasonTeams = detailedSeasons[seasonID].rankedTeams.sort((a, b) => {
+            if (!userSeason || !userSeason.favTeam) {
+                const seasonTeams = season.rankedTeams.sort((a, b) => {
                     if (a.name > b.name) return 1
                     else return -1
                 })
                 setSeasonTeams(seasonTeams)
                 setNewSeason(true)
 
-            } else if (detailedSeasons[seasonID] && !nextMatchweeks[seasonID] && !loadingSeason) {
+            } else if (!nextMatchweeks[seasonID] && !loadingSeason) {
                 setNewSeason(false)
-                setNextMatchweek(detailedSeasons[seasonID])
+                setNextMatchweek(season)
 
-            } else if (detailedSeasons[seasonID] && nextMatchweeks[seasonID]) {
+            } else if (nextMatchweeks[seasonID]) {
                 setNewSeason(false)
                 setMatchweek(nextMatchweeks[seasonID])
             }
         }
-    }, [user, seasonID, detailedSeasons, nextMatchweeks, loadingSeason, getSeason, setNextMatchweek])
+    }, [user, seasonID, season, nextMatchweeks, loadingSeason, setNextMatchweek])
 
     const saveNewFavTeam = async () => {
         if (favTeam.value === '') return openNotification('warning', 'Attention', 'Tu dois choisir une équipe de coeur avant de continuer.')
@@ -59,54 +71,54 @@ const PronogeeksSearch = ({ match: { params: { seasonID } }, loading, loadingGee
 
     return <div className='pronogeeks-bg'>
 
-        {newSeason && seasonTeams ?
+        {errorSeason ?
 
-            <div>
+            <ErrorMessage>{errorSeason}</ErrorMessage>
 
-                <div className='choose-favteam'>
+            : newSeason && seasonTeams ?
 
-                    <label htmlFor="favteam-select">Choisis une équipe de coeur pour cette saison.
+                <div>
+
+                    <div className='choose-favteam'>
+
+                        <label htmlFor="favteam-select">Choisis une équipe de coeur pour cette saison.
                         <br />
                         NB : Chaque bon prono sur un match de ton équipe de coeur te rapporte un bonus de 30 pts.
                         <br />
-                        <WarningIcon />&nbsp;
+                            <WarningIcon />&nbsp;
                         Réfléchis bien, tu ne pourras plus changer ensuite...
                     </label>
 
-                    <br />
+                        <br />
 
-                    <select name="favTeam" id="favteam-select" {...favTeam} >
-                        <option value="" disabled>Sélectionner une équipe</option>
-                        {seasonTeams.map(team =>
-                            <option
-                                key={team._id}
-                                value={team._id}
-                            >
-                                {team.name}
-                            </option>
-                        )}
-                    </select>
+                        <select name="favTeam" id="favteam-select" {...favTeam} >
+                            <option value="" disabled>Sélectionner une équipe</option>
+                            {seasonTeams.map(team =>
+                                <option
+                                    key={team._id}
+                                    value={team._id}
+                                >
+                                    {team.name}
+                                </option>
+                            )}
+                        </select>
 
-                    <br />
+                        <br />
 
-                    <button
-                        className='btn my-btn save-favteam-btn'
-                        onClick={saveNewFavTeam}
-                    >
-                        Confirmer
+                        <button
+                            className='btn my-btn save-favteam-btn'
+                            onClick={saveNewFavTeam}
+                        >
+                            Confirmer
                         </button>
+
+                    </div>
 
                 </div>
 
-            </div>
+                : loading || loadingGeek || loadingSeason || !matchweek || newSeason === null ?
 
-            : loading || loadingGeek || loadingSeason || !matchweek || newSeason === null ?
-
-                <Loader color='rgb(4, 78, 199)' />
-
-                : errorSeason ?
-
-                    <ErrorMessage>{errorSeason}</ErrorMessage>
+                    <Loader color='rgb(4, 78, 199)' />
 
                     : <Redirect to={`/pronogeeks/${seasonID}/matchweek/${matchweek}`} />}
 
@@ -120,7 +132,6 @@ const mapStateToProps = state => ({
     detailedSeasons: state.seasonReducer.detailedSeasons,
     nextMatchweeks: state.seasonReducer.nextMatchweeks,
     loadingSeason: state.seasonReducer.loading,
-    errorSeason: state.seasonReducer.error
 })
 
 const mapDispatchToProps = {

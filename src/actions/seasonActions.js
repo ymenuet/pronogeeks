@@ -8,11 +8,20 @@ import {
     ERROR
 } from '../types/seasonTypes'
 import {
-    updateMatchweekFixtures
+    updateMatchweekFixtures,
+    copyReducer,
+    printError
 } from '../helpers'
+import {
+    seasonReducer,
+    detailedSeasons,
+    nextMatchweeks,
+    lastMatchweeks
+} from '../reducerKeys/season'
+import {
+    MILLISECONDS_IN_3_HOURS
+} from '../constants'
 
-
-const MILLISECONDS_IN_3_HOURS = 1000 * 60 * 60 * 3
 
 const baseURL = process.env.NODE_ENV === 'production' ?
     `/api/seasons` :
@@ -24,8 +33,15 @@ const seasonService = axios.create({
 })
 
 export const getSeason = seasonID => async(dispatch, getState) => {
+    const newDetailedSeasons = copyReducer(getState, seasonReducer, detailedSeasons)
+    newDetailedSeasons[seasonID] = {
+        loading: true,
+        error: false
+    }
+
     dispatch({
-        type: LOADING
+        type: ADD_SEASON,
+        payload: newDetailedSeasons
     })
 
     try {
@@ -35,22 +51,25 @@ export const getSeason = seasonID => async(dispatch, getState) => {
             }
         } = await seasonService.get(`/${seasonID}`)
 
-        const {
-            detailedSeasons
-        } = getState().seasonReducer
-        const newDetailedSeasons = {
-            ...detailedSeasons
-        }
-        newDetailedSeasons[season._id] = season
+        const newDetailedSeasons = copyReducer(getState, seasonReducer, detailedSeasons)
+        newDetailedSeasons[seasonID] = season
 
         dispatch({
             type: ADD_SEASON,
             payload: newDetailedSeasons
         })
     } catch (error) {
+        console.error('ERROR:', error.message)
+
+        const newDetailedSeasons = copyReducer(getState, seasonReducer, detailedSeasons)
+        newDetailedSeasons[seasonID] = {
+            loading: false,
+            error: printError('fr', error, 'Erreur lors du chargement des données de la saison. Recharge la page ou réessaye plus tard.')
+        }
+
         dispatch({
-            type: ERROR,
-            payload: 'Erreur lors du chargement des données de la saison. Recharge la page ou réessaye plus tard.'
+            type: ADD_SEASON,
+            payload: newDetailedSeasons
         })
     }
 }
@@ -95,12 +114,7 @@ export const setNextMatchweek = season => (dispatch, getState) => {
         nextMatchweek = getLastMatchweek(fixtures)
     }
 
-    const {
-        nextMatchweeks,
-    } = getState().seasonReducer
-    const newMatchweeks = {
-        ...nextMatchweeks
-    }
+    const newMatchweeks = copyReducer(getState, seasonReducer, nextMatchweeks)
     newMatchweeks[_id] = nextMatchweek
 
     dispatch({
@@ -123,12 +137,7 @@ export const setLastMatchweek = season => (dispatch, getState) => {
     if (lastFixtures.length) lastMatchweek = getLastMatchweek(lastFixtures)
     else lastMatchweek = 1
 
-    const {
-        lastMatchweeks,
-    } = getState().seasonReducer
-    const newMatchweeks = {
-        ...lastMatchweeks
-    }
+    const newMatchweeks = copyReducer(getState, seasonReducer, lastMatchweeks)
     newMatchweeks[_id] = lastMatchweek
 
     dispatch({
@@ -144,17 +153,9 @@ export const closeProvRankings = seasonID => async(dispatch, getState) => {
 
     try {
         await seasonService.put(`/closeRankings/${seasonID}`)
-        const {
-            detailedSeasons
-        } = getState().seasonReducer
 
-        const newDetailedSeasons = {
-            ...detailedSeasons
-        }
-        newDetailedSeasons[seasonID] = {
-            ...detailedSeasons[seasonID],
-            provRankingOpen: false
-        }
+        const newDetailedSeasons = copyReducer(getState, seasonReducer, detailedSeasons, seasonID)
+        newDetailedSeasons[seasonID].provRankingOpen = false
 
         dispatch({
             type: ADD_SEASON,
@@ -162,16 +163,22 @@ export const closeProvRankings = seasonID => async(dispatch, getState) => {
         })
 
     } catch (error) {
+        console.error('ERROR:', error.message)
+
         dispatch({
             type: ERROR,
-            payload: `Erreur lors de la fermeture du classement de la saison.`
+            payload: printError('fr', error, `Erreur lors de la fermeture du classement de la saison.`)
         })
     }
 }
 
 export const getUndergoingSeasons = () => async dispatch => {
     dispatch({
-        type: LOADING
+        type: GET_UNDERGOING_SEASONS,
+        payload: {
+            loading: true,
+            error: false
+        }
     })
 
     try {
@@ -181,15 +188,25 @@ export const getUndergoingSeasons = () => async dispatch => {
             }
         } = await seasonService.get('/current')
 
+        const undergoingSeasons = {}
+        for (let season of seasons) {
+            undergoingSeasons[season._id] = season
+        }
+
         dispatch({
             type: GET_UNDERGOING_SEASONS,
-            payload: seasons
+            payload: undergoingSeasons
         })
 
     } catch (error) {
+        console.error('ERROR:', error.message)
+
         dispatch({
-            type: ERROR,
-            payload: `Erreur lors du chargement des saisons. Recharge la page ou réessaye plus tard.`
+            type: GET_UNDERGOING_SEASONS,
+            payload: {
+                loading: false,
+                error: printError('fr', error, `Erreur lors du chargement des saisons. Recharge la page ou réessaye plus tard.`)
+            }
         })
     }
 }

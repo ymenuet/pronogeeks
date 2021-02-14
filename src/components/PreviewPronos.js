@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { Loader, ErrorMessage, GeekProno } from '.'
 import { isConnected, statusTranform } from '../helpers/index'
-import { readGeekLeagueState } from '../stateHandlers/geekLeague'
+import { handleStateWithId } from '../stateHandlers'
 import { CloseIcon } from './Icons'
 import '../styles/previewPronos.css'
 
@@ -13,11 +13,12 @@ import { getGeekleagueFixturePronos } from '../actions/pronogeekActions'
 
 const PreviewPronos = ({ user, fixture, setShowLeagues, geekleagues, geeksFixturePronogeeks, saveGeekleagueHistory, getLeague, getGeekleagueFixturePronos }) => {
 
-    const [geekleague, setGeekleague] = useState(null)
+    const [geekleague, setGeekLeague] = useState(null)
     const [geeksPronos, setGeeksPronos] = useState(null)
     const [loadingPronogeek, setLoadingPronogeek] = useState(false)
     const [winner, setWinner] = useState(null)
-    const [error, setError] = useState(false)
+    const [errorPronos, setErrorPronos] = useState(false)
+    const [errorGeekLeague, setErrorGeekLeague] = useState(false)
 
     const determineWinner = (goalsHome, goalsAway) => {
         return goalsHome > goalsAway ? 'Home' :
@@ -34,29 +35,29 @@ const PreviewPronos = ({ user, fixture, setShowLeagues, geekleagues, geeksFixtur
     useEffect(() => {
         if (isConnected(user)) {
             const geekLeagueID = user.geekLeagueHistory || user.geekLeagues[0]._id
-            readGeekLeagueState({
-                geekleagues,
-                getLeague,
-                geekLeagueID,
-                setGeekLeague: setGeekleague
+            handleStateWithId({
+                id: geekLeagueID,
+                reducerData: geekleagues,
+                action: getLeague,
+                setResult: setGeekLeague,
+                setError: setErrorGeekLeague
             })
         }
-
     }, [user, geekleagues, getLeague])
 
 
     useEffect(() => {
-        if (geekleague && !geekleague.error) {
+        if (geekleague) {
             const geeksPronos = geeksFixturePronogeeks[`${fixture._id}-${geekleague._id}`]
 
             if (!geeksPronos) getGeekleagueFixturePronos(geekleague._id, fixture._id)
 
             else if (geeksPronos.loading) {
                 setLoadingPronogeek(geeksPronos.loading)
-                setError(false)
+                setErrorPronos(false)
 
             } else if (geeksPronos.error) {
-                setError(geeksPronos.error)
+                setErrorPronos(geeksPronos.error)
                 setLoadingPronogeek(false)
 
             } else {
@@ -70,11 +71,12 @@ const PreviewPronos = ({ user, fixture, setShowLeagues, geekleagues, geeksFixtur
 
     const changeLeague = async (e) => {
         const geekLeagueID = e.target.value
-        readGeekLeagueState({
-            geekleagues,
-            getLeague,
-            geekLeagueID,
-            setGeekLeague: setGeekleague
+        handleStateWithId({
+            id: geekLeagueID,
+            reducerData: geekleagues,
+            action: getLeague,
+            setResult: setGeekLeague,
+            setError: setErrorGeekLeague
         })
         saveGeekleagueHistory(geekLeagueID)
     }
@@ -167,8 +169,8 @@ const PreviewPronos = ({ user, fixture, setShowLeagues, geekleagues, geeksFixtur
             </div>
 
 
-            <div className={`${!geeksPronos || loadingPronogeek || geekleague?.error || error ? 'align-items-center' : ''} view-pronos-body`}>
-                {geekleague?.error || error ? <ErrorMessage>{geekleague.error || error}</ErrorMessage>
+            <div className={`${!geeksPronos || loadingPronogeek || errorGeekLeague || errorPronos ? 'align-items-center' : ''} view-pronos-body`}>
+                {errorGeekLeague || errorPronos ? <ErrorMessage>{errorGeekLeague || errorPronos}</ErrorMessage>
 
                     : loadingPronogeek || !geeksPronos ? <Loader
                         size='small'

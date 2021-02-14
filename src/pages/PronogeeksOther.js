@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { ErrorMessage, FixtureOther, Loader, MatchweekNavigation } from '../components'
+import { handleStateWithId } from '../stateHandlers'
 import '../styles/pronogeeks.css'
 
 import * as geekActions from '../actions/geekActions'
 import * as seasonActions from '../actions/seasonActions'
 import * as pronogeekActions from '../actions/pronogeekActions'
 
-const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID, geekID } }, history, loading, loadingSeason, detailedGeeks, detailedSeasons, seasonMatchweeks, geeksMatchweekPronogeeks, errorSeason, getDetailsGeek, getSeason, getMatchweekFixtures, getGeekMatchweekPronos }) => {
+const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID, geekID } }, history, loading, loadingSeason, detailedGeeks, detailedSeasons, seasonMatchweeks, geeksMatchweekPronogeeks, getDetailsGeek, getSeason, getMatchweekFixtures, getGeekMatchweekPronos }) => {
     const [season, setSeason] = useState(null)
     const [fixtures, setFixtures] = useState(null)
     const [matchweekPoints, setMatchweekPoints] = useState(null)
@@ -16,31 +17,29 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID, geekID } }, 
     const [geek, setGeek] = useState(null)
     const [matchweekStarted, setMatchweekStarted] = useState(true)
     const [noPronogeeks, setNoPronogeeks] = useState(false)
-    const [errorGeek, setErrorGeek] = useState(0)
+    const [errorGeek, setErrorGeek] = useState(false)
+    const [errorSeason, setErrorSeason] = useState(false)
 
     useEffect(() => {
-        const geek = detailedGeeks[geekID]
-
-        if (!geek) getDetailsGeek(geekID)
-
-        else if (geek.error) setErrorGeek(geek.error)
-
-        else if (!geek.loading) setGeek(geek)
-
-    }, [detailedGeeks, geekID, getDetailsGeek])
+        handleStateWithId({
+            id: geekID,
+            reducerData: detailedGeeks,
+            action: getDetailsGeek,
+            setResult: setGeek,
+            setError: setErrorGeek
+        })
+    }, [geekID, detailedGeeks, getDetailsGeek])
 
 
     useEffect(() => {
-        const seasonDetails = detailedSeasons[seasonID]
-        if (
-            !seasonDetails &&
-            !loadingSeason &&
-            !errorSeason
-        ) getSeason(seasonID)
-
-        else if (seasonDetails) setSeason(seasonDetails)
-
-    }, [seasonID, matchweekNumber, detailedSeasons, loadingSeason, getSeason, errorSeason])
+        handleStateWithId({
+            id: seasonID,
+            reducerData: detailedSeasons,
+            action: getSeason,
+            setResult: setSeason,
+            setError: setErrorSeason
+        })
+    }, [seasonID, detailedSeasons, getSeason])
 
 
     useEffect(() => {
@@ -48,8 +47,7 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID, geekID } }, 
         if (
             season &&
             !matchweekDetails &&
-            !loadingSeason &&
-            !errorSeason
+            !loadingSeason
         ) getMatchweekFixtures(season, matchweekNumber)
 
         else if (matchweekDetails) {
@@ -57,7 +55,7 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID, geekID } }, 
             setMatchweekStarted(matchweekDetails.hasStarted)
         }
 
-    }, [seasonID, matchweekNumber, season, seasonMatchweeks, loadingSeason, getMatchweekFixtures, errorSeason])
+    }, [seasonID, matchweekNumber, season, seasonMatchweeks, loadingSeason, getMatchweekFixtures])
 
 
     useEffect(() => {
@@ -178,7 +176,6 @@ const mapStateToProps = state => ({
     detailedSeasons: state.seasonReducer.detailedSeasons,
     seasonMatchweeks: state.seasonReducer.seasonMatchweeks,
     loadingSeason: state.seasonReducer.loading,
-    errorSeason: state.seasonReducer.error,
     detailedGeeks: state.geekReducer.detailedGeeks,
     geeksMatchweekPronogeeks: state.pronogeekReducer.geeksMatchweekPronogeeks,
 })

@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { Fixture, Loader, MatchweekNavigation, AdminButtons, RulesProno, InputMatchweek } from '../components'
+import { Fixture, Loader, MatchweekNavigation, AdminButtons, RulesProno, InputMatchweek, ErrorMessage } from '../components'
 import { openNotification, resetMatchweek, getUserSeasonFromProfile, getUserMatchweekFromProfile, isConnected, matchFinished } from '../helpers'
+import { handleStateWithId } from '../stateHandlers'
 import { QuestionIcon, SaveIcon, RankingIcon, ValidateIcon } from '../components/Icons'
 import { MILLISECONDS_IN_30_MINUTES, MILLISECONDS_IN_1_DAY, MILLISECONDS_IN_1_WEEK } from '../constants'
 import '../styles/pronogeeks.css'
@@ -11,7 +12,7 @@ import * as seasonActions from '../actions/seasonActions'
 import * as pronogeekActions from '../actions/pronogeekActions'
 import * as apiFootballActions from '../actions/apiFootballActions'
 
-const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history, loading, loadingSeason, loadingApi, user, detailedSeasons, seasonMatchweeks, userPronogeeks, statusUpdated, oddsUpdated, warningMessage, getSeason, getMatchweekFixtures, getUserMatchweekPronos, saveAllPronogeeks, resetMatchweekSaveAndErrorState, updateFixturesStatus, updateOdds, errorSeason }) => {
+const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history, loading, loadingSeason, loadingApi, user, detailedSeasons, seasonMatchweeks, userPronogeeks, statusUpdated, oddsUpdated, warningMessage, getSeason, getMatchweekFixtures, getUserMatchweekPronos, saveAllPronogeeks, resetMatchweekSaveAndErrorState, updateFixturesStatus, updateOdds }) => {
     const [season, setSeason] = useState(null)
     const [newSeason, setNewSeason] = useState(true)
     const [userMatchweek, setUserMatchweek] = useState(null)
@@ -29,12 +30,26 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
     const [modifiedTotal, setModifiedTotal] = useState(0)
     const [scoresUpdatedOnce, setScoresUpdatedOnce] = useState(false)
     const [oddsUpdatedOnce, setOddsUpdatedOnce] = useState(false)
+    const [errorSeason, setErrorSeason] = useState(false)
+
 
     const setPoints = userMatchweek => {
         setMatchweekPoints(userMatchweek.totalPoints)
         setMatchweekBonus(userMatchweek.bonusPoints)
         setMatchweekCorrects(userMatchweek.numberCorrects)
     }
+
+
+    useEffect(() => {
+        handleStateWithId({
+            id: seasonID,
+            reducerData: detailedSeasons,
+            action: getSeason,
+            setResult: setSeason,
+            setError: setErrorSeason
+        })
+    }, [seasonID, detailedSeasons, getSeason])
+
 
     useEffect(() => {
         if (isConnected(user)) {
@@ -53,19 +68,6 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
             }
         }
     }, [history, seasonID, matchweekNumber, user, newSeason])
-
-
-    useEffect(() => {
-        const seasonDetails = detailedSeasons[seasonID]
-        if (
-            !seasonDetails &&
-            !loadingSeason &&
-            !errorSeason
-        ) getSeason(seasonID)
-
-        else if (seasonDetails) setSeason(seasonDetails)
-
-    }, [seasonID, matchweekNumber, detailedSeasons, loadingSeason, getSeason, errorSeason])
 
 
     useEffect(() => {
@@ -211,144 +213,150 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
         history.push(`/pronogeeks/${seasonID}/matchweek/${matchweek}`)
     }
 
-    return !fixtures || !season || loading || newSeason ? (
+    return errorSeason ? (
+
+        <div className='pronogeeks-bg'>
+            <ErrorMessage>{errorSeason}</ErrorMessage>
+        </div>
+
+    ) : !fixtures || !season || loading || newSeason ? (
 
         <div className='pronogeeks-bg'>
             <Loader color='rgb(4, 78, 199)' />
         </div>
 
     ) : (
-            <div
-                className='pronogeeks-bg matchweek-page offset-for-btn'
-                onClick={e => resetMatchweek(e, matchweekFromInput, matchweekNumber, setMatchweekFromInput)}
-            >
+                <div
+                    className='pronogeeks-bg matchweek-page offset-for-btn'
+                    onClick={e => resetMatchweek(e, matchweekFromInput, matchweekNumber, setMatchweekFromInput)}
+                >
 
-                <div className='go-to-ranking'>
+                    <div className='go-to-ranking'>
 
-                    <Link className='btn my-btn go-to-ranking-btn' to={`/ranking/season/${seasonID}/${matchweekNumber}`}>
-                        <RankingIcon size='40px' />
+                        <Link className='btn my-btn go-to-ranking-btn' to={`/ranking/season/${seasonID}/${matchweekNumber}`}>
+                            <RankingIcon size='40px' />
                         &nbsp;
                         <span>{season.provRankingOpen ? 'Faire classement prévisionnel' : `Classement ${season.leagueName}`}</span>
-                    </Link>
+                        </Link>
 
-                    <div className='go-to-ranking-info'>
-                        <p>{season.provRankingOpen ? 'Faire mon classement prévisionnel' : `Voir le classement de ${season.leagueName}`}.</p>
+                        <div className='go-to-ranking-info'>
+                            <p>{season.provRankingOpen ? 'Faire mon classement prévisionnel' : `Voir le classement de ${season.leagueName}`}.</p>
+                        </div>
+
                     </div>
 
-                </div>
+                    <div className='save-all'>
 
-                <div className='save-all'>
-
-                    <button
-                        onClick={() => saveAllPronogeeks(seasonID, matchweekNumber)}
-                        className={`btn my-btn save-all-btn ${saveAllSuccess ? 'all-saved' : ''}`}
-                        disabled={savingAll}
-                    >
-                        {modifiedTotal > 0 && <small className='pronos-to-save large-screen-icon'>{modifiedTotal}</small>}
-                        {savingAll ? <Loader
-                            tip=''
-                            fontSize='2.2rem'
-                            container={false}
-                            className='saving-all-loader'
-                        /> :
-                            saveAllSuccess ? <ValidateIcon size='40px' /> :
-                                <SaveIcon size='40px' />}
+                        <button
+                            onClick={() => saveAllPronogeeks(seasonID, matchweekNumber)}
+                            className={`btn my-btn save-all-btn ${saveAllSuccess ? 'all-saved' : ''}`}
+                            disabled={savingAll}
+                        >
+                            {modifiedTotal > 0 && <small className='pronos-to-save large-screen-icon'>{modifiedTotal}</small>}
+                            {savingAll ? <Loader
+                                tip=''
+                                fontSize='2.2rem'
+                                container={false}
+                                className='saving-all-loader'
+                            /> :
+                                saveAllSuccess ? <ValidateIcon size='40px' /> :
+                                    <SaveIcon size='40px' />}
                         &nbsp;
                         <span>{modifiedTotal > 0 && <small className='pronos-to-save'>{modifiedTotal}</small>}{savingAll ? 'Enregistrement...' : saveAllSuccess ? 'Enregistré' : 'Enregistrer tout'}</span>
 
-                    </button>
+                        </button>
 
-                    <div className='save-all-info'>
-                        <p>Enregistrer tous les pronos de la journée.</p>
+                        <div className='save-all-info'>
+                            <p>Enregistrer tous les pronos de la journée.</p>
+                        </div>
+
                     </div>
+
+                    <AdminButtons
+                        season={season}
+                        matchweekNumber={matchweekNumber}
+                    />
+
+                    <h2>
+                        <QuestionIcon onClick={() => setShowRules(!showRules)} />
+                        {season.leagueName} saison {season.year} :<br />
+                    journée <InputMatchweek
+                            matchweekInit={matchweekNumber}
+                            matchweekFromInput={matchweekFromInput}
+                            setMatchweekFromInput={setMatchweekFromInput}
+                            changeMatchweek={changeMatchweek}
+                            lastMatchweek={38}
+                            backgroundColor='rgb(4, 78, 199)'
+                            fontSize='2rem'
+                        />
+                    </h2>
+
+                    <ul
+                        onClick={() => setShowRules(false)}
+                        className="list-group list-group-flush list-fixtures col-10 offset-1 col-md-8 offset-md-2 col-xl-6 offset-xl-3"
+                    >
+
+                        <MatchweekNavigation
+                            matchweekNumber={matchweekNumber}
+                            matchweekPoints={matchweekPoints}
+                            matchweekCorrects={matchweekCorrects}
+                            gamesFinished={seasonMatchweeks[`${seasonID}-${matchweekNumber}`].gamesFinished}
+                            matchweekBonus={matchweekBonus}
+                            previousPage={previousPage}
+                            nextPage={nextPage}
+                            myClassName='score-top'
+                        />
+
+                        <div className='list-fixtures-header'>
+                            <div className='header-title'>Domicile</div>
+                            <div>|</div>
+                            <div className='header-title'>Extérieur</div>
+                        </div>
+
+                        {fixtures.map(fixture => (
+                            <li
+                                className="list-group-item"
+                                key={fixture._id}
+                                style={{ background: 'none' }}
+                            >
+                                <Fixture
+                                    fixture={fixture}
+                                    showLeaguePronos={showLeaguePronos}
+                                    setShowLeaguePronos={setShowLeaguePronos}
+                                />
+                            </li>
+                        ))}
+
+                        <MatchweekNavigation
+                            matchweekNumber={matchweekNumber}
+                            matchweekPoints={matchweekPoints}
+                            matchweekCorrects={matchweekCorrects}
+                            gamesFinished={seasonMatchweeks[`${seasonID}-${matchweekNumber}`].gamesFinished}
+                            matchweekBonus={matchweekBonus}
+                            previousPage={previousPage}
+                            nextPage={nextPage}
+                            myClassName='score-bottom'
+                        />
+
+                    </ul>
+
+                    <AdminButtons
+                        season={season}
+                        matchweekNumber={matchweekNumber}
+                    />
+
+                    {showRules && <div className="rules-box">
+                        <RulesProno
+                            setShowRules={setShowRules}
+                            lastScoresUpdated={lastScoresUpdated}
+                            lastOddsUpdated={lastOddsUpdated}
+                            season={season}
+                        />
+                    </div>}
 
                 </div>
 
-                <AdminButtons
-                    season={season}
-                    matchweekNumber={matchweekNumber}
-                />
-
-                <h2>
-                    <QuestionIcon onClick={() => setShowRules(!showRules)} />
-                    {season.leagueName} saison {season.year} :<br />
-                    journée <InputMatchweek
-                        matchweekInit={matchweekNumber}
-                        matchweekFromInput={matchweekFromInput}
-                        setMatchweekFromInput={setMatchweekFromInput}
-                        changeMatchweek={changeMatchweek}
-                        lastMatchweek={38}
-                        backgroundColor='rgb(4, 78, 199)'
-                        fontSize='2rem'
-                    />
-                </h2>
-
-                <ul
-                    onClick={() => setShowRules(false)}
-                    className="list-group list-group-flush list-fixtures col-10 offset-1 col-md-8 offset-md-2 col-xl-6 offset-xl-3"
-                >
-
-                    <MatchweekNavigation
-                        matchweekNumber={matchweekNumber}
-                        matchweekPoints={matchweekPoints}
-                        matchweekCorrects={matchweekCorrects}
-                        gamesFinished={seasonMatchweeks[`${seasonID}-${matchweekNumber}`].gamesFinished}
-                        matchweekBonus={matchweekBonus}
-                        previousPage={previousPage}
-                        nextPage={nextPage}
-                        myClassName='score-top'
-                    />
-
-                    <div className='list-fixtures-header'>
-                        <div className='header-title'>Domicile</div>
-                        <div>|</div>
-                        <div className='header-title'>Extérieur</div>
-                    </div>
-
-                    {fixtures.map(fixture => (
-                        <li
-                            className="list-group-item"
-                            key={fixture._id}
-                            style={{ background: 'none' }}
-                        >
-                            <Fixture
-                                fixture={fixture}
-                                showLeaguePronos={showLeaguePronos}
-                                setShowLeaguePronos={setShowLeaguePronos}
-                            />
-                        </li>
-                    ))}
-
-                    <MatchweekNavigation
-                        matchweekNumber={matchweekNumber}
-                        matchweekPoints={matchweekPoints}
-                        matchweekCorrects={matchweekCorrects}
-                        gamesFinished={seasonMatchweeks[`${seasonID}-${matchweekNumber}`].gamesFinished}
-                        matchweekBonus={matchweekBonus}
-                        previousPage={previousPage}
-                        nextPage={nextPage}
-                        myClassName='score-bottom'
-                    />
-
-                </ul>
-
-                <AdminButtons
-                    season={season}
-                    matchweekNumber={matchweekNumber}
-                />
-
-                {showRules && <div className="rules-box">
-                    <RulesProno
-                        setShowRules={setShowRules}
-                        lastScoresUpdated={lastScoresUpdated}
-                        lastOddsUpdated={lastOddsUpdated}
-                        season={season}
-                    />
-                </div>}
-
-            </div>
-
-        )
+            )
 }
 
 const mapStateToProps = state => ({
@@ -356,7 +364,6 @@ const mapStateToProps = state => ({
     detailedSeasons: state.seasonReducer.detailedSeasons,
     seasonMatchweeks: state.seasonReducer.seasonMatchweeks,
     loadingSeason: state.seasonReducer.loading,
-    errorSeason: state.seasonReducer.error,
     userPronogeeks: state.pronogeekReducer.userPronogeeks,
     statusUpdated: state.apiFootballReducer.statusUpdated,
     oddsUpdated: state.apiFootballReducer.oddsUpdated,

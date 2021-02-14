@@ -7,6 +7,14 @@ import {
 import {
     ADD_USER_PRONOGEEKS
 } from '../types/pronogeekTypes'
+import {
+    seasonReducer,
+    seasonMatchweeks
+} from '../reducerKeys/season'
+import {
+    pronogeekReducer,
+    userPronogeeks
+} from '../reducerKeys/pronogeek'
 
 export const isEmpty = myObject => {
     let result = null
@@ -268,7 +276,7 @@ export const updateMatchweekFixtures = ({
     const gamesFinished = matchweekFixtures.filter(fixture => matchFinished(fixture.statusShort)).length
     const hasStarted = new Date(matchweekFixtures[0].date).getTime() <= Date.now()
 
-    const newMatchweeks = copyReducer(getState, 'seasonReducer', 'seasonMatchweeks')
+    const newMatchweeks = copyReducer(getState, seasonReducer, seasonMatchweeks)
     newMatchweeks[`${seasonID}-${matchweekNumber}`] = {
         totalGames,
         gamesFinished,
@@ -290,7 +298,7 @@ export const updateMatchweekPronogeeks = ({
     getState
 }) => {
 
-    const newPronogeeks = copyReducer(getState, 'pronogeekReducer', 'userPronogeeks')
+    const newPronogeeks = copyReducer(getState, pronogeekReducer, userPronogeeks)
     newPronogeeks[`${seasonID}-${matchweekNumber}`] = {}
 
     for (let pronogeek of pronogeeks) {

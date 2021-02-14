@@ -18,7 +18,7 @@ const done = {
 }
 
 const INITIAL_STATE = {
-    undergoingSeasons: [],
+    undergoingSeasons: {},
     detailedSeasons: {},
     seasonMatchweeks: {},
     nextMatchweeks: {},

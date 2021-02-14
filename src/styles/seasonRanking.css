@@ -127,7 +127,7 @@ th.season-ranking-team-name {
 
 .save-ranking-btn,
 .save-ranking-btn-bottom {
-    width: 192px;
+    min-width: 220px;
     height: unset;
     margin-bottom: 15px;
 }

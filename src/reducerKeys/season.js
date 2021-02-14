@@ -1,6 +1,6 @@
 module.exports = {
     seasonReducer: 'seasonReducer',
-    undergoingSeasonsArray: 'undergoingSeasons',
+    undergoingSeasons: 'undergoingSeasons',
     detailedSeasons: 'detailedSeasons',
     seasonMatchweeks: 'seasonMatchweeks',
     nextMatchweeks: 'nextMatchweeks',

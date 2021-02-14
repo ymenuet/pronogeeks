@@ -2,40 +2,40 @@ import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
-import { Loader } from '../components'
+import { ErrorMessage, Loader } from '../components'
 import { DragIcon, SaveIcon, ListIcon } from '../components/Icons'
 import { openNotification, isConnected } from '../helpers'
+import { handleStateWithId } from '../stateHandlers'
 import { PROV_RANKING_MATCHWEEK_LIMIT } from '../constants'
 import '../styles/seasonRanking.css'
 
 import { saveUserProvRanking } from '../actions/geekActions'
 import { getSeason, closeProvRankings } from '../actions/seasonActions'
 
-const SeasonRanking = ({ match: { params: { seasonID, matchweekNumber } }, loadingGeek, loadingSeason, user, rankingSaved, detailedSeasons, saveUserProvRanking, getSeason, closeProvRankings, errorSeason }) => {
+const SeasonRanking = ({ match: { params: { seasonID, matchweekNumber } }, history, loadingGeek, user, rankingSaved, detailedSeasons, saveUserProvRanking, getSeason, closeProvRankings }) => {
 
     const [season, setSeason] = useState(null)
     const [userProvRanking, setUserProvRanking] = useState(null)
     const [userWithoutRanking, setUserWithoutRanking] = useState(false)
     const [provRankingOpen, setProvRankingOpen] = useState(false)
+    const [errorSeason, setErrorSeason] = useState(false)
+
+    useEffect(() => {
+        handleStateWithId({
+            id: seasonID,
+            reducerData: detailedSeasons,
+            action: getSeason,
+            setResult: setSeason,
+            setError: setErrorSeason
+        })
+    }, [seasonID, detailedSeasons, getSeason])
+
 
     useEffect(() => {
         if (rankingSaved) {
             openNotification('success', 'Classement enregistré')
         }
     }, [rankingSaved])
-
-
-    useEffect(() => {
-        const seasonDetails = detailedSeasons[seasonID]
-        if (
-            !seasonDetails &&
-            !loadingSeason &&
-            !errorSeason
-        ) getSeason(seasonID)
-
-        else if (seasonDetails) setSeason(seasonDetails)
-
-    }, [seasonID, matchweekNumber, detailedSeasons, loadingSeason, getSeason, errorSeason])
 
 
     useEffect(() => {
@@ -49,9 +49,9 @@ const SeasonRanking = ({ match: { params: { seasonID, matchweekNumber } }, loadi
                     if (season.provRankingOpen) setUserProvRanking(season.rankedTeams)
                     else setUserProvRanking([])
                 }
-            }
+            } else history.push(`/pronogeeks/${seasonID}`)
         }
-    }, [user, season, seasonID])
+    }, [history, user, season, seasonID])
 
 
     useEffect(() => {
@@ -60,13 +60,13 @@ const SeasonRanking = ({ match: { params: { seasonID, matchweekNumber } }, loadi
             const matchweek7HasStarted = Date.now() - Math.min(...matchweek7Dates) > 0
 
             if (matchweek7HasStarted) {
-                if (!loadingSeason && !errorSeason) closeProvRankings(season._id)
+                closeProvRankings(season._id)
                 setProvRankingOpen(false)
 
             } else setProvRankingOpen(true)
         }
 
-    }, [season, closeProvRankings, loadingSeason, errorSeason])
+    }, [season, closeProvRankings])
 
 
     const handleDragEnd = result => {
@@ -97,7 +97,11 @@ const SeasonRanking = ({ match: { params: { seasonID, matchweekNumber } }, loadi
 
     return <div className="pronogeeks-bg offset-for-btn">
 
-        {season && userProvRanking ? <>
+        {errorSeason ? (
+
+            <ErrorMessage>{errorSeason}</ErrorMessage>
+
+        ) : season && userProvRanking ? <>
 
             <div className='go-to-ranking'>
 
@@ -263,8 +267,6 @@ const mapStateToProps = state => ({
     rankingSaved: state.geekReducer.rankingSaved,
     loadingGeek: state.geekReducer.loading,
     detailedSeasons: state.seasonReducer.detailedSeasons,
-    loadingSeason: state.seasonReducer.loading,
-    errorSeason: state.seasonReducer.error
 })
 
 const mapDispatchToProps = {
