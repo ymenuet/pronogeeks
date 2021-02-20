@@ -1,8 +1,8 @@
 module.exports = {
-    apiFootballReducer: 'apiFootballReducer',
-    statusUpdated: 'statusUpdated',
-    oddsUpdated: 'oddsUpdated',
-    warningMessage: 'warningMessage',
-    loading: 'loading',
-    error: 'error',
+    API_FOOTBALL_REDUCER_KEY: 'apiFootballReducer',
+    STATUS_UPDATED_KEY: 'statusUpdated',
+    ODDS_UPDATED_KEY: 'oddsUpdated',
+    WARNING_MESSAGE_KEY: 'warningMessage',
+    LOADING_KEY: 'loading',
+    ERROR_KEY: 'error',
 }

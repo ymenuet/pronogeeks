@@ -13,10 +13,10 @@ import {
     printError
 } from '../helpers'
 import {
-    seasonReducer,
-    detailedSeasons,
-    nextMatchweeks,
-    lastMatchweeks
+    SEASON_REDUCER_KEY,
+    DETAILED_SEASONS_KEY,
+    NEXT_MATCHWEEKS_KEY,
+    LAST_MATCHWEEKS_KEY
 } from '../reducerKeys/season'
 import {
     MILLISECONDS_IN_3_HOURS
@@ -33,7 +33,7 @@ const seasonService = axios.create({
 })
 
 export const getSeason = seasonID => async(dispatch, getState) => {
-    const newDetailedSeasons = copyReducer(getState, seasonReducer, detailedSeasons)
+    const newDetailedSeasons = copyReducer(getState, SEASON_REDUCER_KEY, DETAILED_SEASONS_KEY)
     newDetailedSeasons[seasonID] = {
         loading: true,
         error: false
@@ -51,7 +51,7 @@ export const getSeason = seasonID => async(dispatch, getState) => {
             }
         } = await seasonService.get(`/${seasonID}`)
 
-        const newDetailedSeasons = copyReducer(getState, seasonReducer, detailedSeasons)
+        const newDetailedSeasons = copyReducer(getState, SEASON_REDUCER_KEY, DETAILED_SEASONS_KEY)
         newDetailedSeasons[seasonID] = season
 
         dispatch({
@@ -61,7 +61,7 @@ export const getSeason = seasonID => async(dispatch, getState) => {
     } catch (error) {
         console.error('ERROR:', error.message)
 
-        const newDetailedSeasons = copyReducer(getState, seasonReducer, detailedSeasons)
+        const newDetailedSeasons = copyReducer(getState, SEASON_REDUCER_KEY, DETAILED_SEASONS_KEY)
         newDetailedSeasons[seasonID] = {
             loading: false,
             error: printError('fr', error, 'Erreur lors du chargement des données de la saison. Recharge la page ou réessaye plus tard.')
@@ -114,7 +114,7 @@ export const setNextMatchweek = season => (dispatch, getState) => {
         nextMatchweek = getLastMatchweek(fixtures)
     }
 
-    const newMatchweeks = copyReducer(getState, seasonReducer, nextMatchweeks)
+    const newMatchweeks = copyReducer(getState, SEASON_REDUCER_KEY, NEXT_MATCHWEEKS_KEY)
     newMatchweeks[_id] = nextMatchweek
 
     dispatch({
@@ -137,7 +137,7 @@ export const setLastMatchweek = season => (dispatch, getState) => {
     if (lastFixtures.length) lastMatchweek = getLastMatchweek(lastFixtures)
     else lastMatchweek = 1
 
-    const newMatchweeks = copyReducer(getState, seasonReducer, lastMatchweeks)
+    const newMatchweeks = copyReducer(getState, SEASON_REDUCER_KEY, LAST_MATCHWEEKS_KEY)
     newMatchweeks[_id] = lastMatchweek
 
     dispatch({
@@ -154,7 +154,7 @@ export const closeProvRankings = seasonID => async(dispatch, getState) => {
     try {
         await seasonService.put(`/closeRankings/${seasonID}`)
 
-        const newDetailedSeasons = copyReducer(getState, seasonReducer, detailedSeasons, seasonID)
+        const newDetailedSeasons = copyReducer(getState, SEASON_REDUCER_KEY, DETAILED_SEASONS_KEY, seasonID)
         newDetailedSeasons[seasonID].provRankingOpen = false
 
         dispatch({
