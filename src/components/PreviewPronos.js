@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { Loader, ErrorMessage, GeekProno } from '.'
 import { isConnected, statusTranform } from '../helpers/index'
-import { handleStateWithId } from '../stateHandlers'
+import { handleStateWith2Ids, handleStateWithId } from '../stateHandlers'
 import { CloseIcon } from './Icons'
 import '../styles/previewPronos.css'
 
@@ -15,21 +15,9 @@ const PreviewPronos = ({ user, fixture, setShowLeagues, geekleagues, geeksFixtur
 
     const [geekleague, setGeekLeague] = useState(null)
     const [geeksPronos, setGeeksPronos] = useState(null)
-    const [loadingPronogeek, setLoadingPronogeek] = useState(false)
     const [winner, setWinner] = useState(null)
     const [errorPronos, setErrorPronos] = useState(false)
     const [errorGeekLeague, setErrorGeekLeague] = useState(false)
-
-    const determineWinner = (goalsHome, goalsAway) => {
-        return goalsHome > goalsAway ? 'Home' :
-            goalsHome < goalsAway ? 'Away' :
-                'Draw'
-    }
-
-    useEffect(() => {
-        const winner = determineWinner(fixture.goalsHomeTeam, fixture.goalsAwayTeam)
-        setWinner(winner)
-    }, [fixture])
 
 
     useEffect(() => {
@@ -47,23 +35,15 @@ const PreviewPronos = ({ user, fixture, setShowLeagues, geekleagues, geeksFixtur
 
 
     useEffect(() => {
-        if (geekleague) {
-            const geeksPronos = geeksFixturePronogeeks[`${fixture._id}-${geekleague._id}`]
-
-            if (!geeksPronos) getGeekleagueFixturePronos(geekleague._id, fixture._id)
-
-            else if (geeksPronos.loading) {
-                setLoadingPronogeek(geeksPronos.loading)
-                setErrorPronos(false)
-
-            } else if (geeksPronos.error) {
-                setErrorPronos(geeksPronos.error)
-                setLoadingPronogeek(false)
-
-            } else {
-                setGeeksPronos(geeksPronos)
-                setLoadingPronogeek(false)
-            }
+        if (geekleague && fixture) {
+            handleStateWith2Ids({
+                id1: fixture._id,
+                id2: geekleague._id,
+                reducerData: geeksFixturePronogeeks,
+                action: getGeekleagueFixturePronos,
+                setResult: setGeeksPronos,
+                setError: setErrorPronos
+            })
         }
 
     }, [geekleague, fixture, geeksFixturePronogeeks, getGeekleagueFixturePronos])
@@ -71,6 +51,7 @@ const PreviewPronos = ({ user, fixture, setShowLeagues, geekleagues, geeksFixtur
 
     const changeLeague = async (e) => {
         const geekLeagueID = e.target.value
+        setGeeksPronos(null)
         handleStateWithId({
             id: geekLeagueID,
             reducerData: geekleagues,
@@ -80,6 +61,20 @@ const PreviewPronos = ({ user, fixture, setShowLeagues, geekleagues, geeksFixtur
         })
         saveGeekleagueHistory(geekLeagueID)
     }
+
+
+    useEffect(() => {
+        const winner = determineWinner(fixture.goalsHomeTeam, fixture.goalsAwayTeam)
+        setWinner(winner)
+    }, [fixture])
+
+
+    function determineWinner(goalsHome, goalsAway) {
+        return goalsHome > goalsAway ? 'Home' :
+            goalsHome < goalsAway ? 'Away' :
+                'Draw'
+    }
+
 
     return (
 
@@ -169,10 +164,13 @@ const PreviewPronos = ({ user, fixture, setShowLeagues, geekleagues, geeksFixtur
             </div>
 
 
-            <div className={`${!geeksPronos || loadingPronogeek || errorGeekLeague || errorPronos ? 'align-items-center' : ''} view-pronos-body`}>
-                {errorGeekLeague || errorPronos ? <ErrorMessage>{errorGeekLeague || errorPronos}</ErrorMessage>
+            <div className={`${!geeksPronos || errorGeekLeague || errorPronos ? 'align-items-center' : ''} view-pronos-body`}>
 
-                    : loadingPronogeek || !geeksPronos ? <Loader
+                {errorGeekLeague || errorPronos ? <ErrorMessage>
+                    {errorGeekLeague || errorPronos}
+                </ErrorMessage>
+
+                    : !geeksPronos ? <Loader
                         size='small'
                         tip='Chargement des pronos...'
                         fontSize='2.4rem'

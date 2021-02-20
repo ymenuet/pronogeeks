@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { Loader, ErrorMessage } from '.'
-import { isEmpty, sortByUsername } from '../helpers'
+import { sortByUsername } from '../helpers'
+import { handleStateWithoutId } from '../stateHandlers'
 import { Form, Select } from 'antd'
 
 import { getAllGeeks } from '../actions/geekActions'
@@ -11,40 +12,47 @@ const { Option } = Select
 const GeekSelector = ({ user, allGeeks, getAllGeeks, geekLeague }) => {
 
     const [geeks, setGeeks] = useState([])
+    const [geeksObject, setGeeksObject] = useState(null)
+    const [errorGeeks, setErrorGeeks] = useState(false)
+
 
     useEffect(() => {
-        if (isEmpty(allGeeks)) getAllGeeks()
+        handleStateWithoutId({
+            reducerData: allGeeks,
+            action: getAllGeeks,
+            setResult: setGeeksObject,
+            setError: setErrorGeeks
+        })
 
-        else if (
-            !allGeeks.loading &&
-            !allGeeks.error &&
-            !geekLeague
-        ) {
-            const geeks = sortByUsername(Object.values(allGeeks))
-                .filter(geek => geek._id !== user._id)
-            setGeeks(geeks)
-        }
+    }, [allGeeks, getAllGeeks])
 
-        else if (
-            geekLeague &&
-            !geekLeague.error &&
-            !allGeeks.loading &&
-            !allGeeks.error
-        ) {
-            let geeks = Object.values(allGeeks)
-                .filter(geek => {
-                    let result = true
-                    geekLeague.geeks.map(leagueGeek => {
-                        if (leagueGeek._id.toString() === geek._id.toString()) result = false
-                        return leagueGeek
+
+    useEffect(() => {
+        if (geeksObject) {
+            const rawGeeks = Object.values(geeksObject)
+
+            if (!geekLeague) {
+                const geeks = sortByUsername(rawGeeks)
+                    .filter(geek => geek._id !== user._id)
+                setGeeks(geeks)
+
+            } else {
+                let geeks = rawGeeks
+                    .filter(geek => {
+                        let result = true
+                        geekLeague.geeks.map(leagueGeek => {
+                            if (leagueGeek._id.toString() === geek._id.toString()) result = false
+                            return leagueGeek
+                        })
+                        return result
                     })
-                    return result
-                })
-            geeks = sortByUsername(geeks)
-            setGeeks(geeks)
+                geeks = sortByUsername(geeks)
+                setGeeks(geeks)
+            }
         }
 
-    }, [allGeeks, getAllGeeks, geekLeague, user._id])
+    }, [geeksObject, geekLeague, user._id])
+
 
     return <Form.Item
         type='text'
@@ -58,17 +66,17 @@ const GeekSelector = ({ user, allGeeks, getAllGeeks, geekLeague }) => {
         ]}
     >
 
-        {allGeeks.loading ? <Loader
-            tip='Chargement des joueurs...'
-            size='small'
-            fontSize='2.4rem'
-            tipSize='1rem'
-            container={false}
-        />
+        {errorGeeks ? <ErrorMessage>
+            {errorGeeks}
+        </ErrorMessage>
 
-            : allGeeks.error ? <ErrorMessage>
-                {allGeeks.error}
-            </ErrorMessage>
+            : allGeeks.loading ? <Loader
+                tip='Chargement des joueurs...'
+                size='small'
+                fontSize='2.4rem'
+                tipSize='1rem'
+                container={false}
+            />
 
                 : <Select
                     mode="multiple"

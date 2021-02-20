@@ -147,30 +147,6 @@ export const dateFormatterForRulesPanel = date => {
     return `${date.getDate()}/${month}/${date.getFullYear()} à ${date.getHours()}h${minutes}`
 }
 
-export const statusTranform = (statusShort, minutes) => {
-    if (statusShort !== 'TBD' &&
-        statusShort !== 'NS' &&
-        statusShort !== '1H' &&
-        statusShort !== 'HT' &&
-        statusShort !== '2H' &&
-        statusShort !== 'ET' &&
-        statusShort !== 'P' &&
-        statusShort !== 'BT' &&
-        statusShort !== 'SUSP' &&
-        statusShort !== 'INT' &&
-        statusShort !== 'PST') {
-        return 'Match terminé'
-    } else if (statusShort === 'HT') {
-        return 'Mi-temps'
-    } else if (statusShort === 'PST') {
-        return 'Match reporté'
-    } else if (statusShort === 'SUSP') {
-        return `Match suspendu (${minutes}')`
-    } else if (statusShort === 'INT') {
-        return `Match interrompu (${minutes}')`
-    } else return `${minutes}'`
-}
-
 export const matchFinished = (statusShort) => {
     return statusShort !== 'TBD' &&
         statusShort !== 'NS' &&
@@ -183,6 +159,25 @@ export const matchFinished = (statusShort) => {
         statusShort !== 'SUSP' &&
         statusShort !== 'INT' &&
         statusShort !== 'PST'
+}
+
+export const statusTranform = (statusShort, minutes) => {
+    if (matchFinished(statusShort)) {
+        return 'Match terminé'
+
+    } else if (statusShort === 'HT') {
+        return 'Mi-temps'
+
+    } else if (statusShort === 'PST') {
+        return 'Match reporté'
+
+    } else if (statusShort === 'SUSP') {
+        return `Match suspendu (${minutes}')`
+
+    } else if (statusShort === 'INT') {
+        return `Match interrompu (${minutes}')`
+
+    } else return `${minutes}'`
 }
 
 export const resetMatchweek = (e, matchweekInput, matchweekRef, setMatchweekInput) => {

@@ -4,6 +4,7 @@ import { connect } from "react-redux"
 import axios from 'axios'
 import { Loader, RankGeeks, ErrorMessage } from '../components'
 import { appendPhoto, isConnected, openNotification } from '../helpers'
+import { handleStateWithId } from '../stateHandlers'
 import { EditIcon, WarningIcon } from '../components/Icons'
 import '../styles/profile.css'
 
@@ -17,11 +18,12 @@ const Profile = ({ loading, loadingUsername, loadingPhoto, user, seasonGeeksRank
     const [deleteAccount, setDeleteAccount] = useState(false)
     const [usernameInput, setUsernameInput] = useState('')
     const [season, setSeason] = useState(null)
-    const [seasonID, setSeasonID] = useState(null)
+    const [intermediateRanking, setIntermediateRanking] = useState(null)
     const [seasonRankingFull, setSeasonRankingFull] = useState(null)
     const [seasonRanking, setSeasonRanking] = useState(null)
     const [userRanking, setUserRanking] = useState(null)
     const [errorRanking, setErrorRanking] = useState(null)
+
 
     useEffect(() => {
         if (isConnected(user)) {
@@ -29,37 +31,44 @@ const Profile = ({ loading, loadingUsername, loadingPhoto, user, seasonGeeksRank
         }
     }, [user])
 
+
     useEffect(() => {
         if (isConnected(user) && user.seasons.length > 0) {
             const season = user.seasons[user.seasons.length - 1].season
-            const seasonID = season._id.toString()
             setSeason(season)
-            setSeasonID(seasonID)
         }
     }, [user])
 
+
     useEffect(() => {
-        if (seasonID && isConnected(user) && user.seasons.length) {
-            const ranking = seasonGeeksRankings[seasonID]
-
-            if (!ranking) getSeasonPlayers(seasonID)
-
-            else if (ranking.error) setErrorRanking(ranking.error)
-
-            else if (!ranking.loading) {
-                const rankedGeeks = ranking.map(geek => {
-                    if (geek._id === user._id) return user
-                    return geek
-                })
-                const userRanking = rankedGeeks.map(geek => geek._id).indexOf(user._id)
-                const rankedGeeks20 = rankedGeeks.slice(0, 20)
-                setUserRanking(userRanking)
-                setSeasonRankingFull(rankedGeeks)
-                setSeasonRanking(rankedGeeks20)
-            }
+        if (season && season._id) {
+            handleStateWithId({
+                id: season._id,
+                reducerData: seasonGeeksRankings,
+                action: getSeasonPlayers,
+                setResult: setIntermediateRanking,
+                setError: setErrorRanking
+            })
         }
 
-    }, [user, seasonID, seasonGeeksRankings, getSeasonPlayers])
+    }, [season, seasonGeeksRankings, getSeasonPlayers])
+
+
+    useEffect(() => {
+        if (intermediateRanking && isConnected(user) && user.seasons.length) {
+            const rankedGeeks = intermediateRanking.map(geek => {
+                if (geek._id === user._id) return user
+                return geek
+            })
+            const userRanking = rankedGeeks.map(geek => geek._id).indexOf(user._id)
+            const rankedGeeks20 = rankedGeeks.slice(0, 20)
+            setUserRanking(userRanking)
+            setSeasonRankingFull(rankedGeeks)
+            setSeasonRanking(rankedGeeks20)
+        }
+
+    }, [user, intermediateRanking])
+
 
     const uploadPhoto = async e => {
         const photo = appendPhoto(e)
@@ -259,7 +268,7 @@ const Profile = ({ loading, loadingUsername, loadingPhoto, user, seasonGeeksRank
                                     user={user}
                                     userRanking={userRanking}
                                     players={seasonRanking}
-                                    seasonID={seasonID}
+                                    seasonID={season._id}
                                     generalRanking
                                 />
 

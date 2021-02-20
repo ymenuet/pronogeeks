@@ -111,7 +111,7 @@ export const getGeekMatchweekPronos = (geekID, seasonID, matchweekNumber) => asy
     }
 }
 
-export const getGeekleagueFixturePronos = (geekleagueID, fixtureID) => async(dispatch, getState) => {
+export const getGeekleagueFixturePronos = (fixtureID, geekleagueID) => async(dispatch, getState) => {
     const newPronogeeks = copyReducer(getState, PRONOGEEK_REDUCER_KEY, GEEKS_FIXTURE_PRONOGEEKS_KEY)
     newPronogeeks[`${fixtureID}-${geekleagueID}`] = {
         loading: true,

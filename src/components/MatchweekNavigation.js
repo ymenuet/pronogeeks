@@ -16,10 +16,10 @@ const MatchweekNavigation = ({ matchweekNumber, matchweekPoints, matchweekCorrec
         </div>}
 
         {!noPronos && matchweekBonus > 0 && <div className={myClassName}>
-            <p>Total J{matchweekNumber} : {matchweekPoints} pts<br />dont {matchweekBonus} pts bonus ({matchweekCorrects}/{gamesFinished})</p>
+            <p>Total J{matchweekNumber} : {matchweekPoints} pts<br />dont {matchweekBonus} pts bonus ({matchweekCorrects || 0}/{gamesFinished})</p>
         </div>}
         {!noPronos && !matchweekBonus && <div className={myClassName}>
-            <p>Total J{matchweekNumber} : {matchweekPoints} pts ({matchweekCorrects}/{gamesFinished})</p>
+            <p>Total J{matchweekNumber} : {matchweekPoints} pts ({matchweekCorrects || 0}/{gamesFinished})</p>
         </div>}
 
         {noPronos && <div className='score-top'>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { ErrorMessage, FixtureOther, Loader, MatchweekNavigation } from '../components'
-import { handleStateWithId } from '../stateHandlers'
+import { handleStateWithId, handleStateMatchweekFixtures } from '../stateHandlers'
 import '../styles/pronogeeks.css'
 
 import * as geekActions from '../actions/geekActions'
@@ -43,19 +43,17 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID, geekID } }, 
 
 
     useEffect(() => {
-        const matchweekDetails = seasonMatchweeks[`${seasonID}-${matchweekNumber}`]
-        if (
-            season &&
-            !matchweekDetails &&
-            !loadingSeason
-        ) getMatchweekFixtures(season, matchweekNumber)
+        handleStateMatchweekFixtures({
+            season,
+            matchweekNumber,
+            seasonMatchweeks,
+            loadingSeason,
+            getMatchweekFixtures,
+            setFixtures,
+            setMatchweekStarted
+        })
 
-        else if (matchweekDetails) {
-            setFixtures(matchweekDetails.fixtures)
-            setMatchweekStarted(matchweekDetails.hasStarted)
-        }
-
-    }, [seasonID, matchweekNumber, season, seasonMatchweeks, loadingSeason, getMatchweekFixtures])
+    }, [matchweekNumber, season, seasonMatchweeks, loadingSeason, getMatchweekFixtures])
 
 
     useEffect(() => {

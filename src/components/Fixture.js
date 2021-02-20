@@ -19,21 +19,6 @@ const Fixture = ({ user, fixture, showLeaguePronos, setShowLeaguePronos, userPro
     const [modified, setModified] = useState(false)
     const [errorProno, setErrorProno] = useState(false)
 
-    const saveProno = () => {
-        setSaveSuccess(false)
-
-        // Error message if someone takes out the "disabled" property of a passed game to change their pronostics
-        if (matchStarted) return openNotification('error', 'Erreur', 'Ce match est déjà commencé ou fini. Tu ne peux plus changer ton prono.')
-
-        // Warning message if one of the inputs doesn't have a number
-        if (
-            (!homeScore && parseInt(homeScore) !== 0) ||
-            (!awayScore && parseInt(awayScore) !== 0)
-        ) return openNotification('warning', 'Attention', `Tu n'as pas défini de score pour le match ${fixture.homeTeam.name} - ${fixture.awayTeam.name}. Prono non enregistré.`)
-
-        savePronogeek(homeScore, awayScore, fixture)
-    }
-
     useEffect(() => {
         let pronogeek = { homeProno: '', awayProno: '' }
         const { _id, season, matchweek } = fixture
@@ -76,6 +61,7 @@ const Fixture = ({ user, fixture, showLeaguePronos, setShowLeaguePronos, userPro
 
     }, [pronogeek, fixture, resetSaveAndErrorState])
 
+
     useEffect(() => {
         if (
             new Date(fixture.date) < Date.now() &&
@@ -96,6 +82,22 @@ const Fixture = ({ user, fixture, showLeaguePronos, setShowLeaguePronos, userPro
     const seeLeaguePronos = () => {
         setShowLeaguePronos(true)
         setTimeout(() => setShowLeagues(!showLeagues), 100)
+    }
+
+
+    const saveProno = () => {
+        setSaveSuccess(false)
+
+        // Error message if someone takes out the "disabled" property of a passed game to change their pronostics
+        if (matchStarted) return openNotification('error', 'Erreur', 'Ce match est déjà commencé ou fini. Tu ne peux plus changer ton prono.')
+
+        // Warning message if one of the inputs doesn't have a number
+        if (
+            (!homeScore && parseInt(homeScore) !== 0) ||
+            (!awayScore && parseInt(awayScore) !== 0)
+        ) return openNotification('warning', 'Attention', `Tu n'as pas défini de score pour le match ${fixture.homeTeam.name} - ${fixture.awayTeam.name}. Prono non enregistré.`)
+
+        savePronogeek(homeScore, awayScore, fixture)
     }
 
 

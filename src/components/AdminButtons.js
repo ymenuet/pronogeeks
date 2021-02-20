@@ -6,15 +6,6 @@ import * as mapDispatchToProps from '../actions/apiFootballActions'
 
 const AdminButtons = ({ user, loadingApi, season, matchweekNumber, updateFixturesStatus, updateOdds }) => {
 
-    // const getOdds = async () => {
-    //     const message = await updateOdds(season._id, matchweekNumber)
-    //     if (message) return openNotification('warning', 'Actualisation abortée', message.fr)
-    //     else {
-    //         setMatchweekFixtures(season, matchweekNumber)
-    //         openNotification('success', 'Cotes actualisées')
-    //     }
-    // }
-
     return user.role === 'GEEK ADMIN' && <div>
 
         <button
