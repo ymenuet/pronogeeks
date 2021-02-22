@@ -36,7 +36,12 @@ const Profile = ({ loading, loadingUsername, loadingPhoto, user, seasonGeeksRank
         if (isConnected(user) && user.seasons.length > 0) {
             const season = user.seasons[user.seasons.length - 1].season
             setSeason(season)
+
+        } else {
+            setSeasonRankingFull([])
+
         }
+
     }, [user])
 
 
@@ -97,7 +102,8 @@ const Profile = ({ loading, loadingUsername, loadingPhoto, user, seasonGeeksRank
     }
 
     const setRank = (num) => {
-        if (parseInt(num) === 1) return '1er(e)'
+        if (num === 1) return '1er(e)'
+        else if (num === 0) return '_'
         else return `${num}ème`
     }
 
