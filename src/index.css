@@ -111,8 +111,15 @@ label::before {
     height: 100vh;
     opacity: 0.83;
     z-index: -1;
-    background: url('/images/bg-stadium.jpg') center;
+    background: url('/images/bg-stadium_medium-quality.jpg') center;
     background-size: cover;
+}
+
+@media (max-width: 576px) {
+    .my-content-homepage::before {
+        background: url('/images/bg-stadium_low-quality.jpg') center;
+        background-size: cover;
+    }
 }
 
 .my-content-homepage {
@@ -120,6 +127,10 @@ label::before {
     text-align: center;
     min-height: calc(100vh - var(--navbar-height));
     text-align: center;
+}
+
+.my-content-homepage .row {
+    margin: 0;
 }
 
 .my-content-homepage .row>div:first-child {
@@ -181,8 +192,15 @@ label::before {
     height: 100vh;
     opacity: 0.83;
     z-index: -1;
-    background: url('/images/bg-stadium.jpg') center;
+    background: url('/images/bg-stadium_medium-quality.jpg') center;
     background-size: cover;
+}
+
+@media (max-width: 576px) {
+    .register-pages::before {
+        background: url('/images/bg-stadium_low-quality.jpg') center;
+        background-size: cover;
+    }
 }
 
 .register-pages {
