@@ -1,0 +1,95 @@
+.team-logo {
+    width: 50px;
+}
+
+.fixture-line {
+    min-width: 100%;
+}
+
+.fixture-line>table {
+    width: 100% !important;
+}
+
+.fixture-line tr {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    border-color: rgb(0, 0, 0, 0.1);
+}
+
+.fixture-line th {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.fixture-line th,
+.fixture-line td {
+    text-align: center;
+    width: 50%;
+}
+
+.score-fixture {
+    font-size: 2rem;
+}
+
+.score-teams-row {
+    display: flex;
+    align-items: center;
+}
+
+.odds-section {
+    background-color: var(--color-white-cream);
+    color: var(--color-light-blue-gb)
+}
+
+.odds-top {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    display: flex;
+    align-items: flex-end;
+}
+
+.odds-bottom {
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.prono-section {
+    margin-top: 20px;
+}
+
+.prono-input-col {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.prono-input {
+    color: var(--color-light-blue-gb);
+    max-width: 80px;
+    text-align: center;
+    border: none;
+    border-radius: 10px;
+    height: 30px;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.points-cell {
+    font-size: 1.1rem;
+    width: 100%;
+    text-align: center !important;
+}
+
+.points-cell>svg {
+    position: relative;
+    bottom: 3px;
+}
+
+@media (max-width: 340px) {
+    .prono-input {
+        width: 45px;
+    }
+}

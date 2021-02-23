@@ -1,0 +1,54 @@
+.custom-file-signup {
+    max-width: unset !important;
+    width: 100%;
+    text-align: left !important;
+    margin-bottom: 20px;
+}
+
+.signup-file-label {
+    float: left;
+}
+
+.custom-file-signup .profile-image {
+    padding-left: 10px;
+    max-width: unset !important;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.signup-form input,
+.ant-input-password {
+    border-radius: 15.8px!important;
+}
+
+.reset-pwd {
+    color: var(--color-white-cream);
+    margin-top: 7px;
+    margin-bottom: 10px;
+}
+
+.reset-pwd a {
+    color: var(--color-purple-rp);
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.reset-pwd a:hover {
+    color: var(--color-white-cream);
+    text-decoration: underline;
+}
+
+.privacy-policy-link {
+    padding: 10px 20px;
+    color: var(--color-white-cream);
+    margin-top: 20px;
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    font-size: 0.8rem;
+}
+
+.privacy-policy-link:hover {
+    color: var(--color-white-cream);
+    text-decoration: underline;
+}
