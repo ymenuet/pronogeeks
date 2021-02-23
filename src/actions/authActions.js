@@ -16,7 +16,7 @@ import {
 } from "../types/authTypes"
 import {
     printError
-} from '../helpers'
+} from '../utils/functions'
 
 const baseURL = process.env.NODE_ENV === 'production' ?
     `/auth` :

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { Skeleton } from 'antd'
-import { dateTransform, statusTranform } from '../../helpers'
+import { dateTransform, statusTranform } from '../../utils/functions'
 import { FavTeamIcon } from '../Icons'
 import { ErrorMessage } from '../'
 import './fixture.css'

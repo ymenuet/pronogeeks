@@ -8,7 +8,7 @@ import {
     printError,
     copyReducer,
     updateMatchweekPronogeeks
-} from '../helpers'
+} from '../utils/functions'
 import {
     PRONOGEEK_REDUCER_KEY,
     USER_PRONOGEEKS_KEY,

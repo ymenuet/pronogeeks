@@ -17,7 +17,7 @@ import {
 import {
     printError,
     copyReducer
-} from '../helpers'
+} from '../utils/functions'
 import {
     GEEKLEAGUE_REDUCER_KEY,
     GEEKLEAGUES_KEY

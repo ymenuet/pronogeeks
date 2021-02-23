@@ -1,14 +1,14 @@
 import React from 'react'
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import { AppLayout, ErrorNotification } from './components'
 import { Login, Signup, Home, Profile, PronogeeksSeason, Pronogeeks, CreateGeekLeague, GeekLeague, AllGeekLeagues, GeekLeagueMatchweek, GeekMatchweek, ConfirmUser, RequestPwdReset, SetNewPwd, PrivacyPolicy, Rules, SeasonRanking } from './pages'
-import PrivateRoute from './helpers/PrivateRoute'
-import PublicRoute from './helpers/PublicRoute'
+import PrivateRoute from './helpers/PrivateRoute.jsx'
+import PublicRoute from './helpers/PublicRoute.jsx'
 
 const NotFound = () => <h2 className='page-404-heading'>Cette page n'existe pas...<br />Retourne faire tes pronos au lieu de papilloner !</h2>
 
-const router = () => {
-    return <Router>
+const Router = () => {
+    return <BrowserRouter>
         <AppLayout>
             <Switch>
                 <Route component={Rules} exact path='/rules' />
@@ -34,7 +34,7 @@ const router = () => {
             </Switch>
             <ErrorNotification />
         </AppLayout>
-    </Router>
+    </BrowserRouter>
 }
 
-export default router
+export default Router

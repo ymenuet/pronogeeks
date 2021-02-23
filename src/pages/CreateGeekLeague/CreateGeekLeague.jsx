@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import { Form, Input } from 'antd'
 import { Loader, GeekSelector } from '../../components'
-import { openNotification } from '../../helpers'
+import { openNotification } from '../../utils/functions'
 import './createGeekleague.css'
 
 import { createLeague } from '../../actions/geekleagueActions'

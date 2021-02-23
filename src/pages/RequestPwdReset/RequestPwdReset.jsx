@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import { Form, Input } from 'antd'
 import { Loader } from '../../components'
-import { openNotification } from '../../helpers'
+import { openNotification } from '../../utils/functions'
 
 import * as mapDispatchToProps from '../../actions/authActions'
 

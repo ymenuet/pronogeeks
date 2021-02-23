@@ -11,7 +11,7 @@ import {
     updateMatchweekFixtures,
     copyReducer,
     printError
-} from '../helpers'
+} from '../utils/functions'
 import {
     SEASON_REDUCER_KEY,
     DETAILED_SEASONS_KEY,

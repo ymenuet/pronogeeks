@@ -32,7 +32,7 @@ import {
     rankGeeks,
     printError,
     copyReducer
-} from '../helpers'
+} from '../utils/functions'
 
 const baseURL = process.env.NODE_ENV === 'production' ?
     `/api/geek` :

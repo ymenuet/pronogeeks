@@ -21,7 +21,7 @@ import {
     printError,
     updateMatchweekFixtures,
     updateMatchweekPronogeeks
-} from '../helpers'
+} from '../utils/functions'
 import {
     SEASON_REDUCER_KEY,
     SEASON_MATCHWEEKS_KEY

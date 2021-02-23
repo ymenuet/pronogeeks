@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { ErrorMessage, Loader } from '../../components'
-import { isConnected, isEmpty } from '../../helpers'
+import { isConnected, isEmpty } from '../../utils/functions'
 import './geekleagues.css'
 
 import { getUserLeagues } from '../../actions/geekleagueActions'

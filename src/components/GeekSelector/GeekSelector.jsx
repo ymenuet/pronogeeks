@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { Loader, ErrorMessage } from '../'
-import { sortByUsername } from '../../helpers'
+import { sortByUsername } from '../../utils/functions'
 import { handleStateWithoutId } from '../../stateHandlers'
 import { Form, Select } from 'antd'
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { RankingOneGeek } from '..'
-import { rankGeeks, isConnected } from '../../helpers'
+import { rankGeeks, isConnected } from '../../utils/functions'
 
 const RankGeeks = ({ user, players, seasonID, generalRanking, matchweek }) => {
 

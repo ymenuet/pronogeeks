@@ -1,5 +1,5 @@
 import React from 'react'
-import { dateFormatterForRulesPanel } from '../../helpers'
+import { dateFormatterForRulesPanel } from '../../utils/functions'
 import { CorrectIcon, ExactIcon, FavTeamIcon } from '../Icons'
 import './rulesProno.css'
 

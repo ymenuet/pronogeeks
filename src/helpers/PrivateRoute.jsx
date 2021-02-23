@@ -1,7 +1,7 @@
 import React from 'react'
 import { Redirect, Route } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { isConnected } from '../helpers'
+import { isConnected } from '../utils/functions'
 import { Signup } from '../pages'
 
 const PrivateRoute = ({ component: Component, user, usernameConfirmed, profileError, ...rest }) => {

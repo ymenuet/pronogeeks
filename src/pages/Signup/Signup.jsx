@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { Form, Input } from 'antd'
 import axios from 'axios'
 import { Loader, SocialLogins } from '../../components'
-import { openNotification, appendPhoto } from '../../helpers'
+import { openNotification, appendPhoto } from '../../utils/functions'
 import './connectPages.css'
 
 import * as mapDispatchToProps from '../../actions/authActions'

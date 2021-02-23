@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { HomeIcon } from '../Icons'
-import { isConnected, openNotification } from '../../helpers'
+import { isConnected, openNotification } from '../../utils/functions'
 import './appLayout.css'
 
 import * as mapDispatchToProps from '../../actions/authActions'
