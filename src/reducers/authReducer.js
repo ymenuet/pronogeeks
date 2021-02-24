@@ -12,7 +12,7 @@ import {
     PROFILE_ERROR,
     ERROR,
     ERROR_RESET,
-} from "../types/authTypes"
+} from "../utils/reduxTypes/authTypes"
 
 const notLoading = {
     loading: false,

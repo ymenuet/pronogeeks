@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { Loader, ErrorMessage, GeekProno } from '..'
 import { isConnected, statusTranform } from '../../utils/functions'
-import { handleStateWith2Ids, handleStateWithId } from '../../stateHandlers'
+import { handleStateWith2Ids, handleStateWithId } from '../../utils/stateHandlers'
 import { CloseIcon } from '../Icons'
 import './viewGeekLeaguePronos.css'
 

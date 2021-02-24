@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { openNotification } from '../../utils/functions'
-import { handleStateWithId, handleStateWithoutId } from '../../stateHandlers'
+import { handleStateWithId, handleStateWithoutId } from '../../utils/stateHandlers'
 import { Loader, RankGeeks, ErrorMessage, GeekSelector } from '../../components'
 import { Form, Input } from 'antd'
 import { Link } from 'react-router-dom'

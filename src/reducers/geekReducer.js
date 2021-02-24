@@ -10,11 +10,11 @@ import {
     LOADING,
     ERROR,
     ERROR_RESET
-} from '../types/geekTypes'
+} from '../utils/reduxTypes/geekTypes'
 import {
     LOGOUT,
     DELETE_ACCOUNT
-} from "../types/authTypes"
+} from "../utils/reduxTypes/authTypes"
 
 const done = {
     error: false,

@@ -11,22 +11,22 @@ import {
     LOADING,
     ERROR,
     ERROR_RESET
-} from '../types/geekTypes'
+} from '../utils/reduxTypes/geekTypes'
 import {
     LOGIN
-} from '../types/authTypes'
+} from '../utils/reduxTypes/authTypes'
 import {
     GEEK_REDUCER_KEY,
     SEASON_GEEKS_RANKING_KEY,
     DETAILED_GEEKS_KEY
-} from '../reducerKeys/geek'
+} from '../utils/reducerKeys/geek'
 import {
     AUTH_REDUCER_KEY,
     USER_KEY
-} from '../reducerKeys/auth'
+} from '../utils/reducerKeys/auth'
 import {
     RESET_TIMEOUT_IN_MS
-} from '../constants'
+} from '../utils/constants.js'
 
 import {
     rankGeeks,

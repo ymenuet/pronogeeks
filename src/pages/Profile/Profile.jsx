@@ -4,7 +4,7 @@ import { connect } from "react-redux"
 import axios from 'axios'
 import { Loader, RankGeeks, ErrorMessage } from '../../components'
 import { appendPhoto, isConnected, openNotification } from '../../utils/functions'
-import { handleStateWithId } from '../../stateHandlers'
+import { handleStateWithId } from '../../utils/stateHandlers'
 import { EditIcon, WarningIcon } from '../../components/Icons'
 import './profile.css'
 

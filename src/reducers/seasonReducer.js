@@ -6,11 +6,11 @@ import {
     SET_LAST_MATCHWEEK,
     LOADING,
     ERROR
-} from '../types/seasonTypes'
+} from '../utils/reduxTypes/seasonTypes'
 import {
     LOGOUT,
     DELETE_ACCOUNT
-} from "../types/authTypes"
+} from "../utils/reduxTypes/authTypes"
 
 const done = {
     loading: false,

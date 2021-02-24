@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { ErrorMessage, GeekFixture, Loader, MatchweekNavigation } from '../../components'
-import { handleStateWithId, handleStateMatchweekFixtures } from '../../stateHandlers'
+import { handleStateWithId, handleStateMatchweekFixtures } from '../../utils/stateHandlers'
 import './pronogeeks.css'
 
 import * as geekActions from '../../actions/geekActions'

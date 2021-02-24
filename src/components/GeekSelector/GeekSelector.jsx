@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { Loader, ErrorMessage } from '../'
 import { sortByUsername } from '../../utils/functions'
-import { handleStateWithoutId } from '../../stateHandlers'
+import { handleStateWithoutId } from '../../utils/stateHandlers'
 import { Form, Select } from 'antd'
 
 import { getAllGeeks } from '../../actions/geekActions'

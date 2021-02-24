@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { useInput } from '../../customHooks'
+import { useInput } from '../../utils/hooks.js'
 import { ErrorMessage, Loader } from '../../components'
 import { openNotification, getUserSeasonFromProfile, isConnected } from '../../utils/functions'
-import { handleStateWithId } from '../../stateHandlers'
+import { handleStateWithId } from '../../utils/stateHandlers'
 import { WarningIcon } from '../../components/Icons'
 import './pronogeeks.css'
 

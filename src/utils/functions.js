@@ -3,18 +3,18 @@ import {
 } from 'antd'
 import {
     ADD_MATCHWEEK
-} from '../types/seasonTypes'
+} from './reduxTypes/seasonTypes'
 import {
     ADD_USER_PRONOGEEKS
-} from '../types/pronogeekTypes'
+} from './reduxTypes/pronogeekTypes'
 import {
     SEASON_REDUCER_KEY,
     SEASON_MATCHWEEKS_KEY
-} from '../reducerKeys/season'
+} from '../utils/reducerKeys/season'
 import {
     PRONOGEEK_REDUCER_KEY,
     USER_PRONOGEEKS_KEY
-} from '../reducerKeys/pronogeek'
+} from '../utils/reducerKeys/pronogeek'
 
 export const isEmpty = myObject => {
     let result = null

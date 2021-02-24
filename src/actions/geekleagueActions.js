@@ -10,10 +10,10 @@ import {
     LOADING,
     ERROR,
     ERROR_RESET,
-} from '../types/geekleagueTypes'
+} from '../utils/reduxTypes/geekleagueTypes'
 import {
     LOGIN
-} from '../types/authTypes'
+} from '../utils/reduxTypes/authTypes'
 import {
     printError,
     copyReducer
@@ -21,14 +21,14 @@ import {
 import {
     GEEKLEAGUE_REDUCER_KEY,
     GEEKLEAGUES_KEY
-} from '../reducerKeys/geekleague'
+} from '../utils/reducerKeys/geekleague'
 import {
     AUTH_REDUCER_KEY,
     USER_KEY
-} from '../reducerKeys/auth'
+} from '../utils/reducerKeys/auth'
 import {
     RESET_TIMEOUT_IN_MS
-} from '../constants'
+} from '../utils/constants.js'
 
 const baseURL = process.env.NODE_ENV === 'production' ?
     `/api/geekLeagues` :

@@ -9,11 +9,11 @@ import {
     LOADING,
     ERROR,
     ERROR_RESET
-} from '../types/geekleagueTypes'
+} from '../utils/reduxTypes/geekleagueTypes'
 import {
     LOGOUT,
     DELETE_ACCOUNT
-} from "../types/authTypes"
+} from "../utils/reduxTypes/authTypes"
 
 const done = {
     loading: false,

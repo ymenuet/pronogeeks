@@ -8,11 +8,11 @@ import {
     LOADING,
     ERROR,
     ERROR_RESET
-} from '../types/apiFootballTypes'
+} from '../utils/reduxTypes/apiFootballTypes'
 import {
     LOGOUT,
     DELETE_ACCOUNT
-} from '../types/authTypes'
+} from '../utils/reduxTypes/authTypes'
 
 const done = {
     loading: false,

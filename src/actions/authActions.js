@@ -13,7 +13,7 @@ import {
     PROFILE_ERROR,
     ERROR,
     ERROR_RESET
-} from "../types/authTypes"
+} from "../utils/reduxTypes/authTypes"
 import {
     printError
 } from '../utils/functions'

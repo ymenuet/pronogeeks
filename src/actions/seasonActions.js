@@ -6,7 +6,7 @@ import {
     SET_LAST_MATCHWEEK,
     LOADING,
     ERROR
-} from '../types/seasonTypes'
+} from '../utils/reduxTypes/seasonTypes'
 import {
     updateMatchweekFixtures,
     copyReducer,
@@ -17,10 +17,10 @@ import {
     DETAILED_SEASONS_KEY,
     NEXT_MATCHWEEKS_KEY,
     LAST_MATCHWEEKS_KEY
-} from '../reducerKeys/season'
+} from '../utils/reducerKeys/season'
 import {
     MILLISECONDS_IN_3_HOURS
-} from '../constants'
+} from '../utils/constants.js'
 
 
 const baseURL = process.env.NODE_ENV === 'production' ?
