@@ -3,9 +3,9 @@ import { Spin, Space } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons'
 import './loader.css'
 
-const Loader = ({ size = 'large', tip = 'Chargement de la page...', color = 'white', tipSize = '1.2rem', fontSize = '3rem', container = true, className, style }) => {
+const Loader = ({ size = 'large', tip = 'Chargement de la page...', color = 'white', tipSize = '1.2rem', fontSize = '3rem', container = true, className = '', style }) => {
 
-    return <div className={`${className} ${container ? 'loader-container' : ''}`} style={style}>
+    return <div className={`${container ? 'loader-container' : ''}${className}`} style={style}>
 
         <Space size={size}>
             <Spin

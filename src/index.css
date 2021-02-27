@@ -126,7 +126,6 @@ label::before {
     box-sizing: border-box;
     text-align: center;
     min-height: calc(100vh - var(--navbar-height));
-    text-align: center;
 }
 
 .my-content-homepage .row {

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { useInput } from '../../utils/hooks.js'
+import { useInput } from '../../utils/hooks'
 import { ErrorMessage, Loader } from '../../components'
 import { openNotification, getUserSeasonFromProfile, isConnected } from '../../utils/functions'
 import { handleStateWithId } from '../../utils/stateHandlers'

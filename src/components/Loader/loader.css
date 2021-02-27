@@ -1,9 +1,10 @@
 div.loader-container {
     position: absolute;
     top: var(--navbar-height);
-    width: 100vw;
+    width: calc(100% - 20px);
     height: calc(100vh - var(--navbar-height));
     display: flex;
     justify-content: center;
     align-items: center;
+    box-sizing: border-box;
 }

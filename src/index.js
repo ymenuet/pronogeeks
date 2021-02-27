@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import Router from './router.jsx';
+import App from './App.jsx';
 import * as serviceWorker from './serviceWorker';
 import 'antd/dist/antd.css'
 
@@ -21,7 +21,7 @@ const store = createStore(
 
 ReactDOM.render(
   <Provider store={store}>
-    <Router />
+    <App />
   </Provider>,
   document.getElementById('root')
 );

@@ -1,7 +1,7 @@
 div.my-content {
     padding-top: var(--navbar-height);
-    box-sizing: border-box;
     text-align: center;
+    width: 100%;
     min-height: 100vh;
 }
 

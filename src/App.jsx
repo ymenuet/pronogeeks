@@ -1,13 +1,17 @@
 import React from 'react'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
-import { AppLayout, ErrorNotification } from './components'
+import { AppLayout } from './components'
 import { Login, Signup, Home, Profile, PronogeeksSeason, Pronogeeks, CreateGeekLeague, GeekLeague, AllGeekLeagues, GeekLeagueMatchweek, GeekMatchweek, ConfirmUser, RequestPwdReset, SetNewPwd, PrivacyPolicy, Rules, SeasonRanking } from './pages'
 import PrivateRoute from './helpers/PrivateRoute.jsx'
 import PublicRoute from './helpers/PublicRoute.jsx'
+import { useErrorNotification } from './utils/hooks/index'
 
 const NotFound = () => <h2 className='page-404-heading'>Cette page n'existe pas...<br />Retourne faire tes pronos au lieu de papilloner !</h2>
 
-const Router = () => {
+const App = () => {
+
+    useErrorNotification()
+
     return <BrowserRouter>
         <AppLayout>
             <Switch>
@@ -32,9 +36,8 @@ const Router = () => {
                 <PrivateRoute component={SeasonRanking} exact path='/ranking/season/:seasonID' />
                 <Route component={NotFound} />
             </Switch>
-            <ErrorNotification />
         </AppLayout>
     </BrowserRouter>
 }
 
-export default Router
+export default App
