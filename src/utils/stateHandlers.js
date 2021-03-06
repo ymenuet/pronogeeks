@@ -40,33 +40,3 @@ export const handleStateWith2Ids = ({
     else if (result.error) setError(result.error)
     else if (!result.loading) setResult(result)
 }
-
-export const handleStateMatchweekFixtures = ({
-    season,
-    matchweekNumber,
-    seasonMatchweeks,
-    loadingSeason,
-    getMatchweekFixtures,
-    setFixtures,
-    setMatchweekStarted,
-    setTotalGames,
-    setGamesFinished
-}) => {
-    if (season) {
-
-        const matchweekDetails = seasonMatchweeks[`${season._id}-${matchweekNumber}`]
-
-        if (!matchweekDetails && !loadingSeason) getMatchweekFixtures(season, matchweekNumber)
-
-        else if (matchweekDetails) {
-            if (setFixtures) setFixtures(matchweekDetails.fixtures)
-
-            if (setMatchweekStarted) setMatchweekStarted(matchweekDetails.hasStarted)
-
-            if (setTotalGames) setTotalGames(matchweekDetails.totalGames)
-
-            if (setGamesFinished) setGamesFinished(matchweekDetails.gamesFinished)
-        }
-    }
-
-}

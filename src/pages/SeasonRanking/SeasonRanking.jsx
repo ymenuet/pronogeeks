@@ -5,30 +5,20 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import { ErrorMessage, Loader } from '../../components'
 import { DragIcon, SaveIcon, ListIcon } from '../../components/Icons'
 import { openNotification, isConnected } from '../../utils/functions'
-import { handleStateWithId } from '../../utils/stateHandlers'
+import { useSeason } from '../../utils/hooks'
 import { PROV_RANKING_MATCHWEEK_LIMIT } from '../../utils/constants.js'
 import './seasonRanking.css'
 
 import { saveUserProvRanking } from '../../actions/geekActions'
-import { getSeason, closeProvRankings } from '../../actions/seasonActions'
+import { closeProvRankings } from '../../actions/seasonActions'
 
-const SeasonRanking = ({ match: { params: { seasonID, matchweekNumber } }, history, loadingGeek, user, rankingSaved, detailedSeasons, saveUserProvRanking, getSeason, closeProvRankings }) => {
+const SeasonRanking = ({ match: { params: { seasonID, matchweekNumber } }, history, loadingGeek, user, rankingSaved, saveUserProvRanking, closeProvRankings }) => {
 
-    const [season, setSeason] = useState(null)
     const [userProvRanking, setUserProvRanking] = useState(null)
     const [userWithoutRanking, setUserWithoutRanking] = useState(false)
     const [provRankingOpen, setProvRankingOpen] = useState(false)
-    const [errorSeason, setErrorSeason] = useState(false)
 
-    useEffect(() => {
-        handleStateWithId({
-            id: seasonID,
-            reducerData: detailedSeasons,
-            action: getSeason,
-            setResult: setSeason,
-            setError: setErrorSeason
-        })
-    }, [seasonID, detailedSeasons, getSeason])
+    const { season, errorSeason } = useSeason(seasonID)
 
 
     useEffect(() => {
@@ -266,12 +256,10 @@ const mapStateToProps = state => ({
     user: state.authReducer.user,
     rankingSaved: state.geekReducer.rankingSaved,
     loadingGeek: state.geekReducer.loading,
-    detailedSeasons: state.seasonReducer.detailedSeasons,
 })
 
 const mapDispatchToProps = {
     saveUserProvRanking,
-    getSeason,
     closeProvRankings
 }
 

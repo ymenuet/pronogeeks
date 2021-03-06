@@ -2,17 +2,14 @@ import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { Fixture, Loader, MatchweekNavigation, PronosAdminButtons, RulesProno, InputMatchweek, ErrorMessage } from '../../components'
-import { useSeason, useUserMatchweek, useConditionalFixturesUpdate } from '../../utils/hooks'
+import { useSeason, useUserMatchweek, useConditionalFixturesUpdate, useMatchweekFixtures } from '../../utils/hooks'
 import { openNotification, resetMatchweek, isConnected } from '../../utils/functions'
-import { handleStateMatchweekFixtures } from '../../utils/stateHandlers'
 import { QuestionIcon, SaveIcon, RankingIcon, ValidateIcon } from '../../components/Icons'
 import './pronogeeks.css'
 
-import * as seasonActions from '../../actions/seasonActions'
 import * as pronogeekActions from '../../actions/pronogeekActions'
 
-const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history, loading, loadingSeason, user, seasonMatchweeks, userPronogeeks, statusUpdated, oddsUpdated, warningMessage, getMatchweekFixtures, getUserMatchweekPronos, saveAllPronogeeks, resetMatchweekSaveAndErrorState }) => {
-    const [fixtures, setFixtures] = useState(null)
+const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history, loading, user, userPronogeeks, statusUpdated, oddsUpdated, warningMessage, getUserMatchweekPronos, saveAllPronogeeks, resetMatchweekSaveAndErrorState }) => {
     const [showRules, setShowRules] = useState(false)
     const [showLeaguePronos, setShowLeaguePronos] = useState(false)
     const [savingAll, setSavingAll] = useState(false)
@@ -24,22 +21,9 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
 
     const { matchweekPoints, matchweekBonus, matchweekCorrects, newSeason } = useUserMatchweek({ seasonID, matchweekNumber, history })
 
+    const { fixtures, gamesFinished } = useMatchweekFixtures(season, matchweekNumber)
+
     const { lastScoresUpdated, lastOddsUpdated } = useConditionalFixturesUpdate({ seasonID, matchweekNumber, fixtures, newSeason })
-
-
-    useEffect(() => {
-        if (season) {
-            handleStateMatchweekFixtures({
-                season,
-                matchweekNumber,
-                seasonMatchweeks,
-                loadingSeason,
-                getMatchweekFixtures,
-                setFixtures
-            })
-        }
-
-    }, [matchweekNumber, season, seasonMatchweeks, loadingSeason, getMatchweekFixtures])
 
 
     useEffect(() => {
@@ -98,17 +82,14 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
 
 
     const previousPage = () => {
-        setFixtures(null)
         history.push(`/pronogeeks/${seasonID}/matchweek/${parseInt(matchweekNumber) - 1}`)
     }
 
     const nextPage = () => {
-        setFixtures(null)
         history.push(`/pronogeeks/${seasonID}/matchweek/${parseInt(matchweekNumber) + 1}`)
     }
 
     const changeMatchweek = matchweek => {
-        setFixtures(null)
         history.push(`/pronogeeks/${seasonID}/matchweek/${matchweek}`)
     }
 
@@ -200,7 +181,7 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
                             matchweekNumber={matchweekNumber}
                             matchweekPoints={matchweekPoints}
                             matchweekCorrects={matchweekCorrects}
-                            gamesFinished={seasonMatchweeks[`${seasonID}-${matchweekNumber}`].gamesFinished}
+                            gamesFinished={gamesFinished}
                             matchweekBonus={matchweekBonus}
                             previousPage={previousPage}
                             nextPage={nextPage}
@@ -231,7 +212,7 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
                             matchweekNumber={matchweekNumber}
                             matchweekPoints={matchweekPoints}
                             matchweekCorrects={matchweekCorrects}
-                            gamesFinished={seasonMatchweeks[`${seasonID}-${matchweekNumber}`].gamesFinished}
+                            gamesFinished={gamesFinished}
                             matchweekBonus={matchweekBonus}
                             previousPage={previousPage}
                             nextPage={nextPage}
@@ -261,8 +242,6 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
 
 const mapStateToProps = state => ({
     user: state.authReducer.user,
-    seasonMatchweeks: state.seasonReducer.seasonMatchweeks,
-    loadingSeason: state.seasonReducer.loading,
     userPronogeeks: state.pronogeekReducer.userPronogeeks,
     statusUpdated: state.apiFootballReducer.statusUpdated,
     oddsUpdated: state.apiFootballReducer.oddsUpdated,
@@ -270,7 +249,6 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = {
-    ...seasonActions,
     ...pronogeekActions,
 }
 

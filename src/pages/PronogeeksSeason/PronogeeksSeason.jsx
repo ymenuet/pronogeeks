@@ -4,31 +4,22 @@ import { connect } from 'react-redux'
 import { useInput } from '../../utils/hooks'
 import { ErrorMessage, Loader } from '../../components'
 import { openNotification, getUserSeasonFromProfile, isConnected } from '../../utils/functions'
-import { handleStateWithId } from '../../utils/stateHandlers'
+import { useSeason } from '../../utils/hooks'
 import { WarningIcon } from '../../components/Icons'
 import './pronogeeks.css'
 
 import * as geekActions from '../../actions/geekActions'
 import * as seasonActions from '../../actions/seasonActions'
 
-const PronogeeksSeason = ({ match: { params: { seasonID } }, loading, loadingGeek, loadingSeason, user, favTeamAdded, saveFavTeam, detailedSeasons, nextMatchweeks, getSeason, setNextMatchweek }) => {
+const PronogeeksSeason = ({ match: { params: { seasonID } }, loading, loadingGeek, loadingSeason, user, favTeamAdded, saveFavTeam, nextMatchweeks, setNextMatchweek }) => {
 
-    const [season, setSeason] = useState(null)
     const [seasonTeams, setSeasonTeams] = useState(null)
     const [newSeason, setNewSeason] = useState(null)
     const [matchweek, setMatchweek] = useState(null)
-    const [errorSeason, setErrorSeason] = useState(false)
+
     const favTeam = useInput('')
 
-    useEffect(() => {
-        handleStateWithId({
-            id: seasonID,
-            reducerData: detailedSeasons,
-            action: getSeason,
-            setResult: setSeason,
-            setError: setErrorSeason
-        })
-    }, [seasonID, detailedSeasons, getSeason])
+    const { season, errorSeason } = useSeason(seasonID)
 
 
     useEffect(() => {
@@ -129,7 +120,6 @@ const mapStateToProps = state => ({
     user: state.authReducer.user,
     favTeamAdded: state.geekReducer.favTeamAdded,
     loadingGeek: state.geekReducer.loading,
-    detailedSeasons: state.seasonReducer.detailedSeasons,
     nextMatchweeks: state.seasonReducer.nextMatchweeks,
     loadingSeason: state.seasonReducer.loading,
 })
