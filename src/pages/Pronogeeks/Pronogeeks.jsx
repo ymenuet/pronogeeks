@@ -1,21 +1,18 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { connect } from 'react-redux'
 import { Fixture, Loader, MatchweekNavigation, PronosAdminButtons, RulesProno, InputMatchweek, ErrorMessage } from '../../components'
-import { useSeason, useUserMatchweek, useConditionalFixturesUpdate, useMatchweekFixtures } from '../../utils/hooks'
-import { openNotification, resetMatchweek, isConnected } from '../../utils/functions'
+import { useSeason, useUserMatchweek, useConditionalFixturesUpdate, useMatchweekFixtures, useUserPronogeeks, useApiFootballNotification } from '../../utils/hooks'
+import { resetMatchweek } from '../../utils/functions'
 import { QuestionIcon, SaveIcon, RankingIcon, ValidateIcon } from '../../components/Icons'
 import './pronogeeks.css'
 
-import * as pronogeekActions from '../../actions/pronogeekActions'
+import { saveAllPronogeeks } from '../../actions/pronogeekActions'
 
-const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history, loading, user, userPronogeeks, statusUpdated, oddsUpdated, warningMessage, getUserMatchweekPronos, saveAllPronogeeks, resetMatchweekSaveAndErrorState }) => {
+const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history, loading }) => {
     const [showRules, setShowRules] = useState(false)
     const [showLeaguePronos, setShowLeaguePronos] = useState(false)
-    const [savingAll, setSavingAll] = useState(false)
-    const [saveAllSuccess, setSaveAllSuccess] = useState(false)
     const [matchweekFromInput, setMatchweekFromInput] = useState(matchweekNumber)
-    const [modifiedTotal, setModifiedTotal] = useState(0)
 
     const { season, errorSeason } = useSeason(seasonID)
 
@@ -23,62 +20,13 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
 
     const { fixtures, gamesFinished } = useMatchweekFixtures(season, matchweekNumber)
 
+    const { modifiedTotal, savingAll, saveAllSuccess, errorProno } = useUserPronogeeks(seasonID, matchweekNumber)
+
     const { lastScoresUpdated, lastOddsUpdated } = useConditionalFixturesUpdate({ seasonID, matchweekNumber, fixtures, newSeason })
 
+    useApiFootballNotification()
 
-    useEffect(() => {
-        const pronogeeks = userPronogeeks[`${seasonID}-${matchweekNumber}`]
-
-        if (
-            isConnected(user) &&
-            !pronogeeks
-        ) getUserMatchweekPronos(user._id, seasonID, matchweekNumber)
-
-        else if (
-            pronogeeks &&
-            Object.keys(pronogeeks).length
-        ) {
-            const modifiedTotal = Object.values(pronogeeks).reduce((total, currentProno) => {
-                if (currentProno.modified) return total + 1
-                else return total
-            }, 0)
-            setModifiedTotal(modifiedTotal)
-
-            if (pronogeeks.saving) setSavingAll(true)
-
-            if (pronogeeks.saved) {
-                resetMatchweekSaveAndErrorState(seasonID, matchweekNumber)
-                setSavingAll(false)
-                setSaveAllSuccess(true)
-                setTimeout(() => setSaveAllSuccess(false), 4000)
-                openNotification('success', 'Sauvegarde réussie', `Pronogeeks de la journée ${matchweekNumber} enregistrés.`)
-            }
-
-            if (pronogeeks.error && pronogeeks.error.type) {
-                const { type, title, message } = pronogeeks.error
-                resetMatchweekSaveAndErrorState(seasonID, matchweekNumber)
-                setSavingAll(false)
-                openNotification(type, title, message)
-            }
-
-        } else setModifiedTotal(0)
-
-    }, [user, userPronogeeks, seasonID, matchweekNumber, getUserMatchweekPronos, resetMatchweekSaveAndErrorState])
-
-
-    useEffect(() => {
-        if (statusUpdated) openNotification('success', 'Scores et dates actualisés')
-    }, [statusUpdated])
-
-
-    useEffect(() => {
-        if (oddsUpdated) openNotification('success', 'Cotes mises à jour')
-    }, [oddsUpdated])
-
-
-    useEffect(() => {
-        if (warningMessage) openNotification('warning', 'Actualisation abortée', warningMessage)
-    }, [warningMessage])
+    const dispatch = useDispatch()
 
 
     const previousPage = () => {
@@ -129,7 +77,7 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
                     <div className='save-all'>
 
                         <button
-                            onClick={() => saveAllPronogeeks(seasonID, matchweekNumber)}
+                            onClick={() => dispatch(saveAllPronogeeks(seasonID, matchweekNumber))}
                             className={`btn my-btn save-all-btn ${saveAllSuccess ? 'all-saved' : ''}`}
                             disabled={savingAll}
                         >
@@ -204,6 +152,7 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
                                     fixture={fixture}
                                     showLeaguePronos={showLeaguePronos}
                                     setShowLeaguePronos={setShowLeaguePronos}
+                                    errorProno={errorProno}
                                 />
                             </li>
                         ))}
@@ -240,16 +189,4 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
             )
 }
 
-const mapStateToProps = state => ({
-    user: state.authReducer.user,
-    userPronogeeks: state.pronogeekReducer.userPronogeeks,
-    statusUpdated: state.apiFootballReducer.statusUpdated,
-    oddsUpdated: state.apiFootballReducer.oddsUpdated,
-    warningMessage: state.apiFootballReducer.warningMessage,
-})
-
-const mapDispatchToProps = {
-    ...pronogeekActions,
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Pronogeeks)
+export default Pronogeeks

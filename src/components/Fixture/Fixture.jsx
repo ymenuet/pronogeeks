@@ -8,7 +8,7 @@ import './fixture.css'
 
 import * as pronogeekActions from '../../actions/pronogeekActions'
 
-const Fixture = ({ user, fixture, showLeaguePronos, setShowLeaguePronos, userPronogeeks, savePronogeek, resetSaveAndErrorState, handleInputHomeProno, handleInputAwayProno, loadingApi }) => {
+const Fixture = ({ fixture, showLeaguePronos, setShowLeaguePronos, errorProno, userPronogeeks, savePronogeek, resetSaveAndErrorState, handleInputHomeProno, handleInputAwayProno, loadingApi }) => {
     const [pronogeek, setPronogeek] = useState(null)
     const [matchStarted, setMatchStarted] = useState(false)
     const [homeScore, setHomeScore] = useState(null)
@@ -17,7 +17,6 @@ const Fixture = ({ user, fixture, showLeaguePronos, setShowLeaguePronos, userPro
     const [saveSuccess, setSaveSuccess] = useState(false)
     const [showLeagues, setShowLeagues] = useState(false)
     const [modified, setModified] = useState(false)
-    const [errorProno, setErrorProno] = useState(false)
 
     useEffect(() => {
         let pronogeek = { homeProno: '', awayProno: '' }
@@ -26,8 +25,6 @@ const Fixture = ({ user, fixture, showLeaguePronos, setShowLeaguePronos, userPro
         const userMatchweekPronogeeks = userPronogeeks[`${season}-${matchweek}`]
         if (userMatchweekPronogeeks) {
 
-            if (userMatchweekPronogeeks.error) setErrorProno(userMatchweekPronogeeks.error)
-
             if (userMatchweekPronogeeks[_id]) pronogeek = userMatchweekPronogeeks[_id]
         }
 
@@ -35,7 +32,6 @@ const Fixture = ({ user, fixture, showLeaguePronos, setShowLeaguePronos, userPro
         setHomeScore(parseInt(pronogeek.homeProno) >= 0 ? pronogeek.homeProno : '')
         setAwayScore(parseInt(pronogeek.awayProno) >= 0 ? pronogeek.awayProno : '')
         setModified(pronogeek.modified ? true : false)
-
 
     }, [fixture, userPronogeeks])
 
@@ -183,7 +179,6 @@ const Fixture = ({ user, fixture, showLeaguePronos, setShowLeaguePronos, userPro
                                 <td className='prono-input-col'>
 
                                     <SavePronoButton
-                                        user={user}
                                         modified={modified}
                                         saveSuccess={saveSuccess}
                                         matchStarted={matchStarted}
@@ -247,7 +242,6 @@ const Fixture = ({ user, fixture, showLeaguePronos, setShowLeaguePronos, userPro
 }
 
 const mapStateToProps = state => ({
-    user: state.authReducer.user,
     userPronogeeks: state.pronogeekReducer.userPronogeeks,
     loadingApi: state.apiFootballReducer.loading
 })

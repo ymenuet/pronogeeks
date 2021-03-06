@@ -1,9 +1,12 @@
 import React from 'react'
 import { SaveIcon, ValidateIcon, ViewPronoIcon } from '../Icons'
 import { Loader } from '..'
+import { useUser } from '../../utils/hooks'
 import './savePronoButton.css'
 
-const SavePronoButton = ({ user, modified, saveSuccess, matchStarted, saveProno, saving, homeScore, awayScore, seeLeaguePronos }) => {
+const SavePronoButton = ({ modified, saveSuccess, matchStarted, saveProno, saving, homeScore, awayScore, seeLeaguePronos }) => {
+
+    const { user } = useUser()
 
     const disabled = matchStarted || (!homeScore && parseInt(homeScore) !== 0) || (!awayScore && parseInt(awayScore) !== 0)
 

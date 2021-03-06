@@ -1,19 +1,23 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
 import { Redirect, Route } from 'react-router-dom'
-import { connect } from 'react-redux'
-import { isConnected } from '../utils/functions'
+import { useUser } from '../utils/hooks'
 import { Signup } from '../pages'
 
-const PrivateRoute = ({ component: Component, user, usernameConfirmed, profileError, ...rest }) => {
+const PrivateRoute = ({ component: Component, ...rest }) => {
+
+    const { user, isUserConnected } = useUser()
+
+    const { usernameConfirmed, profileError } = useSelector(({ authReducer: { usernameConfirmed, profileError } }) => ({ usernameConfirmed, profileError }))
 
     return (
         <Route
             {...rest}
-            render={props => isConnected(user) === 0 && !profileError ? (
+            render={props => isUserConnected === 0 && !profileError ? (
                 <Component {...props} loading />
-            ) : isConnected(user) && !user.confirmed && !usernameConfirmed ? (
+            ) : isUserConnected && !user.confirmed && !usernameConfirmed ? (
                 <Signup emailToConfirm={true} />
-            ) : isConnected(user) ? (
+            ) : isUserConnected ? (
                 <Component {...props} />
             ) : (
                             <Redirect
@@ -27,6 +31,4 @@ const PrivateRoute = ({ component: Component, user, usernameConfirmed, profileEr
     )
 }
 
-const mapStateToProps = ({ authReducer }) => authReducer
-
-export default connect(mapStateToProps)(PrivateRoute)
+export default PrivateRoute
