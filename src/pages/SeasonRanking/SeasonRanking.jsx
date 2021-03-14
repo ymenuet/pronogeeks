@@ -6,7 +6,7 @@ import { ErrorMessage, Loader } from '../../components'
 import { DragIcon, SaveIcon, ListIcon } from '../../components/Icons'
 import { openNotification, isConnected } from '../../utils/functions'
 import { useSeason } from '../../utils/hooks'
-import { PROV_RANKING_MATCHWEEK_LIMIT } from '../../utils/constants.js'
+import { PROV_RANKING_MATCHWEEK_LIMIT } from '../../utils/constants'
 import './seasonRanking.css'
 
 import { saveUserProvRanking } from '../../actions/geekActions'

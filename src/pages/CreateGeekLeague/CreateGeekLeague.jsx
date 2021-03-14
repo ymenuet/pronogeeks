@@ -1,45 +1,25 @@
-import React, { useEffect, useState } from 'react'
-import { connect } from 'react-redux'
+import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { Form, Input } from 'antd'
 import { Loader, GeekSelector } from '../../components'
 import { openNotification } from '../../utils/functions'
+import { useRedirectNewLeague } from '../../utils/hooks'
 import './createGeekleague.css'
 
 import { createLeague } from '../../actions/geekleagueActions'
 
-const CreateGeekLeague = ({ history, loading, creatingLeague, geekleagues, createLeague }) => {
+const CreateGeekLeague = ({ loading }) => {
     const [form] = Form.useForm()
-    const [existingLeagues, setExistingLeagues] = useState(null)
-    const [newLeagueID, setNewLeagueID] = useState(null)
 
+    useRedirectNewLeague()
 
-    useEffect(() => {
-        const leaguesArray = Object.keys(geekleagues).filter(key => key !== 'empty')
-
-        if (!existingLeagues) setExistingLeagues(leaguesArray)
-
-        else if (leaguesArray.length > existingLeagues.length) {
-            const newLeagueID = Object.keys(geekleagues).filter(id => !existingLeagues.includes(id))[0]
-            setNewLeagueID(newLeagueID)
-        }
-
-    }, [geekleagues, existingLeagues])
-
-
-    useEffect(() => {
-        if (newLeagueID) {
-            openNotification('success', `Nouvelle ligue créée !`)
-            history.push(`/myGeekLeagues/${newLeagueID}`)
-        }
-
-    }, [history, newLeagueID])
-
-
+    const dispatch = useDispatch()
     const newLeague = async ({ name, geeks }) => {
         if (!name || !geeks || !geeks.length) return openNotification('warning', 'Attention', 'Tous les champs sont requis.')
-        createLeague({ name, geeks })
+        dispatch(createLeague({ name, geeks }))
     }
 
+    const creatingLeague = useSelector(({ geekleagueReducer }) => geekleagueReducer.loading)
 
     return <div className='geekleague-bg'>
         {creatingLeague || loading ? (
@@ -109,15 +89,4 @@ const CreateGeekLeague = ({ history, loading, creatingLeague, geekleagues, creat
     </div>
 }
 
-const mapStateToProps = state => ({
-    user: state.authReducer.user,
-    errorGeek: state.geekReducer.error,
-    geekleagues: state.geekleagueReducer.geekleagues,
-    creatingLeague: state.geekleagueReducer.loading,
-})
-
-const mapDispatchToProps = {
-    createLeague
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(CreateGeekLeague)
+export default CreateGeekLeague

@@ -1,15 +1,12 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { connect } from 'react-redux'
 import { Loader, InputMatchweek, RankGeeks, ErrorMessage } from '../../components'
 import { resetMatchweek } from '../../utils/functions'
 import { useSeason, useMatchweekFixtures, useGeekLeague, useLastStartedMatchweek, useSoonerMatchweek } from '../../utils/hooks'
 import { GoBackIcon, GoNextIcon } from '../../components/Icons'
 import './detailGeekleague.css'
 
-import { setNextMatchweek } from '../../actions/seasonActions'
-
-const GeekLeagueMatchweek = ({ match: { params: { geekLeagueID, seasonID, matchweekNumber } }, loading, loadingSeason, nextMatchweeks, setNextMatchweek }) => {
+const GeekLeagueMatchweek = ({ match: { params: { geekLeagueID, seasonID, matchweekNumber } }, loading }) => {
     const [matchweekFromInput, setMatchweekFromInput] = useState(matchweekNumber)
 
     const { season, errorSeason } = useSeason(seasonID)
@@ -127,14 +124,4 @@ const GeekLeagueMatchweek = ({ match: { params: { geekLeagueID, seasonID, matchw
     </div>
 }
 
-const mapStateToProps = state => ({
-    lastMatchweeks: state.seasonReducer.lastMatchweeks,
-    nextMatchweeks: state.seasonReducer.nextMatchweeks,
-    loadingSeason: state.seasonReducer.loading,
-})
-
-const mapDispatchToProps = {
-    setNextMatchweek
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(GeekLeagueMatchweek)
+export default GeekLeagueMatchweek
