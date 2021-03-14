@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { RankingOneGeek } from '..'
 import { rankGeeks, isConnected } from '../../utils/functions'
+import { useUser } from '../../utils/hooks'
 
-const RankGeeks = ({ user, players, seasonID, generalRanking, matchweek }) => {
+const RankGeeks = ({ players, seasonID, generalRanking, matchweek }) => {
 
     const [ranking, setRanking] = useState(null)
     const [userRanking, setUserRanking] = useState(null)
+
+    const { user } = useUser()
 
     useEffect(() => {
         if (players) {

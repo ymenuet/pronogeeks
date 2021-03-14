@@ -7,7 +7,7 @@ import {
 } from '.'
 
 export const useGeekLeagueHistory = () => {
-    const [geekLeagueID, setGeekLeagueID] = useState(null)
+    const [geekLeagueHistoryID, setGeekLeagueHistoryID] = useState(null)
 
     const {
         user,
@@ -17,9 +17,12 @@ export const useGeekLeagueHistory = () => {
     useEffect(() => {
         if (isUserConnected) {
             const geekLeagueID = user.geekLeagueHistory || user.geekLeagues[0]._id
-            setGeekLeagueID(geekLeagueID)
+            setGeekLeagueHistoryID(geekLeagueID)
         }
     }, [user, user.geekLeagueHistory, isUserConnected])
 
-    return geekLeagueID
+    return {
+        geekLeagueHistoryID,
+        user
+    }
 }

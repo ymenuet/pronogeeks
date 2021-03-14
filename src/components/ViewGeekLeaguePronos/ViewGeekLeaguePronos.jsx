@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { Loader, ErrorMessage, GeekProno } from '..'
 import { statusTranform } from '../../utils/functions'
-import { useGeekLeague, useGeekLeagueHistory, useUser, useGeeksFixturePronos, useFixtureWinner } from '../../utils/hooks'
+import { useGeekLeague, useGeekLeagueHistory, useGeeksFixturePronos, useFixtureWinner } from '../../utils/hooks'
 import { CloseIcon } from '../Icons'
 import './viewGeekLeaguePronos.css'
 
@@ -12,9 +12,8 @@ import { saveGeekleagueHistory } from '../../actions/geekActions'
 const applyWinnerClass = (winner, row) => winner === row ? 'right-prono exact-prono' : ''
 
 const ViewGeekLeaguePronos = ({ fixture, setShowLeagues }) => {
-    const { user } = useUser()
 
-    const geekLeagueHistoryID = useGeekLeagueHistory()
+    const { geekLeagueHistoryID, user } = useGeekLeagueHistory()
     const [geekLeagueID, setGeekLeagueID] = useState(geekLeagueHistoryID)
     useEffect(() => { setGeekLeagueID(geekLeagueHistoryID) }, [geekLeagueHistoryID])
 
