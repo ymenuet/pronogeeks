@@ -1,15 +1,19 @@
 import React, { useEffect } from 'react'
 import { Link, Redirect } from 'react-router-dom'
-import { connect } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { Loader } from '../../components'
 
-import * as authActions from '../../actions/authActions'
+import { confirmEmail } from '../../actions/authActions'
 
-const ConfirmUser = ({ match: { params: { userID, confirmToken } }, user, usernameConfirmed, loading, error, confirmEmail }) => {
+const ConfirmUser = ({ match: { params: { userID, confirmToken } } }) => {
+
+    const { user, usernameConfirmed, loading, error } = useSelector(({ authReducer }) => authReducer)
+
+    const dispatch = useDispatch()
 
     useEffect(() => {
-        confirmEmail(userID, confirmToken)
-    }, [confirmEmail, userID, confirmToken])
+        dispatch(confirmEmail(userID, confirmToken))
+    }, [dispatch, userID, confirmToken])
 
     return <div
         className='my-content-homepage'
@@ -29,27 +33,21 @@ const ConfirmUser = ({ match: { params: { userID, confirmToken } }, user, userna
 
         ) : <div style={{ padding: 30, background: 'rgba(4, 78, 199, 0.8)', borderRadius: 10, width: '80%' }}>
 
-                    <h4 style={{ color: 'white' }}>Merci {usernameConfirmed}, ton email est confirmé !<br />Tu peux maintenant te connecter.</h4>
+            <h4 style={{ color: 'white' }}>Merci {usernameConfirmed}, ton email est confirmé !<br />Tu peux maintenant te connecter.</h4>
 
-                    <div className='home-register'>
-                        <Link
-                            className='btn my-btn login-btn'
-                            to='/login'
-                        >
-                            Se connecter
+            <div className='home-register'>
+                <Link
+                    className='btn my-btn login-btn'
+                    to='/login'
+                >
+                    Se connecter
                         </Link>
-                    </div>
+            </div>
 
-                </div>
+        </div>
         }
 
     </div>
 }
 
-const mapStateToProps = ({ authReducer }) => authReducer
-
-const mapDispatchToProps = {
-    ...authActions,
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(ConfirmUser)
+export default ConfirmUser
