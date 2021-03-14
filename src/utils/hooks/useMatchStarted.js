@@ -2,17 +2,16 @@ import {
     useState,
     useEffect
 } from 'react'
+import {
+    hasMatchStarted
+} from '../functions'
 
 export const useMatchStarted = fixture => {
     const [matchStarted, setMatchStarted] = useState(true)
 
     useEffect(() => {
-        if (
-            fixture &&
-            (new Date(fixture.date) > Date.now() ||
-                fixture.statusShort === 'PST')
-        ) setMatchStarted(false)
-
+        const matchStarted = hasMatchStarted(fixture)
+        setMatchStarted(matchStarted)
     }, [fixture])
 
     return matchStarted

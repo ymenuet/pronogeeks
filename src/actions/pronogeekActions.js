@@ -7,7 +7,8 @@ import {
 import {
     printError,
     copyReducer,
-    updateMatchweekPronogeeks
+    updateMatchweekPronogeeks,
+    hasMatchStarted
 } from '../utils/functions'
 import {
     PRONOGEEK_REDUCER_KEY,
@@ -283,7 +284,13 @@ export const savePronogeek = (homeProno, awayProno, fixture) => async(dispatch, 
     }
 }
 
-export const saveAllPronogeeks = (seasonID, matchweekNumber) => async(dispatch, getState) => {
+export const saveAllPronogeeks = (seasonID, matchweekNumber, fixtures) => async(dispatch, getState) => {
+
+    const fixturesStartedIDs = fixtures
+        .filter(fixture => hasMatchStarted(fixture))
+        .map(({
+            _id
+        }) => _id)
 
     const newPronogeeks = copyReducer(getState, PRONOGEEK_REDUCER_KEY, USER_PRONOGEEKS_KEY, `${seasonID}-${matchweekNumber}`)
 
@@ -301,8 +308,9 @@ export const saveAllPronogeeks = (seasonID, matchweekNumber) => async(dispatch, 
 
     const pronogeeksToSave = Object.values(newPronogeeks[`${seasonID}-${matchweekNumber}`])
         .filter(({
-            modified
-        }) => modified === true)
+            modified,
+            fixture
+        }) => modified === true && !fixturesStartedIDs.includes(fixture))
         .map(({
             fixture,
             homeProno,
@@ -331,6 +339,10 @@ export const saveAllPronogeeks = (seasonID, matchweekNumber) => async(dispatch, 
         saved: false,
         error: false
     }
+    dispatch({
+        type: ADD_USER_PRONOGEEKS,
+        payload: newPronogeeks
+    })
 
     try {
         const {

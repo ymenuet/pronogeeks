@@ -3,12 +3,12 @@ import { useDispatch } from 'react-redux'
 import { SaveIcon, ValidateIcon, ViewPronoIcon } from '../Icons'
 import { Loader } from '..'
 import { useUser, useSaveOneProno } from '../../utils/hooks'
-import { openNotification } from '../../utils/functions'
+import { openNotification, hasMatchStarted } from '../../utils/functions'
 import './savePronoButton.css'
 
 import { savePronogeek } from '../../actions/pronogeekActions'
 
-const SavePronoButton = ({ pronogeek, fixture, modified, matchStarted, homeScore, awayScore, seeLeaguePronos }) => {
+const SavePronoButton = ({ pronogeek, fixture, modified, matchStarted, homeScore, awayScore, savingAll, seeLeaguePronos }) => {
 
     const { user } = useUser()
 
@@ -16,13 +16,15 @@ const SavePronoButton = ({ pronogeek, fixture, modified, matchStarted, homeScore
 
     const dispatch = useDispatch()
 
-    const disabled = matchStarted || (!homeScore && parseInt(homeScore) !== 0) || (!awayScore && parseInt(awayScore) !== 0)
+    const disabled = matchStarted || savingAll || (!homeScore && parseInt(homeScore) !== 0) || (!awayScore && parseInt(awayScore) !== 0)
 
     const saveProno = () => {
         setSaveSuccess(false)
 
         // Error message if someone takes out the "disabled" property of a passed game to change their pronostics
-        if (matchStarted) return openNotification('error', 'Erreur', 'Ce match est déjà commencé ou fini. Tu ne peux plus changer ton prono.')
+        if (
+            hasMatchStarted(fixture)
+        ) return openNotification('error', 'Erreur', 'Ce match est déjà commencé ou fini. Tu ne peux plus changer ton prono.')
 
         // Warning message if one of the inputs doesn't have a number
         if (

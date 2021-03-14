@@ -9,7 +9,7 @@ import './fixture.css'
 
 import { handleInputHomeProno, handleInputAwayProno } from '../../actions/pronogeekActions'
 
-const Fixture = ({ fixture, showLeaguePronos, setShowLeaguePronos, errorProno }) => {
+const Fixture = ({ fixture, showLeaguePronos, setShowLeaguePronos, errorProno, savingAll }) => {
 
     const { pronogeek, homeScore, awayScore, modified } = useUserFixtureProno(fixture)
 
@@ -111,6 +111,7 @@ const Fixture = ({ fixture, showLeaguePronos, setShowLeaguePronos, errorProno })
                                     homeScore={homeScore}
                                     awayScore={awayScore}
                                     seeLeaguePronos={seeLeaguePronos}
+                                    savingAll={savingAll}
                                 />
 
                             </td>

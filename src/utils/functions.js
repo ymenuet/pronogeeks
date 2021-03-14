@@ -260,6 +260,16 @@ export const determineFixtureWinner = (goalsHome, goalsAway) => goalsHome > goal
     goalsHome < goalsAway ? 'Away' :
     'Draw'
 
+export const hasMatchStarted = fixture => {
+    let result = true
+    if (
+        fixture &&
+        (new Date(fixture.date) > Date.now() ||
+            fixture.statusShort === 'PST')
+    ) result = false
+    return result
+}
+
 export const updateMatchweekFixtures = ({
     fixtures,
     seasonID,
