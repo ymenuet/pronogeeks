@@ -1,79 +1,54 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { connect } from "react-redux"
+import { useSelector, useDispatch } from "react-redux"
 import axios from 'axios'
 import { Loader, RankGeeks, ErrorMessage } from '../../components'
-import { appendPhoto, isConnected, openNotification } from '../../utils/functions'
-import { handleStateWithId } from '../../utils/stateHandlers'
+import { appendPhoto, openNotification } from '../../utils/functions'
+import { useSeasonPlayersRanking, useUser, useSeasonHistory } from '../../utils/hooks'
 import { EditIcon, WarningIcon } from '../../components/Icons'
 import './profile.css'
 
-import * as authActions from '../../actions/authActions'
-import { getSeasonPlayers } from '../../actions/geekActions'
+import { updateUsername, updatePhoto, deleteUserAccount, logout } from '../../actions/authActions'
 
-const Profile = ({ loading, loadingUsername, loadingPhoto, user, seasonGeeksRankings, updateUsername, updatePhoto, deleteUserAccount, logout, getSeasonPlayers }) => {
+const Profile = ({ loading }) => {
     const [cloudinaryLoading, setCloudinaryLoading] = useState(false)
     const [cloudinaryError, setCloudinaryError] = useState(false)
     const [showModal, setShowModal] = useState(false)
     const [deleteAccount, setDeleteAccount] = useState(false)
-    const [usernameInput, setUsernameInput] = useState('')
     const [season, setSeason] = useState(null)
-    const [intermediateRanking, setIntermediateRanking] = useState(null)
-    const [seasonRankingFull, setSeasonRankingFull] = useState(null)
-    const [seasonRanking, setSeasonRanking] = useState(null)
-    const [userRanking, setUserRanking] = useState(null)
-    const [errorRanking, setErrorRanking] = useState(null)
+
+    const { user, isUserConnected } = useUser()
+
+    const { loadingUsername, loadingPhoto } = useSelector(({ authReducer }) => ({
+        loadingUsername: authReducer.loadingUsername,
+        loadingPhoto: authReducer.loadingPhoto,
+    }))
+
+    const dispatch = useDispatch()
+
+    const { seasonRanking, seasonRankingFull, userRanking, setSeasonRankingFull, errorRanking } = useSeasonPlayersRanking(season, 20)
 
 
+    const seasonFromUserHistory = useSeasonHistory()
     useEffect(() => {
-        if (isConnected(user)) {
-            setUsernameInput(user.username)
-        }
-    }, [user])
-
-
-    useEffect(() => {
-        if (isConnected(user) && user.seasons.length > 0) {
-            const season = user.seasons[user.seasons.length - 1].season
+        if (seasonFromUserHistory) {
+            const season = seasonFromUserHistory.season
             setSeason(season)
 
-        } else {
-            setSeasonRankingFull([])
+        } else setSeasonRankingFull([])
 
-        }
-
-    }, [user])
+    }, [seasonFromUserHistory, setSeasonRankingFull])
 
 
+    const [usernameInput, setUsernameInput] = useState('')
     useEffect(() => {
-        if (season && season._id) {
-            handleStateWithId({
-                id: season._id,
-                reducerData: seasonGeeksRankings,
-                action: getSeasonPlayers,
-                setResult: setIntermediateRanking,
-                setError: setErrorRanking
-            })
+        if (isUserConnected) {
+            setUsernameInput(user.username)
         }
+    }, [user, isUserConnected])
 
-    }, [season, seasonGeeksRankings, getSeasonPlayers])
 
-
-    useEffect(() => {
-        if (intermediateRanking && isConnected(user) && user.seasons.length) {
-            const rankedGeeks = intermediateRanking.map(geek => {
-                if (geek._id === user._id) return user
-                return geek
-            })
-            const userRanking = rankedGeeks.map(geek => geek._id).indexOf(user._id)
-            const rankedGeeks20 = rankedGeeks.slice(0, 20)
-            setUserRanking(userRanking)
-            setSeasonRankingFull(rankedGeeks)
-            setSeasonRanking(rankedGeeks20)
-        }
-
-    }, [user, intermediateRanking])
-
+    const photoLoader = loadingPhoto || cloudinaryLoading
 
     const uploadPhoto = async e => {
         const photo = appendPhoto(e)
@@ -85,7 +60,7 @@ const Profile = ({ loading, loadingUsername, loadingPhoto, user, seasonGeeksRank
                 openNotification('error', "Une erreur a eu lieu lors de l'import de la photo. Merci de réessayer.")
             })
             if (!cloudinaryError) {
-                updatePhoto(secure_url)
+                dispatch(updatePhoto(secure_url))
                 setCloudinaryLoading(false)
             }
         }
@@ -93,12 +68,12 @@ const Profile = ({ loading, loadingUsername, loadingPhoto, user, seasonGeeksRank
 
     const saveUsername = () => {
         setShowModal(false)
-        updateUsername(usernameInput)
+        dispatch(updateUsername(usernameInput))
     }
 
     const removeAccount = () => {
-        logout()
-        deleteUserAccount()
+        dispatch(logout())
+        dispatch(deleteUserAccount())
     }
 
     const setRank = (num) => {
@@ -107,13 +82,12 @@ const Profile = ({ loading, loadingUsername, loadingPhoto, user, seasonGeeksRank
         else return `${num}ème`
     }
 
-    const defineUserRank = (seasonRanking, league) => {
+    const defineUserRank = (seasonRanking, geekLeague) => {
         return seasonRanking
-            .filter(({ _id }) => league.geeks.includes(_id))
+            .filter(({ _id }) => geekLeague.geeks.includes(_id))
             .map(player => player._id).indexOf(user._id) + 1
     }
 
-    const photoLoader = () => loadingPhoto || cloudinaryLoading
 
     const printEditIcon = () => loadingUsername ? <Loader
         container={false}
@@ -142,13 +116,13 @@ const Profile = ({ loading, loadingUsername, loadingPhoto, user, seasonGeeksRank
 
                         <div className='profile-picture-container'>
 
-                            {!photoLoader() && <img
+                            {!photoLoader && <img
                                 src={user.photo}
                                 alt="Profile pic"
                                 className='profile-pic'
                             />}
 
-                            {photoLoader() && <div className='profile-pic'>
+                            {photoLoader && <div className='profile-pic'>
 
                                 <Loader
                                     container={false}
@@ -189,16 +163,16 @@ const Profile = ({ loading, loadingUsername, loadingPhoto, user, seasonGeeksRank
                             </div>
                         </div>
 
-                        {user.seasons.length > 0 && user.seasons[user.seasons.length - 1].favTeam && <div className='favteam-info'>
+                        {seasonFromUserHistory && seasonFromUserHistory.favTeam && <div className='favteam-info'>
 
                             <div>
                                 <img
-                                    src={user.seasons[user.seasons.length - 1].favTeam.logo}
+                                    src={seasonFromUserHistory.favTeam.logo}
                                     alt="Logo équipe de coeur"
                                 />
                             </div>
 
-                            <h5>{user.seasons[user.seasons.length - 1].favTeam.name} est ton équipe de coeur<br />pour la saison {user.seasons[user.seasons.length - 1].season.year} de {user.seasons[user.seasons.length - 1].season.leagueName}.</h5>
+                            <h5>{seasonFromUserHistory.favTeam.name} est ton équipe de coeur<br />pour la saison {seasonFromUserHistory.season.year} de {seasonFromUserHistory.season.leagueName}.</h5>
 
                         </div>}
 
@@ -421,16 +395,4 @@ const Profile = ({ loading, loadingUsername, loadingPhoto, user, seasonGeeksRank
     )
 }
 
-const mapStateToProps = state => ({
-    user: state.authReducer.user,
-    loadingUsername: state.authReducer.loadingUsername,
-    loadingPhoto: state.authReducer.loadingPhoto,
-    seasonGeeksRankings: state.geekReducer.seasonGeeksRankings,
-})
-
-const mapDispatchToProps = {
-    ...authActions,
-    getSeasonPlayers
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Profile)
+export default Profile
