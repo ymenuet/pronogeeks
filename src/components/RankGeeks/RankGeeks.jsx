@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { RankingOneGeek } from '..'
-import { rankGeeks, isConnected } from '../../utils/functions'
+import { rankGeeks } from '../../utils/functions'
 import { useUser } from '../../utils/hooks'
 
 const RankGeeks = ({ players, seasonID, generalRanking, matchweek }) => {
@@ -8,7 +8,7 @@ const RankGeeks = ({ players, seasonID, generalRanking, matchweek }) => {
     const [ranking, setRanking] = useState(null)
     const [userRanking, setUserRanking] = useState(null)
 
-    const { user } = useUser()
+    const { user, isUserConnected } = useUser()
 
     useEffect(() => {
         if (players) {
@@ -28,13 +28,13 @@ const RankGeeks = ({ players, seasonID, generalRanking, matchweek }) => {
             setUserRanking(userRanking)
         }
 
-        if (isConnected(user)) {
+        if (isUserConnected) {
             if (!generalRanking && ranking) setUserRank(user, ranking)
 
             else if (generalRanking) setUserRank(user, players)
         }
 
-    }, [user, ranking, players, generalRanking, matchweek])
+    }, [user, isUserConnected, ranking, players, generalRanking, matchweek])
 
     return (
         ranking ? <ul className={`list-group list-group-flush ${generalRanking ? 'season-ranking' : 'geekleague-ranking-detail'}`}>

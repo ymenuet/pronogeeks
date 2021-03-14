@@ -7,9 +7,11 @@ import {
     useDispatch
 } from 'react-redux'
 import {
-    isConnected,
     openNotification
 } from '../functions'
+import {
+    useUser
+} from '.'
 
 import {
     getUserMatchweekPronos,
@@ -25,9 +27,12 @@ export const useUserPronogeeks = (seasonID, matchweekNumber) => {
 
     const {
         user,
+        isUserConnected
+    } = useUser()
+
+    const {
         userPronogeeks
     } = useSelector(state => ({
-        user: state.authReducer.user,
         userPronogeeks: state.pronogeekReducer.userPronogeeks,
     }))
 
@@ -37,7 +42,7 @@ export const useUserPronogeeks = (seasonID, matchweekNumber) => {
         const pronogeeks = userPronogeeks[`${seasonID}-${matchweekNumber}`]
 
         if (
-            isConnected(user) &&
+            isUserConnected &&
             !pronogeeks
         ) dispatch(getUserMatchweekPronos(user._id, seasonID, matchweekNumber))
 
@@ -76,7 +81,7 @@ export const useUserPronogeeks = (seasonID, matchweekNumber) => {
 
         } else setModifiedTotal(0)
 
-    }, [user, userPronogeeks, seasonID, matchweekNumber, dispatch])
+    }, [user, isUserConnected, userPronogeeks, seasonID, matchweekNumber, dispatch])
 
     return {
         modifiedTotal,

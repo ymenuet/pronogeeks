@@ -1,17 +1,32 @@
-import { useState, useEffect } from 'react'
-import { useSelector } from 'react-redux'
-import { isConnected, getUserSeasonFromProfile, getUserMatchweekFromProfile } from '../functions'
+import {
+    useState,
+    useEffect
+} from 'react'
+import {
+    getUserSeasonFromProfile,
+    getUserMatchweekFromProfile
+} from '../functions'
+import {
+    useUser
+} from '.'
 
-export const useUserMatchweek = ({ seasonID, matchweekNumber, history }) => {
+export const useUserMatchweek = ({
+    seasonID,
+    matchweekNumber,
+    history
+}) => {
     const [matchweekPoints, setMatchweekPoints] = useState(null)
     const [matchweekBonus, setMatchweekBonus] = useState(null)
     const [matchweekCorrects, setMatchweekCorrects] = useState(null)
     const [newSeason, setNewSeason] = useState(true)
 
-    const user = useSelector(({ authReducer }) => authReducer.user)
+    const {
+        user,
+        isUserConnected
+    } = useUser()
 
     useEffect(() => {
-        if (isConnected(user)) {
+        if (isUserConnected) {
             const userSeason = getUserSeasonFromProfile(user, seasonID)
 
             if (!userSeason || !userSeason.favTeam) {
@@ -27,7 +42,12 @@ export const useUserMatchweek = ({ seasonID, matchweekNumber, history }) => {
                 }
             }
         }
-    }, [history, seasonID, matchweekNumber, user])
+    }, [history, seasonID, matchweekNumber, user, isUserConnected])
 
-    return { matchweekPoints, matchweekBonus, matchweekCorrects, newSeason }
+    return {
+        matchweekPoints,
+        matchweekBonus,
+        matchweekCorrects,
+        newSeason
+    }
 }

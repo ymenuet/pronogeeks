@@ -1,27 +1,54 @@
-import { useState, useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import { isConnected, matchFinished } from '../functions'
-import { MILLISECONDS_IN_30_MINUTES, MILLISECONDS_IN_1_DAY, MILLISECONDS_IN_1_WEEK } from '../constants'
+import {
+    useState,
+    useEffect
+} from 'react'
+import {
+    useSelector,
+    useDispatch
+} from 'react-redux'
+import {
+    matchFinished
+} from '../functions'
+import {
+    useUser
+} from '.'
+import {
+    MILLISECONDS_IN_30_MINUTES,
+    MILLISECONDS_IN_1_DAY,
+    MILLISECONDS_IN_1_WEEK
+} from '../constants'
 
-import { updateFixturesStatus, updateOdds } from '../../actions/apiFootballActions'
+import {
+    updateFixturesStatus,
+    updateOdds
+} from '../../actions/apiFootballActions'
 
-export const useConditionalFixturesUpdate = ({ seasonID, matchweekNumber, fixtures, newSeason }) => {
+export const useConditionalFixturesUpdate = ({
+    seasonID,
+    matchweekNumber,
+    fixtures,
+    newSeason
+}) => {
 
     const [lastScoresUpdated, setLastScoresUpdated] = useState(null)
     const [lastOddsUpdated, setLastOddsUpdated] = useState(null)
     const [scoresUpdatedOnce, setScoresUpdatedOnce] = useState(false)
     const [oddsUpdatedOnce, setOddsUpdatedOnce] = useState(false)
 
-    const { user, loadingApi } = useSelector(state => ({
-        user: state.authReducer.user,
-        loadingApi: state.apiFootballReducer.loading
-    }))
+    const {
+        user,
+        isUserConnected
+    } = useUser()
+
+    const loadingApi = useSelector(({
+        apiFootballReducer
+    }) => apiFootballReducer.loading)
 
     const dispatch = useDispatch()
 
     useEffect(() => {
 
-        if (isConnected(user) && !newSeason && fixtures) {
+        if (isUserConnected && !newSeason && fixtures) {
             const fixtureDates = fixtures.map(fixture => new Date(fixture.date).getTime())
             const minDate = Math.min(...fixtureDates)
             const maxDate = Math.max(...fixtureDates)
@@ -38,7 +65,9 @@ export const useConditionalFixturesUpdate = ({ seasonID, matchweekNumber, fixtur
             if ((user.role === 'SUPER GEEK' || user.role === 'GEEK ADMIN') && fixturesInLessThanOneWeek && !loadingApi) {
 
                 // Update fixtures results from API-football data if last update happened more than 30minutes ago, first game of matchweek is in less than 1 week and last game of matchweek was over for less than 2 days.
-                const matchweekNotFinished = !!fixtures.filter(({ statusShort }) => !matchFinished(statusShort)).length
+                const matchweekNotFinished = !!fixtures.filter(({
+                    statusShort
+                }) => !matchFinished(statusShort)).length
                 const fixturesUpdatedMoreThanThirtyMinutesAgo = Date.now() > lastUpdate + MILLISECONDS_IN_30_MINUTES
 
                 if (
@@ -54,8 +83,7 @@ export const useConditionalFixturesUpdate = ({ seasonID, matchweekNumber, fixtur
                 const allFixturesStarted = Date.now() > maxDate - MILLISECONDS_IN_30_MINUTES
                 const oddsUpdatedMoreThanOneDayAgo = Date.now() > lastOddsUpdate + MILLISECONDS_IN_1_DAY
 
-                if (
-                    !allFixturesStarted &&
+                if (!allFixturesStarted &&
                     oddsUpdatedMoreThanOneDayAgo &&
                     !oddsUpdatedOnce
                 ) {
@@ -67,7 +95,10 @@ export const useConditionalFixturesUpdate = ({ seasonID, matchweekNumber, fixtur
 
         }
 
-    }, [fixtures, loadingApi, matchweekNumber, seasonID, user, newSeason, scoresUpdatedOnce, oddsUpdatedOnce, dispatch])
+    }, [fixtures, loadingApi, matchweekNumber, seasonID, user, isUserConnected, newSeason, scoresUpdatedOnce, oddsUpdatedOnce, dispatch])
 
-    return { lastScoresUpdated, lastOddsUpdated }
+    return {
+        lastScoresUpdated,
+        lastOddsUpdated
+    }
 }
