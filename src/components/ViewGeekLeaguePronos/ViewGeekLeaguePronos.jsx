@@ -1,80 +1,37 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { connect } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { Loader, ErrorMessage, GeekProno } from '..'
-import { isConnected, statusTranform } from '../../utils/functions'
-import { handleStateWith2Ids, handleStateWithId } from '../../utils/stateHandlers'
+import { statusTranform } from '../../utils/functions'
+import { useGeekLeague, useGeekLeagueHistory, useUser, useGeeksFixturePronos, useFixtureWinner } from '../../utils/hooks'
 import { CloseIcon } from '../Icons'
 import './viewGeekLeaguePronos.css'
 
 import { saveGeekleagueHistory } from '../../actions/geekActions'
-import { getLeague } from '../../actions/geekleagueActions'
-import { getGeekleagueFixturePronos } from '../../actions/pronogeekActions'
 
-const PreviewPronos = ({ user, fixture, setShowLeagues, geekleagues, geeksFixturePronogeeks, saveGeekleagueHistory, getLeague, getGeekleagueFixturePronos }) => {
+const applyWinnerClass = (winner, row) => winner === row ? 'right-prono exact-prono' : ''
 
-    const [geekleague, setGeekLeague] = useState(null)
-    const [geeksPronos, setGeeksPronos] = useState(null)
-    const [winner, setWinner] = useState(null)
-    const [errorPronos, setErrorPronos] = useState(false)
-    const [errorGeekLeague, setErrorGeekLeague] = useState(false)
+const ViewGeekLeaguePronos = ({ fixture, setShowLeagues }) => {
+    const { user } = useUser()
 
+    const geekLeagueHistoryID = useGeekLeagueHistory()
+    const [geekLeagueID, setGeekLeagueID] = useState(geekLeagueHistoryID)
+    useEffect(() => { setGeekLeagueID(geekLeagueHistoryID) }, [geekLeagueHistoryID])
 
-    useEffect(() => {
-        if (isConnected(user)) {
-            const geekLeagueID = user.geekLeagueHistory || user.geekLeagues[0]._id
-            handleStateWithId({
-                id: geekLeagueID,
-                reducerData: geekleagues,
-                action: getLeague,
-                setResult: setGeekLeague,
-                setError: setErrorGeekLeague
-            })
-        }
-    }, [user, geekleagues, getLeague])
+    const { geekLeague, errorGeekLeague } = useGeekLeague(geekLeagueID)
 
+    const { geeksPronos, setGeeksPronos, errorPronos } = useGeeksFixturePronos(fixture, geekLeague)
 
-    useEffect(() => {
-        if (geekleague && fixture) {
-            handleStateWith2Ids({
-                id1: fixture._id,
-                id2: geekleague._id,
-                reducerData: geeksFixturePronogeeks,
-                action: getGeekleagueFixturePronos,
-                setResult: setGeeksPronos,
-                setError: setErrorPronos
-            })
-        }
+    const winner = useFixtureWinner(fixture)
 
-    }, [geekleague, fixture, geeksFixturePronogeeks, getGeekleagueFixturePronos])
-
+    const dispatch = useDispatch()
 
     const changeLeague = async (e) => {
         const geekLeagueID = e.target.value
+        setGeekLeagueID(geekLeagueID)
         setGeeksPronos(null)
-        handleStateWithId({
-            id: geekLeagueID,
-            reducerData: geekleagues,
-            action: getLeague,
-            setResult: setGeekLeague,
-            setError: setErrorGeekLeague
-        })
-        saveGeekleagueHistory(geekLeagueID)
+        dispatch(saveGeekleagueHistory(geekLeagueID))
     }
-
-
-    useEffect(() => {
-        const winner = determineWinner(fixture.goalsHomeTeam, fixture.goalsAwayTeam)
-        setWinner(winner)
-    }, [fixture])
-
-
-    function determineWinner(goalsHome, goalsAway) {
-        return goalsHome > goalsAway ? 'Home' :
-            goalsHome < goalsAway ? 'Away' :
-                'Draw'
-    }
-
 
     return (
 
@@ -94,8 +51,9 @@ const PreviewPronos = ({ user, fixture, setShowLeagues, geekleagues, geeksFixtur
                     <div>
 
                         <select
-                            defaultValue={user?.geekLeagueHistory || user?.geekLeagues[0]._id}
+                            defaultValue={geekLeagueHistoryID}
                             onChange={changeLeague}
+                            value={geekLeague?._id}
                         >
 
                             {user.geekLeagues.map(oneGeekleague =>
@@ -110,7 +68,7 @@ const PreviewPronos = ({ user, fixture, setShowLeagues, geekleagues, geeksFixtur
                         </select>
 
 
-                        <p className='link-to-ranking-matchweek'><Link to={`/myGeekleagues/${geekleague?._id}/season/${fixture.season}/${fixture.matchweek}`}>Classement ligue</Link></p>
+                        <p className='link-to-ranking-matchweek'><Link to={`/myGeekleagues/${geekLeague?._id}/season/${fixture.season}/${fixture.matchweek}`}>Classement ligue</Link></p>
 
                     </div>
 
@@ -151,9 +109,9 @@ const PreviewPronos = ({ user, fixture, setShowLeagues, geekleagues, geeksFixtur
                             </tr>
 
                             <tr>
-                                <td className={winner === 'Home' ? 'right-prono exact-prono' : ''}>{fixture.oddsWinHome}</td>
-                                <td className={winner === 'Draw' ? 'right-prono exact-prono' : ''}>{fixture.oddsDraw}</td>
-                                <td className={winner === 'Away' ? 'right-prono exact-prono' : ''}>{fixture.oddsWinAway}</td>
+                                <td className={applyWinnerClass(winner, 'Home')}>{fixture.oddsWinHome}</td>
+                                <td className={applyWinnerClass(winner, 'Draw')}>{fixture.oddsDraw}</td>
+                                <td className={applyWinnerClass(winner, 'Away')}>{fixture.oddsWinAway}</td>
                             </tr>
 
                         </tbody>
@@ -184,7 +142,6 @@ const PreviewPronos = ({ user, fixture, setShowLeagues, geekleagues, geeksFixtur
                                     pronogeek={prono}
                                     fixture={fixture}
                                     winner={winner}
-                                    determineWinner={determineWinner}
                                 />
                             )}
                         </ul>
@@ -197,16 +154,4 @@ const PreviewPronos = ({ user, fixture, setShowLeagues, geekleagues, geeksFixtur
     )
 }
 
-const mapStateToProps = state => ({
-    user: state.authReducer.user,
-    geekleagues: state.geekleagueReducer.geekleagues,
-    geeksFixturePronogeeks: state.pronogeekReducer.geeksFixturePronogeeks,
-})
-
-const mapDispatchToProps = {
-    saveGeekleagueHistory,
-    getLeague,
-    getGeekleagueFixturePronos
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(PreviewPronos)
+export default ViewGeekLeaguePronos

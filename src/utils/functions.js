@@ -256,6 +256,10 @@ export const sortByUsername = geeks => geeks.sort((a, b) => {
     else return -1
 })
 
+export const determineFixtureWinner = (goalsHome, goalsAway) => goalsHome > goalsAway ? 'Home' :
+    goalsHome < goalsAway ? 'Away' :
+    'Draw'
+
 export const updateMatchweekFixtures = ({
     fixtures,
     seasonID,

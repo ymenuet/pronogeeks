@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
+import { determineFixtureWinner } from '../../utils/functions'
 import './geekProno.css'
 
-const GeekProno = ({ pronogeek, fixture, winner, determineWinner }) => {
+const GeekProno = ({ pronogeek, fixture, winner }) => {
     const [correct, setCorrect] = useState(false)
     const [exact, setExact] = useState(false)
 
@@ -10,13 +11,13 @@ const GeekProno = ({ pronogeek, fixture, winner, determineWinner }) => {
             const { homeProno, awayProno } = pronogeek
             if ((homeProno || homeProno === 0) &&
                 (awayProno || awayProno === 0)) {
-                const prono = determineWinner(homeProno, awayProno)
+                const prono = determineFixtureWinner(homeProno, awayProno)
                 if (winner === prono) setCorrect(true)
                 const exact = fixture.goalsHomeTeam === homeProno && fixture.goalsAwayTeam === awayProno
                 if (exact) setExact(true)
             }
         }
-    }, [pronogeek, fixture, winner, determineWinner])
+    }, [pronogeek, fixture, winner])
 
     return (
         <li className={`view-pronos-list-item ${correct ? 'right-prono' : 'wrong-prono'} ${exact ? 'exact-prono' : ''}`}>
