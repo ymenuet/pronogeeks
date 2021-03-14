@@ -1,21 +1,19 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
-import { connect } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { HomeIcon } from '../Icons'
-import { isConnected, openNotification } from '../../utils/functions'
+import { useCurrentUserProfile, useAccountDeleted } from '../../utils/hooks'
 import './appLayout.css'
 
-import * as mapDispatchToProps from '../../actions/authActions'
+import { logout } from '../../actions/authActions'
 
-const AppLayout = ({ children, user, logout, setProfile, accountDeleted }) => {
+const AppLayout = ({ children }) => {
 
-    useEffect(() => {
-        if (!isConnected(user)) setProfile()
-    }, [user, setProfile])
+    const { isUserConnected, user } = useCurrentUserProfile()
 
-    useEffect(() => {
-        if (accountDeleted) openNotification('success', 'Ton compte a bien été supprimé.')
-    }, [accountDeleted])
+    useAccountDeleted()
+
+    const dispatch = useDispatch()
 
     return <>
 
@@ -46,12 +44,12 @@ const AppLayout = ({ children, user, logout, setProfile, accountDeleted }) => {
             >
                 <ul className="navbar-nav mt-2 mt-lg-0">
 
-                    {isConnected(user) ? <>
+                    {isUserConnected ? <>
 
                         <li className="nav-item  mobile-list-item">
                             <button
                                 className="nav-link navbar-btns"
-                                onClick={logout}
+                                onClick={() => dispatch(logout())}
                             >
                                 Déconnexion
                             </button>
@@ -112,7 +110,7 @@ const AppLayout = ({ children, user, logout, setProfile, accountDeleted }) => {
                                     <li className="nav-item">
                                         <button
                                             className="nav-link navbar-btns"
-                                            onClick={logout}
+                                            onClick={() => dispatch(logout())}
                                         >
                                             Déconnexion
                                         </button>
@@ -123,35 +121,35 @@ const AppLayout = ({ children, user, logout, setProfile, accountDeleted }) => {
 
                     </> : <>
 
-                            <li className="nav-item">
-                                <Link
-                                    className="nav-link"
-                                    to="/login"
-                                >
-                                    Se connecter
-                                        </Link>
-                            </li>
+                        <li className="nav-item">
+                            <Link
+                                className="nav-link"
+                                to="/login"
+                            >
+                                Se connecter
+                            </Link>
+                        </li>
 
-                            <li className="nav-item">
-                                <Link
-                                    className="nav-link"
-                                    to="/signup"
-                                >
-                                    Créer un compte
-                                        </Link>
-                            </li>
+                        <li className="nav-item">
+                            <Link
+                                className="nav-link"
+                                to="/signup"
+                            >
+                                Créer un compte
+                            </Link>
+                        </li>
 
-                            <li className="nav-item">
-                                <Link
-                                    className="nav-link"
-                                    to="/"
-                                >
-                                    <HomeIcon className="bi bi-house-fill my-home-icon" />
-                                    <span className="sr-only">(current)</span>
-                                </Link>
-                            </li>
+                        <li className="nav-item">
+                            <Link
+                                className="nav-link"
+                                to="/"
+                            >
+                                <HomeIcon className="bi bi-house-fill my-home-icon" />
+                                <span className="sr-only">(current)</span>
+                            </Link>
+                        </li>
 
-                        </>
+                    </>
 
                     }
 
@@ -172,6 +170,4 @@ const AppLayout = ({ children, user, logout, setProfile, accountDeleted }) => {
     </>
 }
 
-const mapStateToProps = ({ authReducer }) => authReducer
-
-export default connect(mapStateToProps, mapDispatchToProps)(AppLayout)
+export default AppLayout

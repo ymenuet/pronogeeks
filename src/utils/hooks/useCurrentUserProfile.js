@@ -1,0 +1,31 @@
+import {
+    useEffect
+} from 'react'
+import {
+    useDispatch
+} from 'react-redux'
+import {
+    useUser
+} from '.'
+
+import {
+    setProfile
+} from '../../actions/authActions'
+
+export const useCurrentUserProfile = () => {
+    const {
+        isUserConnected,
+        user
+    } = useUser()
+
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        if (!isUserConnected) dispatch(setProfile())
+    }, [isUserConnected, dispatch])
+
+    return {
+        isUserConnected,
+        user
+    }
+}

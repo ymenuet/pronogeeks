@@ -1,16 +1,23 @@
 import React from 'react'
-import { connect } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import { useUser } from '../../utils/hooks'
 import './pronosAdminButtons.css'
 
-import * as mapDispatchToProps from '../../actions/apiFootballActions'
+import { updateFixturesStatus, updateOdds } from '../../actions/apiFootballActions'
 
-const PronosAdminButtons = ({ user, loadingApi, season, matchweekNumber, updateFixturesStatus, updateOdds }) => {
+const PronosAdminButtons = ({ seasonID, matchweekNumber }) => {
+
+    const { user } = useUser()
+
+    const loadingApi = useSelector(({ apiFootballReducer }) => apiFootballReducer.loading)
+
+    const dispatch = useDispatch()
 
     return user.role === 'GEEK ADMIN' && <div>
 
         <button
             className='btn my-btn admin-btn top'
-            onClick={() => updateFixturesStatus(season._id, matchweekNumber)}
+            onClick={() => dispatch(updateFixturesStatus(seasonID, matchweekNumber))}
             disabled={loadingApi}
         >
             Actualiser les scores
@@ -18,7 +25,7 @@ const PronosAdminButtons = ({ user, loadingApi, season, matchweekNumber, updateF
 
         <button
             className='btn my-btn admin-btn top'
-            onClick={() => updateOdds(season._id, matchweekNumber)}
+            onClick={() => dispatch(updateOdds(seasonID, matchweekNumber))}
             disabled={loadingApi}
         >
             Actualiser les cotes
@@ -27,9 +34,4 @@ const PronosAdminButtons = ({ user, loadingApi, season, matchweekNumber, updateF
     </div>
 }
 
-const mapStateToProps = state => ({
-    user: state.authReducer.user,
-    loadingApi: state.apiFootballReducer.loading,
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(PronosAdminButtons)
+export default PronosAdminButtons

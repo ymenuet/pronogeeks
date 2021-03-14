@@ -102,7 +102,7 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
             </div>
 
             <PronosAdminButtons
-                season={season}
+                seasonID={seasonID}
                 matchweekNumber={matchweekNumber}
             />
 
@@ -172,7 +172,7 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
             </ul>
 
             <PronosAdminButtons
-                season={season}
+                seasonID={seasonID}
                 matchweekNumber={matchweekNumber}
             />
 
