@@ -1,18 +1,22 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { connect } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { Form, Input } from 'antd'
 import './connectPages.css'
 import { SocialLogins, Loader } from '../../components'
 
-import * as mapDispatchToProps from '../../actions/authActions'
+import { login } from '../../actions/authActions'
 
-const Login = ({ loadingUser, loadingState, login }) => {
+const Login = ({ loadingUser }) => {
     const [form] = Form.useForm()
+
+    const { loading } = useSelector(({ authReducer }) => authReducer)
+
+    const dispatch = useDispatch()
 
     return <div className='register-pages'>
 
-        {loadingUser || loadingState ?
+        {loadingUser || loading ?
 
             <Loader
                 tip='Chargement...'
@@ -29,7 +33,7 @@ const Login = ({ loadingUser, loadingState, login }) => {
 
                     <Form
                         form={form}
-                        onFinish={({ email, password }) => login({ email, password })}
+                        onFinish={({ email, password }) => dispatch(login({ email, password }))}
                         layout='vertical'
                         name="basic"
                         initialValues={{
@@ -100,6 +104,4 @@ const Login = ({ loadingUser, loadingState, login }) => {
     </div>
 }
 
-const mapStateToProps = ({ authReducer }) => ({ loadingState: authReducer.loading })
-
-export default connect(mapStateToProps, mapDispatchToProps)(Login)
+export default Login

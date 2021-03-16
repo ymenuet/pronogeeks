@@ -67,7 +67,7 @@ const SeasonRanking = ({ match: { params: { seasonID, matchweekNumber } }, histo
         setUserProvRanking(newRanking)
     }
 
-    const saveRanking = async () => {
+    const saveRanking = () => {
         saveUserProvRanking(seasonID, userProvRanking)
     }
 

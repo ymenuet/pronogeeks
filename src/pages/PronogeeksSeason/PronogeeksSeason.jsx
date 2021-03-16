@@ -1,25 +1,25 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { Redirect } from 'react-router-dom'
-import { connect } from 'react-redux'
-import { useInput } from '../../utils/hooks'
+import { useSelector, useDispatch } from 'react-redux'
 import { ErrorMessage, Loader } from '../../components'
-import { openNotification, getUserSeasonFromProfile, isConnected } from '../../utils/functions'
-import { useSeason } from '../../utils/hooks'
+import { openNotification } from '../../utils/functions'
+import { useInput, useSeason, useOpenSeason } from '../../utils/hooks'
 import { WarningIcon } from '../../components/Icons'
 import './pronogeeks.css'
 
-import * as geekActions from '../../actions/geekActions'
-import * as seasonActions from '../../actions/seasonActions'
+import { saveFavTeam } from '../../actions/geekActions'
 
-const PronogeeksSeason = ({ match: { params: { seasonID } }, loading, loadingGeek, loadingSeason, user, favTeamAdded, saveFavTeam, nextMatchweeks, setNextMatchweek }) => {
-
-    const [seasonTeams, setSeasonTeams] = useState(null)
-    const [newSeason, setNewSeason] = useState(null)
-    const [matchweek, setMatchweek] = useState(null)
+const PronogeeksSeason = ({ match: { params: { seasonID } }, loading }) => {
 
     const favTeam = useInput('')
 
     const { season, errorSeason } = useSeason(seasonID)
+
+    const { newSeason, seasonTeams, matchweek, loadingSeason, setNewSeason } = useOpenSeason(season)
+
+    const { favTeamAdded, loading: loadingGeek } = useSelector(({ geekReducer }) => geekReducer)
+
+    const dispatch = useDispatch()
 
 
     useEffect(() => {
@@ -27,37 +27,13 @@ const PronogeeksSeason = ({ match: { params: { seasonID } }, loading, loadingGee
             openNotification('success', 'Équipe de coeur enregistrée.')
             setNewSeason(false)
         }
-    }, [favTeamAdded])
+    }, [favTeamAdded, setNewSeason])
 
 
-    useEffect(() => {
-        if (isConnected(user) && season) {
-            const userSeason = getUserSeasonFromProfile(user, seasonID)
-
-            if (!userSeason || !userSeason.favTeam) {
-                const seasonTeams = season.rankedTeams.sort((a, b) => {
-                    if (a.name > b.name) return 1
-                    else return -1
-                })
-                setSeasonTeams(seasonTeams)
-                setNewSeason(true)
-
-            } else if (!nextMatchweeks[seasonID] && !loadingSeason) {
-                setNewSeason(false)
-                setNextMatchweek(season)
-
-            } else if (nextMatchweeks[seasonID]) {
-                setNewSeason(false)
-                setMatchweek(nextMatchweeks[seasonID])
-            }
-        }
-    }, [user, seasonID, season, nextMatchweeks, loadingSeason, setNextMatchweek])
-
-    const saveNewFavTeam = async () => {
+    const saveNewFavTeam = () => {
         if (favTeam.value === '') return openNotification('warning', 'Attention', 'Tu dois choisir une équipe de coeur avant de continuer.')
-        else {
-            saveFavTeam(seasonID, favTeam.value)
-        }
+
+        else dispatch(saveFavTeam(seasonID, favTeam.value))
     }
 
     return <div className='pronogeeks-bg'>
@@ -116,17 +92,4 @@ const PronogeeksSeason = ({ match: { params: { seasonID } }, loading, loadingGee
     </div>
 }
 
-const mapStateToProps = state => ({
-    user: state.authReducer.user,
-    favTeamAdded: state.geekReducer.favTeamAdded,
-    loadingGeek: state.geekReducer.loading,
-    nextMatchweeks: state.seasonReducer.nextMatchweeks,
-    loadingSeason: state.seasonReducer.loading,
-})
-
-const mapDispatchToProps = {
-    ...geekActions,
-    ...seasonActions
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(PronogeeksSeason)
+export default PronogeeksSeason
