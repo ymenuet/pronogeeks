@@ -1,21 +1,25 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { connect } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { Form, Input } from 'antd'
 import axios from 'axios'
 import { Loader, SocialLogins } from '../../components'
 import { openNotification, appendPhoto } from '../../utils/functions'
 import './connectPages.css'
 
-import * as mapDispatchToProps from '../../actions/authActions'
+import { signup } from '../../actions/authActions'
 
-const Signup = ({ loadingUser, signup, loading, signedup, emailToConfirm }) => {
+const Signup = ({ loadingUser }) => {
     const [form] = Form.useForm()
     const [cloudinaryLoading, setCloudinaryLoading] = useState(false)
     const [cloudinaryError, setCloudinaryError] = useState(false)
     const [photo, setPhoto] = useState(null)
     const [photoUploading, setPhotoUploading] = useState(false)
     const [fileName, setFileName] = useState('Charger une photo')
+
+    const { loading, signedup, emailToConfirm } = useSelector(({ authReducer }) => authReducer)
+
+    const dispatch = useDispatch()
 
     const onFinish = async (values) => {
         const emailCorrect = (/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@(([[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/).test(String(values.email).toLowerCase())
@@ -34,7 +38,7 @@ const Signup = ({ loadingUser, signup, loading, signedup, emailToConfirm }) => {
                 photoUrl = secure_url
             }
             if (!cloudinaryError) {
-                signup({ ...values, photo: photoUrl })
+                dispatch(signup({ ...values, photo: photoUrl }))
                 setCloudinaryLoading(false)
             }
         }
@@ -74,114 +78,112 @@ const Signup = ({ loadingUser, signup, loading, signedup, emailToConfirm }) => {
 
         ) : <div className='row signup-form'>
 
-                        <div className='col-10 offset-1 col-sm-8 offset-sm-2 col-xl-6 offset-xl-3'>
+            <div className='col-10 offset-1 col-sm-8 offset-sm-2 col-xl-6 offset-xl-3'>
 
-                            <h2>Créer un compte</h2>
+                <h2>Créer un compte</h2>
 
-                            <Form
-                                form={form}
-                                layout='vertical'
-                                name="basic"
-                                onFinish={onFinish}
-                                initialValues={{
-                                    remember: true,
-                                }}
-                            >
+                <Form
+                    form={form}
+                    layout='vertical'
+                    name="basic"
+                    onFinish={onFinish}
+                    initialValues={{
+                        remember: true,
+                    }}
+                >
 
-                                <Form.Item
-                                    type='email'
-                                    label="Email :"
-                                    name="email"
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: `L'email est nécessaire pour créer un compte.`,
-                                        },
-                                    ]}
-                                >
-                                    <Input placeholder='roi.geek@pronogeeks.fr' />
-                                </Form.Item>
+                    <Form.Item
+                        type='email'
+                        label="Email :"
+                        name="email"
+                        rules={[
+                            {
+                                required: true,
+                                message: `L'email est nécessaire pour créer un compte.`,
+                            },
+                        ]}
+                    >
+                        <Input placeholder='roi.geek@pronogeeks.fr' />
+                    </Form.Item>
 
-                                <Form.Item
-                                    label="Pseudo :"
-                                    name="username"
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: 'Le pseudo est obligatoire et doit être unique.',
-                                        },
-                                    ]}
-                                >
-                                    <Input placeholder='RoiGeek' />
-                                </Form.Item>
+                    <Form.Item
+                        label="Pseudo :"
+                        name="username"
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Le pseudo est obligatoire et doit être unique.',
+                            },
+                        ]}
+                    >
+                        <Input placeholder='RoiGeek' />
+                    </Form.Item>
 
-                                <Form.Item
-                                    label="Mot de passe :"
-                                    name="password"
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: 'Tu auras besoin d\'un mot de passe pour te connecter !',
-                                        },
-                                    ]}
-                                >
-                                    <Input.Password placeholder='********' />
-                                </Form.Item>
+                    <Form.Item
+                        label="Mot de passe :"
+                        name="password"
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Tu auras besoin d\'un mot de passe pour te connecter !',
+                            },
+                        ]}
+                    >
+                        <Input.Password placeholder='********' />
+                    </Form.Item>
 
-                                <label
-                                    className='first-file-label signup-file-label'
-                                    htmlFor="profile-pic-input-signup"
-                                >
-                                    Photo de profil :
+                    <label
+                        className='first-file-label signup-file-label'
+                        htmlFor="profile-pic-input-signup"
+                    >
+                        Photo de profil :
                                 </label>
 
-                                <br />
+                    <br />
 
-                                <div className="custom-file custom-file-signup">
-                                    <label
-                                        className="profile-image custom-file-label"
-                                        htmlFor="profile-pic-input-signup"
-                                    >
-                                        {fileName}
-                                        <input
-                                            id="profile-pic-input-signup"
-                                            type="file"
-                                            name="image"
-                                            className="custom-file-input"
-                                            onChange={uploadPhoto}
-                                        />
-                                    </label>
-                                </div>
-
-                                <div style={{ display: 'flex', justifyContent: 'center' }}>
-                                    <button
-                                        type='submit'
-                                        className='btn my-btn submit-btn register-btn'
-                                        style={{ marginTop: 10 }}
-                                        disabled={photoUploading}
-                                    >
-                                        Créer mon compte
-                                    </button>
-                                </div>
-
-                            </Form>
-
-                            <SocialLogins />
-
-                        </div>
-
-                        <Link
-                            to='/privacy-policy'
-                            className='privacy-policy-link'
+                    <div className="custom-file custom-file-signup">
+                        <label
+                            className="profile-image custom-file-label"
+                            htmlFor="profile-pic-input-signup"
                         >
-                            Politique de confidentialité
+                            {fileName}
+                            <input
+                                id="profile-pic-input-signup"
+                                type="file"
+                                name="image"
+                                className="custom-file-input"
+                                onChange={uploadPhoto}
+                            />
+                        </label>
+                    </div>
+
+                    <div style={{ display: 'flex', justifyContent: 'center' }}>
+                        <button
+                            type='submit'
+                            className='btn my-btn submit-btn register-btn'
+                            style={{ marginTop: 10 }}
+                            disabled={photoUploading}
+                        >
+                            Créer mon compte
+                                    </button>
+                    </div>
+
+                </Form>
+
+                <SocialLogins />
+
+            </div>
+
+            <Link
+                to='/privacy-policy'
+                className='privacy-policy-link'
+            >
+                Politique de confidentialité
                         </Link>
 
-                    </div>}
+        </div>}
 
     </div>
 }
 
-const mapStateToProps = ({ authReducer }) => authReducer
-
-export default connect(mapStateToProps, mapDispatchToProps)(Signup)
+export default Signup

@@ -1,62 +1,32 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { connect } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import { ErrorMessage, Loader } from '../../components'
 import { DragIcon, SaveIcon, ListIcon } from '../../components/Icons'
-import { openNotification, isConnected } from '../../utils/functions'
-import { useSeason } from '../../utils/hooks'
-import { PROV_RANKING_MATCHWEEK_LIMIT } from '../../utils/constants'
+import { openNotification } from '../../utils/functions'
+import { useSeason, useUserProvRanking, useProvRankingOpen } from '../../utils/hooks'
 import './seasonRanking.css'
 
 import { saveUserProvRanking } from '../../actions/geekActions'
-import { closeProvRankings } from '../../actions/seasonActions'
 
-const SeasonRanking = ({ match: { params: { seasonID, matchweekNumber } }, history, loadingGeek, user, rankingSaved, saveUserProvRanking, closeProvRankings }) => {
-
-    const [userProvRanking, setUserProvRanking] = useState(null)
-    const [userWithoutRanking, setUserWithoutRanking] = useState(false)
-    const [provRankingOpen, setProvRankingOpen] = useState(false)
+const SeasonRanking = ({ match: { params: { seasonID, matchweekNumber } } }) => {
 
     const { season, errorSeason } = useSeason(seasonID)
 
+    const { userProvRanking, userWithoutRanking, setUserProvRanking } = useUserProvRanking(season)
+
+    const provRankingOpen = useProvRankingOpen(season)
+
+    const dispatch = useDispatch()
+
+    const { rankingSaved, loading: loadingGeek } = useSelector(({ geekReducer }) => geekReducer)
 
     useEffect(() => {
         if (rankingSaved) {
             openNotification('success', 'Classement enregistré')
         }
     }, [rankingSaved])
-
-
-    useEffect(() => {
-        if (isConnected(user) && season) {
-            const seasonUser = user.seasons.filter(season => season.season._id === seasonID)
-            if (seasonUser.length) {
-                const userProvRanking = seasonUser[0].provisionalRanking
-                if (userProvRanking.length) setUserProvRanking(userProvRanking)
-                else {
-                    setUserWithoutRanking(true)
-                    if (season.provRankingOpen) setUserProvRanking(season.rankedTeams)
-                    else setUserProvRanking([])
-                }
-            } else history.push(`/pronogeeks/${seasonID}`)
-        }
-    }, [history, user, season, seasonID])
-
-
-    useEffect(() => {
-        if (season && season.provRankingOpen) {
-            const matchweek7Dates = season.fixtures.filter(({ matchweek }) => matchweek === PROV_RANKING_MATCHWEEK_LIMIT).map(({ date }) => new Date(date))
-            const matchweek7HasStarted = Date.now() - Math.min(...matchweek7Dates) > 0
-
-            if (matchweek7HasStarted) {
-                closeProvRankings(season._id)
-                setProvRankingOpen(false)
-
-            } else setProvRankingOpen(true)
-        }
-
-    }, [season, closeProvRankings])
 
 
     const handleDragEnd = result => {
@@ -68,7 +38,7 @@ const SeasonRanking = ({ match: { params: { seasonID, matchweekNumber } }, histo
     }
 
     const saveRanking = () => {
-        saveUserProvRanking(seasonID, userProvRanking)
+        dispatch(saveUserProvRanking(seasonID, userProvRanking))
     }
 
     const infoProvRanking = (provRankingOpen) => {
@@ -252,15 +222,4 @@ const SeasonRanking = ({ match: { params: { seasonID, matchweekNumber } }, histo
 
 }
 
-const mapStateToProps = state => ({
-    user: state.authReducer.user,
-    rankingSaved: state.geekReducer.rankingSaved,
-    loadingGeek: state.geekReducer.loading,
-})
-
-const mapDispatchToProps = {
-    saveUserProvRanking,
-    closeProvRankings
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(SeasonRanking)
+export default SeasonRanking

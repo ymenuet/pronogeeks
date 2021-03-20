@@ -41,7 +41,8 @@ export const useOpenSeason = season => {
             const userSeason = getUserSeasonFromProfile(user, season._id)
 
             if (!userSeason || !userSeason.favTeam) {
-                const seasonTeams = season.rankedTeams.sort((a, b) => {
+                const seasonTeams = [...season.rankedTeams]
+                seasonTeams.sort((a, b) => {
                     if (a.name > b.name) return 1
                     else return -1
                 })
