@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { CorrectIcon, ExactIcon, FavTeamIcon, ViewPronoIcon, FirstIcon, SecondIcon, ThirdIcon } from '../Icons'
+import { getUserSeasonFromProfile, getUserMatchweekFromProfile } from '../../utils/functions'
 import './rankingOneGeek.css'
 
 const iconSize = '20px'
@@ -10,50 +11,39 @@ const RankingOneGeek = ({ user, geek, rank, seasonID, matchweek, header }) => {
     const [totalPoints, setTotalPoints] = useState(0)
     const [correctPronos, setCorrectPronos] = useState(0)
     const [exactPronos, setExactPronos] = useState(0)
-    const [favTeam, setFavTeam] = useState(false)
-    const [team, setTeam] = useState(null)
+    const [favTeamBonus, setFavTeamBonus] = useState(false)
+    const [favTeam, setFavTeam] = useState(null)
 
     useEffect(() => {
 
-        const getSeasonID = season => season.season._id?.toString() || season.season.toString()
+        const geekSeason = getUserSeasonFromProfile(geek, seasonID)
 
-        const geekPlaysSeason = geek.seasons.length > 0 &&
-            geek.seasons.filter(seas => getSeasonID(seas) === seasonID.toString()).length > 0
-        let geekPlaysMatchweek = false
-        if (geekPlaysSeason) geekPlaysMatchweek = matchweek &&
-            geek.seasons.filter(seas => getSeasonID(seas) === seasonID.toString())[0].matchweeks.length > 0 &&
-            geek.seasons.filter(seas => getSeasonID(seas) === seasonID.toString())[0].matchweeks.filter(oneMatchweek => oneMatchweek.number.toString() === matchweek.toString()).length > 0
+        if (geekSeason) {
+            setFavTeam(geekSeason.favTeam)
 
-        if (geekPlaysSeason && geekPlaysMatchweek) {
-            const team = geek.seasons.filter(seas => getSeasonID(seas) === seasonID.toString())[0].favTeam
-            const matchweekDetails = geek.seasons.filter(seas => getSeasonID(seas) === seasonID.toString())[0].matchweeks.filter(oneMatchweek => oneMatchweek.number.toString() === matchweek.toString())[0]
-            setTotalPoints(matchweekDetails.totalPoints)
-            setCorrectPronos(matchweekDetails.numberCorrects)
-            setExactPronos(matchweekDetails.numberExacts)
-            setFavTeam(matchweekDetails.bonusFavTeam)
-            setTeam(team)
-        }
-        else if (!matchweek && geekPlaysSeason) {
-            const seasonDetails = geek.seasons.filter(seas => getSeasonID(seas) === seasonID.toString())[0]
-            setTotalPoints(seasonDetails.totalPoints || seasonDetails.initialPoints)
-            setCorrectPronos(seasonDetails.numberCorrects || seasonDetails.initialNumberCorrects)
-            setExactPronos(seasonDetails.numberExacts || seasonDetails.initialNumberExacts)
-            setFavTeam(seasonDetails.bonusFavTeam || seasonDetails.initialBonusFavTeam)
-            setTeam(seasonDetails.favTeam)
-        }
-        else {
+            const geekMatchweek = matchweek && getUserMatchweekFromProfile(geekSeason, matchweek)
+
+            if (geekMatchweek) {
+                setTotalPoints(geekMatchweek.totalPoints)
+                setCorrectPronos(geekMatchweek.numberCorrects)
+                setExactPronos(geekMatchweek.numberExacts)
+                setFavTeamBonus(geekMatchweek.bonusFavTeam)
+
+            } else {
+                setTotalPoints(geekSeason.totalPoints || geekSeason.initialPoints)
+                setCorrectPronos(geekSeason.numberCorrects || geekSeason.initialNumberCorrects)
+                setExactPronos(geekSeason.numberExacts || geekSeason.initialNumberExacts)
+                setFavTeamBonus(geekSeason.bonusFavTeam || geekSeason.initialBonusFavTeam)
+            }
+
+        } else {
             setTotalPoints(0)
             setCorrectPronos(0)
             setExactPronos(0)
-            setFavTeam(false)
-            setTeam(null)
+            setFavTeamBonus(false)
+            setFavTeam(null)
         }
-        return () => {
-            setTotalPoints(0)
-            setCorrectPronos(0)
-            setExactPronos(0)
-            setFavTeam(false)
-        }
+
     }, [geek, matchweek, seasonID])
 
     const giveMedal = () => {
@@ -69,18 +59,18 @@ const RankingOneGeek = ({ user, geek, rank, seasonID, matchweek, header }) => {
     }
 
     const favTeamInfo = () => {
-        if (matchweek) return favTeam && <span className='ranking-icon'>
+        if (matchweek) return favTeamBonus && <span className='ranking-icon'>
             <FavTeamIcon size={iconSize} />
             <div className='ranking-icon-details ranking-icon-details-right'>
                 <p>Bon prono avec son équipe de coeur :<br />
-                    <img className="team-logo-ranking" src={team?.logo} alt="Fav Team" /> {team?.name}
+                    <img className="team-logo-ranking" src={favTeam?.logo} alt="Fav Team" /> {favTeam?.name}
                 </p>
             </div>
         </span>
         else return <span className='ranking-icon'>
-            {favTeam}<FavTeamIcon className='ranking-icon-component' size={iconSize} />
+            {favTeamBonus}<FavTeamIcon className='ranking-icon-component' size={iconSize} />
             <div className='ranking-icon-details ranking-icon-details-right'>
-                <p>{favTeam} bons pronos avec son équipe de coeur.</p>
+                <p>{favTeamBonus} bons pronos avec son équipe de coeur.</p>
             </div>
         </span>
     }
@@ -97,10 +87,10 @@ const RankingOneGeek = ({ user, geek, rank, seasonID, matchweek, header }) => {
                 </div>
             </span>
         </Link>
-        else return team ? <span className='ranking-icon ranking-icon-last ranking-favteam-logo'>
-            <img className="team-logo-ranking" src={team.logo} alt="Fav Team" />
+        else return favTeam ? <span className='ranking-icon ranking-icon-last ranking-favteam-logo'>
+            <img className="team-logo-ranking" src={favTeam.logo} alt="Fav Team" />
             <div className='ranking-icon-details'>
-                <p>Équipe de coeur de {geek.username} : {team.name}</p>
+                <p>Équipe de coeur de {geek.username} : {favTeam.name}</p>
             </div>
         </span> : <span className='ranking-icon ranking-icon-last ranking-favteam-logo'>&nbsp;</span>
     }

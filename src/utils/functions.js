@@ -220,10 +220,12 @@ export const rankGeeks = (players, seasonID, matchweekNumber = null) => {
     })
 }
 
+export const getSeasonID = (season) => (season.season._id ? season.season._id : season.season).toString()
+
 export const getUserSeasonFromProfile = (user, seasonID) => {
-    const seasonFiltered = user.seasons.filter(season => season.season._id.toString() === seasonID.toString())
+    const seasonFiltered = user.seasons.filter(season => getSeasonID(season) === seasonID.toString())
     if (seasonFiltered.length > 0) return seasonFiltered[0]
-    else return null
+    return null
 }
 
 export const getUserMatchweekFromProfile = (userSeason, matchweekNumber) => {
@@ -231,6 +233,12 @@ export const getUserMatchweekFromProfile = (userSeason, matchweekNumber) => {
     if (userSeason && userSeason.matchweeks) matchweekFiltered = userSeason.matchweeks.filter(matchweek => matchweek.number.toString() === matchweekNumber.toString())
     if (matchweekFiltered && matchweekFiltered.length > 0) matchweekFiltered = matchweekFiltered[0]
     return matchweekFiltered
+}
+
+export const getUserFavTeam = (user, seasonID) => {
+    const userSeason = getUserSeasonFromProfile(user, seasonID)
+    if (userSeason) return userSeason.favTeam
+    return null
 }
 
 export const appendPhoto = (event, setFileName = null) => {
