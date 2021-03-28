@@ -22,12 +22,7 @@ const GeekLeague = ({ match: { params: { geekLeagueID } }, history, loading }) =
 
     const { seasons, errorSeasons } = useUndergoingSeasons()
 
-    const { geekleagueEdited, geekleagueDeleted, geekleagueOut, loadingGeekleague } = useSelector(({ geekleagueReducer }) => ({
-        geekleagueEdited: geekleagueReducer.geekleagueEdited,
-        geekleagueDeleted: geekleagueReducer.geekleagueDeleted,
-        geekleagueOut: geekleagueReducer.geekleagueOut,
-        loadingGeekleague: geekleagueReducer.loading,
-    }))
+    const { geekleagueEdited, geekleagueDeleted, geekleagueOut, loading: loadingGeekleague } = useSelector(({ geekleagueReducer }) => geekleagueReducer)
 
     const dispatch = useDispatch()
 

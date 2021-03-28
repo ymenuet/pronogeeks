@@ -29,18 +29,17 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
     const dispatch = useDispatch()
 
 
-    const previousPage = () => {
-        history.push(`/pronogeeks/${seasonID}/matchweek/${parseInt(matchweekNumber) - 1}`)
-    }
-
-    const nextPage = () => {
-        history.push(`/pronogeeks/${seasonID}/matchweek/${parseInt(matchweekNumber) + 1}`)
-    }
-
     const changeMatchweek = matchweek => {
         history.push(`/pronogeeks/${seasonID}/matchweek/${matchweek}`)
     }
 
+    const previousPage = () => {
+        changeMatchweek(parseInt(matchweekNumber) - 1)
+    }
+
+    const nextPage = () => {
+        changeMatchweek(parseInt(matchweekNumber) + 1)
+    }
 
     return errorSeason ? (
 

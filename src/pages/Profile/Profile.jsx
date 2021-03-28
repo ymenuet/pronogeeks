@@ -19,10 +19,7 @@ const Profile = ({ loading }) => {
 
     const { user, isUserConnected } = useUser()
 
-    const { loadingUsername, loadingPhoto } = useSelector(({ authReducer }) => ({
-        loadingUsername: authReducer.loadingUsername,
-        loadingPhoto: authReducer.loadingPhoto,
-    }))
+    const { loadingUsername, loadingPhoto } = useSelector(({ authReducer }) => authReducer)
 
     const dispatch = useDispatch()
 

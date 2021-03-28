@@ -14,7 +14,7 @@ const RequestPwdReset = ({ history, loadingUser }) => {
 
     const dispatch = useDispatch()
 
-    const onFinish = async ({ email }) => {
+    const onFinish = ({ email }) => {
         dispatch(resetPwd(email))
     }
 
