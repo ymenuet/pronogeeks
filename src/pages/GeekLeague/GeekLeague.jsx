@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { openNotification } from '../../utils/functions'
-import { useGeekLeague, useUndergoingSeasons, useUser } from '../../utils/hooks'
+import { useGeekLeague, useUndergoingSeasons, useUser, useNotification } from '../../utils/hooks'
 import { Loader, RankGeeks, ErrorMessage, GeekSelector } from '../../components'
 import { Form, Input } from 'antd'
 import { Link } from 'react-router-dom'
@@ -26,33 +25,29 @@ const GeekLeague = ({ match: { params: { geekLeagueID } }, history, loading }) =
 
     const dispatch = useDispatch()
 
-    useEffect(() => {
-        if (geekleagueEdited) {
-            setShowModal(false)
-            openNotification('success', 'Ligue actualisée.')
-        }
+    useNotification(
+        geekleagueEdited,
+        { title: 'Ligue actualisée' },
+        () => setShowModal(false)
+    )
 
-    }, [geekleagueEdited])
-
-
-    useEffect(() => {
-        if (geekleagueDeleted) {
+    useNotification(
+        geekleagueDeleted,
+        { title: 'Ligue supprimée' },
+        () => {
             setShowDelete(false)
-            openNotification('success', 'Ligue supprimée.')
             history.push('/myGeekLeagues')
         }
+    )
 
-    }, [geekleagueDeleted, history])
-
-
-    useEffect(() => {
-        if (geekleagueOut) {
+    useNotification(
+        geekleagueOut,
+        { title: `Tu as bien quitté la ligue "${geekLeague?.name}"` },
+        () => {
             setShowOut(false)
-            openNotification('success', `Tu as bien quitté la ligue "${geekLeague.name}".`)
             history.push('/myGeekLeagues')
         }
-
-    }, [geekleagueOut, history, geekLeague])
+    )
 
 
     return <div className='geekleague-bg geekleague-details'>

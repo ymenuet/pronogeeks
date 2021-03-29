@@ -10,17 +10,13 @@ export const useNotification = (condition, {
     title = 'Succès',
     message,
     duration
-}, callbacks) => {
+}, callback) => {
 
     useEffect(() => {
         if (condition) {
             openNotification(type, title, message, duration)
-            if (callbacks.length) {
-                callbacks.map(({
-                    callback,
-                    args
-                }) => callback(...args))
-            }
+            callback && callback()
         }
-    }, [condition, type, title, message, duration, callbacks])
+        /* eslint-disable-next-line react-hooks/exhaustive-deps */
+    }, [condition, type, title, message, duration])
 }
