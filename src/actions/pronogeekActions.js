@@ -172,12 +172,14 @@ export const handleInputHomeProno = (homeProno, fixture) => (dispatch, getState)
 
     const newPronogeeks = createCopyUserPronos(getState, fixture)
 
-    const awayProno = newPronogeeks[`${season}-${matchweek}`][_id].awayProno
+    const fixturePronos = newPronogeeks[`${season}-${matchweek}`][_id]
+
+    const awayProno = fixturePronos.awayProno
     const isAwayPronoSet = parseInt(awayProno) >= 0
 
-    const awayPronoDB = newPronogeeks[`${season}-${matchweek}`][_id].awayPronoDB || awayProno
-    let homePronoDB = newPronogeeks[`${season}-${matchweek}`][_id].homePronoDB
-    if (!newPronogeeks[`${season}-${matchweek}`][_id].modified) homePronoDB = newPronogeeks[`${season}-${matchweek}`][_id].homeProno
+    const awayPronoDB = fixturePronos.awayPronoDB >= 0 ? fixturePronos.awayPronoDB : awayProno
+    let homePronoDB = fixturePronos.homePronoDB
+    if (!homePronoDB && homePronoDB !== 0) homePronoDB = fixturePronos.homeProno
     const isSamePronoAsInDB = awayProno === awayPronoDB && homeProno === homePronoDB
 
     newPronogeeks[`${season}-${matchweek}`][_id].fixture = _id
@@ -201,12 +203,14 @@ export const handleInputAwayProno = (awayProno, fixture) => (dispatch, getState)
 
     const newPronogeeks = createCopyUserPronos(getState, fixture)
 
-    const homeProno = newPronogeeks[`${season}-${matchweek}`][_id].homeProno
-    const isHomePronoSet = parseInt(newPronogeeks[`${season}-${matchweek}`][_id].homeProno) >= 0
+    const fixturePronos = newPronogeeks[`${season}-${matchweek}`][_id]
 
-    const homePronoDB = newPronogeeks[`${season}-${matchweek}`][_id].homePronoDB || homeProno
-    let awayPronoDB = newPronogeeks[`${season}-${matchweek}`][_id].awayPronoDB
-    if (!newPronogeeks[`${season}-${matchweek}`][_id].modified) awayPronoDB = newPronogeeks[`${season}-${matchweek}`][_id].awayProno
+    const homeProno = fixturePronos.homeProno
+    const isHomePronoSet = parseInt(homeProno) >= 0
+
+    const homePronoDB = fixturePronos.homePronoDB >= 0 ? fixturePronos.homePronoDB : homeProno
+    let awayPronoDB = fixturePronos.awayPronoDB
+    if (!awayPronoDB && awayPronoDB !== 0) awayPronoDB = fixturePronos.awayProno
     const isSamePronoAsInDB = homeProno === homePronoDB && awayProno === awayPronoDB
 
     newPronogeeks[`${season}-${matchweek}`][_id].fixture = _id
