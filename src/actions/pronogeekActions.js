@@ -183,7 +183,7 @@ export const handleInputHomeProno = (homeProno, fixture) => (dispatch, getState)
     newPronogeeks[`${season}-${matchweek}`][_id].fixture = _id
     newPronogeeks[`${season}-${matchweek}`][_id].homeProno = homeProno
     newPronogeeks[`${season}-${matchweek}`][_id].modified = isAwayPronoSet && !isSamePronoAsInDB && homeProno >= 0
-    if (homePronoDB) newPronogeeks[`${season}-${matchweek}`][_id].homePronoDB = homePronoDB
+    if (homePronoDB >= 0) newPronogeeks[`${season}-${matchweek}`][_id].homePronoDB = homePronoDB
 
     dispatch({
         type: ADD_USER_PRONOGEEKS,
@@ -212,7 +212,7 @@ export const handleInputAwayProno = (awayProno, fixture) => (dispatch, getState)
     newPronogeeks[`${season}-${matchweek}`][_id].fixture = _id
     newPronogeeks[`${season}-${matchweek}`][_id].awayProno = awayProno
     newPronogeeks[`${season}-${matchweek}`][_id].modified = isHomePronoSet && !isSamePronoAsInDB && awayProno >= 0
-    if (awayPronoDB) newPronogeeks[`${season}-${matchweek}`][_id].awayPronoDB = awayPronoDB
+    if (awayPronoDB >= 0) newPronogeeks[`${season}-${matchweek}`][_id].awayPronoDB = awayPronoDB
 
     dispatch({
         type: ADD_USER_PRONOGEEKS,
