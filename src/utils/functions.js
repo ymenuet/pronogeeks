@@ -198,8 +198,13 @@ export const rankGeeks = (players, seasonID, matchweekNumber = null) => {
             else if (results2.numberExacts !== results1.numberExacts) return results2.numberExacts - results1.numberExacts
             else if (!matchweek && results2.bonusFavTeam !== results1.bonusFavTeam) return results2.bonusFavTeam - results1.bonusFavTeam
             else if (matchweek && results2.bonusFavTeam !== results1.bonusFavTeam) return results1.bonusFavTeam ? -1 : 1
-            else if (creationUserA >= creationUserB) return 1
-            else return -1
+            else if (creationUserA >= creationUserB) {
+                a.tied = true
+                return 1
+            } else {
+                b.tied = true
+                return -1
+            }
         }
 
         const seasonA = a.seasons.filter(seas => seas.season.toString() === seasonID.toString())

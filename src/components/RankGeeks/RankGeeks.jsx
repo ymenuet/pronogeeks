@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react'
 import { RankingOneGeek } from '..'
 import { rankGeeks } from '../../utils/functions'
 import { useUser } from '../../utils/hooks'
+import { SIZE_GENERAL_RANKING } from '../../utils/constants'
 
 const RankGeeks = ({ players, seasonID, generalRanking, matchweek }) => {
 
     const [ranking, setRanking] = useState(null)
-    const [userRanking, setUserRanking] = useState(null)
+    const [userRank, setUserRank] = useState(null)
 
     const { user, isUserConnected } = useUser()
 
@@ -17,32 +18,40 @@ const RankGeeks = ({ players, seasonID, generalRanking, matchweek }) => {
                 setRanking(ranking)
             }
 
-            else setRanking(players.slice(0, 50))
+            else setRanking(players.slice(0, SIZE_GENERAL_RANKING))
         }
 
     }, [players, seasonID, matchweek, setRanking, generalRanking])
 
     useEffect(() => {
-        const setUserRank = (user, ranking) => {
-            const userRanking = ranking.map(player => player._id).indexOf(user._id) + 1
-            setUserRanking(userRanking)
+        const setUserRanking = (user, ranking) => {
+            let indexUser = ranking.map(player => player._id).indexOf(user._id)
+            while (ranking[indexUser].tied) indexUser--
+            setUserRank(indexUser + 1)
         }
 
         if (isUserConnected) {
-            if (!generalRanking && ranking) setUserRank(user, ranking)
+            if (!generalRanking && ranking) setUserRanking(user, ranking)
 
-            else if (generalRanking) setUserRank(user, players)
+            else if (generalRanking) setUserRanking(user, players)
+
         }
 
-    }, [user, isUserConnected, ranking, players, generalRanking, matchweek])
+    }, [user, isUserConnected, ranking, players, generalRanking])
+
+    const getRank = (geeks, index) => {
+        let i = index
+        while (geeks[i].tied) i--
+        return i + 1
+    }
 
     return (
         ranking ? <ul className={`list-group list-group-flush ${generalRanking ? 'season-ranking' : 'geekleague-ranking-detail'}`}>
 
-            {userRanking > 1 && <RankingOneGeek
+            {userRank > 1 && <RankingOneGeek
                 user={user}
                 geek={user}
-                rank={userRanking}
+                rank={userRank}
                 seasonID={seasonID}
                 matchweek={matchweek}
                 header
@@ -52,7 +61,7 @@ const RankGeeks = ({ players, seasonID, generalRanking, matchweek }) => {
                 key={player._id}
                 user={user}
                 geek={player}
-                rank={index + 1}
+                rank={getRank(ranking, index)}
                 seasonID={seasonID}
                 matchweek={matchweek}
             />)}

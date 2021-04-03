@@ -77,7 +77,11 @@ const RankingOneGeek = ({ user, geek, rank, seasonID, matchweek, header }) => {
 
     const seePronos = () => {
         const geekIsCurrentUser = geek._id === user._id
-        const linkToPronos = geekIsCurrentUser ? `/pronogeeks/${seasonID}/matchweek/${matchweek}` : `/geek/${geek._id}/pronogeeks/${seasonID}/matchweek/${matchweek}`
+
+        const linkToPronos =
+            geekIsCurrentUser ? `/pronogeeks/${seasonID}/matchweek/${matchweek}`
+                : `/geek/${geek._id}/pronogeeks/${seasonID}/matchweek/${matchweek}`
+
         if (matchweek) return <Link to={linkToPronos}>
             <span className='ranking-icon ranking-icon-last'>
                 <ViewPronoIcon color='rgba(156, 0, 99, 0.8)' size='24px' />
@@ -87,12 +91,15 @@ const RankingOneGeek = ({ user, geek, rank, seasonID, matchweek, header }) => {
                 </div>
             </span>
         </Link>
+
         else return favTeam ? <span className='ranking-icon ranking-icon-last ranking-favteam-logo'>
             <img className="team-logo-ranking" src={favTeam.logo} alt="Fav Team" />
             <div className='ranking-icon-details'>
                 <p>Équipe de coeur de {geek.username} : {favTeam.name}</p>
             </div>
-        </span> : <span className='ranking-icon ranking-icon-last ranking-favteam-logo'>&nbsp;</span>
+        </span>
+            :
+            <span className='ranking-icon ranking-icon-last ranking-favteam-logo'>&nbsp;</span>
     }
 
     return (

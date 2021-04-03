@@ -17,11 +17,9 @@ import {
     getSeasonPlayers
 } from '../../actions/geekActions'
 
-export const useSeasonPlayersRanking = (season, rankingSize) => {
+export const useSeasonPlayersRanking = (season) => {
     const [intermediateRanking, setIntermediateRanking] = useState(null)
-    const [seasonRankingFull, setSeasonRankingFull] = useState(null)
     const [seasonRanking, setSeasonRanking] = useState(null)
-    const [userRanking, setUserRanking] = useState(null)
     const [errorRanking, setErrorRanking] = useState(null)
 
     const {
@@ -52,23 +50,20 @@ export const useSeasonPlayersRanking = (season, rankingSize) => {
     useEffect(() => {
         if (intermediateRanking && isUserConnected && user.seasons.length) {
             const rankedGeeks = intermediateRanking.map(geek => {
-                if (geek._id === user._id) return user
+                if (geek._id === user._id) return {
+                    ...geek,
+                    ...user
+                }
                 return geek
             })
-            const userRanking = rankedGeeks.map(geek => geek._id).indexOf(user._id)
-            const rankedGeeks20 = rankedGeeks.slice(0, rankingSize)
-            setUserRanking(userRanking)
-            setSeasonRankingFull(rankedGeeks)
-            setSeasonRanking(rankedGeeks20)
+            setSeasonRanking(rankedGeeks)
         }
 
-    }, [user, isUserConnected, rankingSize, intermediateRanking])
+    }, [user, isUserConnected, intermediateRanking])
 
     return {
-        seasonRankingFull,
-        setSeasonRankingFull,
-        userRanking,
         seasonRanking,
+        setSeasonRanking,
         errorRanking
     }
 }

@@ -23,7 +23,7 @@ const Profile = ({ loading }) => {
 
     const dispatch = useDispatch()
 
-    const { seasonRanking, seasonRankingFull, userRanking, setSeasonRankingFull, errorRanking } = useSeasonPlayersRanking(season, 20)
+    const { seasonRanking, setSeasonRanking, errorRanking } = useSeasonPlayersRanking(season)
 
 
     const seasonFromUserHistory = useSeasonHistory()
@@ -32,9 +32,9 @@ const Profile = ({ loading }) => {
             const season = seasonFromUserHistory.season
             setSeason(season)
 
-        } else setSeasonRankingFull([])
+        } else setSeasonRanking([])
 
-    }, [seasonFromUserHistory, setSeasonRankingFull])
+    }, [seasonFromUserHistory, setSeasonRanking])
 
 
     const [usernameInput, setUsernameInput] = useState('')
@@ -189,7 +189,7 @@ const Profile = ({ loading }) => {
 
                             <ErrorMessage>{errorRanking}</ErrorMessage>
 
-                        ) : !seasonRankingFull ? <div className='pt-4'>
+                        ) : !seasonRanking ? <div className='pt-4'>
 
                             <Loader
                                 tip='Chargement des ligues...'
@@ -209,7 +209,7 @@ const Profile = ({ loading }) => {
                                 <li className='list-group-item d-flex justify-content-between align-items-center'>
 
                                     <span className='username-ranking' style={{ color: 'rgb(4, 78, 199)' }}>{league.name}</span>
-                                    <span className='badge badge-success badge-pill my-badge my-badge-ranking my-badge-ranking-header'>{setRank(defineUserRank(seasonRankingFull, league))} / {league.geeks.length}</span>
+                                    <span className='badge badge-success badge-pill my-badge my-badge-ranking my-badge-ranking-header'>{setRank(defineUserRank(seasonRanking, league))} / {league.geeks.length}</span>
 
                                 </li>
                             </Link>)}
@@ -234,7 +234,7 @@ const Profile = ({ loading }) => {
 
                         <ErrorMessage>{errorRanking}</ErrorMessage>
 
-                    ) : !seasonRanking ? (
+                    ) : !seasonRanking.length ? (
 
                         <Loader
                             tip='Chargement du classement...'
@@ -244,7 +244,6 @@ const Profile = ({ loading }) => {
                     ) : (
 
                         <RankGeeks
-                            userRanking={userRanking}
                             players={seasonRanking}
                             seasonID={season._id}
                             generalRanking
