@@ -187,7 +187,9 @@ export const resetMatchweek = (e, matchweekInput, matchweekRef, setMatchweekInpu
 
 export const rankGeeks = (players, seasonID, matchweekNumber = null) => {
 
-    return players.sort((a, b) => {
+    const geeks = JSON.parse(JSON.stringify(players))
+
+    return geeks.sort((a, b) => {
 
         const creationUserA = a.createdAt
         const creationUserB = b.createdAt
