@@ -1,7 +1,8 @@
 import React from 'react'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import { AppLayout } from './components'
-import { Login, Signup, Home, Profile, PronogeeksSeason, Pronogeeks, CreateGeekLeague, GeekLeague, AllGeekLeagues, GeekLeagueMatchweek, GeekMatchweek, ConfirmUser, RequestPwdReset, SetNewPwd, PrivacyPolicy, Rules, SeasonRanking } from './pages'
+import { Login, Signup, Home, Profile, PronogeeksSeason, Pronogeeks, CreateGeekLeague, GeekLeague, AllGeekLeagues, GeekLeagueMatchweek, GeekMatchweek, ConfirmUser, RequestPwdReset, SetNewPwd, PrivacyPolicy, Rules, SeasonRanking, Admin } from './pages'
+import AdminRoute from './helpers/AdminRoute.jsx'
 import PrivateRoute from './helpers/PrivateRoute.jsx'
 import PublicRoute from './helpers/PublicRoute.jsx'
 import { useErrorNotification } from './utils/hooks/index'
@@ -34,6 +35,7 @@ const App = () => {
                 <PrivateRoute component={GeekLeagueMatchweek} exact path='/myGeekleagues/:geekLeagueID/season/:seasonID' />
                 <PrivateRoute component={SeasonRanking} exact path='/ranking/season/:seasonID/:matchweekNumber' />
                 <PrivateRoute component={SeasonRanking} exact path='/ranking/season/:seasonID' />
+                <AdminRoute component={Admin} exact path='/admin' />
                 <Route component={NotFound} />
             </Switch>
         </AppLayout>
