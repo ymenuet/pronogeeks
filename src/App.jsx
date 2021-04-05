@@ -1,5 +1,6 @@
 import React from 'react'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
+import './i18n'
 import { AppLayout } from './components'
 import { Login, Signup, Home, Profile, PronogeeksSeason, Pronogeeks, CreateGeekLeague, GeekLeague, AllGeekLeagues, GeekLeagueMatchweek, GeekMatchweek, ConfirmUser, RequestPwdReset, SetNewPwd, PrivacyPolicy, Rules, SeasonRanking, Admin } from './pages'
 import AdminRoute from './helpers/AdminRoute.jsx'

@@ -1,0 +1,22 @@
+{
+    "translation": {
+        "admin": {
+            "pageTitle": "Page d'admin",
+            "seasons": {
+                "title": "Saisons",
+                "closeSeason": {
+                    "formTitle": "Terminer une saison",
+                    "label": "Sélectionner une saison à terminer :",
+                    "placeholder": "Choisir saison",
+                    "button": "Terminer la saison"
+                },
+                "addSeason": {
+                    "formTitle": "Ajouter une saison",
+                    "label": "Entrer l'ID API-football de la saison à ajouter :",
+                    "placeholder": "ID de la nouvelle saison",
+                    "button": "Ajouter la saison"
+                }
+            }
+        }
+    }
+}
