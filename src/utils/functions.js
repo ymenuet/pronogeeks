@@ -26,6 +26,8 @@ export const isConnected = user => {
     return user ? Object.keys(user).length : null
 }
 
+export const nbToPx = num => `${num}px`
+
 export const printError = (lang, error, errorMessage) => error.response ?
     error.response.data ?
     error.response.data.message ?

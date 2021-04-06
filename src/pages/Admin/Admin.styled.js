@@ -24,32 +24,35 @@ const Container = styled.div`
     border-radius: 10px;
     padding: 40px;
 `
-
+// TODO: remove !important
 const PageTitle = styled.h2`
     color: ${colors.marineBlue}!important;
     font-family: ${fonts.audiowide};
-`
+    `
 
 const Section = styled.section`
     text-align: left;
-`
+    `
 
 const SubTitle = styled.h3`
     color: ${colors.marineBlue};
-`
+    `
 const Form = styled.form``
 
-const FormTitle = styled.h4``
+const FormTitle = styled.h4`
+    color: ${colors.cyan};
+    `
 
-const Label = styled.label``
+// TODO: remove !important
+const Label = styled.label`
+    color: ${colors.grey}!important;
+`
 
 const Select = styled.select``
 
 const Option = styled.option``
 
 const Input = styled.input``
-
-const Button = styled.button``
 
 export {
     Background,
@@ -63,5 +66,4 @@ export {
     Select,
     Option,
     Input,
-    Button
 }
