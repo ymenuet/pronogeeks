@@ -10,6 +10,7 @@ const Filter = styled.div`
     left: 0;
     width: 100vw;
     height: calc(100vh - ${constants.navbarHeight});
+    padding: 1rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -27,9 +28,23 @@ const Container = styled.div`
 
 const Header = styled.div``
 
+const Border = styled.hr``
+
 const CloseIcon = styled(Close)`
     cursor: pointer;
     position: absolute;
+    top: 0.313rem;
+    right: 0.313rem;
 `
 
-export { Filter, Container, Header, CloseIcon }
+const Title = styled.h3``
+
+const Body = styled.div``
+
+const Message = styled.p``
+
+const Footer = styled.div``
+
+const ButtonWrapper = styled.div``
+
+export { Filter, Container, Header, Border, CloseIcon, Title, Body, Message, Footer, ButtonWrapper }

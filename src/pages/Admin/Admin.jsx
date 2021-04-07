@@ -24,31 +24,48 @@ const Admin = ({ loading }) => {
         setShowCloseSeason(true)
     }
 
+    const printSeason = season => season && `${season.leagueName} - ${season.year}`
+
     return <>
         <Background>
+
             {loading
                 ? <Loader />
+
                 : <Container>
+
                     <PageTitle>{t('admin.pageTitle')}</PageTitle>
+
                     <Section>
+
                         <SubTitle>{t('admin.seasons.title')}</SubTitle>
 
                         <Form onSubmit={handleButtonCloseSeason}>
+
                             <FormTitle>{t('admin.seasons.closeSeason.formTitle')}</FormTitle>
+
                             <Label>{t('admin.seasons.closeSeason.label')}</Label>
+
                             {seasons && <Select defaultValue={selectDefault.current} onChange={handleSelectSeasonChange}>
+
                                 <Option value={selectDefault.current} disabled>{selectDefault.current}</Option>
                                 {Object.values(seasons).map(season => <Option
                                     key={season._id}
                                     value={season._id}
-                                >{season.leagueName} - {season.year}</Option>)}
+                                >
+                                    {printSeason(season)}
+                                </Option>)}
+
                             </Select>}
+
                             {errorSeasons && <ErrorMessage>{errorSeasons}</ErrorMessage>}
+
                             <Button
                                 type='submit'
                                 disabled={!selectedSeason}
                                 label={t('admin.seasons.closeSeason.button')}
                             />
+
                         </Form>
 
                         <Form>
@@ -63,8 +80,14 @@ const Admin = ({ loading }) => {
             }
         </Background>
         <Modal
-            isVisible={showCloseSeason}
+            title={t('admin.seasons.closeSeason.modal.title')}
+            body={t('admin.seasons.closeSeason.modal.body', { season: seasons && printSeason(seasons[selectedSeason]) })}
+            isVisible={true}
             onClose={() => setShowCloseSeason(false)}
+            buttons={[
+                <Button key={1} label={t('admin.seasons.closeSeason.modal.cancel')} />,
+                <Button key={2} label={t('admin.seasons.closeSeason.modal.confirm')} />,
+            ]}
         />
     </>
 }

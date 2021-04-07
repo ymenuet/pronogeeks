@@ -8,7 +8,13 @@
                     "formTitle": "Terminer une saison",
                     "label": "Sélectionner une saison à terminer :",
                     "placeholder": "Choisir saison",
-                    "button": "Terminer la saison"
+                    "button": "Terminer la saison",
+                    "modal": {
+                        "title": "Es-tu sûr de toi ?",
+                        "body": "Es-tu sûr de vouloir terminer la saison '{{season}}' ?\nLes points des classements prévisionnels seront calculés pour tous les geeks.\nAssure-toi que la saison est bien terminée.",
+                        "confirm": "Confirmer",
+                        "cancel": "Annuler"
+                    }
                 },
                 "addSeason": {
                     "formTitle": "Ajouter une saison",
