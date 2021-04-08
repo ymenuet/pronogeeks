@@ -64,6 +64,7 @@ const Admin = ({ loading }) => {
                                 type='submit'
                                 disabled={!selectedSeason}
                                 label={t('admin.seasons.closeSeason.button')}
+                                level='primary'
                             />
 
                         </Form>
@@ -72,7 +73,11 @@ const Admin = ({ loading }) => {
                             <FormTitle>{t('admin.seasons.addSeason.formTitle')}</FormTitle>
                             <Label>{t('admin.seasons.addSeason.label')}</Label>
                             <Input placeholder={t('admin.seasons.addSeason.placeholder')} />
-                            <Button type='submit' label={t('admin.seasons.addSeason.button')} />
+                            <Button
+                                type='submit'
+                                label={t('admin.seasons.addSeason.button')}
+                                level='primary'
+                            />
                         </Form>
 
                     </Section>
@@ -82,11 +87,23 @@ const Admin = ({ loading }) => {
         <Modal
             title={t('admin.seasons.closeSeason.modal.title')}
             body={t('admin.seasons.closeSeason.modal.body', { season: seasons && printSeason(seasons[selectedSeason]) })}
-            isVisible={true}
+            isVisible={showCloseSeason}
             onClose={() => setShowCloseSeason(false)}
             buttons={[
-                <Button key={1} label={t('admin.seasons.closeSeason.modal.cancel')} />,
-                <Button key={2} label={t('admin.seasons.closeSeason.modal.confirm')} />,
+                <Button
+                    key={1}
+                    label={t('admin.seasons.closeSeason.modal.cancel')}
+                    level='secondary'
+                    type='button'
+                    kind='error'
+                    onClick={() => setShowCloseSeason(false)}
+                />,
+                <Button
+                    key={2}
+                    label={t('admin.seasons.closeSeason.modal.confirm')}
+                    level='primary'
+                    type='button'
+                />,
             ]}
         />
     </>
