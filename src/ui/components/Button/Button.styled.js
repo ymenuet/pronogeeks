@@ -1,27 +1,28 @@
 import styled, { css } from 'styled-components'
 import colors from '../../theme/colors'
+import kinds from './kinds'
 
 const btnHeight = '3'
 
 const buttonTheme = {
-    base: {
-        main: colors.base,
+    [kinds.base]: {
+        main: colors.marineBlue,
         contrast: colors.white,
     },
-    error: {
-        main: colors.error,
+    [kinds.error]: {
+        main: colors.red,
         contrast: colors.white,
     },
     label: {
-        main: colors.label,
+        main: colors.grey,
         constrast: colors.white,
     },
     success: {
-        main: colors.success,
+        main: colors.darkGreen,
         contrast: colors.white,
     },
     warning: {
-        main: colors.warning,
+        main: colors.yellow,
         contrast: colors.black,
     }
 }

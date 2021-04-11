@@ -2,7 +2,6 @@ import styled from 'styled-components'
 import { rgba } from 'polished'
 import { CloseIcon as Close } from '../../icons'
 import constants from '../../theme/constants'
-import colors from '../../theme/colors'
 
 const modalPadding = '1.875rem'
 
@@ -16,13 +15,13 @@ const Filter = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: ${rgba(colors.disabled, 0.7)}; /* TODO: update color */
+    background-color: ${({ theme }) => rgba(theme.blur, 0.7)}; /* TODO: update color */
     backdrop-filter: blur(2px);
     z-index: 2;
 `
 
 const Container = styled.div`
-    background-color: ${colors.white};
+    background-color: ${({ theme }) => theme.background};
     border-radius: ${constants.borderRadius};;
     position: relative;
     max-width: 30rem;

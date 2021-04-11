@@ -1,8 +1,8 @@
 export default {
     white: '#fff',
     black: '#000',
-    disabled: '#b2b8c8', //grey
-    base: '#044fc7', //marineBlue
+    grey: '#b2b8c8',
+    marineBlue: '#044fc7',
     cyan: '#258ae6',
     lightPurple: '#9702b6',
     darkPurple: '#65067c',
@@ -10,6 +10,6 @@ export default {
     lightGreen: '#3bb515',
     blue: '#0258d3',
     magenta: '#9c0063',
-    error: '#fd0007', //red
+    red: '#fd0007',
     yellow: '#ffd900',
 }

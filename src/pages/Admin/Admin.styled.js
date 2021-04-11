@@ -1,6 +1,5 @@
 import styled from 'styled-components'
 import { rgba } from 'polished'
-import colors from '../../ui/theme/colors'
 import fonts from '../../ui/theme/fonts'
 
 const Background = styled.div`
@@ -20,13 +19,13 @@ const Background = styled.div`
 `
 
 const Container = styled.div`
-    background: ${rgba(colors.white, 0.8)};
+    background: ${({ theme }) => rgba(theme.background, 0.8)};
     border-radius: 10px;
     padding: 40px;
 `
 // TODO: remove !important
 const PageTitle = styled.h2`
-    color: ${colors.marineBlue}!important;
+    color: ${({ theme }) => theme.base}!important;
     font-family: ${fonts.audiowide};
     `
 
@@ -35,17 +34,17 @@ const Section = styled.section`
     `
 
 const SubTitle = styled.h3`
-    color: ${colors.marineBlue};
+    color: ${({ theme }) => theme.base};
     `
 const Form = styled.form``
 
 const FormTitle = styled.h4`
-    color: ${colors.cyan};
+    color: ${({ theme }) => theme.cyan};
     `
 
 // TODO: remove !important
 const Label = styled.label`
-    color: ${colors.grey}!important;
+    color: ${({ theme }) => theme.label}!important;
 `
 
 const Select = styled.select``
