@@ -7,6 +7,8 @@ export const themeNames = {
 
 export const THEMES_OPTIONS = Object.values(themeNames)
 
+export const THEME_PREFERENCE_STORAGE_KEY = 'Pronogeeks_theme_preference'
+
 const lightTheme = {
     name: themeNames.lightTheme,
     background: colors.white,

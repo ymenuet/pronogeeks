@@ -1,7 +1,7 @@
-import colors from '../../theme/colors'
+import colors from '../../../theme/colors'
 import {
     themeNames
-} from '../../theme/themes'
+} from '../../../theme/themes'
 import kinds from './kinds'
 
 export const lightTheme = {

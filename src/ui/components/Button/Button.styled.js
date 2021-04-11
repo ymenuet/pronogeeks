@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import buttonThemes from './themes'
+import buttonThemes from './theme/themes'
 
 const btnHeight = '3'
 
@@ -9,9 +9,9 @@ const PrimaryButton = styled.button`
     width: 100%;
     height: ${btnHeight}rem;
     border-radius: ${btnHeight / 2}rem;
-    background-color: ${({ kind, theme }) => getTheme({ kind, theme }).main};
-    color: ${({ kind, theme }) => getTheme({ kind, theme }).contrast};
-    border-color: ${({ kind, theme }) => getTheme({ kind, theme }).main};
+    background-color: ${(props) => getTheme(props).main};
+    color: ${(props) => getTheme(props).contrast};
+    border-color: ${(props) => getTheme(props).main};
     border-style: solid;
     border-width: 0;
     outline: none!important; /* TODO: remove !important */
@@ -20,7 +20,7 @@ const PrimaryButton = styled.button`
 const SecondaryButton = styled(PrimaryButton)`
     background-color: transparent;
     border-width: 0.063rem;
-    color: ${({ kind, theme }) => getTheme({ kind, theme }).main};
+    color: ${(props) => getTheme(props).main};
 `
 
 const buttonFactory = level => {

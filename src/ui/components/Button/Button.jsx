@@ -1,8 +1,8 @@
 import React from 'react'
 import { buttonFactory } from './Button.styled'
-import kinds from './kinds'
+import kinds from './theme/kinds'
 
-const Button = ({ label, type, disabled, onClick, level, kind = 'base' }) => {
+const Button = ({ label, type, disabled, onClick, level, kind = kinds.base }) => {
     const Button = buttonFactory(level)
 
     return (
