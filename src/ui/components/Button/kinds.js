@@ -4,4 +4,5 @@ export default {
     label: 'label',
     success: 'success',
     warning: 'warning',
+    disabled: 'disabled',
 }

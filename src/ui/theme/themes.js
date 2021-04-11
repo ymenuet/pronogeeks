@@ -1,10 +1,18 @@
 import colors from './colors'
 
-export const lightTheme = {
+export const themeNames = {
+    lightTheme: 'lightTheme',
+    darkTheme: 'darkTheme'
+}
+
+export const THEMES_OPTIONS = Object.values(themeNames)
+
+const lightTheme = {
+    name: themeNames.lightTheme,
     background: colors.white,
     opposite: colors.black,
     base: colors.marineBlue,
-    disabled: colors.grey,
+    disabled: colors.darkerGrey,
     label: colors.grey,
     blur: colors.grey,
     error: colors.red,
@@ -19,17 +27,14 @@ export const lightTheme = {
     magenta: colors.magenta,
 }
 
-export const darkTheme = {
+const darkTheme = {
     ...lightTheme,
+    name: themeNames.darkTheme,
     background: colors.black,
     opposite: colors.white,
 }
 
-const themes = {
-    lightTheme,
-    darkTheme
+export default {
+    [themeNames.lightTheme]: lightTheme,
+    [themeNames.darkTheme]: darkTheme,
 }
-
-export const THEMES_OPTIONS = Object.keys(themes)
-
-export default themes
