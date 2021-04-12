@@ -12,4 +12,11 @@ class LocalStorage {
     }
 }
 
-export default key => new LocalStorage(key)
+export const STORAGE_KEYS = {
+    THEME_PREFERENCE: 'Pronogeeks_theme_preference',
+    GEEKLEAGUE_PREFERENCE: 'Pronogeeks_geekleague_preference'
+}
+
+export const preferredTheme = new LocalStorage(STORAGE_KEYS.THEME_PREFERENCE)
+
+export const preferredGeekleague = new LocalStorage(STORAGE_KEYS.GEEKLEAGUE_PREFERENCE)

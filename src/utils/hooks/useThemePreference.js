@@ -1,16 +1,43 @@
 import {
-    THEMES_OPTIONS
-} from '../../ui/theme/themes'
-import localStorage from '../../utils/classes/localStorage'
+    useState,
+    useEffect
+} from 'react'
 import {
-    THEME_PREFERENCE_STORAGE_KEY
+    useSelector,
+    useDispatch
+} from 'react-redux'
+import {
+    themeNames
 } from '../../ui/theme/themes'
+import {
+    preferredTheme
+} from '../../utils/classes/localStorage'
+
+import {
+    changeTheme
+} from '../../actions/globalActions'
 
 export const useThemePreference = () => {
-    const themeStorage = localStorage(THEME_PREFERENCE_STORAGE_KEY)
-    const userPreference = themeStorage.get()
+    const [theme, setTheme] = useState(themeNames.lightTheme)
 
-    if (userPreference) return userPreference
+    const appTheme = useSelector(({
+        globalReducer
+    }) => globalReducer.appTheme)
 
-    return THEMES_OPTIONS[0]
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+
+        if (appTheme) setTheme(appTheme)
+
+        else {
+            const userPreference = preferredTheme.get()
+            if (userPreference) {
+                setTheme(userPreference)
+                dispatch(changeTheme(userPreference))
+            }
+        }
+    }, [appTheme, dispatch])
+
+    return theme
 }
