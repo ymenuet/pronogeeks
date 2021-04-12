@@ -1,6 +1,9 @@
 import {
     CHANGE_THEME
 } from '../utils/reduxTypes/global'
+import {
+    preferredTheme
+} from '../utils/classes/localStorage'
 
 const INITIAL_STATE = {
     appTheme: null,
@@ -9,6 +12,7 @@ const INITIAL_STATE = {
 const globalReducer = (state = INITIAL_STATE, action) => {
     switch (action.type) {
         case CHANGE_THEME:
+            preferredTheme.set(action.payload)
             return {
                 ...state,
                 appTheme: action.payload,
