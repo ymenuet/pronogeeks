@@ -2,15 +2,11 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { HomeIcon } from '../Icons'
-import { useCurrentUserProfile, useAccountDeleted, useThemePreference } from '../../utils/hooks'
-import { themeNames } from '../../ui/theme/themes'
+import { useCurrentUserProfile, useAccountDeleted } from '../../utils/hooks'
+import ThemeSelector from './ThemeSelector'
 import './appLayout.css'
 
 import { logout } from '../../actions/authActions'
-import { changeTheme } from '../../actions/globalActions'
-
-const checkedTheme = themeNames.darkTheme
-const uncheckedTheme = themeNames.lightTheme
 
 const AppLayout = ({ children }) => {
 
@@ -19,13 +15,6 @@ const AppLayout = ({ children }) => {
     useAccountDeleted()
 
     const dispatch = useDispatch()
-
-    const theme = useThemePreference()
-
-    const handleThemeChange = e => {
-        const theme = e.target.checked ? checkedTheme : uncheckedTheme
-        dispatch(changeTheme(theme))
-    }
 
     return <>
 
@@ -38,11 +27,7 @@ const AppLayout = ({ children }) => {
                 <h1>pronogeeks</h1>
             </Link>
 
-            <input
-                type='checkbox'
-                checked={theme === checkedTheme ? true : false}
-                onChange={handleThemeChange}
-            />
+            <ThemeSelector />
 
             <button
                 className="navbar-toggler my-navbar-btn"
