@@ -11,7 +11,7 @@
                     "button": "Terminer la saison",
                     "modal": {
                         "title": "Es-tu sûr de toi ?",
-                        "body": "Es-tu sûr de vouloir terminer la saison '{{season}}' ?\nLes points des classements prévisionnels seront calculés pour tous les geeks.\nAssure-toi que la saison est bien terminée.",
+                        "body": "Es-tu sûr de vouloir terminer la saison '{{season}}' ?\nLes points des classements prévisionnels seront calculés pour tous les geeks.\nAssure-toi que le championnat est bien terminé.",
                         "confirm": "Confirmer",
                         "cancel": "Annuler"
                     }
