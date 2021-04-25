@@ -5,8 +5,8 @@ import {
     useSelector
 } from 'react-redux'
 import {
-    openNotification
-} from '../functions'
+    openNotification,
+} from '../helpers'
 
 export const useAccountDeleted = () => {
     const accountDeleted = useSelector(({

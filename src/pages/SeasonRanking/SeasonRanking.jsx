@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import { ErrorMessage, Loader } from '../../components'
 import { DragIcon, SaveIcon, ListIcon } from '../../components/Icons'
-import { openNotification } from '../../utils/functions'
+import { openNotification } from '../../utils/helpers'
 import { useSeason, useUserProvRanking, useProvRankingOpen } from '../../utils/hooks'
 import './seasonRanking.css'
 

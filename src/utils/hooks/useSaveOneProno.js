@@ -6,8 +6,8 @@ import {
     useDispatch
 } from 'react-redux'
 import {
-    openNotification
-} from '../functions'
+    openNotification,
+} from '../helpers'
 
 import {
     resetSaveAndErrorState

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { Loader, ErrorMessage, GeekProno } from '..'
-import { statusTranform } from '../../utils/functions'
+import { printFixtureStatus } from '../../utils/helpers'
 import { useGeekLeague, useGeekLeagueHistory, useGeeksFixturePronos, useFixtureWinner } from '../../utils/hooks'
 import { CloseIcon } from '../Icons'
 import './viewGeekLeaguePronos.css'
@@ -103,7 +103,7 @@ const ViewGeekLeaguePronos = ({ fixture, setShowLeagues }) => {
 
                             <tr className='team-names'>
                                 <td className='team-name'>{fixture.homeTeam.name}</td>
-                                <td className='fixture-status'>{(fixture.timeElapsed || fixture.statusShort === 'PST') && statusTranform(fixture.statusShort, fixture.timeElapsed)}</td>
+                                <td className='fixture-status'>{(fixture.timeElapsed || fixture.statusShort === 'PST') && printFixtureStatus(fixture.statusShort, fixture.timeElapsed)}</td>
                                 <td className='team-name'>{fixture.awayTeam.name}</td>
                             </tr>
 

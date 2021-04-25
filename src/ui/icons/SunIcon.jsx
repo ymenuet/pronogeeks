@@ -1,5 +1,5 @@
 import React from 'react'
-import { nbToPx } from '../../utils/functions'
+import { nbToPx } from '../../utils/helpers'
 
 const SunIcon = ({ size, color, ...props }) => {
     return (

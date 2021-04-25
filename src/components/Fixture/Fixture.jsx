@@ -1,7 +1,7 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Skeleton } from 'antd'
-import { dateTransform, statusTranform } from '../../utils/functions'
+import { printFixtureDate, printFixtureStatus } from '../../utils/helpers'
 import { useUserFixtureProno, useMatchStarted, useShowLeaguesPronos } from '../../utils/hooks'
 import { SavePronoButton, ViewGeekLeaguePronos, ErrorMessage } from '../'
 import { FavTeamIcon } from '../Icons'
@@ -45,7 +45,7 @@ const Fixture = ({ fixture, showLeaguePronos, setShowLeaguePronos, errorProno, s
                             />
                         </th>
                         <th>
-                            <small>{fixture.homeTeam.stadium}<br />{dateTransform(fixture.date).fullDate}<br />à {dateTransform(fixture.date).fullTime}</small>
+                            <small>{fixture.homeTeam.stadium}<br />{printFixtureDate(fixture.date).fullDate}<br />à {printFixtureDate(fixture.date).fullTime}</small>
                         </th>
                         <th>
                             <img
@@ -68,7 +68,7 @@ const Fixture = ({ fixture, showLeaguePronos, setShowLeaguePronos, errorProno, s
 
                     {(fixture.timeElapsed || fixture.statusShort === 'PST') && <tr className='pb-1'>
                         <td></td>
-                        <td className='fixture-status'>{statusTranform(fixture.statusShort, fixture.timeElapsed)}</td>
+                        <td className='fixture-status'>{printFixtureStatus(fixture.statusShort, fixture.timeElapsed)}</td>
                         <td></td>
                     </tr>}
 

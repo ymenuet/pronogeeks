@@ -7,7 +7,7 @@ import {
 } from 'react-redux'
 import {
     isConnected
-} from '../functions'
+} from '../helpers'
 
 export const useUser = () => {
     const [isUserConnected, setIsUserConnected] = useState(0)

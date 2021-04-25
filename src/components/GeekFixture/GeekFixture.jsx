@@ -1,6 +1,6 @@
 import React from 'react'
 import { Skeleton } from 'antd'
-import { dateTransform, statusTranform } from '../../utils/functions'
+import { printFixtureDate, printFixtureStatus } from '../../utils/helpers'
 import { useMatchStarted, useGeekFixtureProno } from '../../utils/hooks'
 import { FavTeamIcon } from '../Icons'
 import { ErrorMessage } from '../'
@@ -34,7 +34,7 @@ const GeekFixture = ({ fixture, geek }) => {
                             />
                         </th>
                         <th>
-                            <small>{fixture.homeTeam.stadium}<br />{dateTransform(fixture.date).fullDate}<br />à {dateTransform(fixture.date).fullTime}</small>
+                            <small>{fixture.homeTeam.stadium}<br />{printFixtureDate(fixture.date).fullDate}<br />à {printFixtureDate(fixture.date).fullTime}</small>
                         </th>
                         <th>
                             <img
@@ -57,7 +57,7 @@ const GeekFixture = ({ fixture, geek }) => {
 
                     {(fixture.timeElapsed || fixture.statusShort === 'PST') && <tr className='pb-1'>
                         <td></td>
-                        <td className='fixture-status'>{statusTranform(fixture.statusShort, fixture.timeElapsed)}</td>
+                        <td className='fixture-status'>{printFixtureStatus(fixture.statusShort, fixture.timeElapsed)}</td>
                         <td></td>
                     </tr>}
 

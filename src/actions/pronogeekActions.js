@@ -5,11 +5,13 @@ import {
     ADD_GEEKS_FIXTURE_PRONOGEEKS,
 } from '../utils/reduxTypes/pronogeekTypes'
 import {
-    printError,
-    copyReducer,
     updateMatchweekPronogeeks,
     hasMatchStarted
 } from '../utils/functions'
+import {
+    printError,
+    copyReducer,
+} from '../utils/helpers'
 import {
     PRONOGEEK_REDUCER_KEY,
     USER_PRONOGEEKS_KEY,

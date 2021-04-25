@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Form, Input } from 'antd'
 import { Loader } from '../../components'
-import { openNotification } from '../../utils/functions'
+import { openNotification } from '../../utils/helpers'
 
 import { updatePwd } from '../../actions/authActions'
 

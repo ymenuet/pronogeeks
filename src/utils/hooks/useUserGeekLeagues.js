@@ -11,7 +11,7 @@ import {
 } from '.'
 import {
     isEmpty
-} from '../functions'
+} from '../helpers'
 
 
 import {

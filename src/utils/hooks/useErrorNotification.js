@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { openNotification } from '../functions'
+import { openNotification } from '../helpers'
 
 import { resetAuthError } from '../../actions/authActions'
 import { resetGeekError } from '../../actions/geekActions'

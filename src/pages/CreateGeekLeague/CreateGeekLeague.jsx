@@ -2,7 +2,7 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Form, Input } from 'antd'
 import { Loader, GeekSelector } from '../../components'
-import { openNotification } from '../../utils/functions'
+import { openNotification } from '../../utils/helpers'
 import { useRedirectNewLeague } from '../../utils/hooks'
 import './createGeekleague.css'
 

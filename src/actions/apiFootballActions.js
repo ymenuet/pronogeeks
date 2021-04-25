@@ -17,11 +17,13 @@ import {
     LOGIN
 } from '../utils/reduxTypes/authTypes'
 import {
-    copyReducer,
-    printError,
     updateMatchweekFixtures,
     updateMatchweekPronogeeks
 } from '../utils/functions'
+import {
+    printError,
+    copyReducer,
+} from '../utils/helpers'
 import {
     SEASON_REDUCER_KEY,
     SEASON_MATCHWEEKS_KEY

@@ -1,6 +1,6 @@
 import {
     isEmpty
-} from "./functions"
+} from "./helpers"
 
 export const handleStateWithoutId = ({
     reducerData,

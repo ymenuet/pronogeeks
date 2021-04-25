@@ -9,9 +9,11 @@ import {
 } from '../utils/reduxTypes/seasonTypes'
 import {
     updateMatchweekFixtures,
-    copyReducer,
-    printError
 } from '../utils/functions'
+import {
+    printError,
+    copyReducer,
+} from '../utils/helpers'
 import {
     SEASON_REDUCER_KEY,
     DETAILED_SEASONS_KEY,

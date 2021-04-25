@@ -16,7 +16,7 @@ import {
 } from "../utils/reduxTypes/authTypes"
 import {
     printError
-} from '../utils/functions'
+} from '../utils/helpers'
 
 const baseURL = process.env.NODE_ENV === 'production' ?
     `/auth` :

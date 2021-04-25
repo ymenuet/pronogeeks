@@ -1,5 +1,6 @@
 import React from 'react'
-import { dateFormatterForRulesPanel } from '../../utils/functions'
+
+import { fullDateFormatter } from '../../utils/helpers'
 import { CorrectIcon, ExactIcon, FavTeamIcon } from '../Icons'
 import './rulesProno.css'
 
@@ -14,8 +15,8 @@ const RulesProno = ({ setShowRules, lastScoresUpdated, lastOddsUpdated, season }
                 <hr />
             </>}
             <ul className='pronogeeks-rules-list'>
-                <li>Les statuts et résultats des matchs sont actualisés en moyenne toutes les 30 minutes (à partir de 7 jours avant le début de la journée) et les points de pronogeeks avec. {lastScoresUpdated && `(dernière mise à jour le ${dateFormatterForRulesPanel(lastScoresUpdated)})`}</li>
-                <li>Les cotes sont actualisées une fois par jour (à partir de 7 jours avant le début de la journée). À partir de 30 minutes avant le début d'un match, ses cotes ne changent plus. {lastOddsUpdated && `(dernière mise à jour le ${dateFormatterForRulesPanel(lastOddsUpdated)})`}</li>
+                <li>Les statuts et résultats des matchs sont actualisés en moyenne toutes les 30 minutes (à partir de 7 jours avant le début de la journée) et les points de pronogeeks avec. {lastScoresUpdated && `(dernière mise à jour le ${fullDateFormatter(lastScoresUpdated)})`}</li>
+                <li>Les cotes sont actualisées une fois par jour (à partir de 7 jours avant le début de la journée). À partir de 30 minutes avant le début d'un match, ses cotes ne changent plus. {lastOddsUpdated && `(dernière mise à jour le ${fullDateFormatter(lastOddsUpdated)})`}</li>
                 <li>Il n'est plus possible de changer son pronogeek après le coup d'envoi.</li>
                 <li>Un pronogeek <b>correct</b> (bon vainqueur ou match nul) rapporte le nombre de points indiqués dans les cotes de la rencontre.</li>
                 <li>Un pronogeek <b>exact</b> (score exact bien pronogeeké) rapporte le double de la cote correspondante.</li>

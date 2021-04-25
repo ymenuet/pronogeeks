@@ -3,7 +3,7 @@ import {
 } from 'react'
 import {
     openNotification
-} from '../functions'
+} from '../helpers'
 
 export const useNotification = (condition, {
     type = 'success',

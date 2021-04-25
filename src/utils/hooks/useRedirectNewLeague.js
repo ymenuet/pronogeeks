@@ -9,8 +9,8 @@ import {
     useHistory
 } from 'react-router-dom'
 import {
-    openNotification
-} from '../functions'
+    openNotification,
+} from '../helpers'
 
 export const useRedirectNewLeague = () => {
     const [existingLeagues, setExistingLeagues] = useState(null)

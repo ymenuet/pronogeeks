@@ -30,9 +30,11 @@ import {
 
 import {
     rankGeeks,
-    printError,
-    copyReducer
 } from '../utils/functions'
+import {
+    printError,
+    copyReducer,
+} from '../utils/helpers'
 
 const baseURL = process.env.NODE_ENV === 'production' ?
     `/api/geek` :

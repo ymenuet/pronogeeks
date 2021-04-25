@@ -16,8 +16,8 @@ import {
 } from '../utils/reduxTypes/authTypes'
 import {
     printError,
-    copyReducer
-} from '../utils/functions'
+    copyReducer,
+} from '../utils/helpers'
 import {
     GEEKLEAGUE_REDUCER_KEY,
     GEEKLEAGUES_KEY

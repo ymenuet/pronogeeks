@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { Fixture, Loader, MatchweekNavigation, PronosAdminButtons, RulesProno, InputMatchweek, ErrorMessage } from '../../components'
 import { useSeason, useUserMatchweek, useConditionalFixturesUpdate, useMatchweekFixtures, useUserPronogeeks, useApiFootballNotification } from '../../utils/hooks'
-import { resetMatchweek } from '../../utils/functions'
+import { resetMatchweekInput } from '../../utils/helpers'
 import { QuestionIcon, SaveIcon, RankingIcon, ValidateIcon } from '../../components/Icons'
 import './pronogeeks.css'
 
@@ -56,7 +56,7 @@ const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history,
     ) : (
         <div
             className='pronogeeks-bg matchweek-page offset-for-btn'
-            onClick={e => resetMatchweek(e, matchweekFromInput, matchweekNumber, setMatchweekFromInput)}
+            onClick={e => resetMatchweekInput(e, matchweekFromInput, matchweekNumber, setMatchweekFromInput)}
         >
 
             <div className='go-to-ranking'>

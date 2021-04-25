@@ -7,8 +7,8 @@ import {
     useDispatch
 } from 'react-redux'
 import {
-    matchFinished
-} from '../functions'
+    isMatchFinished
+} from '../helpers'
 import {
     useUser
 } from '.'
@@ -67,7 +67,7 @@ export const useConditionalFixturesUpdate = ({
                 // Update fixtures results from API-football data if last update happened more than 30minutes ago, first game of matchweek is in less than 1 week and last game of matchweek was over for less than 2 days.
                 const matchweekNotFinished = !!fixtures.filter(({
                     statusShort
-                }) => !matchFinished(statusShort)).length
+                }) => !isMatchFinished(statusShort)).length
                 const fixturesUpdatedMoreThanThirtyMinutesAgo = Date.now() > lastUpdate + MILLISECONDS_IN_30_MINUTES
 
                 if (

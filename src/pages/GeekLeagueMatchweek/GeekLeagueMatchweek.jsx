@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Loader, InputMatchweek, RankGeeks, ErrorMessage } from '../../components'
-import { resetMatchweek } from '../../utils/functions'
+import { resetMatchweekInput } from '../../utils/helpers'
 import { useSeason, useMatchweekFixtures, useGeekLeague, useLastStartedMatchweek, useSoonerMatchweek } from '../../utils/hooks'
 import { GoBackIcon, GoNextIcon } from '../../components/Icons'
 import './detailGeekleague.css'
@@ -33,7 +33,7 @@ const GeekLeagueMatchweek = ({ match: { params: { geekLeagueID, seasonID, matchw
 
     return <div
         className='geekleague-bg geekleague-details'
-        onClick={e => resetMatchweek(e, matchweekFromInput, matchweek, setMatchweekFromInput)}
+        onClick={e => resetMatchweekInput(e, matchweekFromInput, matchweek, setMatchweekFromInput)}
     >
 
         {errorGeekLeague || errorSeason ? <ErrorMessage>{errorGeekLeague || errorSeason}</ErrorMessage>

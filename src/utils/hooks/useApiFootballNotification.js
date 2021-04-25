@@ -6,7 +6,7 @@ import {
 } from 'react-redux'
 import {
     openNotification
-} from '../functions'
+} from '../helpers'
 
 export const useApiFootballNotification = () => {
     const {
