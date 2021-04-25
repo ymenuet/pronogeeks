@@ -1,16 +1,28 @@
 import styled from 'styled-components'
 import { Switch } from 'antd';
 
+import { themeNames } from '../../../ui/theme/themes'
 import { SunIcon, MoonIcon } from '../../../ui/icons'
 
-const Selector = styled(Switch)``
+const setOpacity = (theme, matchingTheme, opacity = 0.5) => theme.name === matchingTheme ? 1 : opacity
 
-const LightModeIcon = styled(SunIcon).attrs(({ theme }) => ({
+export const Container = styled.div`
+    width: 8rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+`
+
+export const Selector = styled(Switch)``
+
+export const LightModeIcon = styled(SunIcon).attrs(({ theme }) => ({
     color: theme.opposite,
-}))``
+}))`
+    opacity: ${({ theme }) => setOpacity(theme, themeNames.lightTheme)}
+`
 
-const DarkModeIcon = styled(MoonIcon).attrs(({ theme }) => ({
+export const DarkModeIcon = styled(MoonIcon).attrs(({ theme }) => ({
     color: theme.opposite,
-}))``
-
-export { Selector, LightModeIcon, DarkModeIcon }
+}))`
+    opacity: ${({ theme }) => setOpacity(theme, themeNames.darkTheme)}
+`

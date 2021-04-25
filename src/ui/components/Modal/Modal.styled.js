@@ -15,7 +15,7 @@ const Filter = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: ${({ theme }) => rgba(theme.blur, 0.7)}; /* TODO: update color */
+    background-color: ${({ theme }) => rgba(theme.blur, 0.7)};
     backdrop-filter: blur(2px);
     z-index: 2;
 `
@@ -33,23 +33,28 @@ const Header = styled.div`
 
 const Border = styled.hr`
     margin: 1.25rem 0 1.25rem 0;
+    background-color: ${({ theme }) => rgba(theme.opposite, 0.1)};
 `
 
-const CloseIcon = styled(Close)`
+const CloseIcon = styled(Close).attrs(({ theme }) => ({ fill: theme.opposite }))`
     cursor: pointer;
     position: absolute;
     top: 0.313rem;
     right: 0.313rem;
 `
 
-const Title = styled.h3``
+const Title = styled.h3`
+    color: ${({ theme }) => theme.opposite};
+`
 
 const Body = styled.div`
     text-align: left;
     padding: 0 ${modalPadding} 0 ${modalPadding};
 `
 
-const Message = styled.p``
+const Message = styled.p`
+    color: ${({ theme }) => theme.opposite};
+`
 
 const Footer = styled.div`
     padding: 0 ${modalPadding} ${modalPadding} ${modalPadding};

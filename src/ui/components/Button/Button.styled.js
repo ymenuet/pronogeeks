@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import buttonThemes from './theme/themes'
 
 const btnHeight = '3'
@@ -15,6 +15,12 @@ const PrimaryButton = styled.button`
     border-style: solid;
     border-width: 0;
     outline: none!important; /* TODO: remove !important */
+
+    &:hover {
+        transform: ${({ disabled }) => !disabled && css`
+            scale(1.02);
+        `};
+    }
 `
 
 const SecondaryButton = styled(PrimaryButton)`

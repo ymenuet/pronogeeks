@@ -2,7 +2,7 @@ import React from 'react'
 import { buttonFactory } from './Button.styled'
 import kinds from './theme/kinds'
 
-const Button = ({ label, type, disabled, onClick, level, kind = kinds.base }) => {
+const Button = ({ label, type, disabled, onClick, level, kind }) => {
     const Button = buttonFactory(level)
 
     return (
@@ -10,6 +10,10 @@ const Button = ({ label, type, disabled, onClick, level, kind = kinds.base }) =>
             {label}
         </Button>
     )
+}
+
+Button.defaultProps = {
+    kind: kinds.base
 }
 
 export default Button
