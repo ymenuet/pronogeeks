@@ -7,8 +7,8 @@ import { LightModeIcon, DarkModeIcon, Selector, Container } from './ThemeSelecto
 
 import { changeTheme } from '../../../actions/globalActions'
 
-const checkedTheme = themeNames.darkTheme
-const uncheckedTheme = themeNames.lightTheme
+const checkedTheme = themeNames.lightTheme
+const uncheckedTheme = themeNames.darkTheme
 
 const iconSize = 30;
 
@@ -22,13 +22,13 @@ const ThemeSelector = () => {
         dispatch(changeTheme(theme))
     }
     return <Container>
-        <LightModeIcon size={iconSize} />
+        <DarkModeIcon size={iconSize} />
         <Selector
             type='checkbox'
             checked={theme === checkedTheme}
             onChange={handleThemeChange}
         />
-        <DarkModeIcon size={iconSize} />
+        <LightModeIcon size={iconSize} />
     </Container>
 }
 
