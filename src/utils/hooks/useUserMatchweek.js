@@ -4,8 +4,8 @@ import {
 } from 'react'
 import {
     getUserSeasonFromProfile,
-    getUserMatchweekFromProfile
-} from '../functions'
+    getUserMatchweekFromProfile,
+} from '../helpers'
 import {
     useUser
 } from '.'

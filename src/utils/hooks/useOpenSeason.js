@@ -8,7 +8,7 @@ import {
 } from 'react-redux'
 import {
     getUserSeasonFromProfile
-} from '../functions'
+} from '../helpers'
 import {
     useUser
 } from '.'

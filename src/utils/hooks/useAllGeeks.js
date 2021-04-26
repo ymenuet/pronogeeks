@@ -10,8 +10,8 @@ import {
     handleStateWithoutId
 } from '../stateHandlers'
 import {
-    sortByUsername
-} from '../functions'
+    sortGeeksByUsername,
+} from '../helpers'
 import {
     useUser
 } from '.'
@@ -50,7 +50,7 @@ export const useAllGeeks = geekLeague => {
             const rawGeeks = Object.values(geeksObject)
 
             if (!geekLeague) {
-                const geeks = sortByUsername(rawGeeks)
+                const geeks = sortGeeksByUsername(rawGeeks)
                     .filter(geek => geek._id !== user._id)
                 setGeeks(geeks)
 
@@ -64,7 +64,7 @@ export const useAllGeeks = geekLeague => {
                         })
                         return result
                     })
-                const geeks = sortByUsername(filteredGeeks)
+                const geeks = sortGeeksByUsername(filteredGeeks)
                 setGeeks(geeks)
             }
         }

@@ -6,11 +6,11 @@ import {
 } from '../utils/reduxTypes/pronogeekTypes'
 import {
     updateMatchweekPronogeeks,
-    hasMatchStarted
 } from '../utils/functions'
 import {
     printError,
     copyReducer,
+    hasMatchStarted,
 } from '../utils/helpers'
 import {
     PRONOGEEK_REDUCER_KEY,

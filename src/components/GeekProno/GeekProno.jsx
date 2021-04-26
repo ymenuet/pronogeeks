@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { determineFixtureWinner } from '../../utils/functions'
+import { determineFixtureWinner } from '../../utils/helpers'
 import './geekProno.css'
 
 const GeekProno = ({ pronogeek, fixture, winner }) => {

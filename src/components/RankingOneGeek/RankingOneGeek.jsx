@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { CorrectIcon, ExactIcon, FavTeamIcon, ViewPronoIcon, FirstIcon, SecondIcon, ThirdIcon } from '../Icons'
-import { getUserSeasonFromProfile, getUserMatchweekFromProfile } from '../../utils/functions'
+import { getUserSeasonFromProfile, getUserMatchweekFromProfile } from '../../utils/helpers'
 import './rankingOneGeek.css'
 
 const iconSize = '20px'

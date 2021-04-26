@@ -4,7 +4,7 @@ import {
 } from 'react'
 import {
     hasMatchStarted
-} from '../functions'
+} from '../helpers'
 
 export const useMatchStarted = fixture => {
     const [matchStarted, setMatchStarted] = useState(true)

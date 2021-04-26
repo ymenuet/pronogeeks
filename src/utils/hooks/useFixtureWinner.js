@@ -3,8 +3,8 @@ import {
     useEffect
 } from 'react'
 import {
-    determineFixtureWinner
-} from '../functions'
+    determineFixtureWinner,
+} from '../helpers'
 
 export const useFixtureWinner = (fixture) => {
     const [winner, setWinner] = useState(null)

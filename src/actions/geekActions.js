@@ -29,11 +29,9 @@ import {
 } from '../utils/constants.js'
 
 import {
-    rankGeeks,
-} from '../utils/functions'
-import {
     printError,
     copyReducer,
+    rankGeeks,
 } from '../utils/helpers'
 
 const baseURL = process.env.NODE_ENV === 'production' ?

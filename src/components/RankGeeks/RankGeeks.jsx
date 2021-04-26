@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { RankingOneGeek } from '..'
-import { rankGeeks } from '../../utils/functions'
+import { rankGeeks } from '../../utils/helpers'
 import { useUser } from '../../utils/hooks'
 import { SIZE_GENERAL_RANKING } from '../../utils/constants'
 
