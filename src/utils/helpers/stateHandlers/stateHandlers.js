@@ -11,7 +11,7 @@ export const handleStateWithoutId = ({
     const result = reducerData
     if (isEmpty(result)) action()
     else if (result.error) setError(result.error)
-    else if (!result.loading) setResult(result)
+    else if (!result.loading && !result.empty) setResult(result)
 }
 
 export const handleStateWithId = ({

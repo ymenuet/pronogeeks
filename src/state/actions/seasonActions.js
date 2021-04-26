@@ -4,11 +4,14 @@ import {
     ADD_SEASON,
     SET_NEXT_MATCHWEEK,
     SET_LAST_MATCHWEEK,
+    CLOSE_SEASON,
+    SEASON_TARGETED_RESET,
     LOADING,
     ERROR
 } from '../types/seasonTypes'
 import {
     updateMatchweekFixtures,
+    targetedResetActionCreator,
 } from './helpers'
 import {
     printError,
@@ -195,6 +198,8 @@ export const getUndergoingSeasons = () => async dispatch => {
             undergoingSeasons[season._id] = season
         }
 
+        if (!seasons.length) undergoingSeasons.empty = true
+
         dispatch({
             type: GET_UNDERGOING_SEASONS,
             payload: undergoingSeasons
@@ -211,6 +216,38 @@ export const getUndergoingSeasons = () => async dispatch => {
             }
         })
     }
+}
+
+export const closeSeason = (seasonID) => async dispatch => {
+    dispatch({
+        type: LOADING
+    })
+
+    try {
+        await seasonService.get(`/closeSeason/${seasonID}`)
+
+        dispatch({
+            type: CLOSE_SEASON,
+            payload: seasonID
+        })
+
+    } catch (error) {
+        console.error('ERROR:', error.message)
+
+        dispatch({
+            type: ERROR,
+            payload: printError('fr', error, `Erreur lors de la fermeture de la saison.`)
+        })
+    }
+}
+
+export const targetedResetSeasons = (statesToReset, resetValue) => dispatch => {
+    targetedResetActionCreator({
+        statesToReset,
+        resetValue,
+        dispatch,
+        type: SEASON_TARGETED_RESET
+    })
 }
 
 function getLastMatchweek(fixtures) {

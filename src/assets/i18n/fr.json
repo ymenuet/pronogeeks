@@ -14,6 +14,12 @@
                         "body": "Es-tu sûr de vouloir terminer la saison '{{season}}' ?\nLes points des classements prévisionnels seront calculés pour tous les geeks.\nAssure-toi que le championnat est bien terminé.",
                         "confirm": "Confirmer",
                         "cancel": "Annuler"
+                    },
+                    "notifications": {
+                        "success": {
+                            "title": "Saison terminée avec succès",
+                            "message": "La saison d'ID \"{{seasonClosed}}\" a été terminée avec succès. Tous les points bonus des joueurs ont été calculés."
+                        }
                     }
                 },
                 "addSeason": {

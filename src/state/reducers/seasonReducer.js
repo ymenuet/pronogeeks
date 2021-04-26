@@ -4,6 +4,8 @@ import {
     ADD_MATCHWEEK,
     SET_NEXT_MATCHWEEK,
     SET_LAST_MATCHWEEK,
+    CLOSE_SEASON,
+    SEASON_TARGETED_RESET,
     LOADING,
     ERROR
 } from '../types/seasonTypes'
@@ -23,6 +25,7 @@ const INITIAL_STATE = {
     seasonMatchweeks: {},
     nextMatchweeks: {},
     lastMatchweeks: {},
+    seasonClosed: null,
     ...done
 }
 
@@ -57,6 +60,17 @@ const seasonReducer = (state = INITIAL_STATE, action) => {
                 ...state,
                 lastMatchweeks: action.payload,
                 ...done
+            }
+        case CLOSE_SEASON:
+            return {
+                ...state,
+                seasonClosed: action.payload,
+                ...done
+            }
+        case SEASON_TARGETED_RESET:
+            return {
+                ...state,
+                ...action.payload,
             }
         case LOADING:
             return {

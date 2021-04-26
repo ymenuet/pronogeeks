@@ -6,3 +6,7 @@ export {
     default as updateMatchweekPronogeeks
 }
 from './updateMatchweekPronogeeks'
+export {
+    default as targetedResetActionCreator
+}
+from './targetedResetActionCreator'

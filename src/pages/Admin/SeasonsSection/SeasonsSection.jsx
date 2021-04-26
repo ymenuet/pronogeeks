@@ -1,10 +1,15 @@
 import React, { useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { Button, Modal, Select, Input } from '../../../ui/components'
 import { ErrorMessage } from '../../../components'
-import { useUndergoingSeasons } from '../../../utils/hooks'
+import { useUndergoingSeasons, useNotification } from '../../../utils/hooks'
 import { Section, SubTitle, FormTitle, Label, ButtonWrapper, InputContainer } from '../Admin.styled'
-import { SeasonForm } from './SeasonSection.styled'
+import { SeasonForm } from './SeasonsSection.styled'
+
+import {
+    closeSeason, targetedResetSeasons
+} from '../../../state/actions/seasonActions'
 
 const SeasonsSection = () => {
     const [selectedSeason, setSelectedSeason] = useState(null)
@@ -12,7 +17,22 @@ const SeasonsSection = () => {
 
     const { t } = useTranslation()
 
+    const dispatch = useDispatch()
+
+    const {
+        seasonClosed,
+    } = useSelector(({
+        seasonReducer
+    }) => seasonReducer)
+
     const { seasons, errorSeasons } = useUndergoingSeasons()
+
+    useNotification(seasonClosed, {
+        title: t('admin.seasons.closeSeason.notifications.success.title'),
+        message: t('admin.seasons.closeSeason.notifications.success.message', {
+            seasonClosed
+        })
+    }, () => dispatch(targetedResetSeasons({ seasonClosed })))
 
     const handleSelectSeasonChange = e => {
         setSelectedSeason(e.target.value)
@@ -23,12 +43,17 @@ const SeasonsSection = () => {
         setShowCloseSeason(true)
     }
 
+    const handleCloseSeasonEvent = () => {
+        dispatch(closeSeason(selectedSeason))
+        setShowCloseSeason(false)
+    }
+
     const printSeason = season => season && `${season.leagueName} - ${season.year}`
 
     const mapSeasonsForSelect = seasons => seasons ? Object.values(seasons).map(season => ({
         value: season._id,
         name: printSeason(season)
-    })) : undefined
+    })) : []
 
     return (
         <Section>
@@ -42,7 +67,11 @@ const SeasonsSection = () => {
                 <Label>{t('admin.seasons.closeSeason.label')}</Label>
 
                 <InputContainer>
-                    <Select defaultValue={t('admin.seasons.closeSeason.placeholder')} onChange={handleSelectSeasonChange} options={mapSeasonsForSelect(seasons)} />
+                    <Select
+                        defaultValue={t('admin.seasons.closeSeason.placeholder')}
+                        onChange={handleSelectSeasonChange}
+                        options={mapSeasonsForSelect(seasons)}
+                    />
                 </InputContainer>
 
                 {errorSeasons && <ErrorMessage>{errorSeasons}</ErrorMessage>}
@@ -92,6 +121,7 @@ const SeasonsSection = () => {
                         label={t('admin.seasons.closeSeason.modal.confirm')}
                         level='primary'
                         type='button'
+                        onClick={handleCloseSeasonEvent}
                     />,
                 ]}
             />
