@@ -6,7 +6,7 @@ import { useUser, useSaveOneProno } from '../../utils/hooks'
 import { openNotification, hasMatchStarted } from '../../utils/helpers'
 import './savePronoButton.css'
 
-import { savePronogeek } from '../../actions/pronogeekActions'
+import { savePronogeek } from '../../state/actions/pronogeekActions'
 
 const SavePronoButton = ({ pronogeek, fixture, modified, matchStarted, homeScore, awayScore, savingAll, seeLeaguePronos }) => {
 

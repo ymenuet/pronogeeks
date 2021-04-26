@@ -11,28 +11,28 @@ import {
     LOADING,
     ERROR,
     ERROR_RESET
-} from '../utils/reduxTypes/geekTypes'
+} from '../types/geekTypes'
 import {
     LOGIN
-} from '../utils/reduxTypes/authTypes'
+} from '../types/authTypes'
 import {
     GEEK_REDUCER_KEY,
     SEASON_GEEKS_RANKING_KEY,
     DETAILED_GEEKS_KEY
-} from '../utils/reducerKeys/geek'
+} from '../reducers/keys/geek'
 import {
     AUTH_REDUCER_KEY,
     USER_KEY
-} from '../utils/reducerKeys/auth'
+} from '../reducers/keys/auth'
 import {
     RESET_TIMEOUT_IN_MS
-} from '../utils/constants.js'
+} from '../../utils/constants.js'
 
 import {
     printError,
     copyReducer,
     rankGeeks,
-} from '../utils/helpers'
+} from '../../utils/helpers'
 
 const baseURL = process.env.NODE_ENV === 'production' ?
     `/api/geek` :

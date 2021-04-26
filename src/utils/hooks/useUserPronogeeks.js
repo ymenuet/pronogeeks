@@ -16,7 +16,7 @@ import {
 import {
     getUserMatchweekPronos,
     resetMatchweekSaveAndErrorState
-} from '../../actions/pronogeekActions'
+} from '../../state/actions/pronogeekActions'
 
 export const useUserPronogeeks = (seasonID, matchweekNumber) => {
 

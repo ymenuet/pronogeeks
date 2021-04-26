@@ -9,7 +9,7 @@ import {
 
 import {
     setNextMatchweek
-} from '../../actions/seasonActions'
+} from '../../state/actions/seasonActions'
 
 export const useSoonerMatchweek = (matchweekNumber, lastMatchweek, season) => {
     const [matchweek, setMatchweek] = useState(parseInt(matchweekNumber))

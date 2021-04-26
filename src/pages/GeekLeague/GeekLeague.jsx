@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom'
 import { EditIcon, DeleteIcon, RemoveIcon, WarningIcon } from '../../components/Icons'
 import './detailGeekleague.css'
 
-import { editLeague, deleteLeague, outLeague } from '../../actions/geekleagueActions'
+import { editLeague, deleteLeague, outLeague } from '../../state/actions/geekleagueActions'
 
 const GeekLeague = ({ match: { params: { geekLeagueID } }, history, loading }) => {
     const [showModal, setShowModal] = useState(false)

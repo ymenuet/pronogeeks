@@ -8,7 +8,7 @@ import {
 } from 'react-redux'
 import {
     handleStateWithoutId
-} from '../stateHandlers'
+} from '../helpers/stateHandlers'
 import {
     sortGeeksByUsername,
 } from '../helpers'
@@ -18,7 +18,7 @@ import {
 
 import {
     getAllGeeks
-} from '../../actions/geekActions'
+} from '../../state/actions/geekActions'
 
 export const useAllGeeks = geekLeague => {
     const [geeks, setGeeks] = useState([])

@@ -13,10 +13,10 @@ import {
     PROFILE_ERROR,
     ERROR,
     ERROR_RESET
-} from "../utils/reduxTypes/authTypes"
+} from "../types/authTypes"
 import {
     printError
-} from '../utils/helpers'
+} from '../../utils/helpers'
 
 const baseURL = process.env.NODE_ENV === 'production' ?
     `/auth` :

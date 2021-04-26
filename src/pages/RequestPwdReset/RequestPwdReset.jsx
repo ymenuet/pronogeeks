@@ -4,7 +4,7 @@ import { Form, Input } from 'antd'
 import { Loader } from '../../components'
 import { openNotification } from '../../utils/helpers'
 
-import { resetPwd } from '../../actions/authActions'
+import { resetPwd } from '../../state/actions/authActions'
 
 const RequestPwdReset = ({ history, loadingUser }) => {
 

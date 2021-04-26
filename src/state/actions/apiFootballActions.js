@@ -9,28 +9,28 @@ import {
     LOADING,
     ERROR,
     ERROR_RESET,
-} from '../utils/reduxTypes/apiFootballTypes'
+} from '../types/apiFootballTypes'
 import {
     ADD_MATCHWEEK
-} from '../utils/reduxTypes/seasonTypes'
+} from '../types/seasonTypes'
 import {
     LOGIN
-} from '../utils/reduxTypes/authTypes'
+} from '../types/authTypes'
 import {
     updateMatchweekFixtures,
     updateMatchweekPronogeeks
-} from '../utils/functions'
+} from './helpers'
 import {
     printError,
     copyReducer,
-} from '../utils/helpers'
+} from '../../utils/helpers'
 import {
     SEASON_REDUCER_KEY,
     SEASON_MATCHWEEKS_KEY
-} from '../utils/reducerKeys/season'
+} from '../reducers/keys/season'
 import {
     RESET_TIMEOUT_IN_MS
-} from '../utils/constants.js'
+} from '../../utils/constants.js'
 
 const baseURL = process.env.NODE_ENV === 'production' ?
     `/api/fetch` :

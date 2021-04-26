@@ -6,7 +6,7 @@ import { openNotification } from '../../utils/helpers'
 import { useRedirectNewLeague } from '../../utils/hooks'
 import './createGeekleague.css'
 
-import { createLeague } from '../../actions/geekleagueActions'
+import { createLeague } from '../../state/actions/geekleagueActions'
 
 const CreateGeekLeague = ({ loading }) => {
     const [form] = Form.useForm()

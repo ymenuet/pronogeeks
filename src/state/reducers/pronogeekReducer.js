@@ -2,11 +2,11 @@ import {
     ADD_USER_PRONOGEEKS,
     ADD_GEEK_MATCHWEEK_PRONOGEEKS,
     ADD_GEEKS_FIXTURE_PRONOGEEKS,
-} from '../utils/reduxTypes/pronogeekTypes'
+} from '../types/pronogeekTypes'
 import {
     LOGOUT,
     DELETE_ACCOUNT
-} from "../utils/reduxTypes/authTypes"
+} from "../types/authTypes"
 
 const INITIAL_STATE = {
     userPronogeeks: {},

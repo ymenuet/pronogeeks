@@ -1,8 +1,8 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { Redirect, Route } from 'react-router-dom'
-import { useUser } from '../utils/hooks'
-import { Signup } from '../pages'
+import { useUser } from '../hooks'
+import { Signup } from '../../pages'
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
 
@@ -20,13 +20,13 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
             ) : isUserConnected ? (
                 <Component {...props} />
             ) : (
-                            <Redirect
-                                to={{
-                                    pathname: '/login',
-                                    state: { from: props.location }
-                                }}
-                            />
-                        )}
+                <Redirect
+                    to={{
+                        pathname: '/login',
+                        state: { from: props.location }
+                    }}
+                />
+            )}
         />
     )
 }

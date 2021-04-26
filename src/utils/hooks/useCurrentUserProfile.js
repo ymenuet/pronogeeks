@@ -10,7 +10,7 @@ import {
 
 import {
     setProfile
-} from '../../actions/authActions'
+} from '../../state/actions/authActions'
 
 export const useCurrentUserProfile = () => {
     const {

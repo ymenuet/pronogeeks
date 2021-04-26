@@ -8,11 +8,11 @@ import {
 } from 'react-redux'
 import {
     handleStateWithoutId
-} from '../stateHandlers'
+} from '../helpers/stateHandlers'
 
 import {
     getUndergoingSeasons
-} from '../../actions/seasonActions'
+} from '../../state/actions/seasonActions'
 
 export const useUndergoingSeasons = () => {
     const [seasons, setSeasons] = useState(null)

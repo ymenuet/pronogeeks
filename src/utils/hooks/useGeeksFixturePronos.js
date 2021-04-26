@@ -8,11 +8,11 @@ import {
 } from 'react-redux'
 import {
     handleStateWith2Ids
-} from '../stateHandlers'
+} from '../helpers/stateHandlers'
 
 import {
     getGeekleagueFixturePronos
-} from '../../actions/pronogeekActions'
+} from '../../state/actions/pronogeekActions'
 
 export const useGeeksFixturePronos = (fixture, geekLeague) => {
     const [geeksPronos, setGeeksPronos] = useState(null)

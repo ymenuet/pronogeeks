@@ -11,7 +11,7 @@ import {
 
 import {
     closeProvRankings
-} from '../../actions/seasonActions'
+} from '../../state/actions/seasonActions'
 
 export const useProvRankingOpen = season => {
     const [provRankingOpen, setProvRankingOpen] = useState(false)

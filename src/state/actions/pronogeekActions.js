@@ -3,21 +3,21 @@ import {
     ADD_USER_PRONOGEEKS,
     ADD_GEEK_MATCHWEEK_PRONOGEEKS,
     ADD_GEEKS_FIXTURE_PRONOGEEKS,
-} from '../utils/reduxTypes/pronogeekTypes'
+} from '../types/pronogeekTypes'
 import {
     updateMatchweekPronogeeks,
-} from '../utils/functions'
+} from './helpers'
 import {
     printError,
     copyReducer,
     hasMatchStarted,
-} from '../utils/helpers'
+} from '../../utils/helpers'
 import {
     PRONOGEEK_REDUCER_KEY,
     USER_PRONOGEEKS_KEY,
     GEEKS_FIXTURE_PRONOGEEKS_KEY,
     GEEKS_MATCHWEEK_PRONOGEEKS_KEY
-} from '../utils/reducerKeys/pronogeek'
+} from '../reducers/keys/pronogeek'
 
 const baseURL = process.env.NODE_ENV === 'production' ?
     `/api/pronogeeks` :

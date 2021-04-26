@@ -1,65 +1,84 @@
 import {
-    STATUS_UPDATED,
-    RESET_STATUS_UPDATED,
-    ODDS_UPDATED,
-    RESET_ODDS_UPDATED,
-    WARNING_MESSAGE,
-    RESET_WARNING_MESSAGE,
+    ALL_GEEKS,
+    DETAILS_GEEK,
+    SEASON_GEEKS,
+    SAVE_FAV_TEAM,
+    SAVE_FAV_TEAM_RESET,
+    SAVE_RANKING,
+    SAVE_RANKING_RESET,
+    DONE,
     LOADING,
     ERROR,
     ERROR_RESET
-} from '../utils/reduxTypes/apiFootballTypes'
+} from '../types/geekTypes'
 import {
     LOGOUT,
     DELETE_ACCOUNT
-} from '../utils/reduxTypes/authTypes'
+} from "../types/authTypes"
 
 const done = {
+    error: false,
     loading: false,
-    error: false
 }
 
 const INITIAL_STATE = {
-    statusUpdated: false,
-    oddsUpdated: false,
-    warningMessage: false,
-    ...done,
+    allGeeks: {},
+    detailedGeeks: {},
+    seasonGeeksRankings: {},
+    favTeamAdded: false,
+    rankingSaved: false,
+    ...done
 }
 
-const apiFootballReducer = (state = INITIAL_STATE, action) => {
+
+const geekReducer = (state = INITIAL_STATE, action) => {
     switch (action.type) {
-        case STATUS_UPDATED:
+        case ALL_GEEKS:
             return {
                 ...state,
-                statusUpdated: true,
+                allGeeks: action.payload,
                 ...done
             }
-        case RESET_STATUS_UPDATED:
+        case DETAILS_GEEK:
             return {
                 ...state,
-                statusUpdated: false
-            }
-        case ODDS_UPDATED:
-            return {
-                ...state,
-                oddsUpdated: true,
+                detailedGeeks: action.payload,
                 ...done
             }
-        case RESET_ODDS_UPDATED:
+        case SEASON_GEEKS:
             return {
                 ...state,
-                oddsUpdated: false
-            }
-        case WARNING_MESSAGE:
-            return {
-                ...state,
-                warningMessage: action.payload,
+                seasonGeeksRankings: action.payload,
                 ...done
             }
-        case RESET_WARNING_MESSAGE:
+        case SAVE_FAV_TEAM:
             return {
                 ...state,
-                warningMessage: false
+                favTeamAdded: true,
+                ...done
+            }
+        case SAVE_FAV_TEAM_RESET:
+            return {
+                ...state,
+                favTeamAdded: false,
+                ...done
+            }
+        case SAVE_RANKING:
+            return {
+                ...state,
+                rankingSaved: true,
+                ...done
+            }
+        case SAVE_RANKING_RESET:
+            return {
+                ...state,
+                rankingSaved: false,
+                ...done
+            }
+        case DONE:
+            return {
+                ...state,
+                ...done
             }
         case LOADING:
             return {
@@ -87,4 +106,4 @@ const apiFootballReducer = (state = INITIAL_STATE, action) => {
     }
 }
 
-export default apiFootballReducer
+export default geekReducer

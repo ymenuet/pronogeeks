@@ -15,7 +15,7 @@ import {
 
 import {
     changeTheme
-} from '../../actions/globalActions'
+} from '../../state/actions/globalActions'
 
 export const useThemePreference = () => {
     const [theme, setTheme] = useState(themeNames.lightTheme)

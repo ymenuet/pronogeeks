@@ -1,8 +1,8 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { Redirect, Route } from 'react-router-dom'
-import USER_ROLES from '../utils/models/userRoles'
-import { useUser } from '../utils/hooks'
+import USER_ROLES from '../models/userRoles'
+import { useUser } from '../hooks'
 
 const AdminRoute = ({ component: Component, ...rest }) => {
 

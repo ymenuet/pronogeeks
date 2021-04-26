@@ -4,7 +4,7 @@ import { Form, Input } from 'antd'
 import { Loader } from '../../components'
 import { openNotification } from '../../utils/helpers'
 
-import { updatePwd } from '../../actions/authActions'
+import { updatePwd } from '../../state/actions/authActions'
 
 const SetNewPwd = ({ match: { params: { userID, renewToken } }, history, loadingUser }) => {
 

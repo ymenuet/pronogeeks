@@ -15,7 +15,7 @@ import {
 
 import {
     setNextMatchweek
-} from '../../actions/seasonActions'
+} from '../../state/actions/seasonActions'
 
 export const useOpenSeason = season => {
     const [seasonTeams, setSeasonTeams] = useState(null)

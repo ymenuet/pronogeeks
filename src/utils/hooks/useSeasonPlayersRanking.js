@@ -8,14 +8,14 @@ import {
 } from 'react-redux'
 import {
     handleStateWithId
-} from '../stateHandlers'
+} from '../helpers/stateHandlers'
 import {
     useUser
 } from '.'
 
 import {
     getSeasonPlayers
-} from '../../actions/geekActions'
+} from '../../state/actions/geekActions'
 
 export const useSeasonPlayersRanking = (season) => {
     const [intermediateRanking, setIntermediateRanking] = useState(null)

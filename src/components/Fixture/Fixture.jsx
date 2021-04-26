@@ -7,7 +7,7 @@ import { SavePronoButton, ViewGeekLeaguePronos, ErrorMessage } from '../'
 import { FavTeamIcon } from '../Icons'
 import './fixture.css'
 
-import { handleInputHomeProno, handleInputAwayProno } from '../../actions/pronogeekActions'
+import { handleInputHomeProno, handleInputAwayProno } from '../../state/actions/pronogeekActions'
 
 const Fixture = ({ fixture, showLeaguePronos, setShowLeaguePronos, errorProno, savingAll }) => {
 

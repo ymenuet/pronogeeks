@@ -1,7 +1,7 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { Redirect, Route } from 'react-router-dom'
-import { useUser } from '../utils/hooks'
+import { useUser } from '../../utils/hooks'
 
 const PublicRoute = ({ component: Component, ...rest }) => {
 
@@ -17,13 +17,13 @@ const PublicRoute = ({ component: Component, ...rest }) => {
             ) : !isUserConnected ? (
                 <Component {...props} />
             ) : (
-                        <Redirect
-                            to={{
-                                pathname: '/profile',
-                                state: { from: props.location }
-                            }}
-                        />
-                    )}
+                <Redirect
+                    to={{
+                        pathname: '/profile',
+                        state: { from: props.location }
+                    }}
+                />
+            )}
         />
     )
 }

@@ -2,10 +2,10 @@ import { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { openNotification } from '../helpers'
 
-import { resetAuthError } from '../../actions/authActions'
-import { resetGeekError } from '../../actions/geekActions'
-import { resetGeekleagueError } from '../../actions/geekleagueActions'
-import { resetApiFootballError } from '../../actions/apiFootballActions'
+import { resetAuthError } from '../../state/actions/authActions'
+import { resetGeekError } from '../../state/actions/geekActions'
+import { resetGeekleagueError } from '../../state/actions/geekleagueActions'
+import { resetApiFootballError } from '../../state/actions/apiFootballActions'
 
 export const useErrorNotification = () => {
     const dispatch = useDispatch()

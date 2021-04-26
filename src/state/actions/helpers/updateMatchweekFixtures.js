@@ -1,23 +1,16 @@
 import {
     ADD_MATCHWEEK
-} from './reduxTypes/seasonTypes'
-import {
-    ADD_USER_PRONOGEEKS
-} from './reduxTypes/pronogeekTypes'
+} from '../../types/seasonTypes'
 import {
     SEASON_REDUCER_KEY,
     SEASON_MATCHWEEKS_KEY
-} from '../utils/reducerKeys/season'
-import {
-    PRONOGEEK_REDUCER_KEY,
-    USER_PRONOGEEKS_KEY
-} from '../utils/reducerKeys/pronogeek'
+} from '../../reducers/keys/season'
 import {
     copyReducer,
     isMatchFinished,
-} from './helpers'
+} from '../../../utils/helpers'
 
-export const updateMatchweekFixtures = ({
+export default ({
     fixtures,
     seasonID,
     matchweekNumber,
@@ -43,26 +36,5 @@ export const updateMatchweekFixtures = ({
     dispatch({
         type: ADD_MATCHWEEK,
         payload: newMatchweeks
-    })
-}
-
-export const updateMatchweekPronogeeks = ({
-    pronogeeks,
-    seasonID,
-    matchweekNumber,
-    dispatch,
-    getState
-}) => {
-
-    const newPronogeeks = copyReducer(getState, PRONOGEEK_REDUCER_KEY, USER_PRONOGEEKS_KEY)
-    newPronogeeks[`${seasonID}-${matchweekNumber}`] = {}
-
-    for (let pronogeek of pronogeeks) {
-        newPronogeeks[`${seasonID}-${matchweekNumber}`][pronogeek.fixture] = pronogeek
-    }
-
-    dispatch({
-        type: ADD_USER_PRONOGEEKS,
-        payload: newPronogeeks
     })
 }

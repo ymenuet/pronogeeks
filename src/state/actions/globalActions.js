@@ -1,6 +1,6 @@
 import {
     CHANGE_THEME
-} from '../utils/reduxTypes/global'
+} from '../types/global'
 
 export const changeTheme = theme => dispatch => {
     dispatch({

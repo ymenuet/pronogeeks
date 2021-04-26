@@ -5,7 +5,7 @@ import { useThemePreference } from '../../../utils/hooks'
 import { themeNames } from '../../../ui/theme/themes'
 import { LightModeIcon, DarkModeIcon, Selector, Container } from './ThemeSelector.styled'
 
-import { changeTheme } from '../../../actions/globalActions'
+import { changeTheme } from '../../../state/actions/globalActions'
 
 const checkedTheme = themeNames.lightTheme
 const uncheckedTheme = themeNames.darkTheme

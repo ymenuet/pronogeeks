@@ -16,7 +16,7 @@ import {
 
 import {
     getUserLeagues
-} from '../../actions/geekleagueActions'
+} from '../../state/actions/geekleagueActions'
 
 export const useUserGeekLeagues = () => {
     const [userGeekLeagues, setUserGeekLeagues] = useState(null)

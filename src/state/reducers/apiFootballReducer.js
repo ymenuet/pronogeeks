@@ -1,16 +1,18 @@
 import {
-    GET_UNDERGOING_SEASONS,
-    ADD_SEASON,
-    ADD_MATCHWEEK,
-    SET_NEXT_MATCHWEEK,
-    SET_LAST_MATCHWEEK,
+    STATUS_UPDATED,
+    RESET_STATUS_UPDATED,
+    ODDS_UPDATED,
+    RESET_ODDS_UPDATED,
+    WARNING_MESSAGE,
+    RESET_WARNING_MESSAGE,
     LOADING,
-    ERROR
-} from '../utils/reduxTypes/seasonTypes'
+    ERROR,
+    ERROR_RESET
+} from '../types/apiFootballTypes'
 import {
     LOGOUT,
     DELETE_ACCOUNT
-} from "../utils/reduxTypes/authTypes"
+} from '../types/authTypes'
 
 const done = {
     loading: false,
@@ -18,45 +20,46 @@ const done = {
 }
 
 const INITIAL_STATE = {
-    undergoingSeasons: {},
-    detailedSeasons: {},
-    seasonMatchweeks: {},
-    nextMatchweeks: {},
-    lastMatchweeks: {},
-    ...done
+    statusUpdated: false,
+    oddsUpdated: false,
+    warningMessage: false,
+    ...done,
 }
 
-const seasonReducer = (state = INITIAL_STATE, action) => {
+const apiFootballReducer = (state = INITIAL_STATE, action) => {
     switch (action.type) {
-        case GET_UNDERGOING_SEASONS:
+        case STATUS_UPDATED:
             return {
                 ...state,
-                undergoingSeasons: action.payload,
+                statusUpdated: true,
                 ...done
             }
-        case ADD_SEASON:
+        case RESET_STATUS_UPDATED:
             return {
                 ...state,
-                detailedSeasons: action.payload,
+                statusUpdated: false
+            }
+        case ODDS_UPDATED:
+            return {
+                ...state,
+                oddsUpdated: true,
                 ...done
             }
-        case ADD_MATCHWEEK:
+        case RESET_ODDS_UPDATED:
             return {
                 ...state,
-                seasonMatchweeks: action.payload,
+                oddsUpdated: false
+            }
+        case WARNING_MESSAGE:
+            return {
+                ...state,
+                warningMessage: action.payload,
                 ...done
             }
-        case SET_NEXT_MATCHWEEK:
+        case RESET_WARNING_MESSAGE:
             return {
                 ...state,
-                nextMatchweeks: action.payload,
-                ...done
-            }
-        case SET_LAST_MATCHWEEK:
-            return {
-                ...state,
-                lastMatchweeks: action.payload,
-                ...done
+                warningMessage: false
             }
         case LOADING:
             return {
@@ -70,6 +73,11 @@ const seasonReducer = (state = INITIAL_STATE, action) => {
                 error: action.payload,
                 loading: false
             }
+        case ERROR_RESET:
+            return {
+                ...state,
+                error: false
+            }
         case LOGOUT:
             return INITIAL_STATE
         case DELETE_ACCOUNT:
@@ -79,4 +87,4 @@ const seasonReducer = (state = INITIAL_STATE, action) => {
     }
 }
 
-export default seasonReducer
+export default apiFootballReducer

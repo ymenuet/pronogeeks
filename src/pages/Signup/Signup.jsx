@@ -7,7 +7,7 @@ import { Loader, SocialLogins } from '../../components'
 import { openNotification, appendPhoto } from '../../utils/helpers'
 import './connectPages.css'
 
-import { signup } from '../../actions/authActions'
+import { signup } from '../../state/actions/authActions'
 
 const Signup = ({ loadingUser }) => {
     const [form] = Form.useForm()

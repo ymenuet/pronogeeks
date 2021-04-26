@@ -6,7 +6,7 @@ import { useCurrentUserProfile, useAccountDeleted } from '../../utils/hooks'
 import ThemeSelector from './ThemeSelector'
 import './appLayout.css'
 
-import { logout } from '../../actions/authActions'
+import { logout } from '../../state/actions/authActions'
 
 const AppLayout = ({ children }) => {
 

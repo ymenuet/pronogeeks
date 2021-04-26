@@ -8,11 +8,11 @@ import {
 } from 'react-redux'
 import {
     handleStateWithId
-} from '../stateHandlers'
+} from '../helpers/stateHandlers'
 
 import {
     getDetailsGeek
-} from '../../actions/geekActions'
+} from '../../state/actions/geekActions'
 
 export const useGeekInfo = geekID => {
     const [geek, setGeek] = useState(null)

@@ -7,7 +7,7 @@ import { resetMatchweekInput } from '../../utils/helpers'
 import { QuestionIcon, SaveIcon, RankingIcon, ValidateIcon } from '../../components/Icons'
 import './pronogeeks.css'
 
-import { saveAllPronogeeks } from '../../actions/pronogeekActions'
+import { saveAllPronogeeks } from '../../state/actions/pronogeekActions'
 
 const Pronogeeks = ({ match: { params: { matchweekNumber, seasonID } }, history, loading }) => {
     const [showRules, setShowRules] = useState(false)

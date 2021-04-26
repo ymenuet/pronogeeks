@@ -8,7 +8,7 @@ import { useSeasonPlayersRanking, useUser, useSeasonHistory } from '../../utils/
 import { EditIcon, WarningIcon } from '../../components/Icons'
 import './profile.css'
 
-import { updateUsername, updatePhoto, deleteUserAccount, logout } from '../../actions/authActions'
+import { updateUsername, updatePhoto, deleteUserAccount, logout } from '../../state/actions/authActions'
 
 const Profile = ({ loading }) => {
     const [cloudinaryLoading, setCloudinaryLoading] = useState(false)

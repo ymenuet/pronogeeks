@@ -5,7 +5,7 @@ import { Form, Input } from 'antd'
 import './connectPages.css'
 import { SocialLogins, Loader } from '../../components'
 
-import { login } from '../../actions/authActions'
+import { login } from '../../state/actions/authActions'
 
 const Login = ({ loadingUser }) => {
     const [form] = Form.useForm()

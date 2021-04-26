@@ -9,7 +9,7 @@ import {
 
 import {
     setLastMatchweek
-} from '../../actions/seasonActions'
+} from '../../state/actions/seasonActions'
 
 export const useLastStartedMatchweek = season => {
     const [lastMatchweek, setLastMatchweekLocal] = useState(null)

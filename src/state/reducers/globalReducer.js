@@ -1,9 +1,9 @@
 import {
     CHANGE_THEME
-} from '../utils/reduxTypes/global'
+} from '../types/global'
 import {
     preferredTheme
-} from '../utils/classes/localStorage'
+} from '../../utils/classes/localStorage'
 
 const INITIAL_STATE = {
     appTheme: null,

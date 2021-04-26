@@ -21,7 +21,7 @@ import {
 import {
     updateFixturesStatus,
     updateOdds
-} from '../../actions/apiFootballActions'
+} from '../../state/actions/apiFootballActions'
 
 export const useConditionalFixturesUpdate = ({
     seasonID,

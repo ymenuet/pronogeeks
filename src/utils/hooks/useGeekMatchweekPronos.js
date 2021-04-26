@@ -8,7 +8,7 @@ import {
 
 import {
     getGeekMatchweekPronos
-} from '../../actions/pronogeekActions'
+} from '../../state/actions/pronogeekActions'
 
 export const useGeekMatchweekPronos = (geekID, seasonID, matchweekNumber) => {
 

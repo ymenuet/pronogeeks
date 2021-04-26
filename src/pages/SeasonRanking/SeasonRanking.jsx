@@ -8,7 +8,7 @@ import { openNotification } from '../../utils/helpers'
 import { useSeason, useUserProvRanking, useProvRankingOpen } from '../../utils/hooks'
 import './seasonRanking.css'
 
-import { saveUserProvRanking } from '../../actions/geekActions'
+import { saveUserProvRanking } from '../../state/actions/geekActions'
 
 const SeasonRanking = ({ match: { params: { seasonID, matchweekNumber } } }) => {
 

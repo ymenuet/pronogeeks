@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useUser } from '../../utils/hooks'
 import './pronosAdminButtons.css'
 
-import { updateFixturesStatus, updateOdds } from '../../actions/apiFootballActions'
+import { updateFixturesStatus, updateOdds } from '../../state/actions/apiFootballActions'
 
 const PronosAdminButtons = ({ seasonID, matchweekNumber }) => {
 

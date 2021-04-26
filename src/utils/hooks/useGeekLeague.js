@@ -8,11 +8,11 @@ import {
 } from 'react-redux'
 import {
     handleStateWithId
-} from '../stateHandlers'
+} from '../helpers/stateHandlers'
 
 import {
     getLeague
-} from '../../actions/geekleagueActions'
+} from '../../state/actions/geekleagueActions'
 
 export const useGeekLeague = geekLeagueID => {
     const [geekLeague, setGeekLeague] = useState(null)

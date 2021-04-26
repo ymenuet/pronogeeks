@@ -7,7 +7,7 @@ import { useGeekLeague, useGeekLeagueHistory, useGeeksFixturePronos, useFixtureW
 import { CloseIcon } from '../Icons'
 import './viewGeekLeaguePronos.css'
 
-import { saveGeekleagueHistory } from '../../actions/geekActions'
+import { saveGeekleagueHistory } from '../../state/actions/geekActions'
 
 const applyWinnerClass = (winner, row) => winner === row ? 'right-prono exact-prono' : ''
 

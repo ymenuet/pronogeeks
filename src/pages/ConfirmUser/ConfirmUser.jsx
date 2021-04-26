@@ -3,7 +3,7 @@ import { Link, Redirect } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { Loader } from '../../components'
 
-import { confirmEmail } from '../../actions/authActions'
+import { confirmEmail } from '../../state/actions/authActions'
 
 const ConfirmUser = ({ match: { params: { userID, confirmToken } } }) => {
 

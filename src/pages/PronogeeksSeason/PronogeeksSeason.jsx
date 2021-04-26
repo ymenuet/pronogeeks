@@ -7,7 +7,7 @@ import { useInput, useSeason, useOpenSeason } from '../../utils/hooks'
 import { WarningIcon } from '../../components/Icons'
 import './pronogeeks.css'
 
-import { saveFavTeam } from '../../actions/geekActions'
+import { saveFavTeam } from '../../state/actions/geekActions'
 
 const PronogeeksSeason = ({ match: { params: { seasonID } }, loading }) => {
 

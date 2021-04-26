@@ -9,7 +9,7 @@ import {
 
 import {
     getMatchweekFixtures
-} from '../../actions/seasonActions'
+} from '../../state/actions/seasonActions'
 
 export const useMatchweekFixtures = (season, matchweekNumber) => {
 
