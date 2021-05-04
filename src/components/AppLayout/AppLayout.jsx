@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { HomeIcon } from '../Icons'
 import { useCurrentUserProfile, useAccountDeleted } from '../../utils/hooks'
-import ThemeSelector from './ThemeSelector'
 import './appLayout.css'
 
 import { logout } from '../../state/actions/authActions'
@@ -26,8 +25,6 @@ const AppLayout = ({ children }) => {
             >
                 <h1>pronogeeks</h1>
             </Link>
-
-            <ThemeSelector />
 
             <button
                 className="navbar-toggler my-navbar-btn"
