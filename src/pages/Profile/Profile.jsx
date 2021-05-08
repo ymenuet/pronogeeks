@@ -1,20 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useSelector, useDispatch } from "react-redux"
-import { useTranslation } from 'react-i18next'
 import axios from 'axios'
 import { Loader, RankGeeks, ErrorMessage } from '../../components'
 import { openNotification, appendPhoto } from '../../utils/helpers'
 import { useSeasonPlayersRanking, useUser, useSeasonHistory } from '../../utils/hooks'
-import { USERNAME_MAX_LENGTH } from '../../utils/constants'
+import { UsernameInput } from '../../utils/components'
 import { EditIcon, WarningIcon } from '../../components/Icons'
 import './profile.css'
 
 import { updateUsername, updatePhoto, deleteUserAccount, logout } from '../../state/actions/authActions'
 
 const Profile = ({ loading }) => {
-    const { t } = useTranslation()
-
     const [cloudinaryLoading, setCloudinaryLoading] = useState(false)
     const [cloudinaryError, setCloudinaryError] = useState(false)
     const [showModal, setShowModal] = useState(false)
@@ -68,7 +65,6 @@ const Profile = ({ loading }) => {
     }
 
     const saveUsername = () => {
-        if (usernameInput.length > USERNAME_MAX_LENGTH) return openNotification('warning', t('notifications.formValidations.usernameTooLong.title'), t('notifications.formValidations.usernameTooLong.message'))
         setShowModal(false)
         dispatch(updateUsername(usernameInput))
     }
@@ -298,14 +294,9 @@ const Profile = ({ loading }) => {
                         </div>
 
                         <div className="modal-body">
-                            <label htmlFor="pseudo-input-profile">Entrer un nouveau pseudo ({USERNAME_MAX_LENGTH} car. max) :</label>
-                            <input
-                                type="text"
-                                id='pseudo-input-profile'
-                                name='username'
+                            <UsernameInput
                                 value={usernameInput}
-                                onChange={(e) => setUsernameInput(e.target.value)}
-                                maxLength={USERNAME_MAX_LENGTH}
+                                onChange={setUsernameInput}
                             />
                         </div>
 

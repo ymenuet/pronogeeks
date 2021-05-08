@@ -37,6 +37,12 @@
                     "message": "Arrête tes bêtises ! Personne n'a besoin d'un pseudo aussi long..."
                 }
             }
+        },
+        "forms": {
+            "usernameInput": {
+                "placeholder": "Roi Geek",
+                "defaultLabel": "Entrer un pseudo ({{maxLength}} car. max) :"
+            }
         }
     }
 }

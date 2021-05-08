@@ -4,7 +4,7 @@ import {
 
 import constants from '../../constants'
 
-export default (type, title, message, duration = constants.NOTIFICATION_DEFAULT_DURATION) => {
+export default (type, title, message, duration = constants.NOTIFICATION_DEFAULT_DURATION_SECONDS) => {
     notification[type]({
         message: title,
         description: message,

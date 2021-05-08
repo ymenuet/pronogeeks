@@ -1,23 +1,21 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { Redirect, Route } from 'react-router-dom'
-import { useUser } from '../hooks'
-import { Signup } from '../../pages'
+import USER_ROLES from '../../models/userRoles'
+import { useUser } from '../../hooks'
 
-const PrivateRoute = ({ component: Component, ...rest }) => {
+const AdminRoute = ({ component: Component, ...rest }) => {
 
     const { user, isUserConnected } = useUser()
 
-    const { usernameConfirmed, profileError } = useSelector(({ authReducer: { usernameConfirmed, profileError } }) => ({ usernameConfirmed, profileError }))
+    const { profileError } = useSelector(({ authReducer: { usernameConfirmed, profileError } }) => ({ usernameConfirmed, profileError }))
 
     return (
         <Route
             {...rest}
             render={props => isUserConnected === 0 && !profileError ? (
                 <Component {...props} loading />
-            ) : isUserConnected && !user.confirmed && !usernameConfirmed ? (
-                <Signup emailToConfirm={true} />
-            ) : isUserConnected ? (
+            ) : isUserConnected && user.role === USER_ROLES.GEEK_ADMIN ? (
                 <Component {...props} />
             ) : (
                 <Redirect
@@ -31,4 +29,4 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
     )
 }
 
-export default PrivateRoute
+export default AdminRoute
