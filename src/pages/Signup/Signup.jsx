@@ -1,15 +1,18 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
+import { useTranslation } from 'react-i18next'
 import { Form, Input } from 'antd'
 import axios from 'axios'
 import { Loader, SocialLogins } from '../../components'
 import { openNotification, appendPhoto } from '../../utils/helpers'
+import { USERNAME_MAX_LENGTH } from '../../utils/constants'
 import './connectPages.css'
 
 import { signup } from '../../state/actions/authActions'
 
 const Signup = ({ loadingUser }) => {
+    const { t } = useTranslation()
     const [form] = Form.useForm()
     const [cloudinaryLoading, setCloudinaryLoading] = useState(false)
     const [cloudinaryError, setCloudinaryError] = useState(false)
@@ -22,6 +25,7 @@ const Signup = ({ loadingUser }) => {
     const dispatch = useDispatch()
 
     const onFinish = async (values) => {
+        if (values.username.length > USERNAME_MAX_LENGTH) return openNotification('warning', t('notifications.formValidations.usernameTooLong.title'), t('notifications.formValidations.usernameTooLong.message'))
         const emailCorrect = (/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@(([[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/).test(String(values.email).toLowerCase())
         if (!emailCorrect) openNotification('warning', 'Attention', `Je crois qu'il y a une faute de frappe dans ton email...`)
         else {
@@ -107,7 +111,7 @@ const Signup = ({ loadingUser }) => {
                     </Form.Item>
 
                     <Form.Item
-                        label="Pseudo :"
+                        label={`Pseudo (${USERNAME_MAX_LENGTH} caractères max) :`}
                         name="username"
                         rules={[
                             {
@@ -116,7 +120,7 @@ const Signup = ({ loadingUser }) => {
                             },
                         ]}
                     >
-                        <Input placeholder='RoiGeek' />
+                        <Input placeholder='RoiGeek' maxLength={USERNAME_MAX_LENGTH} />
                     </Form.Item>
 
                     <Form.Item

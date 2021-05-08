@@ -29,6 +29,14 @@
                     "button": "Ajouter la saison"
                 }
             }
+        },
+        "notifications": {
+            "formValidations": {
+                "usernameTooLong": {
+                    "title": "Pseudo trop long",
+                    "message": "Arrête tes bêtises ! Personne n'a besoin d'un pseudo aussi long..."
+                }
+            }
         }
     }
 }
