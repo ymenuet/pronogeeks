@@ -1,23 +1,42 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Form, Input } from 'antd'
+import { Form } from 'antd'
 import { Loader, GeekSelector } from '../../components'
+import { Input } from '../../ui/components'
 import { openNotification } from '../../utils/helpers'
-import { useRedirectNewLeague } from '../../utils/hooks'
+import { SeasonSelector } from '../../utils/components'
+import { useRedirectNewLeague, useUpcomingAndUndergoingSeasons, useForm } from '../../utils/hooks'
 import './createGeekleague.css'
 
 import { createLeague } from '../../state/actions/geekleagueActions'
+
+const formNames = {
+    name: 'name',
+    geeks: 'geeks',
+    season: 'season'
+}
 
 const CreateGeekLeague = ({ loading }) => {
     const [form] = Form.useForm()
 
     useRedirectNewLeague()
 
+    const { seasons, errorSeasons } = useUpcomingAndUndergoingSeasons()
+
     const dispatch = useDispatch()
-    const newLeague = async ({ name, geeks }) => {
-        if (!name || !geeks || !geeks.length) return openNotification('warning', 'Attention', 'Tous les champs sont requis.')
-        dispatch(createLeague({ name, geeks }))
+    const createNewLeague = async ({ name, geeks, season }) => {
+        if (!name || !geeks || !geeks.length || !season) return openNotification('warning', 'Attention', 'Tous les champs sont requis.')
+        dispatch(createLeague({ name, geeks, season }))
     }
+
+    const { formData, handleInputChange, handleSubmit } = useForm({
+        initialValues: {
+            [formNames.name]: '',
+            [formNames.geeks]: [],
+            [formNames.season]: ''
+        },
+        onSubmit: createNewLeague
+    })
 
     const creatingLeague = useSelector(({ geekleagueReducer }) => geekleagueReducer.loading)
 
@@ -34,6 +53,37 @@ const CreateGeekLeague = ({ loading }) => {
 
                     <h2>Créer une ligue</h2>
 
+                    <form onSubmit={handleSubmit}>
+
+                        <Input
+                            value={formData.name}
+                            name={formNames.name}
+                            onChange={handleInputChange}
+                            style={{ borderRadius: 15.8 }}
+                            placeholder='Ma Ligue Geek'
+                            label="Nom de la ligue :"
+                        />
+
+                        <GeekSelector />
+
+
+                        <SeasonSelector seasons={seasons} />
+
+
+                        <div style={{ display: 'flex', justifyContent: 'center' }}>
+                            <button
+                                type='submit'
+                                className='btn my-btn create-league-btn'
+                                style={{ marginTop: 10 }}
+                                disabled={creatingLeague}
+                            >
+                                Créer ligue
+                                </button>
+                        </div>
+
+                    </form>
+
+
                     <Form
                         form={form}
                         layout='vertical'
@@ -41,7 +91,7 @@ const CreateGeekLeague = ({ loading }) => {
                         initialValues={{
                             remember: true,
                         }}
-                        onFinish={newLeague}
+                        onFinish={createNewLeague}
                     >
 
                         <Form.Item
@@ -65,6 +115,23 @@ const CreateGeekLeague = ({ loading }) => {
 
 
                         <GeekSelector />
+
+
+                        <Form.Item
+                            type='text'
+                            name='season'
+                            label='Sélectionne une saison :'
+                            rules={[
+                                {
+                                    required: true,
+                                    message: `Tu ne peux pas créer de ligue sans saison.`,
+                                },
+                            ]}
+                        >
+
+                            <SeasonSelector seasons={seasons} />
+
+                        </Form.Item>
 
 
                         <div style={{ display: 'flex', justifyContent: 'center' }}>
