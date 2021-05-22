@@ -1,14 +1,21 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { StyledInput } from './Input.styled'
+import { randomNum } from '../../../utils/helpers'
+import { StyledInput, Label } from './Input.styled'
 
-const Input = ({ value, onChange, placeholder, disabled, type, name, maxLength, ...props }) => {
+const generateId = ({ name, placeholder }) => `input_${name}_${placeholder}_${randomNum()}`.replaceAll(' ', '')
+
+const Input = ({ label, value, onChange, placeholder, disabled, type, name, maxLength, ...props }) => {
     const handleChange = (e) => {
-        !disabled && onChange(e.target.value, e.target.name)
+        !disabled && onChange(e)
     }
-    return (
+    const id = generateId({ name, placeholder })
+
+    return (<>
+        {label && <Label htmlFor={id}>{label}</Label>}
         <StyledInput
+            id={id}
             onChange={handleChange}
             value={value}
             placeholder={placeholder}
@@ -18,11 +25,13 @@ const Input = ({ value, onChange, placeholder, disabled, type, name, maxLength, 
             maxLength={maxLength}
             {...props}
         />
+    </>
     )
 }
 
 Input.defaultProps = {
     value: '',
+    label: null,
     onChange: () => { },
     placeholder: '',
     disabled: false,
@@ -33,6 +42,7 @@ Input.defaultProps = {
 
 Input.propTypes = {
     value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    label: PropTypes.string,
     onChange: PropTypes.func.isRequired,
     placeholder: PropTypes.string,
     disabled: PropTypes.bool,
