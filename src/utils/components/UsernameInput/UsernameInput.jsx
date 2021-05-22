@@ -12,7 +12,7 @@ const UsernameInput = ({ value, onChange, disabled, label }) => {
 
     const notifMoment = useRef()
 
-    const handleChange = (value) => {
+    const handleChange = ({ target: { value } }) => {
         const notifDuration = NOTIFICATION_DEFAULT_DURATION_SECONDS * 1000
         if (value.length > USERNAME_MAX_LENGTH) {
             if (!notifMoment.current || (Date.now() - notifMoment.current) > notifDuration) {
