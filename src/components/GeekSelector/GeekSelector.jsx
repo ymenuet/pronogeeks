@@ -5,14 +5,14 @@ import { Form, Select } from 'antd'
 
 const { Option } = Select
 
-const GeekSelector = ({ geekLeague }) => {
+const GeekSelector = ({ geekLeague, name }) => {
 
     const { geeks, loadingGeeks, errorGeeks } = useAllGeeks(geekLeague)
 
     return <Form.Item
         type='text'
         label={"Ajoute d'autres geeks :"}
-        name="geeks"
+        name={name}
         rules={!geekLeague && [
             {
                 required: true,
@@ -65,6 +65,10 @@ const GeekSelector = ({ geekLeague }) => {
                 </Select>}
 
     </Form.Item>
+}
+
+GeekSelector.defaultProps = {
+    name: 'geeks',
 }
 
 export default GeekSelector
