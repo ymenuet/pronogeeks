@@ -68,7 +68,7 @@ const SeasonsSection = () => {
 
                 <InputContainer>
                     <Select
-                        defaultValue={t('admin.seasons.closeSeason.placeholder')}
+                        placeholder={t('admin.seasons.closeSeason.placeholder')}
                         onChange={handleSelectSeasonChange}
                         options={mapSeasonsForSelect(seasons)}
                     />
