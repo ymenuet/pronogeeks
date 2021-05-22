@@ -42,6 +42,17 @@
             "usernameInput": {
                 "placeholder": "Roi Geek",
                 "defaultLabel": "Entrer un pseudo ({{maxLength}} car. max) :"
+            },
+            "seasonSelector": {
+                "placeholder": "Choisir une saison",
+                "defaultLabel": "Sélectionne une saison :"
+            }
+        },
+        "ui": {
+            "components": {
+                "select": {
+                    "defaultPlaceholder": "Choisir une option"
+                }
             }
         }
     }

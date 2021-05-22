@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useGeekLeague, useUndergoingSeasons, useUser, useNotification } from '../../utils/hooks'
+import { useGeekLeague, useUser, useNotification } from '../../utils/hooks'
 import { Loader, RankGeeks, ErrorMessage, GeekSelector } from '../../components'
 import { Form, Input } from 'antd'
 import { Link } from 'react-router-dom'
@@ -18,8 +18,6 @@ const GeekLeague = ({ match: { params: { geekLeagueID } }, history, loading }) =
     const { user } = useUser()
 
     const { geekLeague, errorGeekLeague } = useGeekLeague(geekLeagueID)
-
-    const { seasons, errorSeasons } = useUndergoingSeasons()
 
     const { geekleagueEdited, geekleagueDeleted, geekleagueOut, loading: loadingGeekleague } = useSelector(({ geekleagueReducer }) => geekleagueReducer)
 
@@ -52,11 +50,11 @@ const GeekLeague = ({ match: { params: { geekLeagueID } }, history, loading }) =
 
     return <div className='geekleague-bg geekleague-details'>
 
-        {errorGeekLeague || errorSeasons ? (
+        {errorGeekLeague ? (
 
-            <ErrorMessage>{errorGeekLeague || errorSeasons}</ErrorMessage>
+            <ErrorMessage>{errorGeekLeague}</ErrorMessage>
 
-        ) : !geekLeague || !seasons || loading || loadingGeekleague ? (
+        ) : !geekLeague || loading || loadingGeekleague ? (
 
             <Loader />
 
@@ -100,30 +98,27 @@ const GeekLeague = ({ match: { params: { geekLeagueID } }, history, loading }) =
                         setShowOut(false)
                     }}
                 >
-                    {Object.values(seasons).map(season => <div
-                        key={season._id}
-                        className='ranking-geekleague-matchweek-container col-10 offset-1 col-lg-6 offset-lg-3'
-                    >
+                    <div className='ranking-geekleague-matchweek-container col-10 offset-1 col-lg-6 offset-lg-3'>
                         <div className='league-season-ranking'>
 
-                            <h4>{season.leagueName} saison {season.year}<br />Classement général</h4>
+                            <h4>{geekLeague.season.leagueName} saison {geekLeague.season.year}<br />Classement général</h4>
 
-                            <Link to={`/myGeekLeagues/${geekLeagueID}/season/${season._id}`}>
+                            <Link to={`/myGeekLeagues/${geekLeagueID}/season/${geekLeague.season._id}`}>
                                 <button className='btn my-btn see-more-btn'>Détails par journée</button>
                             </Link>
 
                             <RankGeeks
                                 players={geekLeague.geeks}
-                                seasonID={season._id}
+                                seasonID={geekLeague.season._id}
                             />
 
-                            <Link to={`/myGeekLeagues/${geekLeagueID}/season/${season._id}`}>
+                            <Link to={`/myGeekLeagues/${geekLeagueID}/season/${geekLeague.season._id}`}>
                                 <button className='btn my-btn see-more-btn'>Détails par journée</button>
                             </Link>
 
                         </div>
 
-                    </div>)}
+                    </div>
 
                 </div>
 

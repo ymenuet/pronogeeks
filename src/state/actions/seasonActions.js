@@ -1,6 +1,7 @@
 import axios from 'axios'
 import {
     GET_UNDERGOING_SEASONS,
+    GET_SEASONS_FOR_NEW_GEEKLEAGUE,
     ADD_SEASON,
     SET_NEXT_MATCHWEEK,
     SET_LAST_MATCHWEEK,
@@ -210,6 +211,47 @@ export const getUndergoingSeasons = () => async dispatch => {
 
         dispatch({
             type: GET_UNDERGOING_SEASONS,
+            payload: {
+                loading: false,
+                error: printError('fr', error, `Erreur lors du chargement des saisons. Recharge la page ou réessaye plus tard.`)
+            }
+        })
+    }
+}
+
+export const getUpcomingAndUndergoingSeasons = () => async dispatch => {
+    dispatch({
+        type: GET_SEASONS_FOR_NEW_GEEKLEAGUE,
+        payload: {
+            loading: true,
+            error: false
+        }
+    })
+
+    try {
+        const {
+            data: {
+                seasons
+            }
+        } = await seasonService.get('/futureAndCurrent')
+
+        const upcomingAndUndergoingSeasons = {}
+        for (let season of seasons) {
+            upcomingAndUndergoingSeasons[season._id] = season
+        }
+
+        if (!seasons.length) upcomingAndUndergoingSeasons.empty = true
+
+        dispatch({
+            type: GET_SEASONS_FOR_NEW_GEEKLEAGUE,
+            payload: upcomingAndUndergoingSeasons
+        })
+
+    } catch (error) {
+        console.error('ERROR:', error.message)
+
+        dispatch({
+            type: GET_SEASONS_FOR_NEW_GEEKLEAGUE,
             payload: {
                 loading: false,
                 error: printError('fr', error, `Erreur lors du chargement des saisons. Recharge la page ou réessaye plus tard.`)
