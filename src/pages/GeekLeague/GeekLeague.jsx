@@ -152,6 +152,7 @@ const GeekLeague = ({ match: { params: { geekLeagueID } }, history, loading }) =
                                 />
                             </Form.Item>
 
+                            {/* TODO: update process to add geeks. Not working right now. */}
                             <GeekSelector geekLeague={geekLeague} />
 
                             <button

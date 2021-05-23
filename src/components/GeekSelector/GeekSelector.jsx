@@ -1,44 +1,43 @@
 import React from 'react'
+import PropTypes from 'prop-types'
+import { Select } from 'antd'
+
+import i18n from '../../i18n'
 import { Loader, ErrorMessage } from '../'
 import { useAllGeeks } from '../../utils/hooks'
-import { Form, Select } from 'antd'
+import { Container, Label } from './GeekSelector.styled'
 
 const { Option } = Select
 
-const GeekSelector = ({ geekLeague, name }) => {
+const GeekSelector = ({ geekLeague, name, onChange, label }) => {
 
     const { geeks, loadingGeeks, errorGeeks } = useAllGeeks(geekLeague)
 
-    return <Form.Item
-        type='text'
-        label={"Ajoute d'autres geeks :"}
-        name={name}
-        rules={!geekLeague && [
-            {
-                required: true,
-                message: `Tu ne peux pas créer de ligue sans autres geeks.`,
-            },
-        ]}
-    >
+    return errorGeeks ? <ErrorMessage>
+        {errorGeeks}
+    </ErrorMessage>
 
-        {errorGeeks ? <ErrorMessage>
-            {errorGeeks}
-        </ErrorMessage>
+        : loadingGeeks ? <Loader
+            tip='Chargement des joueurs...'
+            size='small'
+            fontSize='2.4rem'
+            tipSize='1rem'
+            container={false}
+        />
 
-            : loadingGeeks ? <Loader
-                tip='Chargement des joueurs...'
-                size='small'
-                fontSize='2.4rem'
-                tipSize='1rem'
-                container={false}
-            />
+            : <Container>
 
-                : <Select
+                <Label>{label}</Label>
+
+                <Select // TODO: create own multiple select component
                     mode="multiple"
+                    name={name}
                     style={{ width: '100%', borderRadius: 15.8, overflow: 'hidden', textAlign: 'left' }}
                     placeholder="Ajoute des geeks à ta ligue !"
+                    label="Ajoute d'autres geeks :"
                     optionLabelProp="label"
                     optionFilterProp='label'
+                    onChange={onChange}
                 >
 
                     {geeks.map(geek => <Option
@@ -62,13 +61,21 @@ const GeekSelector = ({ geekLeague, name }) => {
 
                     </Option>)}
 
-                </Select>}
+                </Select>
 
-    </Form.Item>
+            </Container>
 }
 
 GeekSelector.defaultProps = {
-    name: 'geeks',
+    name: i18n.t('forms.geekSelector.defaultName'),
+    label: i18n.t('forms.geekSelector.defaultLabel'),
+    geekLeague: null,
+}
+
+GeekSelector.propTypes = {
+    name: PropTypes.string,
+    geekLeague: PropTypes.shape({}), // TODO: create GeekLeagueModel
+    onChange: PropTypes.func.isRequired
 }
 
 export default GeekSelector

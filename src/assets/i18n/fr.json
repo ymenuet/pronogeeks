@@ -45,13 +45,19 @@
             },
             "seasonSelector": {
                 "placeholder": "Choisir une saison",
-                "defaultLabel": "Sélectionne une saison :"
+                "defaultLabel": "Sélectionne une saison :",
+                "defaultName": "season"
+            },
+            "geekSelector": {
+                "defaultName": "geeks",
+                "defaultLabel": "Sélectionne des geeks :"
             }
         },
         "ui": {
             "components": {
                 "select": {
-                    "defaultPlaceholder": "Choisir une option"
+                    "defaultPlaceholder": "Choisir une option",
+                    "noOptions": "Aucune option"
                 }
             }
         }

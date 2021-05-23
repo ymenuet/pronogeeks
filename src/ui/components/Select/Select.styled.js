@@ -3,6 +3,13 @@ import { rgba } from 'polished'
 
 import constants from '../../theme/constants'
 
+export const Container = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+`
+
 export const SelectInput = styled.select`
     height: ${constants.inputHeightInRems}rem;
     border-radius: ${constants.inputHeightInRems / 2}rem;
@@ -18,4 +25,8 @@ export const SelectInput = styled.select`
 export const Option = styled.option`
     cursor: pointer;
     color: ${({ disabled, theme }) => disabled ? theme.disabled : theme.black};
+`
+
+export const Label = styled.label`
+    padding-left: 0.675rem;
 `

@@ -1,12 +1,12 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Form } from 'antd'
 import { Loader, GeekSelector } from '../../components'
 import { Input } from '../../ui/components'
 import { openNotification } from '../../utils/helpers'
 import { SeasonSelector } from '../../utils/components'
 import { useRedirectNewLeague, useUpcomingAndUndergoingSeasons, useForm } from '../../utils/hooks'
 import './createGeekleague.css'
+import { InputWrapper } from './CreateGeekLeague.styled'
 
 import { createLeague } from '../../state/actions/geekleagueActions'
 
@@ -17,8 +17,6 @@ const formNames = {
 }
 
 const CreateGeekLeague = ({ loading }) => {
-    const [form] = Form.useForm()
-
     useRedirectNewLeague()
 
     const { seasons, errorSeasons } = useUpcomingAndUndergoingSeasons()
@@ -29,7 +27,7 @@ const CreateGeekLeague = ({ loading }) => {
         dispatch(createLeague({ name, geeks, season }))
     }
 
-    const { formData, handleInputChange, handleSubmit } = useForm({
+    const { formData, handleInputChange, handleValueChange, handleSubmit } = useForm({
         initialValues: {
             [formNames.name]: '',
             [formNames.geeks]: [],
@@ -55,19 +53,32 @@ const CreateGeekLeague = ({ loading }) => {
 
                     <form onSubmit={handleSubmit}>
 
-                        <Input
-                            value={formData.name}
-                            name={formNames.name}
-                            onChange={handleInputChange}
-                            style={{ borderRadius: 15.8 }}
-                            placeholder='Ma Ligue Geek'
-                            label="Nom de la ligue :"
-                        />
+                        <InputWrapper>
+                            <Input
+                                value={formData.name}
+                                name={formNames.name}
+                                onChange={handleInputChange}
+                                style={{ borderRadius: 15.8 }}
+                                placeholder='Ma Ligue Geek'
+                                label="Nom de la ligue :"
+                            />
+                        </InputWrapper>
 
-                        <GeekSelector />
+                        <InputWrapper>
+                            <GeekSelector
+                                name={formNames.geeks}
+                                onChange={handleValueChange(formNames.geeks)}
+                            />
+                        </InputWrapper>
 
-
-                        <SeasonSelector seasons={seasons} />
+                        <InputWrapper>
+                            <SeasonSelector
+                                seasons={seasons}
+                                error={errorSeasons}
+                                name={formNames.season}
+                                onChange={handleInputChange}
+                            />
+                        </InputWrapper>
 
 
                         <div style={{ display: 'flex', justifyContent: 'center' }}>
@@ -82,70 +93,6 @@ const CreateGeekLeague = ({ loading }) => {
                         </div>
 
                     </form>
-
-
-                    <Form
-                        form={form}
-                        layout='vertical'
-                        name="basic"
-                        initialValues={{
-                            remember: true,
-                        }}
-                        onFinish={createNewLeague}
-                    >
-
-                        <Form.Item
-                            type='text'
-                            label="Nom de la ligue :"
-                            name="name"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: `Le nom de ligue est nécessaire.`,
-                                },
-                            ]}
-                        >
-
-                            <Input
-                                style={{ borderRadius: 15.8 }}
-                                placeholder='Ma Ligue Geek'
-                            />
-
-                        </Form.Item>
-
-
-                        <GeekSelector />
-
-
-                        <Form.Item
-                            type='text'
-                            name='season'
-                            label='Sélectionne une saison :'
-                            rules={[
-                                {
-                                    required: true,
-                                    message: `Tu ne peux pas créer de ligue sans saison.`,
-                                },
-                            ]}
-                        >
-
-                            <SeasonSelector seasons={seasons} />
-
-                        </Form.Item>
-
-
-                        <div style={{ display: 'flex', justifyContent: 'center' }}>
-                            <button
-                                type='submit'
-                                className='btn my-btn create-league-btn'
-                                style={{ marginTop: 10 }}
-                                disabled={creatingLeague}
-                            >
-                                Créer ligue
-                                </button>
-                        </div>
-
-                    </Form>
 
                 </div>
 

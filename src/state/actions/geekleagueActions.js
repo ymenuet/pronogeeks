@@ -41,7 +41,8 @@ const geekleagueService = axios.create({
 
 export const createLeague = ({
     name,
-    geeks
+    geeks,
+    season
 }) => async(dispatch, getState) => {
     dispatch({
         type: LOADING
@@ -54,7 +55,8 @@ export const createLeague = ({
             }
         } = await geekleagueService.post('/', {
             name,
-            geeks
+            geeks,
+            season
         })
 
         const newLeagues = copyReducer(getState, GEEKLEAGUE_REDUCER_KEY, GEEKLEAGUES_KEY)

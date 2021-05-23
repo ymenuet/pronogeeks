@@ -16,6 +16,13 @@ export const useForm = ({
         }))
     }
 
+    const handleValueChange = (key) => (value) => {
+        setFormData(previousData => ({
+            ...previousData,
+            [key]: value
+        }))
+    }
+
     const handleSubmit = (e) => {
         e.preventDefault()
         onSubmit(formData)
@@ -24,6 +31,7 @@ export const useForm = ({
     return {
         formData,
         handleInputChange,
+        handleValueChange,
         handleSubmit
     }
 }
