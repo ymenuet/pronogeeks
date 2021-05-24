@@ -34,7 +34,6 @@ const GeekSelector = ({ geekLeague, name, onChange, label }) => {
                     name={name}
                     style={{ width: '100%', borderRadius: 15.8, overflow: 'hidden', textAlign: 'left' }}
                     placeholder="Ajoute des geeks à ta ligue !"
-                    label="Ajoute d'autres geeks :"
                     optionLabelProp="label"
                     optionFilterProp='label'
                     onChange={onChange}

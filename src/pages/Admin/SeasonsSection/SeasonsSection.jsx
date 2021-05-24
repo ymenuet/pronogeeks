@@ -60,6 +60,7 @@ const SeasonsSection = () => {
 
             <SubTitle>{t('admin.seasons.title')}</SubTitle>
 
+            {/* TODO: Use useForm */}
             <SeasonForm onSubmit={handleButtonCloseSeason}>
 
                 <FormTitle>{t('admin.seasons.closeSeason.formTitle')}</FormTitle>
@@ -67,6 +68,7 @@ const SeasonsSection = () => {
                 <Label>{t('admin.seasons.closeSeason.label')}</Label>
 
                 <InputContainer>
+                    {/* TODO: Use SeasonSelector */}
                     <Select
                         placeholder={t('admin.seasons.closeSeason.placeholder')}
                         onChange={handleSelectSeasonChange}

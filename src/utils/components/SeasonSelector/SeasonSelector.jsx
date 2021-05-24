@@ -6,11 +6,14 @@ import i18n from '../../../i18n'
 import { SeasonModel } from '../../models/PropTypes'
 import { Select } from '../../../ui/components'
 import { ErrorMessage, Loader } from '../../../components'
+import season from '../../../state/reducers/keys/season'
 
 const SeasonSelector = ({ seasons, error, name, onChange, label }) => {
     const { t } = useTranslation()
 
-    const options = seasons && Object.values(seasons).map(season => ({ value: season._id, name: `${season.leagueName} - ${season.year}` }))
+    let options = []
+
+    if (seasons && !season.empty) options = Object.values(seasons).map(season => ({ value: season._id, name: `${season.leagueName} - ${season.year}` }))
 
     return error ? <ErrorMessage>
         {error}

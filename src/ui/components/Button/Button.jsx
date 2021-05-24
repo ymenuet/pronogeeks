@@ -12,6 +12,7 @@ const Button = ({ label, type, disabled, onClick, level, kind }) => {
     )
 }
 
+// TODO: define propTypes and defaultProps properly
 Button.defaultProps = {
     kind: kinds.base
 }
