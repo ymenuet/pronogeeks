@@ -1,19 +1,25 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useGeekLeague, useUser, useNotification } from '../../utils/hooks'
-import { Loader, RankGeeks, ErrorMessage, GeekSelector } from '../../components'
-import { Form, Input } from 'antd'
 import { Link } from 'react-router-dom'
+
+import { useGeekLeague, useUser, useNotification, useForm } from '../../utils/hooks'
+import { Input } from '../../ui/components'
+import { Loader, RankGeeks, ErrorMessage, GeekSelector } from '../../components'
 import { EditIcon, DeleteIcon, RemoveIcon, WarningIcon } from '../../components/Icons'
+import { InputWrapper } from './GeekLeague.styled'
 import './detailGeekleague.css'
 
 import { editLeague, deleteLeague, outLeague } from '../../state/actions/geekleagueActions'
+
+const formNames = {
+    name: 'name',
+    geeks: 'geeks',
+}
 
 const GeekLeague = ({ match: { params: { geekLeagueID } }, history, loading }) => {
     const [showModal, setShowModal] = useState(false)
     const [showDelete, setShowDelete] = useState(false)
     const [showOut, setShowOut] = useState(false)
-    const [form] = Form.useForm()
 
     const { user } = useUser()
 
@@ -22,6 +28,15 @@ const GeekLeague = ({ match: { params: { geekLeagueID } }, history, loading }) =
     const { geekleagueEdited, geekleagueDeleted, geekleagueOut, loading: loadingGeekleague } = useSelector(({ geekleagueReducer }) => geekleagueReducer)
 
     const dispatch = useDispatch()
+    const updateGeekleague = ({ name, geeks }) => dispatch(editLeague(geekLeagueID, { name, geeks }))
+    const { formData, handleInputChange, handleValueChange, handleSubmit } = useForm({
+        initialValues: {
+            [formNames.name]: geekLeague?.name,
+            [formNames.geeks]: [],
+        },
+        onSubmit: updateGeekleague,
+        updateInitialValues: !!geekLeague
+    })
 
     useNotification(
         geekleagueEdited,
@@ -132,28 +147,25 @@ const GeekLeague = ({ match: { params: { geekLeagueID } }, history, loading }) =
 
                         <hr />
 
-                        <Form
-                            form={form}
-                            layout='vertical'
-                            name="basic"
-                            onFinish={({ name, geeks }) => dispatch(editLeague(geekLeagueID, { name, geeks }))}
-                        >
+                        <form onSubmit={handleSubmit}>
 
-                            <Form.Item
-                                type='text'
-                                label="Nom de la ligue :"
-                                name="name"
-                                color='black'
-                                initialValue={geekLeague.name}
-                            >
+                            <InputWrapper>
                                 <Input
-                                    style={{ borderRadius: 15.8 }}
-                                    placeholder={geekLeague.name}
+                                    value={formData.name}
+                                    name={formNames.name}
+                                    onChange={handleInputChange}
+                                    placeholder='Ma Ligue Geek'
+                                    label="Nom de la ligue :"
                                 />
-                            </Form.Item>
+                            </InputWrapper>
 
-                            {/* TODO: update process to add geeks. Not working right now. */}
-                            <GeekSelector geekLeague={geekLeague} />
+                            <InputWrapper>
+                                <GeekSelector
+                                    name={formNames.geeks}
+                                    onChange={handleValueChange(formNames.geeks)}
+                                    geekLeague={geekLeague}
+                                />
+                            </InputWrapper>
 
                             <button
                                 type="submit"
@@ -163,7 +175,7 @@ const GeekLeague = ({ match: { params: { geekLeagueID } }, history, loading }) =
                                 Enregistrer
                             </button>
 
-                        </Form>
+                        </form>
 
                     </div>
 

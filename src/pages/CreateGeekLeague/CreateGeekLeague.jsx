@@ -58,7 +58,6 @@ const CreateGeekLeague = ({ loading }) => {
                                 value={formData.name}
                                 name={formNames.name}
                                 onChange={handleInputChange}
-                                style={{ borderRadius: 15.8 }}
                                 placeholder='Ma Ligue Geek'
                                 label="Nom de la ligue :"
                             />

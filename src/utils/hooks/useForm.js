@@ -1,12 +1,22 @@
 import {
-    useState
+    useState,
+    useEffect
 } from 'react'
 
 export const useForm = ({
     initialValues = {},
-    onSubmit = () => {}
+    onSubmit = () => {},
+    updateInitialValues
 }) => {
     const [formData, setFormData] = useState(initialValues)
+    const [initialValuesUpdated, setInitialValuesUpdated] = useState(false)
+
+    useEffect(() => {
+        if (updateInitialValues && !initialValuesUpdated) {
+            setFormData(initialValues)
+            setInitialValuesUpdated(true)
+        }
+    }, [updateInitialValues, initialValues, initialValuesUpdated])
 
     const handleInputChange = (e) => {
         e.persist()
