@@ -30,6 +30,7 @@ const UsernameInput = ({ value, onChange, disabled, label }) => {
             onChange={handleChange}
             value={value}
             placeholder={t('forms.usernameInput.placeholder')}
+            name={t('forms.usernameInput.name')}
             disabled={disabled}
             maxLength={USERNAME_MAX_LENGTH}
             label={label}

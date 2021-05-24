@@ -1,4 +1,5 @@
 export { default as randomNum } from './randomNum'
+export { default as generateInputId } from './generateInputId'
 export { default as isEmpty } from './isEmpty'
 export { default as isConnected } from './isConnected'
 export { default as roundBorder } from './roundBorder'

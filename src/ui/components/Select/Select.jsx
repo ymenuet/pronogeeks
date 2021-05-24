@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { useTranslation } from 'react-i18next'
 
 import i18n from '../../../i18n'
+import { generateInputId } from '../../../utils/helpers'
 import { Container, SelectInput, Option, Label } from './Select.styled'
 
 const Select = ({ placeholder, onChange, options, name, label }) => {
@@ -15,14 +16,16 @@ const Select = ({ placeholder, onChange, options, name, label }) => {
         onChange(e)
     }
 
+    const id = generateInputId({ name, placeholder })
+
     const noOptions = t('ui.components.select.noOptions')
 
     return <Container>
 
-        {/* TODO: use generateId helper (in Input) to associate label to input using htmlFor */}
-        {label && <Label>{label}</Label>}
+        {label && <Label htmlFor={id}>{label}</Label>}
 
         <SelectInput
+            id={id}
             name={name}
             defaultValue={placeholder}
             onChange={handleChange}
@@ -31,7 +34,9 @@ const Select = ({ placeholder, onChange, options, name, label }) => {
         >
             <Option value={placeholder} disabled>{placeholder}</Option>
             {!options.length && <Option value={noOptions} disabled>{noOptions}</Option>}
+
             {options && options.map(({ value, name }) => <Option key={value} value={value}>{name}</Option>)}
+
         </SelectInput>
 
     </Container>

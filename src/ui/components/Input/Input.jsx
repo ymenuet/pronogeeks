@@ -1,19 +1,19 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { randomNum } from '../../../utils/helpers'
+import { generateInputId } from '../../../utils/helpers'
 import { Container, StyledInput, Label } from './Input.styled'
 
-const generateId = ({ name, placeholder }) => `input_${name}_${placeholder}_${randomNum()}`.replaceAll(' ', '')
-
-const Input = ({ label, value, onChange, placeholder, disabled, type, name, maxLength, ...props }) => {
+const Input = ({ label, value, onChange, placeholder, disabled, type, name, maxLength }) => {
     const handleChange = (e) => {
         !disabled && onChange(e)
     }
-    const id = generateId({ name, placeholder })
+    const id = generateInputId({ name, placeholder })
 
     return (<Container>
+
         {label && <Label htmlFor={id}>{label}</Label>}
+
         <StyledInput
             id={id}
             onChange={handleChange}
@@ -23,8 +23,8 @@ const Input = ({ label, value, onChange, placeholder, disabled, type, name, maxL
             type={type}
             name={name}
             maxLength={maxLength}
-            {...props}
         />
+
     </Container>
     )
 }

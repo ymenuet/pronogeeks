@@ -41,7 +41,8 @@
         "forms": {
             "usernameInput": {
                 "placeholder": "Roi Geek",
-                "defaultLabel": "Entrer un pseudo ({{maxLength}} car. max) :"
+                "defaultLabel": "Entrer un pseudo ({{maxLength}} car. max) :",
+                "name": "username"
             },
             "seasonSelector": {
                 "placeholder": "Choisir une saison",
