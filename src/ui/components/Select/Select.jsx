@@ -19,6 +19,7 @@ const Select = ({ placeholder, onChange, options, name, label }) => {
 
     return <Container>
 
+        {/* TODO: use generateId helper (in Input) to associate label to input using htmlFor */}
         {label && <Label>{label}</Label>}
 
         <SelectInput
