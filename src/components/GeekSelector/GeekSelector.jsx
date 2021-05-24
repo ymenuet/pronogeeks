@@ -73,6 +73,7 @@ GeekSelector.defaultProps = {
 
 GeekSelector.propTypes = {
     name: PropTypes.string,
+    label: PropTypes.string,
     geekLeague: PropTypes.shape({}), // TODO: create GeekLeagueModel
     onChange: PropTypes.func.isRequired
 }
