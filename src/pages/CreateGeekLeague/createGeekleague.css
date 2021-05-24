@@ -1,7 +1,6 @@
 .geekleague-form {
-    padding: 20vh 20px;
+    padding: 40px 20px;
     width: 100%;
-    height: calc(80vh - var(--navbar-height));
     margin-bottom: 10vh;
     background-color: rgba(156, 0, 99, 0.8);
     border-radius: 10px;

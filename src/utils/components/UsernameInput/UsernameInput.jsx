@@ -2,10 +2,10 @@ import React, { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import PropTypes from 'prop-types'
 
+import i18n from '../../../i18n'
 import Input from '../../../ui/components/Input'
 import { USERNAME_MAX_LENGTH, NOTIFICATION_DEFAULT_DURATION_SECONDS } from '../../constants'
 import { openNotification } from '../../helpers'
-import { Label } from './UsernameInput.styled'
 
 const UsernameInput = ({ value, onChange, disabled, label }) => {
     const { t } = useTranslation()
@@ -26,21 +26,19 @@ const UsernameInput = ({ value, onChange, disabled, label }) => {
     }
 
     return (
-        <>
-            <Label>{label || t('forms.usernameInput.defaultLabel', { maxLength: USERNAME_MAX_LENGTH })}</Label>
-            <Input
-                onChange={handleChange}
-                value={value}
-                placeholder={t('forms.usernameInput.placeholder')}
-                disabled={disabled}
-                maxLength={USERNAME_MAX_LENGTH}
-            />
-        </>
+        <Input
+            onChange={handleChange}
+            value={value}
+            placeholder={t('forms.usernameInput.placeholder')}
+            disabled={disabled}
+            maxLength={USERNAME_MAX_LENGTH}
+            label={label}
+        />
     )
 }
 
-UsernameInput.defaultProp = {
-    label: '',
+UsernameInput.defaultProps = {
+    label: i18n.t('forms.usernameInput.defaultLabel', { maxLength: USERNAME_MAX_LENGTH }),
     value: '',
     disabled: false,
 }
