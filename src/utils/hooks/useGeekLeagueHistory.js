@@ -5,6 +5,9 @@ import {
 import {
     useUser
 } from '.'
+import {
+    preferredGeekleague
+} from '../classes/localStorage'
 
 export const useGeekLeagueHistory = () => {
     const [geekLeagueHistoryID, setGeekLeagueHistoryID] = useState(null)
@@ -15,11 +18,13 @@ export const useGeekLeagueHistory = () => {
     } = useUser()
 
     useEffect(() => {
-        if (isUserConnected) {
-            const geekLeagueID = user.geekLeagueHistory || user.geekLeagues[0]._id
+        const leagueID = preferredGeekleague.get()
+        if (leagueID) setGeekLeagueHistoryID(leagueID)
+        else if (isUserConnected) {
+            const geekLeagueID = user.geekLeagues[0]._id
             setGeekLeagueHistoryID(geekLeagueID)
         }
-    }, [user, user.geekLeagueHistory, isUserConnected])
+    }, [user, isUserConnected])
 
     return {
         geekLeagueHistoryID,

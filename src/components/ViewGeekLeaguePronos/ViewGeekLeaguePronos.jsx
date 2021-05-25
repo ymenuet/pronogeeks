@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
 import { Loader, ErrorMessage, GeekProno } from '..'
 import { printFixtureStatus } from '../../utils/helpers'
 import { useGeekLeague, useGeekLeagueHistory, useGeeksFixturePronos, useFixtureWinner } from '../../utils/hooks'
 import { CloseIcon } from '../Icons'
+import { preferredGeekleague } from '../../utils/classes/localStorage'
 import './viewGeekLeaguePronos.css'
-
-import { saveGeekleagueHistory } from '../../state/actions/geekActions'
 
 const applyWinnerClass = (winner, row) => winner === row ? 'right-prono exact-prono' : ''
 
@@ -23,13 +21,11 @@ const ViewGeekLeaguePronos = ({ fixture, setShowLeagues }) => {
 
     const winner = useFixtureWinner(fixture)
 
-    const dispatch = useDispatch()
-
     const changeLeague = async (e) => {
         const geekLeagueID = e.target.value
-        setGeekLeagueID(geekLeagueID)
         setGeeksPronos(null)
-        dispatch(saveGeekleagueHistory(geekLeagueID))
+        setGeekLeagueID(geekLeagueID)
+        preferredGeekleague.set(geekLeagueID)
     }
 
     return (

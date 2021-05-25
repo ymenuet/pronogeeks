@@ -10,6 +10,10 @@ class LocalStorage {
     set(value) {
         localStorage.setItem(this.key, value)
     }
+
+    remove() {
+        localStorage.removeItem(this.key)
+    }
 }
 
 export const STORAGE_KEYS = {

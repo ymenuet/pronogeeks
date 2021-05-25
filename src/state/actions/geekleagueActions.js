@@ -29,6 +29,9 @@ import {
 import {
     RESET_TIMEOUT_IN_MS
 } from '../../utils/constants.js'
+import {
+    preferredGeekleague
+} from '../../utils/classes/localStorage'
 
 const baseURL = process.env.NODE_ENV === 'production' ?
     `/api/geekLeagues` :
@@ -298,7 +301,7 @@ function deleteLeagueFromStore({
 
     const newUser = copyReducer(getState, AUTH_REDUCER_KEY, USER_KEY)
     newUser.geekLeagues = newUser.geekLeagues.filter(league => league._id !== geekleagueID)
-    if (`${newUser.geekLeagueHistory}` === `${geekleagueID}`) newUser.geekLeagueHistory = null
+    if (`${preferredGeekleague.get()}` === `${geekleagueID}`) preferredGeekleague.remove()
 
     dispatch({
         type: LOGIN,

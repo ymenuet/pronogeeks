@@ -6,7 +6,6 @@ import {
     SAVE_FAV_TEAM_RESET,
     SAVE_RANKING,
     SAVE_RANKING_RESET,
-    DONE,
     LOADING,
     ERROR,
     ERROR_RESET
@@ -73,11 +72,6 @@ const geekReducer = (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 rankingSaved: false,
-                ...done
-            }
-        case DONE:
-            return {
-                ...state,
                 ...done
             }
         case LOADING:

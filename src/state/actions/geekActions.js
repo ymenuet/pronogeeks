@@ -7,7 +7,6 @@ import {
     SAVE_FAV_TEAM_RESET,
     SAVE_RANKING,
     SAVE_RANKING_RESET,
-    DONE,
     LOADING,
     ERROR,
     ERROR_RESET
@@ -203,31 +202,6 @@ export const saveFavTeam = (seasonID, teamID) => async(dispatch, getState) => {
             type: ERROR,
             payload: printError('fr', error, "Erreur lors de l'enregistrement de l'équipe de coeur. Recharge la page ou réessaye plus tard.")
         })
-    }
-}
-
-export const saveGeekleagueHistory = geekLeagueID => async(dispatch, getState) => {
-    dispatch({
-        type: LOADING
-    })
-
-    try {
-        await geekService.put(`/geekLeagueHistory/${geekLeagueID}`)
-
-        const newUser = copyReducer(getState, AUTH_REDUCER_KEY, USER_KEY)
-        newUser.geekLeagueHistory = geekLeagueID
-
-        dispatch({
-            type: LOGIN,
-            payload: newUser
-        })
-        dispatch({
-            type: DONE
-        })
-
-    } catch (error) {
-        console.error('ERROR:', error.message)
-            // No dispatch here because it is a background process and doesn't directly impact the user experience.
     }
 }
 
