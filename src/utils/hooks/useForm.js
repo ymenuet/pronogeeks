@@ -6,17 +6,17 @@ import {
 export const useForm = ({
     initialValues = {},
     onSubmit = () => {},
-    updateInitialValues
+    resetCondition
 }) => {
     const [formData, setFormData] = useState(initialValues)
     const [initialValuesUpdated, setInitialValuesUpdated] = useState(false)
 
     useEffect(() => {
-        if (updateInitialValues && !initialValuesUpdated) {
+        if (resetCondition && !initialValuesUpdated) {
             setFormData(initialValues)
             setInitialValuesUpdated(true)
         }
-    }, [updateInitialValues, initialValues, initialValuesUpdated])
+    }, [resetCondition, initialValues, initialValuesUpdated])
 
     const handleInputChange = (e) => {
         e.persist()

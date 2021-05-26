@@ -27,6 +27,8 @@ export const Option = styled.option`
     color: ${({ disabled, theme }) => disabled ? theme.disabled : theme.black};
 `
 
+// TODO: remove !important
 export const Label = styled.label`
     padding-left: 0.675rem;
+    color: ${({ theme }) => theme.label}!important;
 `

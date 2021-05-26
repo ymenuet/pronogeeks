@@ -9,6 +9,7 @@
                     "label": "Sélectionner une saison à terminer :",
                     "placeholder": "Choisir saison",
                     "button": "Terminer la saison",
+                    "noUndergoingSeason": "Aucune saison en cours",
                     "modal": {
                         "title": "Es-tu sûr de toi ?",
                         "body": "Es-tu sûr de vouloir terminer la saison '{{season}}' ?\nLes points des classements prévisionnels seront calculés pour tous les geeks.\nAssure-toi que le championnat est bien terminé.",

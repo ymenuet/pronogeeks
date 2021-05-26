@@ -35,7 +35,7 @@ const GeekLeague = ({ match: { params: { geekLeagueID } }, history, loading }) =
             [formNames.geeks]: [],
         },
         onSubmit: updateGeekleague,
-        updateInitialValues: !!geekLeague
+        resetCondition: !!geekLeague
     })
 
     useNotification(

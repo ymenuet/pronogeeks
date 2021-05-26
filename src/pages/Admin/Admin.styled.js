@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import { rgba } from 'polished'
 import fonts from '../../ui/theme/fonts'
 
-const maxWidth = '200px'
+const maxWidth = '320px'
 
 export const Background = styled.div`
     padding: 20px;

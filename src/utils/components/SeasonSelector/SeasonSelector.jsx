@@ -8,7 +8,7 @@ import { Select } from '../../../ui/components'
 import { ErrorMessage, Loader } from '../../../components'
 import season from '../../../state/reducers/keys/season'
 
-const SeasonSelector = ({ seasons, error, name, onChange, label }) => {
+const SeasonSelector = ({ seasons, error, name, onChange, label, noOptionMessage }) => {
     const { t } = useTranslation()
 
     let options = []
@@ -25,6 +25,7 @@ const SeasonSelector = ({ seasons, error, name, onChange, label }) => {
             options={options}
             onChange={onChange}
             label={label}
+            noOptionMessage={noOptionMessage}
         />
 
             : <Loader
@@ -41,6 +42,7 @@ SeasonSelector.defaultProps = {
     label: i18n.t('forms.seasonSelector.defaultLabel'),
     error: null,
     seasons: [],
+    noOptionMessage: undefined,
 }
 
 SeasonSelector.propTypes = {
@@ -49,6 +51,7 @@ SeasonSelector.propTypes = {
     error: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
     onChange: PropTypes.func.isRequired,
     seasons: PropTypes.objectOf(SeasonModel),
+    noOptionMessage: PropTypes.string,
 }
 
 export default SeasonSelector
