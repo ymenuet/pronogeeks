@@ -2,9 +2,10 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { generateInputId } from '../../../utils/helpers'
+import InputValidation from '../InputValidation'
 import { Container, StyledInput, Label } from './Input.styled'
 
-const Input = ({ label, value, onChange, placeholder, disabled, type, name, maxLength }) => {
+const Input = ({ label, value, onChange, placeholder, validation, disabled, type, name, maxLength }) => {
     const handleChange = (e) => {
         !disabled && onChange(e)
     }
@@ -25,6 +26,8 @@ const Input = ({ label, value, onChange, placeholder, disabled, type, name, maxL
             maxLength={maxLength}
         />
 
+        {validation && <InputValidation validation={validation} />}
+
     </Container>
     )
 }
@@ -34,6 +37,7 @@ Input.defaultProps = {
     label: null,
     onChange: () => { },
     placeholder: '',
+    validation: undefined,
     disabled: false,
     type: 'text',
     name: '',
@@ -45,6 +49,7 @@ Input.propTypes = {
     label: PropTypes.string,
     onChange: PropTypes.func.isRequired,
     placeholder: PropTypes.string,
+    validation: PropTypes.string,
     disabled: PropTypes.bool,
     type: PropTypes.string,
     name: PropTypes.string,

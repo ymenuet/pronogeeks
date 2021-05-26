@@ -31,6 +31,9 @@
                 }
             }
         },
+        "createGeekleague": {
+            "noSeasonOption": "Aucune saison à ajouter"
+        },
         "notifications": {
             "formValidations": {
                 "usernameTooLong": {
@@ -54,6 +57,9 @@
                 "defaultName": "geeks",
                 "defaultLabel": "Sélectionne des geeks :"
             }
+        },
+        "formValidations": {
+            "required": "Ce champs est requis."
         },
         "ui": {
             "components": {

@@ -1,10 +1,12 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { Loader, GeekSelector } from '../../components'
 import { Input } from '../../ui/components'
 import { openNotification } from '../../utils/helpers'
 import { SeasonSelector } from '../../utils/components'
 import { useRedirectNewLeague, useUpcomingAndUndergoingSeasons, useForm } from '../../utils/hooks'
+import { valueRequired, arrayNotEmpty } from '../../utils/helpers/inputValidations'
 import './createGeekleague.css'
 import { InputWrapper } from './CreateGeekLeague.styled'
 
@@ -17,6 +19,8 @@ const formNames = {
 }
 
 const CreateGeekLeague = ({ loading }) => {
+    const { t } = useTranslation()
+
     useRedirectNewLeague()
 
     const { seasons, errorSeasons } = useUpcomingAndUndergoingSeasons()
@@ -27,13 +31,27 @@ const CreateGeekLeague = ({ loading }) => {
         dispatch(createLeague({ name, geeks, season }))
     }
 
-    const { formData, handleInputChange, handleValueChange, handleSubmit } = useForm({
+    const { formData, formValidation, handleInputChange, handleValueChange, handleSubmit } = useForm({
         initialValues: {
             [formNames.name]: '',
             [formNames.geeks]: [],
             [formNames.season]: ''
         },
-        onSubmit: createNewLeague
+        onSubmit: createNewLeague,
+        validations: {
+            [formNames.name]: {
+                validation: valueRequired,
+                message: t('formValidations.required')
+            },
+            [formNames.geeks]: {
+                validation: arrayNotEmpty,
+                message: t('formValidations.required')
+            },
+            [formNames.season]: {
+                validation: valueRequired,
+                message: t('formValidations.required')
+            }
+        }
     })
 
     const creatingLeague = useSelector(({ geekleagueReducer }) => geekleagueReducer.loading)
@@ -60,6 +78,7 @@ const CreateGeekLeague = ({ loading }) => {
                                 onChange={handleInputChange}
                                 placeholder='Ma Ligue Geek'
                                 label="Nom de la ligue :"
+                                validation={formValidation.name}
                             />
                         </InputWrapper>
 
@@ -67,6 +86,7 @@ const CreateGeekLeague = ({ loading }) => {
                             <GeekSelector
                                 name={formNames.geeks}
                                 onChange={handleValueChange(formNames.geeks)}
+                                validation={formValidation.geeks}
                             />
                         </InputWrapper>
 
@@ -76,6 +96,8 @@ const CreateGeekLeague = ({ loading }) => {
                                 error={errorSeasons}
                                 name={formNames.season}
                                 onChange={handleInputChange}
+                                validation={formValidation.season}
+                                noOptionMessage={t('createGeekleague.noSeasonOption')}
                             />
                         </InputWrapper>
 

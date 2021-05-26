@@ -5,11 +5,12 @@ import { Select } from 'antd'
 import i18n from '../../i18n'
 import { Loader, ErrorMessage } from '../'
 import { useAllGeeks } from '../../utils/hooks'
+import { InputValidation } from '../../ui/components'
 import { Container, Label } from './GeekSelector.styled'
 
 const { Option } = Select
 
-const GeekSelector = ({ geekLeague, name, onChange, label }) => {
+const GeekSelector = ({ geekLeague, name, onChange, validation, label }) => {
 
     const { geeks, loadingGeeks, errorGeeks } = useAllGeeks(geekLeague)
 
@@ -62,18 +63,22 @@ const GeekSelector = ({ geekLeague, name, onChange, label }) => {
 
                 </Select>
 
+                {validation && <InputValidation validation={validation} />}
+
             </Container>
 }
 
 GeekSelector.defaultProps = {
     name: i18n.t('forms.geekSelector.defaultName'),
     label: i18n.t('forms.geekSelector.defaultLabel'),
+    validation: undefined,
     geekLeague: null,
 }
 
 GeekSelector.propTypes = {
     name: PropTypes.string,
     label: PropTypes.string,
+    validation: PropTypes.string,
     geekLeague: PropTypes.shape({}), // TODO: create GeekLeagueModel
     onChange: PropTypes.func.isRequired
 }

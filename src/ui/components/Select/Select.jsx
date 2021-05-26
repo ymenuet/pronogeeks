@@ -3,9 +3,10 @@ import PropTypes from 'prop-types'
 
 import i18n from '../../../i18n'
 import { generateInputId } from '../../../utils/helpers'
+import InputValidation from '../InputValidation'
 import { Container, SelectInput, Option, Label } from './Select.styled'
 
-const Select = ({ placeholder, onChange, options, name, label, noOptionMessage }) => {
+const Select = ({ placeholder, onChange, options, validation, name, label, noOptionMessage }) => {
 
     const [isSelected, setIsSelected] = useState(false)
 
@@ -35,12 +36,15 @@ const Select = ({ placeholder, onChange, options, name, label, noOptionMessage }
 
         </SelectInput>
 
+        {validation && <InputValidation validation={validation} />}
+
     </Container>
 }
 
 Select.defaultProps = {
     placeholder: i18n.t('ui.components.select.defaultPlaceholder'),
     noOptionMessage: i18n.t('ui.components.select.noOptions'),
+    validation: undefined,
     options: [],
     label: null,
 }
@@ -48,6 +52,7 @@ Select.defaultProps = {
 Select.propTypes = {
     onChange: PropTypes.func.isRequired,
     placeholder: PropTypes.string,
+    validation: PropTypes.string,
     label: PropTypes.string,
     noOptionMessage: PropTypes.string,
     name: PropTypes.string.isRequired,

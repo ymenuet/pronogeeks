@@ -6,14 +6,13 @@ import i18n from '../../../i18n'
 import { SeasonModel } from '../../models/PropTypes'
 import { Select } from '../../../ui/components'
 import { ErrorMessage, Loader } from '../../../components'
-import season from '../../../state/reducers/keys/season'
 
-const SeasonSelector = ({ seasons, error, name, onChange, label, noOptionMessage }) => {
+const SeasonSelector = ({ seasons, error, name, onChange, label, validation, noOptionMessage }) => {
     const { t } = useTranslation()
 
     let options = []
 
-    if (seasons && !season.empty) options = Object.values(seasons).map(season => ({ value: season._id, name: `${season.leagueName} - ${season.year}` }))
+    if (seasons && !seasons.empty) options = Object.values(seasons).map(season => ({ value: season._id, name: `${season.leagueName} - ${season.year}` }))
 
     return error ? <ErrorMessage>
         {error}
@@ -26,6 +25,7 @@ const SeasonSelector = ({ seasons, error, name, onChange, label, noOptionMessage
             onChange={onChange}
             label={label}
             noOptionMessage={noOptionMessage}
+            validation={validation}
         />
 
             : <Loader
@@ -41,6 +41,7 @@ SeasonSelector.defaultProps = {
     name: i18n.t('forms.seasonSelector.defaultName'),
     label: i18n.t('forms.seasonSelector.defaultLabel'),
     error: null,
+    validation: undefined,
     seasons: [],
     noOptionMessage: undefined,
 }
@@ -49,6 +50,7 @@ SeasonSelector.propTypes = {
     name: PropTypes.string,
     label: PropTypes.string,
     error: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
+    validation: PropTypes.string,
     onChange: PropTypes.func.isRequired,
     seasons: PropTypes.objectOf(SeasonModel),
     noOptionMessage: PropTypes.string,

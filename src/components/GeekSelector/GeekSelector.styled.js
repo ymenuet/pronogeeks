@@ -7,6 +7,8 @@ export const Container = styled.div`
     justify-content: flex-start;
 `
 
+// TODO: remove !important
 export const Label = styled.label`
     padding-left: 0.675rem;
+    color: ${({ theme }) => theme.label}!important;
 `
