@@ -34,7 +34,7 @@ const CloseSeasonForm = () => {
 
     const [showCloseSeason, setShowCloseSeason] = useState(false)
 
-    const { formData, handleInputChange, handleSubmit } = useForm({
+    const { inputsProps, handleInputChange, handleSubmit } = useForm({
         initialValues: {
             [formNames.season]: ''
         },
@@ -43,7 +43,7 @@ const CloseSeasonForm = () => {
     })
 
     const handleCloseSeasonEvent = () => {
-        dispatch(closeSeason(formData.season))
+        dispatch(closeSeason(inputsProps[formNames.season].value))
         setShowCloseSeason(false)
     }
 
@@ -62,9 +62,9 @@ const CloseSeasonForm = () => {
 
                 <InputContainer>
                     <SeasonSelector
-                        placeholder={t('admin.seasons.closeSeason.placeholder')}
+                        {...inputsProps[formNames.season]}
                         onChange={handleInputChange}
-                        value={formData.season}
+                        placeholder={t('admin.seasons.closeSeason.placeholder')}
                         seasons={seasons}
                         label={t('admin.seasons.closeSeason.label')}
                         error={errorSeasons}
@@ -75,7 +75,7 @@ const CloseSeasonForm = () => {
                 <ButtonWrapper>
                     <Button
                         type='submit'
-                        disabled={!formData.season || loading}
+                        disabled={!inputsProps[formNames.season].value || loading}
                         label={t('admin.seasons.closeSeason.button')}
                         level='primary'
                     />
@@ -85,7 +85,7 @@ const CloseSeasonForm = () => {
 
             <Modal
                 title={t('admin.seasons.closeSeason.modal.title')}
-                body={t('admin.seasons.closeSeason.modal.body', { season: seasons && printSeason(seasons[formData.season]) })}
+                body={t('admin.seasons.closeSeason.modal.body', { season: seasons && printSeason(seasons[inputsProps[formNames.season].value]) })}
                 isVisible={showCloseSeason}
                 onClose={() => setShowCloseSeason(false)}
                 buttons={[

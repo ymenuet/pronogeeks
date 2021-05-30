@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { Loader, GeekSelector } from '../../components'
 import { Input } from '../../ui/components'
-import { openNotification } from '../../utils/helpers'
 import { SeasonSelector } from '../../utils/components'
 import { useRedirectNewLeague, useUpcomingAndUndergoingSeasons, useForm } from '../../utils/hooks'
 import { valueRequired, arrayNotEmpty } from '../../utils/helpers/inputValidations'
@@ -26,12 +25,11 @@ const CreateGeekLeague = ({ loading }) => {
     const { seasons, errorSeasons } = useUpcomingAndUndergoingSeasons()
 
     const dispatch = useDispatch()
-    const createNewLeague = async ({ name, geeks, season }) => {
-        if (!name || !geeks || !geeks.length || !season) return openNotification('warning', 'Attention', 'Tous les champs sont requis.')
+    const createNewLeague = ({ name, geeks, season }) => {
         dispatch(createLeague({ name, geeks, season }))
     }
 
-    const { formData, formValidation, handleInputChange, handleValueChange, handleSubmit } = useForm({
+    const { inputsProps, handleInputChange, handleValueChange, handleSubmit } = useForm({
         initialValues: {
             [formNames.name]: '',
             [formNames.geeks]: [],
@@ -73,30 +71,26 @@ const CreateGeekLeague = ({ loading }) => {
 
                         <InputWrapper>
                             <Input
-                                value={formData.name}
-                                name={formNames.name}
+                                {...inputsProps[formNames.name]}
                                 onChange={handleInputChange}
                                 placeholder='Ma Ligue Geek'
                                 label="Nom de la ligue :"
-                                validation={formValidation.name}
                             />
                         </InputWrapper>
 
                         <InputWrapper>
                             <GeekSelector
-                                name={formNames.geeks}
+                                {...inputsProps[formNames.geeks]}
                                 onChange={handleValueChange(formNames.geeks)}
-                                validation={formValidation.geeks}
                             />
                         </InputWrapper>
 
                         <InputWrapper>
                             <SeasonSelector
+                                {...inputsProps[formNames.season]}
                                 seasons={seasons}
                                 error={errorSeasons}
-                                name={formNames.season}
                                 onChange={handleInputChange}
-                                validation={formValidation.season}
                                 noOptionMessage={t('createGeekleague.noSeasonOption')}
                             />
                         </InputWrapper>

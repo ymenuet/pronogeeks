@@ -29,7 +29,7 @@ const GeekLeague = ({ match: { params: { geekLeagueID } }, history, loading }) =
 
     const dispatch = useDispatch()
     const updateGeekleague = ({ name, geeks }) => dispatch(editLeague(geekLeagueID, { name, geeks }))
-    const { formData, handleInputChange, handleValueChange, handleSubmit } = useForm({
+    const { inputsProps, handleInputChange, handleValueChange, handleSubmit } = useForm({
         initialValues: {
             [formNames.name]: geekLeague?.name,
             [formNames.geeks]: [],
@@ -151,8 +151,7 @@ const GeekLeague = ({ match: { params: { geekLeagueID } }, history, loading }) =
 
                             <InputWrapper>
                                 <Input
-                                    value={formData.name}
-                                    name={formNames.name}
+                                    {...inputsProps[formNames.name]}
                                     onChange={handleInputChange}
                                     placeholder='Ma Ligue Geek'
                                     label="Nom de la ligue :"
@@ -161,7 +160,7 @@ const GeekLeague = ({ match: { params: { geekLeagueID } }, history, loading }) =
 
                             <InputWrapper>
                                 <GeekSelector
-                                    name={formNames.geeks}
+                                    {...inputsProps[formNames.geeks]}
                                     onChange={handleValueChange(formNames.geeks)}
                                     geekLeague={geekLeague}
                                 />
