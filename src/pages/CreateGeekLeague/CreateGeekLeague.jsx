@@ -41,15 +41,15 @@ const CreateGeekLeague = ({ loading }) => {
         validations: {
             [formNames.name]: {
                 validation: valueRequired,
-                message: t('formValidations.required')
+                message: t('createGeekleague.formValidations.name')
             },
             [formNames.geeks]: {
                 validation: arrayNotEmpty,
-                message: t('formValidations.required')
+                message: t('createGeekleague.formValidations.geeks')
             },
             [formNames.season]: {
                 validation: valueRequired,
-                message: t('formValidations.required')
+                message: t('createGeekleague.formValidations.season')
             }
         }
     })

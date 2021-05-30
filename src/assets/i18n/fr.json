@@ -32,7 +32,12 @@
             }
         },
         "createGeekleague": {
-            "noSeasonOption": "Aucune saison à ajouter"
+            "noSeasonOption": "Aucune saison à ajouter",
+            "formValidations": {
+                "name": "Donne un nom à ta ligue !",
+                "geeks": "Ajoute au moins 1 autre geek.",
+                "season": "Tu ne peux pas créer de ligue sans saison."
+            }
         },
         "notifications": {
             "formValidations": {
@@ -59,7 +64,7 @@
             }
         },
         "formValidations": {
-            "required": "Ce champs est requis."
+            "defaultValidationMessage": "Ce champs est requis."
         },
         "ui": {
             "components": {

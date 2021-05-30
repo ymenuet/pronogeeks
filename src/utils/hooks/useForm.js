@@ -2,6 +2,9 @@ import {
     useState,
     useEffect
 } from 'react'
+import {
+    useTranslation
+} from 'react-i18next'
 
 export const useForm = ({
     initialValues = {},
@@ -9,6 +12,11 @@ export const useForm = ({
     resetCondition,
     validations = {}
 }) => {
+
+    const {
+        t
+    } = useTranslation()
+
     const [formData, setFormData] = useState(initialValues)
     const [formValidation, setFormValidation] = useState({})
     const [initialValuesUpdated, setInitialValuesUpdated] = useState(false)
@@ -51,7 +59,7 @@ export const useForm = ({
             if (inputNotValid(key)) {
                 setFormValidation((previous) => ({
                     ...previous,
-                    [key]: validations[key].message
+                    [key]: validations[key].message || t('formValidations.defaultValidationMessage')
                 }))
                 error = true
             } else setFormValidation((previous) => ({
