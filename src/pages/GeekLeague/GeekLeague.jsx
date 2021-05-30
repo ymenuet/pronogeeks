@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 import { useGeekLeague, useUser, useNotification, useForm } from '../../utils/hooks'
+import { valueRequired } from '../../utils/helpers/inputValidations'
 import { Input } from '../../ui/components'
 import { Loader, RankGeeks, ErrorMessage, GeekSelector } from '../../components'
 import { EditIcon, DeleteIcon, RemoveIcon, WarningIcon } from '../../components/Icons'
@@ -17,6 +19,9 @@ const formNames = {
 }
 
 const GeekLeague = ({ match: { params: { geekLeagueID } }, history, loading }) => {
+
+    const { t } = useTranslation()
+
     const [showModal, setShowModal] = useState(false)
     const [showDelete, setShowDelete] = useState(false)
     const [showOut, setShowOut] = useState(false)
@@ -35,6 +40,12 @@ const GeekLeague = ({ match: { params: { geekLeagueID } }, history, loading }) =
             [formNames.geeks]: [],
         },
         onSubmit: updateGeekleague,
+        validations: {
+            [formNames.name]: {
+                validation: valueRequired,
+                message: t('geekleague.formValidations.name')
+            },
+        },
         resetCondition: !!geekLeague
     })
 

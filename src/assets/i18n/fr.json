@@ -39,6 +39,11 @@
                 "season": "Tu ne peux pas créer de ligue sans saison."
             }
         },
+        "geekleague": {
+            "formValidations": {
+                "name": "Ta ligue a besoin d'un nom."
+            }
+        },
         "notifications": {
             "formValidations": {
                 "usernameTooLong": {
