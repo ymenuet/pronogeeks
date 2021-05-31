@@ -12,7 +12,7 @@ const SeasonSelector = ({ seasons, error, name, onChange, label, validation, noO
 
     let options = []
 
-    if (seasons && !seasons.empty) options = Object.values(seasons).map(season => ({ value: season._id, name: `${season.leagueName} - ${season.year}` }))
+    if (seasons && !seasons.empty) options = Object.values(seasons).map(season => ({ value: season._id, label: `${season.leagueName} - ${season.year}` }))
 
     return error ? <ErrorMessage>
         {error}

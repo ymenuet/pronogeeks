@@ -32,7 +32,7 @@ const Select = ({ placeholder, onChange, options, validation, name, label, noOpt
             <Option value={placeholder} disabled>{placeholder}</Option>
             {!options.length && <Option value={noOptionMessage} disabled>{noOptionMessage}</Option>}
 
-            {options && options.map(({ value, name }) => <Option key={value} value={value}>{name}</Option>)}
+            {options && options.map(({ value, label }) => <Option key={value} value={value}>{label}</Option>)}
 
         </SelectInput>
 
@@ -58,7 +58,7 @@ Select.propTypes = {
     name: PropTypes.string.isRequired,
     options: PropTypes.arrayOf(PropTypes.shape({
         value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-        name: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        label: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     }))
 }
 
