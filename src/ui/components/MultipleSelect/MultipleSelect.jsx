@@ -2,8 +2,9 @@ import React, { useState, useEffect, useCallback, useRef } from 'react'
 import PropTypes from 'prop-types'
 
 import { generateInputId } from '../../../utils/helpers'
+import { SearchIcon } from '../../icons'
 import InputValidation from '../InputValidation'
-import { SelectionsContainer, Selection, SelectionLabel, Input, OptionsContainer, Option, OptionLabel, Label } from './MultipleSelect.styled'
+import { SelectionsContainer, Selection, SelectionLabel, Input, OptionsContainer, Option, OptionLabel, Label, InputWrapper } from './MultipleSelect.styled'
 
 const MultipleSelect = ({ value, name, onChange, options, validation, placeholder, label, selectionComponent: SelectionComponent, optionComponent: OptionComponent }) => {
     const id = generateInputId({ name, placeholder })
@@ -72,14 +73,17 @@ const MultipleSelect = ({ value, name, onChange, options, validation, placeholde
                             </SelectionLabel>
                         </Selection>
                 )}
-                <Input
-                    ref={inputRef}
-                    value={search}
-                    onChange={e => setSearch(e.target.value)}
-                    onFocus={onFocus}
-                    onBlur={onBlur}
-                    placeholder={placeholder} // TODO: Use a magnifying glass icon or smthg for the placeholder or fixed icon
-                />
+                <InputWrapper>
+                    <SearchIcon size={24} />
+                    <Input
+                        ref={inputRef}
+                        value={search}
+                        onChange={e => setSearch(e.target.value)}
+                        onFocus={onFocus}
+                        onBlur={onBlur}
+                        placeholder={placeholder}
+                    />
+                </InputWrapper>
             </SelectionsContainer>
 
             {/* TODO: Make OptionsContainer position absolute */}

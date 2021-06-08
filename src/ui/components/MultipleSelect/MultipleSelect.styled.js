@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 
+import constants from '../../theme/constants'
 import { getTheme } from '../../../utils/helpers/theme'
 
 export const SelectionsContainer = styled.div`
@@ -8,6 +9,9 @@ export const SelectionsContainer = styled.div`
     display: flex;
     align-items: center;
     flex-wrap: wrap;
+    border-radius: 1.2rem;
+    overflow: hidden;
+    min-height: ${constants.inputHeightInRems}rem;
 `
 
 export const Selection = styled.div`
@@ -18,7 +22,6 @@ export const Selection = styled.div`
     height: 1.875rem;
     background: ${({ theme }) => theme.grey};
     cursor: pointer;
-    flex: 1;
     white-space: nowrap;
     padding: 0.0.63rem 0.25rem;
 `
@@ -27,10 +30,17 @@ export const SelectionLabel = styled.span`
     color: ${({ theme }) => theme.black};
 `
 
+export const InputWrapper = styled.div`
+    padding-left: 0.375rem;
+`
+
 export const Input = styled.input`
     flex: 1;
     background-color: ${({ theme }) => theme.white};
-    color: ${getTheme('black')}
+    color: ${getTheme('black')};
+    border: none;
+    outline: none;
+    padding: 0 0.375rem;
 `
 
 export const OptionsContainer = styled.div`
@@ -53,4 +63,9 @@ export const OptionLabel = styled.span`
     color: ${getTheme('black')};
 `
 
-export const Label = styled.label``
+// TODO: remove !important
+export const Label = styled.label`
+    float: left;
+    color: ${getTheme('label')}!important;
+    padding-left: 0.675rem;
+`
