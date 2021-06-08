@@ -12,7 +12,7 @@ const Select = ({ placeholder, onChange, options, validation, name, label, noOpt
 
     const handleChange = e => {
         setIsSelected(true)
-        onChange(e)
+        onChange(e.target.value, e.target.name, e)
     }
 
     const id = generateInputId({ name, placeholder })

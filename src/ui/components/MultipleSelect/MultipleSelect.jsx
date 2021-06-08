@@ -1,15 +1,18 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react'
 import PropTypes from 'prop-types'
 
-import { SelectionsContainer, Selection, SelectionLabel, Input, OptionsContainer, Option, OptionLabel } from './MultipleSelect.styled'
+import { generateInputId } from '../../../utils/helpers'
+import InputValidation from '../InputValidation'
+import { SelectionsContainer, Selection, SelectionLabel, Input, OptionsContainer, Option, OptionLabel, Label } from './MultipleSelect.styled'
 
-const MultipleSelect = ({ value, name, onChange, options, selectionComponent: SelectionComponent, optionComponent: OptionComponent }) => {
+const MultipleSelect = ({ value, name, onChange, options, validation, placeholder, label, selectionComponent: SelectionComponent, optionComponent: OptionComponent }) => {
+    const id = generateInputId({ name, placeholder })
 
-    const getSelectedOptions = useCallback(() => value.map(selectedValue => options.find(option => option.value === selectedValue)), [value, options])
+    const handleChange = useCallback(onChange, [])
 
     const inputRef = useRef()
 
-    const [selectedOptions, setSelectedOptions] = useState(getSelectedOptions())
+    const [selectedOptions, setSelectedOptions] = useState([])
 
     const [search, setSearch] = useState('')
 
@@ -42,21 +45,20 @@ const MultipleSelect = ({ value, name, onChange, options, selectionComponent: Se
 
     useEffect(() => {
         if (options.length) setFilteredOptions(options.filter(option =>
-            option.label.indexOf(search) > -1 &&
-            !selectedOptions.map(({ value }) => value).includes(option.value)
+            option.label.toLowerCase().indexOf(search.toLowerCase()) > -1 &&
+            value &&
+            !value.includes(option.value)
         ))
-    }, [options, search, selectedOptions])
+    }, [options, search, value])
 
     useEffect(() => {
-        setSelectedOptions(getSelectedOptions())
-    }, [getSelectedOptions])
-
-    useEffect(() => {
-        onChange(selectedOptions.map(({ value }) => value))
-    }, [selectedOptions, onChange])
+        handleChange([...selectedOptions].map(({ value }) => value), name)
+    }, [selectedOptions, handleChange, name])
 
     return (
         <>
+            {label && <Label htmlFor={id}>{label}</Label>}
+
             <SelectionsContainer>
                 {selectedOptions.map(selection =>
                     SelectionComponent ? <SelectionComponent
@@ -76,9 +78,11 @@ const MultipleSelect = ({ value, name, onChange, options, selectionComponent: Se
                     onChange={e => setSearch(e.target.value)}
                     onFocus={onFocus}
                     onBlur={onBlur}
-                    placeholder='...' // TODO: Use a magnifying glass icon or smthg for the placeholder or fixed icon
+                    placeholder={placeholder} // TODO: Use a magnifying glass icon or smthg for the placeholder or fixed icon
                 />
             </SelectionsContainer>
+
+            {/* TODO: Make OptionsContainer position absolute */}
             {showOptions && <OptionsContainer>
                 {filteredOptions.map(option =>
                     OptionComponent ? <OptionComponent
@@ -98,6 +102,8 @@ const MultipleSelect = ({ value, name, onChange, options, selectionComponent: Se
                         </Option>
                 )}
             </OptionsContainer>}
+
+            {validation && <InputValidation validation={validation} />}
         </>
     )
 }

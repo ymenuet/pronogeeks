@@ -29,7 +29,7 @@ const CreateGeekLeague = ({ loading }) => {
         dispatch(createLeague({ name, geeks, season }))
     }
 
-    const { inputsProps, handleInputChange, handleValueChange, handleSubmit } = useForm({
+    const { inputsProps, handleSubmit } = useForm({
         initialValues: {
             [formNames.name]: '',
             [formNames.geeks]: [],
@@ -72,7 +72,6 @@ const CreateGeekLeague = ({ loading }) => {
                         <InputWrapper>
                             <Input
                                 {...inputsProps[formNames.name]}
-                                onChange={handleInputChange}
                                 placeholder='Ma Ligue Geek'
                                 label="Nom de la ligue :"
                             />
@@ -81,7 +80,6 @@ const CreateGeekLeague = ({ loading }) => {
                         <InputWrapper>
                             <GeekSelector
                                 {...inputsProps[formNames.geeks]}
-                                onChange={handleValueChange(formNames.geeks)}
                             />
                         </InputWrapper>
 
@@ -90,7 +88,6 @@ const CreateGeekLeague = ({ loading }) => {
                                 {...inputsProps[formNames.season]}
                                 seasons={seasons}
                                 error={errorSeasons}
-                                onChange={handleInputChange}
                                 noOptionMessage={t('createGeekleague.noSeasonOption')}
                             />
                         </InputWrapper>

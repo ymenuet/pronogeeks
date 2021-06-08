@@ -7,7 +7,7 @@ import { Container, StyledInput, Label } from './Input.styled'
 
 const Input = ({ label, value, onChange, placeholder, validation, disabled, type, name, maxLength }) => {
     const handleChange = (e) => {
-        !disabled && onChange(e)
+        !disabled && onChange(e.target.value, e.target.name, e)
     }
     const id = generateInputId({ name, placeholder })
 

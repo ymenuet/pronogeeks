@@ -63,16 +63,12 @@ export const useForm = ({
             prop: 'value',
             value,
         })
-        resetValidation(inputName)
     }
 
-    const handleInputChange = (e) => {
-        e.persist()
-        setInputValue(e.target.name, e.target.value)
-    }
-
-    const handleValueChange = (inputName) => (value) => {
-        setInputValue(inputName, value)
+    const handleInputChange = (value, name, event) => {
+        event && event.persist()
+        setInputValue(name, value)
+        resetValidation(name)
     }
 
     const inputNotValid = inputName => !validations[inputName].validation(inputsProps[inputName].value)
@@ -102,10 +98,20 @@ export const useForm = ({
         onSubmit(getValuesObject())
     }
 
+    const inputPropsWithOnChange = () => {
+        const fullInputsProps = {
+            ...inputsProps
+        }
+        Object.keys(fullInputsProps).map(key => {
+            fullInputsProps[key].onChange = handleInputChange
+            return key
+        })
+        return fullInputsProps
+    }
+
     return {
-        inputsProps,
-        handleInputChange,
-        handleValueChange,
+        // inputsProps contains name, value and onChange props
+        inputsProps: inputPropsWithOnChange(),
         handleSubmit
     }
 }

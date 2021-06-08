@@ -1,14 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Select } from 'antd'
 
 import i18n from '../../i18n'
 import { Loader, ErrorMessage } from '../'
 import { useAllGeeks } from '../../utils/hooks'
-import { InputValidation, MultipleSelect } from '../../ui/components'
-import { Container, Label } from './GeekSelector.styled'
-
-const { Option } = Select
+import { MultipleSelect } from '../../ui/components'
 
 const GeekSelector = ({ geekLeague, name, onChange, validation, label, value }) => {
 
@@ -26,57 +22,18 @@ const GeekSelector = ({ geekLeague, name, onChange, validation, label, value }) 
             container={false}
         />
 
-            : <Container>
-
-                <Label>{label}</Label>
-
-                <Select // TODO: create own multiple select component
-                    mode="multiple"
-                    name={name}
-                    style={{ width: '100%', borderRadius: 15.8, overflow: 'hidden', textAlign: 'left' }}
-                    placeholder="Ajoute des geeks à ta ligue !"
-                    optionLabelProp="label"
-                    optionFilterProp='label'
-                    onChange={onChange}
-                >
-
-                    {geeks.map(geek => <Option
-                        key={geek._id}
-                        value={geek._id}
-                        label={geek.username}
-                    >
-
-                        <div className="demo-option-label-item">
-
-                            <span role="img" aria-label={geek.username}>
-                                <img
-                                    src={geek.photo}
-                                    alt="profile"
-                                    className='profile-pic-preview'
-                                />
-                            </span>
-                            &nbsp;&nbsp;{geek.username}
-
-                        </div>
-
-                    </Option>)}
-
-                </Select>
-
-                <MultipleSelect
-                    onChange={value => console.log(value)}
-                    name='geeks'
-                    value={value}
-                    options={geeks.map(geek => ({
-                        ...geek,
-                        value: geek._id,
-                        label: geek.username
-                    }))}
-                />
-
-                {validation && <InputValidation validation={validation} />}
-
-            </Container>
+            : <MultipleSelect
+                onChange={onChange}
+                name={name}
+                value={value}
+                label={label}
+                validation={validation}
+                options={geeks.map(geek => ({
+                    ...geek,
+                    value: geek._id,
+                    label: geek.username
+                }))}
+            />
 }
 
 GeekSelector.defaultProps = {

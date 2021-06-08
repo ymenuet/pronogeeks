@@ -44,8 +44,13 @@ export const Option = styled.div`
     height: 1.938rem;
     border-top: 0.063rem solid ${getTheme('grey')};
     background-color: ${getTheme('white')};
+    display: flex;
+    align-items: center;
+    padding: 0.063rem 0.375rem;
 `
 
 export const OptionLabel = styled.span`
     color: ${getTheme('black')};
 `
+
+export const Label = styled.label``

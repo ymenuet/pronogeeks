@@ -34,7 +34,7 @@ const CloseSeasonForm = () => {
 
     const [showCloseSeason, setShowCloseSeason] = useState(false)
 
-    const { inputsProps, handleInputChange, handleSubmit } = useForm({
+    const { inputsProps, handleSubmit } = useForm({
         initialValues: {
             [formNames.season]: ''
         },
@@ -63,7 +63,6 @@ const CloseSeasonForm = () => {
                 <InputContainer>
                     <SeasonSelector
                         {...inputsProps[formNames.season]}
-                        onChange={handleInputChange}
                         placeholder={t('admin.seasons.closeSeason.placeholder')}
                         seasons={seasons}
                         label={t('admin.seasons.closeSeason.label')}
