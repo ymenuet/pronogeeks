@@ -4,9 +4,9 @@ import PropTypes from "prop-types";
 import { CloseIcon } from "../../../icons";
 import { Container, SelectionInfoWrapper } from "./Selection.styled";
 
-const Selection = ({ children, onClick }) => {
+const Selection = ({ children, onRemove }) => {
   return (
-    <Container onClick={onClick}>
+    <Container onClick={onRemove}>
       <SelectionInfoWrapper>{children}</SelectionInfoWrapper>
       <CloseIcon size={16} />
     </Container>
@@ -19,7 +19,7 @@ Selection.propTypes = {
     PropTypes.string,
     PropTypes.number,
   ]).isRequired,
-  onClick: PropTypes.func.isRequired,
+  onRemove: PropTypes.func.isRequired,
 };
 
 export default Selection;

@@ -12,6 +12,7 @@ export const SelectionsContainer = styled.div`
   background-color: ${({ theme }) => theme.white};
   display: flex;
   align-items: center;
+  justify-content: flex-start;
   flex-wrap: wrap;
   border-radius: 0.375rem;
   padding: 0.25rem;
@@ -24,10 +25,11 @@ export const SelectionLabel = styled.span`
 `;
 
 export const InputWrapper = styled.div`
-  width: 100%;
+  flex: 1;
   padding-left: 0.125rem;
   display: flex;
   align-items: center;
+  justify-content: flex-start;
 `;
 
 export const Input = styled.input`
@@ -48,7 +50,8 @@ export const Option = styled.div`
   cursor: pointer;
   height: 1.938rem;
   border-top: 0.063rem solid ${getTheme("grey")};
-  background-color: ${getTheme("white")};
+  background-color: ${({ preSelected, theme }) =>
+    preSelected ? theme.lightGrey : theme.white};
   display: flex;
   align-items: center;
   padding: 0.063rem 0.375rem;
