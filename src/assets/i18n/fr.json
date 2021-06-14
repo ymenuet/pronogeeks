@@ -1,83 +1,81 @@
 {
-    "translation": {
-        "admin": {
-            "pageTitle": "Page d'admin",
-            "seasons": {
-                "title": "Saisons",
-                "closeSeason": {
-                    "formTitle": "Terminer une saison",
-                    "label": "Sélectionner une saison à terminer :",
-                    "placeholder": "Choisir saison",
-                    "button": "Terminer la saison",
-                    "noUndergoingSeason": "Aucune saison en cours",
-                    "modal": {
-                        "title": "Es-tu sûr de toi ?",
-                        "body": "Es-tu sûr de vouloir terminer la saison '{{season}}' ?\nLes points des classements prévisionnels seront calculés pour tous les geeks.\nAssure-toi que le championnat est bien terminé.",
-                        "confirm": "Confirmer",
-                        "cancel": "Annuler"
-                    },
-                    "notifications": {
-                        "success": {
-                            "title": "Saison terminée avec succès",
-                            "message": "La saison d'ID \"{{seasonClosed}}\" a été terminée avec succès. Tous les points bonus des joueurs ont été calculés."
-                        }
-                    }
-                },
-                "addSeason": {
-                    "formTitle": "Ajouter une saison",
-                    "label": "Entrer l'ID API-football de la saison à ajouter :",
-                    "placeholder": "ID de la nouvelle saison",
-                    "button": "Ajouter la saison"
-                }
+  "translation": {
+    "admin": {
+      "pageTitle": "Page d'admin",
+      "seasons": {
+        "title": "Saisons",
+        "closeSeason": {
+          "formTitle": "Terminer une saison",
+          "label": "Sélectionner une saison à terminer :",
+          "placeholder": "Choisir saison",
+          "button": "Terminer la saison",
+          "noUndergoingSeason": "Aucune saison en cours",
+          "modal": {
+            "title": "Es-tu sûr de toi ?",
+            "body": "Es-tu sûr de vouloir terminer la saison '{{season}}' ?\nLes points des classements prévisionnels seront calculés pour tous les geeks.\nAssure-toi que le championnat est bien terminé.",
+            "confirm": "Confirmer",
+            "cancel": "Annuler"
+          },
+          "notifications": {
+            "success": {
+              "title": "Saison terminée avec succès",
+              "message": "La saison d'ID \"{{seasonClosed}}\" a été terminée avec succès. Tous les points bonus des joueurs ont été calculés."
             }
+          }
         },
-        "createGeekleague": {
-            "noSeasonOption": "Aucune saison à ajouter",
-            "formValidations": {
-                "name": "Donne un nom à ta ligue !",
-                "geeks": "Ajoute au moins 1 autre geek.",
-                "season": "Tu ne peux pas créer de ligue sans saison."
-            }
-        },
-        "geekleague": {
-            "formValidations": {
-                "name": "Ta ligue a besoin d'un nom."
-            }
-        },
-        "notifications": {
-            "formValidations": {
-                "usernameTooLong": {
-                    "title": "Pseudo trop long",
-                    "message": "Arrête tes bêtises ! Personne n'a besoin d'un pseudo aussi long..."
-                }
-            }
-        },
-        "forms": {
-            "usernameInput": {
-                "placeholder": "Roi Geek",
-                "defaultLabel": "Entrer un pseudo ({{maxLength}} car. max) :",
-                "name": "username"
-            },
-            "seasonSelector": {
-                "placeholder": "Choisir une saison",
-                "defaultLabel": "Sélectionne une saison :",
-                "defaultName": "season"
-            },
-            "geekSelector": {
-                "defaultName": "geeks",
-                "defaultLabel": "Sélectionne des geeks :"
-            }
-        },
-        "formValidations": {
-            "defaultValidationMessage": "Ce champs est requis."
-        },
-        "ui": {
-            "components": {
-                "select": {
-                    "defaultPlaceholder": "Choisir une option",
-                    "noOptions": "Aucune option"
-                }
-            }
+        "addSeason": {
+          "formTitle": "Ajouter une saison",
+          "label": "Entrer l'ID API-football de la saison à ajouter :",
+          "placeholder": "ID de la nouvelle saison",
+          "button": "Ajouter la saison"
         }
+      }
+    },
+    "createGeekleague": {
+      "noSeasonOption": "Aucune saison à ajouter",
+      "formValidations": {
+        "name": "Donne un nom à ta ligue !",
+        "geeks": "Ajoute au moins 1 autre geek.",
+        "season": "Tu ne peux pas créer de ligue sans saison."
+      }
+    },
+    "geekleague": {
+      "formValidations": {
+        "name": "Ta ligue a besoin d'un nom."
+      }
+    },
+    "notifications": {
+      "formValidations": {
+        "usernameTooLong": {
+          "title": "Pseudo trop long",
+          "message": "Arrête tes bêtises ! Personne n'a besoin d'un pseudo aussi long..."
+        }
+      }
+    },
+    "forms": {
+      "usernameInput": {
+        "placeholder": "Roi Geek",
+        "defaultLabel": "Entrer un pseudo ({{maxLength}} car. max) :",
+        "name": "username"
+      },
+      "seasonSelector": {
+        "placeholder": "Choisir une saison",
+        "defaultLabel": "Sélectionne une saison :"
+      },
+      "geekSelector": {
+        "defaultLabel": "Sélectionne des geeks :"
+      }
+    },
+    "formValidations": {
+      "defaultValidationMessage": "Ce champs est requis."
+    },
+    "ui": {
+      "components": {
+        "select": {
+          "defaultPlaceholder": "Choisir une option",
+          "noOptions": "Aucune option"
+        }
+      }
     }
+  }
 }
