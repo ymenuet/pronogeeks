@@ -1,4 +1,0 @@
-export {
-    getTheme
-}
-from './theme'

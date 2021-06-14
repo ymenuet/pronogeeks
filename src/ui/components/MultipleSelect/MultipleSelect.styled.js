@@ -1,7 +1,6 @@
 import styled from "styled-components";
 
-import constants from "../../theme/constants";
-import { getTheme } from "../../../utils/helpers/theme";
+import { constants, themeSelector } from "../../theme";
 
 export const Container = styled.div`
   position: relative;
@@ -9,7 +8,7 @@ export const Container = styled.div`
 
 export const SelectionsContainer = styled.div`
   width: 100%;
-  background-color: ${({ theme }) => theme.white};
+  background-color: ${themeSelector.white};
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -21,7 +20,7 @@ export const SelectionsContainer = styled.div`
 `;
 
 export const SelectionLabel = styled.span`
-  color: ${({ theme }) => theme.black};
+  color: ${themeSelector.black};
 `;
 
 export const InputWrapper = styled.div`
@@ -34,8 +33,8 @@ export const InputWrapper = styled.div`
 
 export const Input = styled.input`
   flex: 1;
-  background-color: ${({ theme }) => theme.white};
-  color: ${getTheme("black")};
+  background-color: ${themeSelector.white};
+  color: ${themeSelector.black};
   border: none;
   outline: none;
   padding: 0 0.25rem;
@@ -49,7 +48,7 @@ export const OptionsContainer = styled.div`
 export const Option = styled.div`
   cursor: pointer;
   height: 1.938rem;
-  border-top: 0.063rem solid ${getTheme("grey")};
+  border-top: 0.063rem solid ${themeSelector.grey};
   background-color: ${({ preSelected, theme }) =>
     preSelected ? theme.lightGrey : theme.white};
   display: flex;
@@ -58,12 +57,12 @@ export const Option = styled.div`
 `;
 
 export const OptionLabel = styled.span`
-  color: ${getTheme("black")};
+  color: ${themeSelector.black};
 `;
 
 // TODO: remove !important
 export const Label = styled.label`
   float: left;
-  color: ${getTheme("label")}!important;
+  color: ${themeSelector.label}!important;
   padding-left: 0.675rem;
 `;

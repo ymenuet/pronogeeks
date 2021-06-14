@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 
 import { generateInputId } from "../../../utils/helpers";
@@ -52,8 +52,6 @@ const MultipleSelect = ({
   optionComponent: OptionComponent,
 }) => {
   const id = generateInputId({ name, placeholder });
-
-  const handleChange = useCallback(onChange, []);
 
   const inputRef = useRef();
 
@@ -114,7 +112,7 @@ const MultipleSelect = ({
   };
 
   useEffect(() => {
-    if (options.length /* && search */)
+    if (options.length && search)
       setFilteredOptions(
         options.filter(
           (option) =>
@@ -123,7 +121,7 @@ const MultipleSelect = ({
             !value.includes(option.value)
         )
       );
-    /* else setFilteredOptions([]); */
+    else setFilteredOptions([]);
   }, [options, search, value]);
 
   useEffect(() => {
@@ -132,11 +130,11 @@ const MultipleSelect = ({
   }, [filteredOptions, preSelected]);
 
   useEffect(() => {
-    handleChange(
+    onChange(
       [...selectedOptions].map(({ value }) => value),
       name
     );
-  }, [selectedOptions, handleChange, name]);
+  }, [selectedOptions, onChange, name]);
 
   return (
     <Container>
@@ -173,32 +171,26 @@ const MultipleSelect = ({
         </InputWrapper>
       </SelectionsContainer>
 
-      {/* TODO: Make OptionsContainer position absolute */}
       {showOptions && (
         <OptionsContainer>
           {filteredOptions
             .slice(0, OPTIONS_DISPLAY_LIMIT_NUMBER)
-            .map((option) =>
-              OptionComponent ? (
-                <OptionComponent
-                  key={option.value}
-                  onSelect={selectOption(option)}
-                  onMouseDown={onMouseDown}
-                  preSelected={option.value === preSelected.value}
-                  {...option}
-                />
+            .map((option) => {
+              const optionProps = {
+                key: option.value,
+                onClick: selectOption(option),
+                onMouseDown: onMouseDown,
+                onMouseEnter: () => setPreSelected(option),
+                preSelected: option.value === preSelected?.value,
+              };
+              return OptionComponent ? (
+                <OptionComponent {...optionProps} {...option} />
               ) : (
-                <Option
-                  key={option.value}
-                  onClick={selectOption(option)}
-                  onMouseDown={onMouseDown}
-                  onMouseEnter={() => setPreSelected(option)}
-                  preSelected={option.value === preSelected.value}
-                >
+                <Option {...optionProps}>
                   <OptionLabel>{option.label}</OptionLabel>
                 </Option>
-              )
-            )}
+              );
+            })}
         </OptionsContainer>
       )}
 

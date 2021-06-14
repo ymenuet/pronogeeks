@@ -1,8 +1,9 @@
 import styled from "styled-components";
-import { getTheme } from "../../../../utils/helpers/theme";
+
+import { themeSelector } from "../../../theme";
 
 export const Container = styled.div`
-  background-color: ${getTheme("lightGrey")};
+  background-color: ${themeSelector.lightGrey};
   border-radius: 0.375rem;
   display: flex;
   align-items: center;

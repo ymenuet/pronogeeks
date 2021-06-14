@@ -9,10 +9,7 @@ import {
   useUpcomingAndUndergoingSeasons,
   useForm,
 } from "../../utils/hooks";
-import {
-  valueRequired,
-  arrayNotEmpty,
-} from "../../utils/helpers/inputValidations";
+import { arrayNotEmpty } from "../../utils/helpers/inputValidations";
 import "./createGeekleague.css";
 import { InputWrapper } from "./CreateGeekLeague.styled";
 
@@ -45,7 +42,6 @@ const CreateGeekLeague = ({ loading }) => {
     onSubmit: createNewLeague,
     validations: {
       [formNames.name]: {
-        validation: valueRequired,
         message: t("createGeekleague.formValidations.name"),
       },
       [formNames.geeks]: {
@@ -53,7 +49,6 @@ const CreateGeekLeague = ({ loading }) => {
         message: t("createGeekleague.formValidations.geeks"),
       },
       [formNames.season]: {
-        validation: valueRequired,
         message: t("createGeekleague.formValidations.season"),
       },
     },
