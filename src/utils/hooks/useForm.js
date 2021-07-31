@@ -119,7 +119,7 @@ export const useForm = ({
   };
 
   return {
-    // inputsProps contains name, value and onChange props
+    // inputsProps contains name, value, validation and onChange props
     inputsProps: inputsPropsWithOnChange(inputsProps),
     handleSubmit,
   };

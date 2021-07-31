@@ -27,7 +27,12 @@
           "formTitle": "Ajouter une saison",
           "label": "Entrer l'ID API-football de la saison à ajouter :",
           "placeholder": "ID de la nouvelle saison",
-          "button": "Ajouter la saison"
+          "button": "Ajouter la saison",
+          "notifications": {
+            "success": {
+              "title": "Nouvelle saison téléchargée avec succès"
+            }
+          }
         }
       }
     },
