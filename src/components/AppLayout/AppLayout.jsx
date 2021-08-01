@@ -61,7 +61,7 @@ const AppLayout = ({ children }) => {
                 <li className="nav-item">
                   <Link
                     className="nav-link"
-                    to="/pronogeeks/5f67f525d7b14148997ee3eb"
+                    to="/pronogeeks/6106dcb0e05e1b06ea75f1bd"
                   >
                     Pronogeeks
                   </Link>
