@@ -1,62 +1,68 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import { ErrorMessage, Loader } from '../../components'
-import { useUserGeekLeagues } from '../../utils/hooks'
-import './geekleagues.css'
+import React from "react";
+import { Link } from "react-router-dom";
+import { ErrorMessage, Loader } from "../../components";
+import { useUserGeekLeagues } from "../../utils/hooks";
+import "./geekleagues.css";
 
 const AllGeekLeagues = ({ loading }) => {
+  const { userGeekLeagues, errorGeekLeagues } = useUserGeekLeagues();
 
-    const { userGeekLeagues, errorGeekLeagues } = useUserGeekLeagues()
+  return (
+    <div className="geekleague-bg geekleagues-list">
+      {(!userGeekLeagues && !errorGeekLeagues) || loading ? (
+        <Loader />
+      ) : (
+        <div className="container">
+          <h2>Mes Ligues Geek</h2>
 
-    return <div className='geekleague-bg geekleagues-list'>
-        {(!userGeekLeagues && !errorGeekLeagues) || loading ? (
+          {errorGeekLeagues ? (
+            <ErrorMessage>{errorGeekLeagues}</ErrorMessage>
+          ) : (
+            <>
+              <div className="my-geekleagues row">
+                {userGeekLeagues.reverse().map((geekLeague) => (
+                  <div
+                    key={geekLeague._id}
+                    className="col-10 col-lg-6 geekleague-card-container"
+                  >
+                    <div className="geekleague-card">
+                      <h4>{geekLeague.name}</h4>
 
-            <Loader />
+                      <h5>
+                        {`${geekLeague.season.leagueName} - ${geekLeague.season.year}`}
+                      </h5>
 
-        ) : (
+                      <p>
+                        Créée par {geekLeague.creator.username} en{" "}
+                        {new Date(geekLeague.createdAt).getMonth() + 1 > 9
+                          ? new Date(geekLeague.createdAt).getMonth() + 1
+                          : `0${new Date(geekLeague.createdAt).getMonth() + 1}`}
+                        /{new Date(geekLeague.createdAt).getFullYear()}
+                      </p>
 
-            <div className='container'>
-
-                <h2>Mes Ligues Geek</h2>
-
-                {errorGeekLeagues ? <ErrorMessage>{errorGeekLeagues}</ErrorMessage> : <>
-
-                    <div className='my-geekleagues row'>
-
-                        {userGeekLeagues.map(geekLeague => <div
-                            key={geekLeague._id}
-                            className='col-10 col-lg-6 geekleague-card-container'
-                        >
-                            <div className='geekleague-card'>
-                                <h4>{geekLeague.name}</h4>
-
-                                <h6>Créée par {geekLeague.creator.username} en {new Date(geekLeague.createdAt).getMonth() + 1 > 9 ? new Date(geekLeague.createdAt).getMonth() + 1 : `0${new Date(geekLeague.createdAt).getMonth() + 1}`}/{new Date(geekLeague.createdAt).getFullYear()}</h6>
-
-                                <Link
-                                    to={`/myGeekLeagues/${geekLeague._id}`}
-                                    className='btn my-btn new-league geekleagues-page-btn'
-                                >
-                                    Voir le détail
-                                </Link>
-
-                            </div>
-                        </div>
-                        )}
-
+                      <Link
+                        to={`/myGeekLeagues/${geekLeague._id}`}
+                        className="btn my-btn new-league geekleagues-page-btn"
+                      >
+                        Voir le détail
+                      </Link>
                     </div>
+                  </div>
+                ))}
+              </div>
 
-                    <Link
-                        to='/myGeekLeagues/new'
-                        className='btn my-btn new-league geekleagues-page-btn'
-                    >
-                        Créer une ligue
-                    </Link>
-
-                </>}
-
-            </div>
-        )}
+              <Link
+                to="/myGeekLeagues/new"
+                className="btn my-btn new-league geekleagues-page-btn"
+              >
+                Créer une ligue
+              </Link>
+            </>
+          )}
+        </div>
+      )}
     </div>
-}
+  );
+};
 
-export default AllGeekLeagues
+export default AllGeekLeagues;

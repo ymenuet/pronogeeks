@@ -216,7 +216,7 @@ const Profile = ({ loading }) => {
                     </span>
                   </li>
 
-                  {user.geekLeagues.map((league) => (
+                  {user.geekLeagues.reverse().map((league) => (
                     <Link to={`/myGeekLeagues/${league._id}`} key={league._id}>
                       <li className="list-group-item d-flex justify-content-between align-items-center">
                         <span
