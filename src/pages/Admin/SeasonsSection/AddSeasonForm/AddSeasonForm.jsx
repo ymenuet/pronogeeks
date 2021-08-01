@@ -18,7 +18,7 @@ const AddSeasonForm = () => {
 
   const dispatch = useDispatch();
 
-  const { newSeasonDownloaded } = useSelector(
+  const { newSeasonDownloaded, loading } = useSelector(
     ({ apiFootballReducer }) => apiFootballReducer
   );
 
@@ -49,7 +49,7 @@ const AddSeasonForm = () => {
           type="submit"
           label={t("admin.seasons.addSeason.button")}
           level="primary"
-          disabled={!inputsProps[formNames.seasonApiID].value}
+          disabled={!inputsProps[formNames.seasonApiID].value || loading}
         />
       </ButtonWrapper>
     </SeasonForm>
