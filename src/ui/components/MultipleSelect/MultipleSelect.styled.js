@@ -63,6 +63,6 @@ export const OptionLabel = styled.span`
 // TODO: remove !important
 export const Label = styled.label`
   float: left;
-  color: ${themeSelector.label}!important;
+  color: ${({ color }) => themeSelector[color]}!important;
   padding-left: 0.675rem;
 `;

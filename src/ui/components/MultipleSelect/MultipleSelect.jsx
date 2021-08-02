@@ -48,6 +48,7 @@ const MultipleSelect = ({
   validation,
   placeholder,
   label,
+  labelColor,
   selectionComponent: SelectionComponent,
   optionComponent: OptionComponent,
 }) => {
@@ -138,7 +139,11 @@ const MultipleSelect = ({
 
   return (
     <Container>
-      {label && <Label htmlFor={id}>{label}</Label>}
+      {label && (
+        <Label color={labelColor} htmlFor={id}>
+          {label}
+        </Label>
+      )}
 
       <SelectionsContainer>
         {selectedOptions.map((selection) =>
@@ -201,12 +206,16 @@ const MultipleSelect = ({
 
 MultipleSelect.defaultProps = {
   options: [],
+  label: null,
+  labelColor: "label",
 };
 
 MultipleSelect.propTypes = {
   value: PropTypes.array.isRequired,
   name: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
+  label: PropTypes.string,
+  labelColor: PropTypes.string,
   options: PropTypes.arrayOf(
     PropTypes.shape({
       value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),

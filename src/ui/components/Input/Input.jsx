@@ -7,6 +7,7 @@ import { Container, StyledInput, Label } from "./Input.styled";
 
 const Input = ({
   label,
+  labelColor,
   value,
   onChange,
   placeholder,
@@ -23,7 +24,11 @@ const Input = ({
 
   return (
     <Container>
-      {label && <Label htmlFor={id}>{label}</Label>}
+      {label && (
+        <Label color={labelColor} htmlFor={id}>
+          {label}
+        </Label>
+      )}
 
       <StyledInput
         id={id}
@@ -44,6 +49,7 @@ const Input = ({
 Input.defaultProps = {
   value: "",
   label: null,
+  labelColor: "label",
   placeholder: "",
   validation: undefined,
   disabled: false,
@@ -55,6 +61,7 @@ Input.defaultProps = {
 Input.propTypes = {
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   label: PropTypes.string,
+  labelColor: PropTypes.string,
   onChange: PropTypes.func.isRequired,
   placeholder: PropTypes.string,
   validation: PropTypes.string,

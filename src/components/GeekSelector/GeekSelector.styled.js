@@ -1,14 +1,18 @@
-import styled from 'styled-components'
+import styled from "styled-components";
 
-export const Container = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
-`
+import { themeSelector } from "../../ui/theme";
 
-// TODO: remove !important
-export const Label = styled.label`
-    padding-left: 0.675rem;
-    color: ${({ theme }) => theme.label}!important;
-`
+export const OptionContainer = styled.div`
+  cursor: pointer;
+  border-top: 0.063rem solid ${themeSelector.grey};
+  background-color: ${({ preSelected }) =>
+    preSelected ? themeSelector.lightGrey : themeSelector.white};
+  display: flex;
+  align-items: center;
+  padding: 0.375rem 0.625rem;
+  color: ${themeSelector.black};
+`;
+
+export const Username = styled.span`
+  margin-left: 0.375rem;
+`;

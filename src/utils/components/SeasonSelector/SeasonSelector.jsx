@@ -13,6 +13,7 @@ const SeasonSelector = ({
   name,
   onChange,
   label,
+  labelColor,
   validation,
   noOptionMessage,
 }) => {
@@ -35,6 +36,7 @@ const SeasonSelector = ({
       options={options}
       onChange={onChange}
       label={label}
+      labelColor={labelColor}
       noOptionMessage={noOptionMessage}
       validation={validation}
     />
@@ -51,6 +53,7 @@ const SeasonSelector = ({
 
 SeasonSelector.defaultProps = {
   label: i18n.t("forms.seasonSelector.defaultLabel"),
+  labelColor: undefined,
   error: null,
   validation: undefined,
   seasons: [],
@@ -60,6 +63,7 @@ SeasonSelector.defaultProps = {
 SeasonSelector.propTypes = {
   name: PropTypes.string.isRequired,
   label: PropTypes.string,
+  labelColor: PropTypes.string,
   error: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   validation: PropTypes.string,
   onChange: PropTypes.func.isRequired,

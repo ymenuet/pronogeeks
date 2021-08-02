@@ -73,6 +73,7 @@ const CreateGeekLeague = ({ loading }) => {
                   {...inputsProps[formNames.name]}
                   placeholder="Ma Ligue Geek"
                   label="Nom de la ligue :"
+                  labelColor="white"
                 />
               </InputWrapper>
 
@@ -82,11 +83,15 @@ const CreateGeekLeague = ({ loading }) => {
                   seasons={seasons}
                   error={errorSeasons}
                   noOptionMessage={t("createGeekleague.noSeasonOption")}
+                  labelColor="white"
                 />
               </InputWrapper>
 
               <InputWrapper>
-                <GeekSelector {...inputsProps[formNames.geeks]} />
+                <GeekSelector
+                  {...inputsProps[formNames.geeks]}
+                  labelColor="white"
+                />
               </InputWrapper>
 
               <div style={{ display: "flex", justifyContent: "center" }}>
