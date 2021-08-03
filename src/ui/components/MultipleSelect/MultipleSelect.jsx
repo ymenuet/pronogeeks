@@ -136,7 +136,7 @@ const MultipleSelect = ({
         [...selectedOptions].map(({ value }) => value),
         name
       );
-  }, [selectedOptions, onChange, name]);
+  }, [selectedOptions, onChange, name, disabled]);
 
   return (
     <Container>
