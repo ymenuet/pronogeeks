@@ -9,7 +9,8 @@ export const Container = styled.div`
 
 export const SelectionsContainer = styled.div`
   width: 100%;
-  background-color: ${themeSelector.white};
+  background-color: ${({ disabled }) =>
+    disabled ? themeSelector.midLightGrey : themeSelector.white};
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -34,7 +35,8 @@ export const InputWrapper = styled.div`
 
 export const Input = styled.input`
   flex: 1;
-  background-color: ${themeSelector.white};
+  background-color: ${({ disabled }) =>
+    disabled ? themeSelector.midLightGrey : themeSelector.white};
   color: ${themeSelector.black};
   border: none;
   outline: none;

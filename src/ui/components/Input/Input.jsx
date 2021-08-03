@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import { generateInputId } from "../../../utils/helpers";
+import { useRandomInputId } from "../../../utils/hooks";
 import InputShell from "../InputShell";
 import { Container, StyledInput } from "./Input.styled";
 
@@ -17,10 +17,11 @@ const Input = ({
   name,
   maxLength,
 }) => {
+  const id = useRandomInputId({ name, placeholder });
+
   const handleChange = (e) => {
     !disabled && onChange(e.target.value, e.target.name, e);
   };
-  const id = generateInputId({ name, placeholder });
 
   return (
     <Container>

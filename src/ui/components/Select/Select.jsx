@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 
 import i18n from "../../../i18n";
-import { generateInputId } from "../../../utils/helpers";
+import { useRandomInputId } from "../../../utils/hooks";
 import InputShell from "../InputShell";
 import { Container, SelectInput, Option } from "./Select.styled";
 
@@ -15,15 +15,16 @@ const Select = ({
   label,
   labelColor,
   noOptionMessage,
+  disabled,
 }) => {
   const [isSelected, setIsSelected] = useState(false);
 
+  const id = useRandomInputId({ name, placeholder });
+
   const handleChange = (e) => {
     setIsSelected(true);
-    onChange(e.target.value, e.target.name, e);
+    !disabled && onChange(e.target.value, e.target.name, e);
   };
-
-  const id = generateInputId({ name, placeholder });
 
   return (
     <Container>
@@ -38,7 +39,7 @@ const Select = ({
           name={name}
           defaultValue={placeholder}
           onChange={handleChange}
-          disabled={!options}
+          disabled={!options || disabled}
           isSelected={isSelected}
         >
           <Option value={placeholder} disabled>
@@ -69,6 +70,7 @@ Select.defaultProps = {
   options: [],
   label: null,
   labelColor: "label",
+  disabled: false,
 };
 
 Select.propTypes = {
@@ -79,6 +81,7 @@ Select.propTypes = {
   labelColor: PropTypes.string,
   noOptionMessage: PropTypes.string,
   name: PropTypes.string.isRequired,
+  disabled: PropTypes.bool,
   options: PropTypes.arrayOf(
     PropTypes.shape({
       value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),

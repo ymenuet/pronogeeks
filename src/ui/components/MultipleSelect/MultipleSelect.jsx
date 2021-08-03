@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 
-import { generateInputId } from "../../../utils/helpers";
+import { useRandomInputId } from "../../../utils/hooks";
 import { SearchIcon } from "../../icons";
 import InputShell from "../InputShell";
 import Selection from "./Selection";
@@ -50,8 +50,9 @@ const MultipleSelect = ({
   labelColor,
   selectionComponent: SelectionComponent,
   optionComponent: OptionComponent,
+  disabled,
 }) => {
-  const id = generateInputId({ name, placeholder });
+  const id = useRandomInputId({ name, placeholder });
 
   const inputRef = useRef();
 
@@ -130,10 +131,11 @@ const MultipleSelect = ({
   }, [filteredOptions, preSelected]);
 
   useEffect(() => {
-    onChange(
-      [...selectedOptions].map(({ value }) => value),
-      name
-    );
+    !disabled &&
+      onChange(
+        [...selectedOptions].map(({ value }) => value),
+        name
+      );
   }, [selectedOptions, onChange, name]);
 
   return (
@@ -144,7 +146,7 @@ const MultipleSelect = ({
         htmlFor={id}
         validation={validation}
       >
-        <SelectionsContainer>
+        <SelectionsContainer disabled={disabled}>
           {selectedOptions.map((selection) =>
             SelectionComponent ? (
               <SelectionComponent
@@ -171,6 +173,8 @@ const MultipleSelect = ({
               onBlur={onBlur}
               onKeyDown={onKeyDown}
               placeholder={placeholder}
+              id={id}
+              disabled={disabled}
             />
           </InputWrapper>
         </SelectionsContainer>
@@ -206,6 +210,7 @@ MultipleSelect.defaultProps = {
   options: [],
   label: null,
   labelColor: "label",
+  disabled: false,
 };
 
 MultipleSelect.propTypes = {
@@ -214,6 +219,7 @@ MultipleSelect.propTypes = {
   onChange: PropTypes.func.isRequired,
   label: PropTypes.string,
   labelColor: PropTypes.string,
+  disabled: PropTypes.bool,
   options: PropTypes.arrayOf(
     PropTypes.shape({
       value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),

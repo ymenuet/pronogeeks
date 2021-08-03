@@ -17,7 +17,7 @@ export const SelectInput = styled.select`
   padding: 0 ${constants.inputPaddingInRems - 0.375}rem;
   line-height: ${constants.inputHeightInRems}rem;
   outline: none;
-  cursor: ${({ disabled }) => (disabled ? "wait" : "pointer")};
+  cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
   width: 100%;
   color: ${({ theme, isSelected }) =>
     isSelected ? theme.black : theme.disabled};
