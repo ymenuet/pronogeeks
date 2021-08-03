@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 import { generateInputId } from "../../../utils/helpers";
 import { SearchIcon } from "../../icons";
-import InputValidation from "../InputValidation";
+import InputShell from "../InputShell";
 import Selection from "./Selection";
 import {
   Container,
@@ -13,7 +13,6 @@ import {
   OptionsContainer,
   Option,
   OptionLabel,
-  Label,
   InputWrapper,
 } from "./MultipleSelect.styled";
 
@@ -139,67 +138,66 @@ const MultipleSelect = ({
 
   return (
     <Container>
-      {label && (
-        <Label color={labelColor} htmlFor={id}>
-          {label}
-        </Label>
-      )}
-
-      <SelectionsContainer>
-        {selectedOptions.map((selection) =>
-          SelectionComponent ? (
-            <SelectionComponent
-              key={selection.value}
-              onRemove={removeSelection(selection.value)}
-              {...selection}
+      <InputShell
+        label={label}
+        labelColor={labelColor}
+        htmlFor={id}
+        validation={validation}
+      >
+        <SelectionsContainer>
+          {selectedOptions.map((selection) =>
+            SelectionComponent ? (
+              <SelectionComponent
+                key={selection.value}
+                onRemove={removeSelection(selection.value)}
+                {...selection}
+              />
+            ) : (
+              <Selection
+                key={selection.value}
+                onRemove={removeSelection(selection.value)}
+              >
+                <SelectionLabel>{selection.label}</SelectionLabel>
+              </Selection>
+            )
+          )}
+          <InputWrapper>
+            <SearchIcon size={24} />
+            <Input
+              ref={inputRef}
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              onFocus={onFocus}
+              onBlur={onBlur}
+              onKeyDown={onKeyDown}
+              placeholder={placeholder}
             />
-          ) : (
-            <Selection
-              key={selection.value}
-              onRemove={removeSelection(selection.value)}
-            >
-              <SelectionLabel>{selection.label}</SelectionLabel>
-            </Selection>
-          )
+          </InputWrapper>
+        </SelectionsContainer>
+
+        {showOptions && (
+          <OptionsContainer>
+            {filteredOptions
+              .slice(0, OPTIONS_DISPLAY_LIMIT_NUMBER)
+              .map((option) => {
+                const optionProps = {
+                  key: option.value,
+                  onClick: selectOption(option),
+                  onMouseDown: onMouseDown,
+                  onMouseEnter: () => setPreSelected(option),
+                  preSelected: option.value === preSelected?.value,
+                };
+                return OptionComponent ? (
+                  <OptionComponent {...optionProps} {...option} />
+                ) : (
+                  <Option {...optionProps}>
+                    <OptionLabel>{option.label}</OptionLabel>
+                  </Option>
+                );
+              })}
+          </OptionsContainer>
         )}
-        <InputWrapper>
-          <SearchIcon size={24} />
-          <Input
-            ref={inputRef}
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            onFocus={onFocus}
-            onBlur={onBlur}
-            onKeyDown={onKeyDown}
-            placeholder={placeholder}
-          />
-        </InputWrapper>
-      </SelectionsContainer>
-
-      {showOptions && (
-        <OptionsContainer>
-          {filteredOptions
-            .slice(0, OPTIONS_DISPLAY_LIMIT_NUMBER)
-            .map((option) => {
-              const optionProps = {
-                key: option.value,
-                onClick: selectOption(option),
-                onMouseDown: onMouseDown,
-                onMouseEnter: () => setPreSelected(option),
-                preSelected: option.value === preSelected?.value,
-              };
-              return OptionComponent ? (
-                <OptionComponent {...optionProps} {...option} />
-              ) : (
-                <Option {...optionProps}>
-                  <OptionLabel>{option.label}</OptionLabel>
-                </Option>
-              );
-            })}
-        </OptionsContainer>
-      )}
-
-      {validation && <InputValidation validation={validation} />}
+      </InputShell>
     </Container>
   );
 };

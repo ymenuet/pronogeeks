@@ -4,6 +4,7 @@ import { constants, themeSelector } from "../../theme";
 
 export const Container = styled.div`
   position: relative;
+  text-align: left;
 `;
 
 export const SelectionsContainer = styled.div`
@@ -58,11 +59,4 @@ export const Option = styled.div`
 
 export const OptionLabel = styled.span`
   color: ${themeSelector.black};
-`;
-
-// TODO: remove !important
-export const Label = styled.label`
-  float: left;
-  color: ${({ color }) => themeSelector[color]}!important;
-  padding-left: 0.675rem;
 `;

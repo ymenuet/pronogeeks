@@ -24,9 +24,3 @@ export const StyledInput = styled.input`
     color: ${({ theme }) => theme.disabled};
   }
 `;
-
-// TODO: remove !important
-export const Label = styled.label`
-  padding-left: 0.675rem;
-  color: ${({ theme, color }) => theme[color]}!important;
-`;

@@ -2,8 +2,8 @@ import React from "react";
 import PropTypes from "prop-types";
 
 import { generateInputId } from "../../../utils/helpers";
-import InputValidation from "../InputValidation";
-import { Container, StyledInput, Label } from "./Input.styled";
+import InputShell from "../InputShell";
+import { Container, StyledInput } from "./Input.styled";
 
 const Input = ({
   label,
@@ -24,24 +24,23 @@ const Input = ({
 
   return (
     <Container>
-      {label && (
-        <Label color={labelColor} htmlFor={id}>
-          {label}
-        </Label>
-      )}
-
-      <StyledInput
-        id={id}
-        onChange={handleChange}
-        value={value}
-        placeholder={placeholder}
-        disabled={disabled}
-        type={type}
-        name={name}
-        maxLength={maxLength}
-      />
-
-      {validation && <InputValidation validation={validation} />}
+      <InputShell
+        label={label}
+        labelColor={labelColor}
+        htmlFor={id}
+        validation={validation}
+      >
+        <StyledInput
+          id={id}
+          onChange={handleChange}
+          value={value}
+          placeholder={placeholder}
+          disabled={disabled}
+          type={type}
+          name={name}
+          maxLength={maxLength}
+        />
+      </InputShell>
     </Container>
   );
 };

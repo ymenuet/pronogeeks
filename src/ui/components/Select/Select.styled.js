@@ -27,9 +27,3 @@ export const Option = styled.option`
   cursor: pointer;
   color: ${({ disabled, theme }) => (disabled ? theme.disabled : theme.black)};
 `;
-
-// TODO: remove !important
-export const Label = styled.label`
-  padding-left: 0.675rem;
-  color: ${({ theme, color }) => theme[color]}!important;
-`;
