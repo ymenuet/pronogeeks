@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 import { useRandomInputId } from "../../../utils/hooks";
 import InputShell from "../InputShell";
-import { Container, StyledInput } from "./Input.styled";
+import { Container, InputContainer, StyledInput, IconWrapper } from "./Input.styled";
 
 const Input = ({
   label,
@@ -16,6 +16,7 @@ const Input = ({
   type,
   name,
   maxLength,
+  icon,
 }) => {
   const id = useRandomInputId({ name, placeholder });
 
@@ -31,16 +32,19 @@ const Input = ({
         htmlFor={id}
         validation={validation}
       >
-        <StyledInput
-          id={id}
-          onChange={handleChange}
-          value={value}
-          placeholder={placeholder}
-          disabled={disabled}
-          type={type}
-          name={name}
-          maxLength={maxLength}
-        />
+        <InputContainer>
+          <StyledInput
+            id={id}
+            onChange={handleChange}
+            value={value}
+            placeholder={placeholder}
+            disabled={disabled}
+            type={type}
+            name={name}
+            maxLength={maxLength}
+          />
+          {icon && <IconWrapper>{icon}</IconWrapper>}
+        </InputContainer>
       </InputShell>
     </Container>
   );
@@ -56,6 +60,7 @@ Input.defaultProps = {
   type: "text",
   name: "",
   maxLength: Number.MAX_SAFE_INTEGER,
+  icon: null,
 };
 
 Input.propTypes = {
@@ -69,6 +74,7 @@ Input.propTypes = {
   type: PropTypes.string,
   name: PropTypes.string,
   maxLength: PropTypes.number,
+  icon: PropTypes.node,
 };
 
 export default Input;

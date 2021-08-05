@@ -82,7 +82,7 @@ const Login = ({ loadingUser }) => {
                             </button>
 
                             <p className='reset-pwd'>Tu as encore oublié ton mot de passe ?<br />
-                            Clique <Link to='/reset-pwd'>ici</Link> pour le renouveler.</p>
+                                Clique <Link to='/reset-pwd'>ici</Link> pour le renouveler.</p>
 
                         </div>
 
