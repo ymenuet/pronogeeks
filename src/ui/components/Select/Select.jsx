@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import PropTypes from "prop-types";
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 
-import i18n from "../../../i18n";
-import { useRandomInputId } from "../../../utils/hooks";
-import InputShell from "../InputShell";
-import { Container, SelectInput, Option } from "./Select.styled";
+import i18n from '../../../i18n';
+import { useRandomInputId } from '../../../utils/hooks';
+import InputShell from '../InputShell';
+import { Container, SelectInput, Option } from './Select.styled';
 
 const Select = ({
   placeholder,
@@ -28,12 +28,7 @@ const Select = ({
 
   return (
     <Container>
-      <InputShell
-        label={label}
-        labelColor={labelColor}
-        htmlFor={id}
-        validation={validation}
-      >
+      <InputShell label={label} labelColor={labelColor} htmlFor={id} validation={validation}>
         <SelectInput
           id={id}
           name={name}
@@ -64,12 +59,12 @@ const Select = ({
 };
 
 Select.defaultProps = {
-  placeholder: i18n.t("ui.components.select.defaultPlaceholder"),
-  noOptionMessage: i18n.t("ui.components.select.noOptions"),
+  placeholder: i18n.t('ui.components.select.defaultPlaceholder'),
+  noOptionMessage: i18n.t('ui.components.select.noOptions'),
   validation: undefined,
   options: [],
   label: null,
-  labelColor: "label",
+  labelColor: 'label',
   disabled: false,
 };
 

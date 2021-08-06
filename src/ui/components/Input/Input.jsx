@@ -1,9 +1,9 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 
-import { useRandomInputId } from "../../../utils/hooks";
-import InputShell from "../InputShell";
-import { Container, InputContainer, StyledInput, IconWrapper } from "./Input.styled";
+import { useRandomInputId } from '../../../utils/hooks';
+import InputShell from '../InputShell';
+import { Container, InputContainer, StyledInput, IconWrapper } from './Input.styled';
 
 const Input = ({
   label,
@@ -26,12 +26,7 @@ const Input = ({
 
   return (
     <Container>
-      <InputShell
-        label={label}
-        labelColor={labelColor}
-        htmlFor={id}
-        validation={validation}
-      >
+      <InputShell label={label} labelColor={labelColor} htmlFor={id} validation={validation}>
         <InputContainer>
           <StyledInput
             id={id}
@@ -51,14 +46,14 @@ const Input = ({
 };
 
 Input.defaultProps = {
-  value: "",
+  value: '',
   label: null,
-  labelColor: "label",
-  placeholder: "",
+  labelColor: 'label',
+  placeholder: '',
   validation: undefined,
   disabled: false,
-  type: "text",
-  name: "",
+  type: 'text',
+  name: '',
   maxLength: Number.MAX_SAFE_INTEGER,
   icon: null,
 };

@@ -1,14 +1,14 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 
-import { nbToPx } from "../../utils/helpers";
+import { nbToPx } from '../../utils/helpers';
 
 const CloseIcon = ({ size, color, ...props }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       height={nbToPx(size)}
-      viewBox={`0 0 24 24`}
+      viewBox="0 0 24 24"
       width={nbToPx(size)}
       fill={color}
       {...props}

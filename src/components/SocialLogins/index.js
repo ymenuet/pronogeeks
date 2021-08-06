@@ -1,4 +1,1 @@
-export {
-    default
-}
-from './SocialLogins'
+export { default } from './SocialLogins';

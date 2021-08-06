@@ -1,4 +1,1 @@
-export {
-    default
-}
-from './RulesProno'
+export { default } from './RulesProno';

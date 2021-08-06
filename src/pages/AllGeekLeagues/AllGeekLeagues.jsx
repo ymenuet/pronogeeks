@@ -1,8 +1,8 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { ErrorMessage, Loader } from "../../components";
-import { useUserGeekLeagues } from "../../utils/hooks";
-import "./geekleagues.css";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { ErrorMessage, Loader } from '../../components';
+import { useUserGeekLeagues } from '../../utils/hooks';
+import './geekleagues.css';
 
 const AllGeekLeagues = ({ loading }) => {
   const { userGeekLeagues, errorGeekLeagues } = useUserGeekLeagues();
@@ -21,19 +21,14 @@ const AllGeekLeagues = ({ loading }) => {
             <>
               <div className="my-geekleagues row">
                 {userGeekLeagues.reverse().map((geekLeague) => (
-                  <div
-                    key={geekLeague._id}
-                    className="col-10 col-lg-6 geekleague-card-container"
-                  >
+                  <div key={geekLeague._id} className="col-10 col-lg-6 geekleague-card-container">
                     <div className="geekleague-card">
                       <h4>{geekLeague.name}</h4>
 
-                      <h5>
-                        {`${geekLeague.season.leagueName} - ${geekLeague.season.year}`}
-                      </h5>
+                      <h5>{`${geekLeague.season.leagueName} - ${geekLeague.season.year}`}</h5>
 
                       <p>
-                        Créée par {geekLeague.creator.username} en{" "}
+                        Créée par {geekLeague.creator.username} en{' '}
                         {new Date(geekLeague.createdAt).getMonth() + 1 > 9
                           ? new Date(geekLeague.createdAt).getMonth() + 1
                           : `0${new Date(geekLeague.createdAt).getMonth() + 1}`}
@@ -51,10 +46,7 @@ const AllGeekLeagues = ({ loading }) => {
                 ))}
               </div>
 
-              <Link
-                to="/myGeekLeagues/new"
-                className="btn my-btn new-league geekleagues-page-btn"
-              >
+              <Link to="/myGeekLeagues/new" className="btn my-btn new-league geekleagues-page-btn">
                 Créer une ligue
               </Link>
             </>

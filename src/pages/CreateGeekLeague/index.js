@@ -1,4 +1,1 @@
-export {
-    default
-}
-from './CreateGeekLeague'
+export { default } from './CreateGeekLeague';

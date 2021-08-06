@@ -1,4 +1,1 @@
-export {
-    default
-}
-from './printError'
+export { default } from './printError';

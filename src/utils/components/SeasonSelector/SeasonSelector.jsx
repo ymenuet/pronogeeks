@@ -1,11 +1,11 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { useTranslation } from "react-i18next";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 
-import i18n from "../../../i18n";
-import { SeasonModel } from "../../models/PropTypes";
-import { Select } from "../../../ui/components";
-import { ErrorMessage, Loader } from "../../../components";
+import i18n from '../../../i18n';
+import { SeasonModel } from '../../models/PropTypes';
+import { Select } from '../../../ui/components';
+import { ErrorMessage, Loader } from '../../../components';
 
 const SeasonSelector = ({
   seasons,
@@ -32,7 +32,7 @@ const SeasonSelector = ({
   ) : options ? (
     <Select
       name={name}
-      placeholder={t("forms.seasonSelector.placeholder")}
+      placeholder={t('forms.seasonSelector.placeholder')}
       options={options}
       onChange={onChange}
       label={label}
@@ -52,7 +52,7 @@ const SeasonSelector = ({
 };
 
 SeasonSelector.defaultProps = {
-  label: i18n.t("forms.seasonSelector.defaultLabel"),
+  label: i18n.t('forms.seasonSelector.defaultLabel'),
   labelColor: undefined,
   error: null,
   validation: undefined,

@@ -1,4 +1,1 @@
-export {
-    default
-}
-from './nbToPx'
+export { default } from './nbToPx';

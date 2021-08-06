@@ -1,4 +1,1 @@
-export {
-    default
-}
-from './RequestPwdReset'
+export { default } from './RequestPwdReset';

@@ -1,1 +1,1 @@
-export default num => `${num}px`
+export default (num) => `${num}px`;

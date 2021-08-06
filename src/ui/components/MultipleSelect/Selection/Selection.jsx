@@ -1,8 +1,8 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 
-import { CloseIcon } from "../../../icons";
-import { Container, SelectionInfoWrapper } from "./Selection.styled";
+import { CloseIcon } from '../../../icons';
+import { Container, SelectionInfoWrapper } from './Selection.styled';
 
 const Selection = ({ children, onRemove }) => {
   return (
@@ -14,11 +14,7 @@ const Selection = ({ children, onRemove }) => {
 };
 
 Selection.propTypes = {
-  children: PropTypes.oneOfType([
-    PropTypes.node,
-    PropTypes.string,
-    PropTypes.number,
-  ]).isRequired,
+  children: PropTypes.oneOfType([PropTypes.node, PropTypes.string, PropTypes.number]).isRequired,
   onRemove: PropTypes.func.isRequired,
 };
 

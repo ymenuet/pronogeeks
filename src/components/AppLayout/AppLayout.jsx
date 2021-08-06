@@ -1,11 +1,11 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { HomeIcon } from "../Icons";
-import { useCurrentUserProfile, useAccountDeleted } from "../../utils/hooks";
-import "./appLayout.css";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { HomeIcon } from '../Icons';
+import { useCurrentUserProfile, useAccountDeleted } from '../../utils/hooks';
+import './appLayout.css';
 
-import { logout } from "../../state/actions/authActions";
+import { logout } from '../../state/actions/authActions';
 
 const AppLayout = ({ children }) => {
   const { isUserConnected, user } = useCurrentUserProfile();
@@ -38,10 +38,7 @@ const AppLayout = ({ children }) => {
             {isUserConnected ? (
               <>
                 <li className="nav-item  mobile-list-item">
-                  <button
-                    className="nav-link navbar-btns"
-                    onClick={() => dispatch(logout())}
-                  >
+                  <button className="nav-link navbar-btns" onClick={() => dispatch(logout())}>
                     Déconnexion
                   </button>
                 </li>
@@ -59,25 +56,14 @@ const AppLayout = ({ children }) => {
                 </li>
 
                 <li className="nav-item">
-                  <Link
-                    className="nav-link"
-                    to="/pronogeeks/6106e0216c1986102d71752a"
-                  >
+                  <Link className="nav-link" to="/pronogeeks/6106e0216c1986102d71752a">
                     Pronogeeks
                   </Link>
                 </li>
 
                 <li className="nav-item profile-pic-navbar-list-item">
-                  <Link
-                    className="nav-link"
-                    to="/profile"
-                    style={{ fontSize: "1rem" }}
-                  >
-                    <img
-                      className="profile-pic-navbar"
-                      src={user.photo}
-                      alt="pic"
-                    />
+                  <Link className="nav-link" to="/profile" style={{ fontSize: '1rem' }}>
+                    <img className="profile-pic-navbar" src={user.photo} alt="pic" />
                   </Link>
                   <div className="profile-submenu">
                     <ul>
@@ -90,10 +76,7 @@ const AppLayout = ({ children }) => {
                         </Link>
                       </li>
                       <li className="nav-item">
-                        <button
-                          className="nav-link navbar-btns"
-                          onClick={() => dispatch(logout())}
-                        >
+                        <button className="nav-link navbar-btns" onClick={() => dispatch(logout())}>
                           Déconnexion
                         </button>
                       </li>
@@ -129,11 +112,9 @@ const AppLayout = ({ children }) => {
 
       <div className="my-content">{children}</div>
 
-      {window.addEventListener("click", () => {
-        if (
-          document.querySelector(".navbar-collapse").classList.contains("show")
-        )
-          document.querySelector(".navbar-collapse").classList.remove("show");
+      {window.addEventListener('click', () => {
+        if (document.querySelector('.navbar-collapse').classList.contains('show'))
+          document.querySelector('.navbar-collapse').classList.remove('show');
       })}
     </>
   );

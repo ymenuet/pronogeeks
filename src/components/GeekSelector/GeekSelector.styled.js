@@ -1,6 +1,6 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
-import { themeSelector } from "../../ui/theme";
+import { themeSelector } from '../../ui/theme';
 
 export const OptionContainer = styled.div`
   cursor: pointer;

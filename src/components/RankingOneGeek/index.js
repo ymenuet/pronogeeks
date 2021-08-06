@@ -1,4 +1,1 @@
-export {
-    default
-}
-from './RankingOneGeek'
+export { default } from './RankingOneGeek';

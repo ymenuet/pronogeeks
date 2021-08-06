@@ -1,4 +1,1 @@
-export {
-    default
-}
-from './MatchweekNavigation'
+export { default } from './MatchweekNavigation';

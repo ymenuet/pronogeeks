@@ -10,8 +10,8 @@ import {
   LOADING,
   ERROR,
   ERROR_RESET,
-} from "../types/apiFootballTypes";
-import { LOGOUT, DELETE_ACCOUNT } from "../types/authTypes";
+} from '../types/apiFootballTypes';
+import { LOGOUT, DELETE_ACCOUNT } from '../types/authTypes';
 
 const done = {
   loading: false,

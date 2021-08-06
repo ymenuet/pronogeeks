@@ -1,4 +1,1 @@
-export {
-    default
-}
-from './AddSeasonForm'
+export { default } from './AddSeasonForm';

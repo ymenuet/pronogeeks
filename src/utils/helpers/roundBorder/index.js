@@ -1,4 +1,1 @@
-export {
-    default
-}
-from './roundBorder'
+export { default } from './roundBorder';

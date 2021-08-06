@@ -1,16 +1,14 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 
-import { Image } from "./Avatar.styled";
+import { Image } from './Avatar.styled';
 
-const Avatar = ({ url, remSize, alt }) => (
-  <Image src={url} size={remSize} alt={alt} />
-);
+const Avatar = ({ url, remSize, alt }) => <Image src={url} size={remSize} alt={alt} />;
 
 Avatar.defaultProps = {
-  url: "",
+  url: '',
   remSize: 3,
-  alt: "Avatar",
+  alt: 'Avatar',
 };
 
 Avatar.propTypes = {

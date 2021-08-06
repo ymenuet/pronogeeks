@@ -1,4 +1,1 @@
-export {
-    default
-}
-from './SeasonSelector'
+export { default } from './SeasonSelector';

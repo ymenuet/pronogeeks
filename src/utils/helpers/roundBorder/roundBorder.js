@@ -1,1 +1,1 @@
-export default (heightInRems) => `${heightInRems / 2}rem`
+export default (heightInRems) => `${heightInRems / 2}rem`;

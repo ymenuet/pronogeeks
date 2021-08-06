@@ -1,4 +1,1 @@
-export {
-    default
-}
-from './determineFixtureWinner'
+export { default } from './determineFixtureWinner';

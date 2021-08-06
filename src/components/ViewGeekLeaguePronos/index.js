@@ -1,4 +1,1 @@
-export {
-    default
-}
-from './ViewGeekLeaguePronos'
+export { default } from './ViewGeekLeaguePronos';

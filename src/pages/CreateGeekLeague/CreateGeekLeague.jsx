@@ -1,24 +1,20 @@
-import React from "react";
-import { useTranslation } from "react-i18next";
-import { useDispatch, useSelector } from "react-redux";
-import { Loader, GeekSelector } from "../../components";
-import { Input } from "../../ui/components";
-import { SeasonSelector } from "../../utils/components";
-import {
-  useRedirectNewLeague,
-  useUpcomingAndUndergoingSeasons,
-  useForm,
-} from "../../utils/hooks";
-import { arrayNotEmpty } from "../../utils/helpers/inputValidations";
-import "./createGeekleague.css";
-import { InputWrapper } from "./CreateGeekLeague.styled";
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
+import { Loader, GeekSelector } from '../../components';
+import { Input } from '../../ui/components';
+import { SeasonSelector } from '../../utils/components';
+import { useRedirectNewLeague, useUpcomingAndUndergoingSeasons, useForm } from '../../utils/hooks';
+import { arrayNotEmpty } from '../../utils/helpers/inputValidations';
+import './createGeekleague.css';
+import { InputWrapper } from './CreateGeekLeague.styled';
 
-import { createLeague } from "../../state/actions/geekleagueActions";
+import { createLeague } from '../../state/actions/geekleagueActions';
 
 const formNames = {
-  name: "name",
-  geeks: "geeks",
-  season: "season",
+  name: 'name',
+  geeks: 'geeks',
+  season: 'season',
 };
 
 const CreateGeekLeague = ({ loading }) => {
@@ -35,28 +31,26 @@ const CreateGeekLeague = ({ loading }) => {
 
   const { inputsProps, handleSubmit } = useForm({
     initialValues: {
-      [formNames.name]: "",
+      [formNames.name]: '',
       [formNames.geeks]: [],
-      [formNames.season]: "",
+      [formNames.season]: '',
     },
     onSubmit: createNewLeague,
     validations: {
       [formNames.name]: {
-        message: t("createGeekleague.formValidations.name"),
+        message: t('createGeekleague.formValidations.name'),
       },
       [formNames.geeks]: {
         validation: arrayNotEmpty,
-        message: t("createGeekleague.formValidations.geeks"),
+        message: t('createGeekleague.formValidations.geeks'),
       },
       [formNames.season]: {
-        message: t("createGeekleague.formValidations.season"),
+        message: t('createGeekleague.formValidations.season'),
       },
     },
   });
 
-  const creatingLeague = useSelector(
-    ({ geekleagueReducer }) => geekleagueReducer.loading
-  );
+  const creatingLeague = useSelector(({ geekleagueReducer }) => geekleagueReducer.loading);
 
   return (
     <div className="geekleague-bg">
@@ -82,19 +76,16 @@ const CreateGeekLeague = ({ loading }) => {
                   {...inputsProps[formNames.season]}
                   seasons={seasons}
                   error={errorSeasons}
-                  noOptionMessage={t("createGeekleague.noSeasonOption")}
+                  noOptionMessage={t('createGeekleague.noSeasonOption')}
                   labelColor="white"
                 />
               </InputWrapper>
 
               <InputWrapper>
-                <GeekSelector
-                  {...inputsProps[formNames.geeks]}
-                  labelColor="white"
-                />
+                <GeekSelector {...inputsProps[formNames.geeks]} labelColor="white" />
               </InputWrapper>
 
-              <div style={{ display: "flex", justifyContent: "center" }}>
+              <div style={{ display: 'flex', justifyContent: 'center' }}>
                 <button
                   type="submit"
                   className="btn my-btn create-league-btn"

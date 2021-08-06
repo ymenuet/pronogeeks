@@ -1,7 +1,7 @@
-import styled from "styled-components";
-import { rgba } from "polished";
+import styled from 'styled-components';
+import { rgba } from 'polished';
 
-import constants from "../../theme/constants";
+import constants from '../../theme/constants';
 
 export const Container = styled.div`
   display: flex;
@@ -17,10 +17,9 @@ export const SelectInput = styled.select`
   padding: 0 ${constants.inputPaddingInRems - 0.375}rem;
   line-height: ${constants.inputHeightInRems}rem;
   outline: none;
-  cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
+  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
   width: 100%;
-  color: ${({ theme, isSelected }) =>
-    isSelected ? theme.black : theme.disabled};
+  color: ${({ theme, isSelected }) => (isSelected ? theme.black : theme.disabled)};
 `;
 
 export const Option = styled.option`

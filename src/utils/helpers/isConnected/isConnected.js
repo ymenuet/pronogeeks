@@ -1,1 +1,1 @@
-export default user => user ? Object.keys(user).length : null
+export default (user) => (user ? Object.keys(user).length : null);

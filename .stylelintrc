@@ -1,0 +1,17 @@
+{
+  "processors": ["stylelint-processor-styled-components"],
+  "extends": [
+    "stylelint-config-standard",
+    "stylelint-config-styled-components"
+  ],
+  "rules": {
+    "selector-type-case": null,
+    "value-keyword-case": null,
+    "declaration-colon-newline-after": null,
+    "color-hex-length": null,
+    "font-family-no-missing-generic-family-keyword": null,
+    "declaration-empty-line-before": null,
+    "selector-type-no-unknown": null,
+    "selector-list-comma-newline-after": null
+  }
+}

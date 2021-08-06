@@ -1,4 +1,1 @@
-export {
-    default
-}
-from './printFixtureDate'
+export { default } from './printFixtureDate';

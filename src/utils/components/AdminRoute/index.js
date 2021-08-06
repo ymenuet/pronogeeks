@@ -1,4 +1,1 @@
-export {
-    default
-}
-from './AdminRoute'
+export { default } from './AdminRoute';

@@ -1,4 +1,1 @@
-export {
-    default
-}
-from './fullDateFormatter'
+export { default } from './fullDateFormatter';

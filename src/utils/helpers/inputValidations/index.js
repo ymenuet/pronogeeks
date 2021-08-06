@@ -1,5 +1,1 @@
-export {
-    valueRequired,
-    arrayNotEmpty
-}
-from './inputValidations'
+export { valueRequired, arrayNotEmpty } from './inputValidations';

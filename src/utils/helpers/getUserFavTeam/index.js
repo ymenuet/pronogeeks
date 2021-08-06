@@ -1,4 +1,1 @@
-export {
-    default
-}
-from './getUserFavTeam'
+export { default } from './getUserFavTeam';

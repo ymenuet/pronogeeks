@@ -1,21 +1,14 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 
-import i18n from "../../i18n";
-import { Loader, ErrorMessage } from "../";
-import { useAllGeeks } from "../../utils/hooks";
-import { Avatar } from "../../ui/components";
-import { MultipleSelect } from "../../ui/components";
-import { OptionContainer, Username } from "./GeekSelector.styled";
+import i18n from '../../i18n';
+import { Loader, ErrorMessage } from '..';
+import { useAllGeeks } from '../../utils/hooks';
+import { Avatar, MultipleSelect } from '../../ui/components';
 
-const Option = ({
-  username,
-  photo,
-  onMouseDown,
-  onMouseEnter,
-  onClick,
-  preSelected,
-}) => {
+import { OptionContainer, Username } from './GeekSelector.styled';
+
+const Option = ({ username, photo, onMouseDown, onMouseEnter, onClick, preSelected }) => {
   return (
     <OptionContainer
       onMouseDown={onMouseDown}
@@ -29,15 +22,7 @@ const Option = ({
   );
 };
 
-const GeekSelector = ({
-  geekLeague,
-  name,
-  onChange,
-  validation,
-  label,
-  labelColor,
-  value,
-}) => {
+const GeekSelector = ({ geekLeague, name, onChange, validation, label, labelColor, value }) => {
   const { geeks, loadingGeeks, errorGeeks } = useAllGeeks(geekLeague);
 
   return errorGeeks ? (
@@ -69,7 +54,7 @@ const GeekSelector = ({
 };
 
 GeekSelector.defaultProps = {
-  label: i18n.t("forms.geekSelector.defaultLabel"),
+  label: i18n.t('forms.geekSelector.defaultLabel'),
   labelColor: undefined,
   validation: undefined,
   geekLeague: null,

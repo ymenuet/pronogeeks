@@ -1,4 +1,1 @@
-export {
-    default
-}
-from './SavePronoButton'
+export { default } from './SavePronoButton';

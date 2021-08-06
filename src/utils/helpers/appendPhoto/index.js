@@ -1,4 +1,1 @@
-export {
-    default
-}
-from './appendPhoto'
+export { default } from './appendPhoto';

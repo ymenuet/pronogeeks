@@ -1,43 +1,27 @@
-import {
-    useState,
-    useEffect
-} from 'react'
-import {
-    useSelector,
-    useDispatch
-} from 'react-redux'
-import {
-    themeNames
-} from '../../ui/theme/themes'
-import {
-    preferredTheme
-} from '../../utils/classes/localStorage'
+import { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { themeNames } from '../../ui/theme/themes';
+import { preferredTheme } from '../classes/localStorage';
 
-import {
-    changeTheme
-} from '../../state/actions/globalActions'
+import { changeTheme } from '../../state/actions/globalActions';
 
 export const useThemePreference = () => {
-    const [theme, setTheme] = useState(themeNames.lightTheme)
+  const [theme, setTheme] = useState(themeNames.lightTheme);
 
-    const appTheme = useSelector(({
-        globalReducer
-    }) => globalReducer.appTheme)
+  const appTheme = useSelector(({ globalReducer }) => globalReducer.appTheme);
 
-    const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
-    useEffect(() => {
+  useEffect(() => {
+    if (appTheme) setTheme(appTheme);
+    else {
+      const userPreference = preferredTheme.get();
+      if (userPreference) {
+        setTheme(userPreference);
+        dispatch(changeTheme(userPreference));
+      }
+    }
+  }, [appTheme, dispatch]);
 
-        if (appTheme) setTheme(appTheme)
-
-        else {
-            const userPreference = preferredTheme.get()
-            if (userPreference) {
-                setTheme(userPreference)
-                dispatch(changeTheme(userPreference))
-            }
-        }
-    }, [appTheme, dispatch])
-
-    return theme
-}
+  return theme;
+};

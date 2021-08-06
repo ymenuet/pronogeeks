@@ -1,4 +1,1 @@
-export {
-    default
-}
-from './hasMatchStarted'
+export { default } from './hasMatchStarted';

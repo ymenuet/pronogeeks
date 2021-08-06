@@ -1,7 +1,7 @@
-import styled from 'styled-components'
+import styled from 'styled-components';
 
 export const Label = styled.label`
-    color: ${({ theme }) => theme.label} !important;
-    text-align: left;
-    width: 100%;
-`
+  color: ${({ theme }) => theme.label} !important;
+  text-align: left;
+  width: 100%;
+`;

@@ -1,24 +1,20 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import axios from "axios";
-import { Loader, RankGeeks, ErrorMessage } from "../../components";
-import { openNotification, appendPhoto } from "../../utils/helpers";
-import {
-  useSeasonPlayersRanking,
-  useUser,
-  useSeasonHistory,
-} from "../../utils/hooks";
-import { UsernameInput } from "../../utils/components";
-import { EditIcon, WarningIcon } from "../../components/Icons";
-import "./profile.css";
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import axios from 'axios';
+import { Loader, RankGeeks, ErrorMessage } from '../../components';
+import { openNotification, appendPhoto } from '../../utils/helpers';
+import { useSeasonPlayersRanking, useUser, useSeasonHistory } from '../../utils/hooks';
+import { UsernameInput } from '../../utils/components';
+import { EditIcon, WarningIcon } from '../../components/Icons';
+import './profile.css';
 
 import {
   updateUsername,
   updatePhoto,
   deleteUserAccount,
   logout,
-} from "../../state/actions/authActions";
+} from '../../state/actions/authActions';
 
 const Profile = ({ loading }) => {
   const [cloudinaryLoading, setCloudinaryLoading] = useState(false);
@@ -29,25 +25,22 @@ const Profile = ({ loading }) => {
 
   const { user, isUserConnected } = useUser();
 
-  const { loadingUsername, loadingPhoto } = useSelector(
-    ({ authReducer }) => authReducer
-  );
+  const { loadingUsername, loadingPhoto } = useSelector(({ authReducer }) => authReducer);
 
   const dispatch = useDispatch();
 
-  const { seasonRanking, setSeasonRanking, errorRanking } =
-    useSeasonPlayersRanking(season);
+  const { seasonRanking, setSeasonRanking, errorRanking } = useSeasonPlayersRanking(season);
 
   const seasonFromUserHistory = useSeasonHistory();
   useEffect(() => {
     if (seasonFromUserHistory) {
-      const season = seasonFromUserHistory.season;
+      const { season } = seasonFromUserHistory;
       setSeason(season);
     } else setSeasonRanking([]);
   }, [seasonFromUserHistory, setSeasonRanking]);
 
   // TODO: Implement useForm
-  const [usernameInput, setUsernameInput] = useState("");
+  const [usernameInput, setUsernameInput] = useState('');
   useEffect(() => {
     if (isUserConnected) {
       setUsernameInput(user.username);
@@ -62,16 +55,14 @@ const Profile = ({ loading }) => {
       setCloudinaryLoading(true);
       const {
         data: { secure_url },
-      } = await axios
-        .post(process.env.REACT_APP_CLOUDINARY_URL, photo)
-        .catch(() => {
-          setCloudinaryError(true);
-          setCloudinaryLoading(false);
-          openNotification(
-            "error",
-            "Une erreur a eu lieu lors de l'import de la photo. Merci de réessayer."
-          );
-        });
+      } = await axios.post(process.env.REACT_APP_CLOUDINARY_URL, photo).catch(() => {
+        setCloudinaryError(true);
+        setCloudinaryLoading(false);
+        openNotification(
+          'error',
+          "Une erreur a eu lieu lors de l'import de la photo. Merci de réessayer."
+        );
+      });
       if (!cloudinaryError) {
         dispatch(updatePhoto(secure_url));
         setCloudinaryLoading(false);
@@ -90,9 +81,9 @@ const Profile = ({ loading }) => {
   };
 
   const setRank = (num) => {
-    if (num === 1) return "1er(e)";
-    else if (num === 0) return "_";
-    else return `${num}ème`;
+    if (num === 1) return '1er(e)';
+    if (num === 0) return '_';
+    return `${num}ème`;
   };
 
   const defineUserRank = (seasonRanking, geekLeague) => {
@@ -128,13 +119,7 @@ const Profile = ({ loading }) => {
 
           <div className="profile-details">
             <div className="profile-picture-container">
-              {!photoLoader && (
-                <img
-                  src={user.photo}
-                  alt="Profile pic"
-                  className="profile-pic"
-                />
-              )}
+              {!photoLoader && <img src={user.photo} alt="Profile pic" className="profile-pic" />}
 
               {photoLoader && (
                 <div className="profile-pic">
@@ -154,10 +139,7 @@ const Profile = ({ loading }) => {
               </label>
 
               <div className="custom-file">
-                <label
-                  className="profile-image custom-file-label"
-                  htmlFor="profile-pic-input"
-                >
+                <label className="profile-image custom-file-label" htmlFor="profile-pic-input">
                   Charger une photo
                   <input
                     id="profile-pic-input"
@@ -173,16 +155,13 @@ const Profile = ({ loading }) => {
             {seasonFromUserHistory && seasonFromUserHistory.favTeam && (
               <div className="favteam-info">
                 <div>
-                  <img
-                    src={seasonFromUserHistory.favTeam.logo}
-                    alt="Logo équipe de coeur"
-                  />
+                  <img src={seasonFromUserHistory.favTeam.logo} alt="Logo équipe de coeur" />
                 </div>
 
                 <h5>
                   {seasonFromUserHistory.favTeam.name} est ton équipe de coeur
                   <br />
-                  pour la saison {seasonFromUserHistory.season.year} de{" "}
+                  pour la saison {seasonFromUserHistory.season.year} de{' '}
                   {seasonFromUserHistory.season.leagueName}.
                 </h5>
               </div>
@@ -219,15 +198,11 @@ const Profile = ({ loading }) => {
                   {user.geekLeagues.reverse().map((league) => (
                     <Link to={`/myGeekLeagues/${league._id}`} key={league._id}>
                       <li className="list-group-item d-flex justify-content-between align-items-center">
-                        <span
-                          className="username-ranking"
-                          style={{ color: "rgb(4, 78, 199)" }}
-                        >
+                        <span className="username-ranking" style={{ color: 'rgb(4, 78, 199)' }}>
                           {league.name}
                         </span>
                         <span className="badge badge-success badge-pill my-badge my-badge-ranking my-badge-ranking-header">
-                          {setRank(defineUserRank(seasonRanking, league))} /{" "}
-                          {league.geeks.length}
+                          {setRank(defineUserRank(seasonRanking, league))} / {league.geeks.length}
                         </span>
                       </li>
                     </Link>
@@ -256,11 +231,7 @@ const Profile = ({ loading }) => {
             ) : !seasonRanking.length ? (
               <Loader tip="Chargement du classement..." container={false} />
             ) : (
-              <RankGeeks
-                players={seasonRanking}
-                seasonID={season._id}
-                generalRanking
-              />
+              <RankGeeks players={seasonRanking} seasonID={season._id} generalRanking />
             )}
           </section>
         )}
@@ -299,26 +270,15 @@ const Profile = ({ loading }) => {
               </div>
 
               <div className="modal-body">
-                <UsernameInput
-                  value={usernameInput}
-                  onChange={setUsernameInput}
-                />
+                <UsernameInput value={usernameInput} onChange={setUsernameInput} />
               </div>
 
               <div className="modal-footer">
-                <button
-                  type="button"
-                  className="my-btn close"
-                  onClick={() => setShowModal(false)}
-                >
+                <button type="button" className="my-btn close" onClick={() => setShowModal(false)}>
                   Fermer
                 </button>
 
-                <button
-                  type="button"
-                  className="my-btn save"
-                  onClick={saveUsername}
-                >
+                <button type="button" className="my-btn save" onClick={saveUsername}>
                   Enregistrer
                 </button>
               </div>
@@ -353,8 +313,7 @@ const Profile = ({ loading }) => {
               <div className="modal-body">
                 <p>
                   <WarningIcon />
-                  Es-tu sûr de vouloir supprimer ton compte ? Toutes tes données
-                  seront perdues...
+                  Es-tu sûr de vouloir supprimer ton compte ? Toutes tes données seront perdues...
                 </p>
               </div>
 
@@ -367,11 +326,7 @@ const Profile = ({ loading }) => {
                   Annuler
                 </button>
 
-                <button
-                  type="button"
-                  className="my-btn delete-account-btn"
-                  onClick={removeAccount}
-                >
+                <button type="button" className="my-btn delete-account-btn" onClick={removeAccount}>
                   Supprimer
                 </button>
               </div>

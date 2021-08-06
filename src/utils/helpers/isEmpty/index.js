@@ -1,4 +1,1 @@
-export {
-    default
-}
-from './isEmpty'
+export { default } from './isEmpty';

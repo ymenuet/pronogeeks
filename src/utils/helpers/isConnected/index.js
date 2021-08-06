@@ -1,4 +1,1 @@
-export {
-    default
-}
-from './isConnected'
+export { default } from './isConnected';

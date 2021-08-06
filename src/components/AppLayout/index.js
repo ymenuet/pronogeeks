@@ -1,4 +1,1 @@
-export {
-    default
-}
-from './AppLayout'
+export { default } from './AppLayout';

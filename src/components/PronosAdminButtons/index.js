@@ -1,4 +1,1 @@
-export {
-    default
-}
-from './PronosAdminButtons'
+export { default } from './PronosAdminButtons';

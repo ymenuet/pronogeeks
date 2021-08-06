@@ -1,24 +1,21 @@
-import React from 'react'
-import { useTranslation } from 'react-i18next'
-import { Section, SubTitle } from '../Admin.styled'
-import CloseSeasonForm from './CloseSeasonForm'
-import AddSeasonForm from './AddSeasonForm'
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { Section, SubTitle } from '../Admin.styled';
+import CloseSeasonForm from './CloseSeasonForm';
+import AddSeasonForm from './AddSeasonForm';
 
 const SeasonsSection = () => {
+  const { t } = useTranslation();
 
-    const { t } = useTranslation()
+  return (
+    <Section>
+      <SubTitle>{t('admin.seasons.title')}</SubTitle>
 
-    return (
-        <Section>
+      <CloseSeasonForm />
 
-            <SubTitle>{t('admin.seasons.title')}</SubTitle>
+      <AddSeasonForm />
+    </Section>
+  );
+};
 
-            <CloseSeasonForm />
-
-            <AddSeasonForm />
-
-        </Section>
-    )
-}
-
-export default SeasonsSection
+export default SeasonsSection;

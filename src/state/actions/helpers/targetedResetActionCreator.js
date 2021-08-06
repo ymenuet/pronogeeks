@@ -1,18 +1,13 @@
 export const targetedReset = (statesToReset, resetValue = null) => {
-    const resettedStates = {}
-    Object.keys(statesToReset).forEach(key => resettedStates[key] = resetValue)
+  const resettedStates = {};
+  Object.keys(statesToReset).forEach((key) => (resettedStates[key] = resetValue));
 
-    return resettedStates
-}
+  return resettedStates;
+};
 
-export default ({
-    statesToReset,
-    resetValue,
+export default ({ statesToReset, resetValue, type, dispatch }) => {
+  dispatch({
     type,
-    dispatch
-}) => {
-    dispatch({
-        type,
-        payload: targetedReset(statesToReset, resetValue)
-    })
-}
+    payload: targetedReset(statesToReset, resetValue),
+  });
+};

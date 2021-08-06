@@ -1,4 +1,1 @@
-export {
-    default
-}
-from './Pronogeeks'
+export { default } from './Pronogeeks';

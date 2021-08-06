@@ -1,8 +1,8 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 
-import Label from "../Label";
-import InputValidation from "../InputValidation";
+import Label from '../Label';
+import InputValidation from '../InputValidation';
 
 const InputShell = ({ children, label, labelColor, htmlFor, validation }) => {
   return (

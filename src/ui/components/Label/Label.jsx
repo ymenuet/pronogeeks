@@ -1,7 +1,7 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 
-import { StyledLabel } from "./Label.styled";
+import { StyledLabel } from './Label.styled';
 
 const Label = ({ label, color, htmlFor }) =>
   label ? (
@@ -12,7 +12,7 @@ const Label = ({ label, color, htmlFor }) =>
 
 Label.defaultProps = {
   label: undefined,
-  color: "label",
+  color: 'label',
 };
 
 Label.propTypes = {

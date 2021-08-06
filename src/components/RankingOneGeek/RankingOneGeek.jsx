@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import {
   CorrectIcon,
   ExactIcon,
@@ -8,14 +8,11 @@ import {
   FirstIcon,
   SecondIcon,
   ThirdIcon,
-} from "../Icons";
-import {
-  getUserSeasonFromProfile,
-  getUserMatchweekFromProfile,
-} from "../../utils/helpers";
-import "./rankingOneGeek.css";
+} from '../Icons';
+import { getUserSeasonFromProfile, getUserMatchweekFromProfile } from '../../utils/helpers';
+import './rankingOneGeek.css';
 
-const iconSize = "20px";
+const iconSize = '20px';
 
 const RankingOneGeek = ({ user, geek, rank, seasonID, matchweek, header }) => {
   const [totalPoints, setTotalPoints] = useState(0);
@@ -30,8 +27,7 @@ const RankingOneGeek = ({ user, geek, rank, seasonID, matchweek, header }) => {
     if (geekSeason) {
       setFavTeam(geekSeason.favTeam);
 
-      const geekMatchweek =
-        matchweek && getUserMatchweekFromProfile(geekSeason, matchweek);
+      const geekMatchweek = matchweek && getUserMatchweekFromProfile(geekSeason, matchweek);
 
       if (geekMatchweek) {
         setTotalPoints(geekMatchweek.totalPoints);
@@ -40,15 +36,9 @@ const RankingOneGeek = ({ user, geek, rank, seasonID, matchweek, header }) => {
         setFavTeamBonus(geekMatchweek.bonusFavTeam);
       } else {
         setTotalPoints(geekSeason.totalPoints || geekSeason.initialPoints);
-        setCorrectPronos(
-          geekSeason.numberCorrects || geekSeason.initialNumberCorrects
-        );
-        setExactPronos(
-          geekSeason.numberExacts || geekSeason.initialNumberExacts
-        );
-        setFavTeamBonus(
-          geekSeason.bonusFavTeam || geekSeason.initialBonusFavTeam
-        );
+        setCorrectPronos(geekSeason.numberCorrects || geekSeason.initialNumberCorrects);
+        setExactPronos(geekSeason.numberExacts || geekSeason.initialNumberExacts);
+        setFavTeamBonus(geekSeason.bonusFavTeam || geekSeason.initialBonusFavTeam);
       }
     } else {
       setTotalPoints(0);
@@ -62,29 +52,11 @@ const RankingOneGeek = ({ user, geek, rank, seasonID, matchweek, header }) => {
   const giveMedal = () => {
     switch (rank) {
       case 1:
-        return (
-          <FirstIcon
-            className="medal-icons-ranking"
-            size="28px"
-            color="#FFA500"
-          />
-        );
+        return <FirstIcon className="medal-icons-ranking" size="28px" color="#FFA500" />;
       case 2:
-        return (
-          <SecondIcon
-            className="medal-icons-ranking"
-            size="28px"
-            color="#616060"
-          />
-        );
+        return <SecondIcon className="medal-icons-ranking" size="28px" color="#616060" />;
       case 3:
-        return (
-          <ThirdIcon
-            className="medal-icons-ranking"
-            size="28px"
-            color="#6A3805"
-          />
-        );
+        return <ThirdIcon className="medal-icons-ranking" size="28px" color="#6A3805" />;
       default:
         return ` ${rank} - `;
     }
@@ -99,27 +71,22 @@ const RankingOneGeek = ({ user, geek, rank, seasonID, matchweek, header }) => {
             <div className="ranking-icon-details ranking-icon-details-right">
               <p>
                 Bon prono avec son équipe de coeur :<br />
-                <img
-                  className="team-logo-ranking"
-                  src={favTeam?.logo}
-                  alt="Fav Team"
-                />{" "}
+                <img className="team-logo-ranking" src={favTeam?.logo} alt="Fav Team" />{' '}
                 {favTeam?.name}
               </p>
             </div>
           </span>
         )
       );
-    else
-      return (
-        <span className="ranking-icon">
-          {favTeamBonus || 0}
-          <FavTeamIcon className="ranking-icon-component" size={iconSize} />
-          <div className="ranking-icon-details ranking-icon-details-right">
-            <p>{favTeamBonus} bons pronos avec son équipe de coeur.</p>
-          </div>
-        </span>
-      );
+    return (
+      <span className="ranking-icon">
+        {favTeamBonus || 0}
+        <FavTeamIcon className="ranking-icon-component" size={iconSize} />
+        <div className="ranking-icon-details ranking-icon-details-right">
+          <p>{favTeamBonus} bons pronos avec son équipe de coeur.</p>
+        </div>
+      </span>
+    );
   };
 
   const seePronos = () => {
@@ -144,32 +111,22 @@ const RankingOneGeek = ({ user, geek, rank, seasonID, matchweek, header }) => {
           </span>
         </Link>
       );
-    else
-      return favTeam ? (
-        <span className="ranking-icon ranking-icon-last ranking-favteam-logo">
-          <img
-            className="team-logo-ranking"
-            src={favTeam.logo}
-            alt="Fav Team"
-          />
-          <div className="ranking-icon-details">
-            <p>
-              Équipe de coeur de {geek.username} : {favTeam.name}
-            </p>
-          </div>
-        </span>
-      ) : (
-        <span className="ranking-icon ranking-icon-last ranking-favteam-logo">
-          &nbsp;
-        </span>
-      );
+    return favTeam ? (
+      <span className="ranking-icon ranking-icon-last ranking-favteam-logo">
+        <img className="team-logo-ranking" src={favTeam.logo} alt="Fav Team" />
+        <div className="ranking-icon-details">
+          <p>
+            Équipe de coeur de {geek.username} : {favTeam.name}
+          </p>
+        </div>
+      </span>
+    ) : (
+      <span className="ranking-icon ranking-icon-last ranking-favteam-logo">&nbsp;</span>
+    );
   };
 
   return (
-    <li
-      key={geek._id}
-      className={`list-group-item d-flex ${header ? "mb-2" : ""}`}
-    >
+    <li key={geek._id} className={`list-group-item d-flex ${header ? 'mb-2' : ''}`}>
       <div className="d-flex justify-content-center align-items-center mr-2 geek-ranking-number">
         <span>
           {giveMedal()}
@@ -185,9 +142,7 @@ const RankingOneGeek = ({ user, geek, rank, seasonID, matchweek, header }) => {
             </span>
           )}
 
-          {user._id !== geek._id && (
-            <span className="username-ranking">{geek.username}</span>
-          )}
+          {user._id !== geek._id && <span className="username-ranking">{geek.username}</span>}
 
           <span className="badge badge-success badge-pill my-badge my-badge-ranking">
             {totalPoints || 0}pts

@@ -1,6 +1,6 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
-import { constants, themeSelector } from "../../theme";
+import { constants, themeSelector } from '../../theme';
 
 export const Container = styled.div`
   position: relative;
@@ -52,8 +52,7 @@ export const Option = styled.div`
   cursor: pointer;
   height: 1.938rem;
   border-top: 0.063rem solid ${themeSelector.grey};
-  background-color: ${({ preSelected, theme }) =>
-    preSelected ? theme.lightGrey : theme.white};
+  background-color: ${({ preSelected, theme }) => (preSelected ? theme.lightGrey : theme.white)};
   display: flex;
   align-items: center;
   padding: 0.063rem 0.375rem;

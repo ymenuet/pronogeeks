@@ -1,83 +1,92 @@
-import React from 'react'
-import { useDispatch } from 'react-redux'
-import { SaveIcon, ValidateIcon, ViewPronoIcon } from '../Icons'
-import { Loader } from '..'
-import { useUser, useSaveOneProno } from '../../utils/hooks'
-import { openNotification, hasMatchStarted } from '../../utils/helpers'
-import './savePronoButton.css'
+import React from 'react';
+import { useDispatch } from 'react-redux';
+import { SaveIcon, ValidateIcon, ViewPronoIcon } from '../Icons';
+import { Loader } from '..';
+import { useUser, useSaveOneProno } from '../../utils/hooks';
+import { openNotification, hasMatchStarted } from '../../utils/helpers';
+import './savePronoButton.css';
 
-import { savePronogeek } from '../../state/actions/pronogeekActions'
+import { savePronogeek } from '../../state/actions/pronogeekActions';
 
-const SavePronoButton = ({ pronogeek, fixture, modified, matchStarted, homeScore, awayScore, savingAll, seeLeaguePronos }) => {
+const SavePronoButton = ({
+  pronogeek,
+  fixture,
+  modified,
+  matchStarted,
+  homeScore,
+  awayScore,
+  savingAll,
+  seeLeaguePronos,
+}) => {
+  const { user } = useUser();
 
-    const { user } = useUser()
+  const { saving, saveSuccess, setSaveSuccess } = useSaveOneProno(pronogeek, fixture);
 
-    const { saving, saveSuccess, setSaveSuccess } = useSaveOneProno(pronogeek, fixture)
+  const dispatch = useDispatch();
 
-    const dispatch = useDispatch()
+  const disabled =
+    matchStarted ||
+    savingAll ||
+    (!homeScore && parseInt(homeScore) !== 0) ||
+    (!awayScore && parseInt(awayScore) !== 0);
 
-    const disabled = matchStarted || savingAll || (!homeScore && parseInt(homeScore) !== 0) || (!awayScore && parseInt(awayScore) !== 0)
+  const saveProno = () => {
+    setSaveSuccess(false);
 
-    const saveProno = () => {
-        setSaveSuccess(false)
+    // Error message if someone takes out the "disabled" property of a passed game to change their pronostics
+    if (hasMatchStarted(fixture))
+      return openNotification(
+        'error',
+        'Erreur',
+        'Ce match est déjà commencé ou fini. Tu ne peux plus changer ton prono.'
+      );
 
-        // Error message if someone takes out the "disabled" property of a passed game to change their pronostics
-        if (
-            hasMatchStarted(fixture)
-        ) return openNotification('error', 'Erreur', 'Ce match est déjà commencé ou fini. Tu ne peux plus changer ton prono.')
+    // Warning message if one of the inputs doesn't have a number
+    if ((!homeScore && parseInt(homeScore) !== 0) || (!awayScore && parseInt(awayScore) !== 0))
+      return openNotification(
+        'warning',
+        'Attention',
+        `Tu n'as pas défini de score pour le match ${fixture.homeTeam.name} - ${fixture.awayTeam.name}. Prono non enregistré.`
+      );
 
-        // Warning message if one of the inputs doesn't have a number
-        if (
-            (!homeScore && parseInt(homeScore) !== 0) ||
-            (!awayScore && parseInt(awayScore) !== 0)
-        ) return openNotification('warning', 'Attention', `Tu n'as pas défini de score pour le match ${fixture.homeTeam.name} - ${fixture.awayTeam.name}. Prono non enregistré.`)
+    dispatch(savePronogeek(homeScore, awayScore, fixture));
+  };
 
-        dispatch(savePronogeek(homeScore, awayScore, fixture))
-    }
-
-    return !matchStarted && saveSuccess ? <>
-
-        <small className='legend-save-btn'>Prono enregistré</small>
-        <button
-            className='btn my-btn save-prono saved-prono'
-            disabled={disabled}
-            onClick={saveProno}
-        >
-            <ValidateIcon />
-        </button>
-
-    </> : !matchStarted ? <>
-
-        <small className='legend-save-btn'>{saving ? 'Enregistrement...' : 'Enregistrer prono'}</small>
-        <button
-            className={`btn my-btn save-prono ${modified ? 'pending-save' : ''}`}
-            disabled={disabled || saving}
-            onClick={saveProno}
-        >
-            {!saving && <SaveIcon />}
-            {saving && <Loader
-                fontSize='1.5rem'
-                tip=''
-                container={false}
-            />}
-        </button>
-
-    </> : matchStarted && !user.geekLeagues.length ? <>
-        <button
-            className='btn my-btn save-prono'
-            disabled={true}
-        >
-            <SaveIcon />
-        </button>
-    </> : <>
-        <small className='legend-save-btn'>Voir pronos</small>
-        <button
-            className='btn my-btn save-prono'
-            onClick={seeLeaguePronos}
-        >
-            <ViewPronoIcon />
-        </button>
+  return !matchStarted && saveSuccess ? (
+    <>
+      <small className="legend-save-btn">Prono enregistré</small>
+      <button className="btn my-btn save-prono saved-prono" disabled={disabled} onClick={saveProno}>
+        <ValidateIcon />
+      </button>
     </>
-}
+  ) : !matchStarted ? (
+    <>
+      <small className="legend-save-btn">
+        {saving ? 'Enregistrement...' : 'Enregistrer prono'}
+      </small>
+      <button
+        className={`btn my-btn save-prono ${modified ? 'pending-save' : ''}`}
+        disabled={disabled || saving}
+        onClick={saveProno}
+      >
+        {!saving && <SaveIcon />}
+        {saving && <Loader fontSize="1.5rem" tip="" container={false} />}
+      </button>
+    </>
+  ) : matchStarted && !user.geekLeagues.length ? (
+    <>
+      <button className="btn my-btn save-prono" disabled>
+        <SaveIcon />
+      </button>
+    </>
+  ) : (
+    <>
+      <small className="legend-save-btn">Voir pronos</small>
+      <button className="btn my-btn save-prono" onClick={seeLeaguePronos}>
+        <ViewPronoIcon />
+      </button>
+    </>
+  );
+};
 
-export default SavePronoButton
+export default SavePronoButton;

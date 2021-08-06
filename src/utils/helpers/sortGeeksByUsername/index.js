@@ -1,4 +1,1 @@
-export {
-    default
-}
-from './sortGeeksByUsername'
+export { default } from './sortGeeksByUsername';

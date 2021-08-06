@@ -1,4 +1,1 @@
-export {
-    default
-}
-from './InputMatchweek'
+export { default } from './InputMatchweek';

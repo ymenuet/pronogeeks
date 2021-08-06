@@ -1,4 +1,4 @@
 export default {
-    GLOBAL_REDUCER_KEY: 'globalReducer',
-    APP_THEME: 'appTheme',
-}
+  GLOBAL_REDUCER_KEY: 'globalReducer',
+  APP_THEME: 'appTheme',
+};

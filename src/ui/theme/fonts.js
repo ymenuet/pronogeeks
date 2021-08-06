@@ -1,3 +1,3 @@
 export default {
-    audiowide: 'Audiowide'
-}
+  audiowide: 'Audiowide',
+};

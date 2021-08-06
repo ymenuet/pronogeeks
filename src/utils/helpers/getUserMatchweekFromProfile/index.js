@@ -1,4 +1,1 @@
-export {
-    default
-}
-from './getUserMatchweekFromProfile'
+export { default } from './getUserMatchweekFromProfile';

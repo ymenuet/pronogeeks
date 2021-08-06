@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useRef } from "react";
-import PropTypes from "prop-types";
+import React, { useState, useEffect, useRef } from 'react';
+import PropTypes from 'prop-types';
 
-import { useRandomInputId } from "../../../utils/hooks";
-import { SearchIcon } from "../../icons";
-import InputShell from "../InputShell";
-import Selection from "./Selection";
+import { useRandomInputId } from '../../../utils/hooks';
+import { SearchIcon } from '../../icons';
+import InputShell from '../InputShell';
+import Selection from './Selection';
 import {
   Container,
   SelectionsContainer,
@@ -14,7 +14,7 @@ import {
   Option,
   OptionLabel,
   InputWrapper,
-} from "./MultipleSelect.styled";
+} from './MultipleSelect.styled';
 
 const OPTIONS_DISPLAY_LIMIT_NUMBER = 5;
 
@@ -27,8 +27,7 @@ const getOptionIndex = (options, option) =>
 const getNextOption = (filteredOptions, preSelectedOption) => {
   const maxIndex = getMaxIndex(filteredOptions);
   const currentIndex = getOptionIndex(filteredOptions, preSelectedOption);
-  if (currentIndex < maxIndex && currentIndex > -1)
-    return filteredOptions[currentIndex + 1];
+  if (currentIndex < maxIndex && currentIndex > -1) return filteredOptions[currentIndex + 1];
   return filteredOptions[0];
 };
 
@@ -58,7 +57,7 @@ const MultipleSelect = ({
 
   const [selectedOptions, setSelectedOptions] = useState([]);
 
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
 
   const [filteredOptions, setFilteredOptions] = useState([]);
 
@@ -75,9 +74,7 @@ const MultipleSelect = ({
 
   const removeSelection = (valueToRemove) => () => {
     inputRef.current.focus();
-    setSelectedOptions(
-      selectedOptions.filter(({ value }) => valueToRemove !== value)
-    );
+    setSelectedOptions(selectedOptions.filter(({ value }) => valueToRemove !== value));
   };
 
   const onMouseDown = () => {
@@ -86,22 +83,21 @@ const MultipleSelect = ({
 
   const onKeyDown = (e) => {
     switch (e.key) {
-      case "ArrowDown":
+      case 'ArrowDown':
         e.preventDefault();
         setPreSelected(getNextOption(filteredOptions, preSelected));
         return;
-      case "ArrowUp":
+      case 'ArrowUp':
         e.preventDefault();
         setPreSelected(getPreviousOption(filteredOptions, preSelected));
         return;
-      case "Enter":
+      case 'Enter':
         e.preventDefault();
         const currentIndex = getOptionIndex(filteredOptions, preSelected);
         selectOption(preSelected)();
         setPreSelected(filteredOptions[currentIndex]);
-        return;
+
       default:
-        return;
     }
   };
 
@@ -126,8 +122,7 @@ const MultipleSelect = ({
   }, [options, search, value]);
 
   useEffect(() => {
-    if (!!filteredOptions.length && !preSelected)
-      setPreSelected(filteredOptions[0]);
+    if (!!filteredOptions.length && !preSelected) setPreSelected(filteredOptions[0]);
   }, [filteredOptions, preSelected]);
 
   useEffect(() => {
@@ -140,12 +135,7 @@ const MultipleSelect = ({
 
   return (
     <Container>
-      <InputShell
-        label={label}
-        labelColor={labelColor}
-        htmlFor={id}
-        validation={validation}
-      >
+      <InputShell label={label} labelColor={labelColor} htmlFor={id} validation={validation}>
         <SelectionsContainer disabled={disabled}>
           {selectedOptions.map((selection) =>
             SelectionComponent ? (
@@ -155,10 +145,7 @@ const MultipleSelect = ({
                 {...selection}
               />
             ) : (
-              <Selection
-                key={selection.value}
-                onRemove={removeSelection(selection.value)}
-              >
+              <Selection key={selection.value} onRemove={removeSelection(selection.value)}>
                 <SelectionLabel>{selection.label}</SelectionLabel>
               </Selection>
             )
@@ -181,24 +168,22 @@ const MultipleSelect = ({
 
         {showOptions && (
           <OptionsContainer>
-            {filteredOptions
-              .slice(0, OPTIONS_DISPLAY_LIMIT_NUMBER)
-              .map((option) => {
-                const optionProps = {
-                  key: option.value,
-                  onClick: selectOption(option),
-                  onMouseDown: onMouseDown,
-                  onMouseEnter: () => setPreSelected(option),
-                  preSelected: option.value === preSelected?.value,
-                };
-                return OptionComponent ? (
-                  <OptionComponent {...optionProps} {...option} />
-                ) : (
-                  <Option {...optionProps}>
-                    <OptionLabel>{option.label}</OptionLabel>
-                  </Option>
-                );
-              })}
+            {filteredOptions.slice(0, OPTIONS_DISPLAY_LIMIT_NUMBER).map((option) => {
+              const optionProps = {
+                key: option.value,
+                onClick: selectOption(option),
+                onMouseDown,
+                onMouseEnter: () => setPreSelected(option),
+                preSelected: option.value === preSelected?.value,
+              };
+              return OptionComponent ? (
+                <OptionComponent {...optionProps} {...option} />
+              ) : (
+                <Option {...optionProps}>
+                  <OptionLabel>{option.label}</OptionLabel>
+                </Option>
+              );
+            })}
           </OptionsContainer>
         )}
       </InputShell>
@@ -209,7 +194,7 @@ const MultipleSelect = ({
 MultipleSelect.defaultProps = {
   options: [],
   label: null,
-  labelColor: "label",
+  labelColor: 'label',
   disabled: false,
 };
 

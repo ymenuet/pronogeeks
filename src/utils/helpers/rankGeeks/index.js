@@ -1,4 +1,1 @@
-export {
-    default
-}
-from './rankGeeks'
+export { default } from './rankGeeks';

@@ -1,4 +1,1 @@
-export {
-    default
-}
-from './isMatchFinished'
+export { default } from './isMatchFinished';

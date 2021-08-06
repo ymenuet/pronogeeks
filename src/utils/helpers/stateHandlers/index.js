@@ -1,6 +1,1 @@
-export {
-    handleStateWith2Ids,
-    handleStateWithId,
-    handleStateWithoutId
-}
-from './stateHandlers'
+export { handleStateWith2Ids, handleStateWithId, handleStateWithoutId } from './stateHandlers';

@@ -1,11 +1,11 @@
-import styled from 'styled-components'
+import styled from 'styled-components';
 
 export const Validation = styled.p`
-    width: 100%;
-    text-align: center;
-    margin: 0;
-    margin-top: 0.25rem;
-    line-height: 1rem;
-    font-size: 1rem;
-    color: ${({ theme }) => theme.error};
-`
+  width: 100%;
+  text-align: center;
+  margin: 0;
+  margin-top: 0.25rem;
+  line-height: 1rem;
+  font-size: 1rem;
+  color: ${({ theme }) => theme.error};
+`;

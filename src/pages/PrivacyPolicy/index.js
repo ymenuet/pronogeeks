@@ -1,4 +1,1 @@
-export {
-    default
-}
-from './PrivacyPolicy'
+export { default } from './PrivacyPolicy';

@@ -1,4 +1,1 @@
-export {
-    default
-}
-from './getUserSeasonFromProfile'
+export { default } from './getUserSeasonFromProfile';

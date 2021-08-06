@@ -1,37 +1,38 @@
-import React from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import { useUser } from '../../utils/hooks'
-import './pronosAdminButtons.css'
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useUser } from '../../utils/hooks';
+import './pronosAdminButtons.css';
 
-import { updateFixturesStatus, updateOdds } from '../../state/actions/apiFootballActions'
+import { updateFixturesStatus, updateOdds } from '../../state/actions/apiFootballActions';
 
 const PronosAdminButtons = ({ seasonID, matchweekNumber }) => {
+  const { user } = useUser();
 
-    const { user } = useUser()
+  const loadingApi = useSelector(({ apiFootballReducer }) => apiFootballReducer.loading);
 
-    const loadingApi = useSelector(({ apiFootballReducer }) => apiFootballReducer.loading)
+  const dispatch = useDispatch();
 
-    const dispatch = useDispatch()
-
-    return user.role === 'GEEK ADMIN' && <div>
-
+  return (
+    user.role === 'GEEK ADMIN' && (
+      <div>
         <button
-            className='btn my-btn admin-btn top'
-            onClick={() => dispatch(updateFixturesStatus(seasonID, matchweekNumber))}
-            disabled={loadingApi}
+          className="btn my-btn admin-btn top"
+          onClick={() => dispatch(updateFixturesStatus(seasonID, matchweekNumber))}
+          disabled={loadingApi}
         >
-            Actualiser les scores
+          Actualiser les scores
         </button>
 
         <button
-            className='btn my-btn admin-btn top'
-            onClick={() => dispatch(updateOdds(seasonID, matchweekNumber))}
-            disabled={loadingApi}
+          className="btn my-btn admin-btn top"
+          onClick={() => dispatch(updateOdds(seasonID, matchweekNumber))}
+          disabled={loadingApi}
         >
-            Actualiser les cotes
+          Actualiser les cotes
         </button>
+      </div>
+    )
+  );
+};
 
-    </div>
-}
-
-export default PronosAdminButtons
+export default PronosAdminButtons;

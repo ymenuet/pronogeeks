@@ -1,8 +1,8 @@
-import colors from "./colors";
+import colors from './colors';
 
 export const themeNames = {
-  lightTheme: "lightTheme",
-  darkTheme: "darkTheme",
+  lightTheme: 'lightTheme',
+  darkTheme: 'darkTheme',
 };
 
 const lightTheme = {

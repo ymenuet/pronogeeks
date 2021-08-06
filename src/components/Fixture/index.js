@@ -1,4 +1,1 @@
-export {
-    default
-}
-from './Fixture'
+export { default } from './Fixture';

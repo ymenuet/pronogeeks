@@ -1,4 +1,1 @@
-export {
-    default
-}
-from './AllGeekLeagues'
+export { default } from './AllGeekLeagues';

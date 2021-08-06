@@ -1,6 +1,6 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
-import { themeSelector } from "../../../theme";
+import { themeSelector } from '../../../theme';
 
 export const Container = styled.div`
   background-color: ${themeSelector.lightGrey};
@@ -9,7 +9,6 @@ export const Container = styled.div`
   align-items: center;
   justify-content: center;
   margin: 0.125rem;
-  border-radius: 0.375rem;
   cursor: pointer;
   white-space: nowrap;
   padding: 0.125rem 0.25rem 0.125rem 0.375rem;

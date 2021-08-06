@@ -1,31 +1,20 @@
-import {
-    useEffect
-} from 'react'
-import {
-    useDispatch
-} from 'react-redux'
-import {
-    useUser
-} from '.'
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { useUser } from '.';
 
-import {
-    setProfile
-} from '../../state/actions/authActions'
+import { setProfile } from '../../state/actions/authActions';
 
 export const useCurrentUserProfile = () => {
-    const {
-        isUserConnected,
-        user
-    } = useUser()
+  const { isUserConnected, user } = useUser();
 
-    const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
-    useEffect(() => {
-        if (!isUserConnected) dispatch(setProfile())
-    }, [isUserConnected, dispatch])
+  useEffect(() => {
+    if (!isUserConnected) dispatch(setProfile());
+  }, [isUserConnected, dispatch]);
 
-    return {
-        isUserConnected,
-        user
-    }
-}
+  return {
+    isUserConnected,
+    user,
+  };
+};

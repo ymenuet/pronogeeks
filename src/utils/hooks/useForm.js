@@ -1,7 +1,7 @@
-import { useState, useEffect, useCallback } from "react";
-import { useTranslation } from "react-i18next";
+import { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 
-import { valueRequired } from "../../utils/helpers/inputValidations";
+import { valueRequired } from '../helpers/inputValidations';
 
 export const useForm = ({
   initialValues = {},
@@ -45,7 +45,7 @@ export const useForm = ({
   const setInputValue = useCallback((inputName, value) => {
     setInputProp({
       inputName,
-      prop: "value",
+      prop: 'value',
       value,
     });
   }, []);
@@ -54,7 +54,7 @@ export const useForm = ({
     (inputName, value) =>
       setInputProp({
         inputName,
-        prop: "validation",
+        prop: 'validation',
         value,
       }),
     []
@@ -85,8 +85,7 @@ export const useForm = ({
       if (inputNotValid(inputName)) {
         setInputValidation(
           inputName,
-          validations[inputName].message ||
-            t("formValidations.defaultValidationMessage")
+          validations[inputName].message || t('formValidations.defaultValidationMessage')
         );
         error = true;
       }
@@ -97,9 +96,7 @@ export const useForm = ({
 
   const getValuesObject = () => {
     const valuesObject = {};
-    Object.keys(inputsProps).map(
-      (key) => (valuesObject[key] = inputsProps[key].value)
-    );
+    Object.keys(inputsProps).map((key) => (valuesObject[key] = inputsProps[key].value));
     return valuesObject;
   };
 

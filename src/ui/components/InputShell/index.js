@@ -1,1 +1,1 @@
-export { default } from "./InputShell";
+export { default } from './InputShell';

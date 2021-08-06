@@ -1,4 +1,1 @@
-export {
-    default
-}
-from './printFixtureStatus'
+export { default } from './printFixtureStatus';

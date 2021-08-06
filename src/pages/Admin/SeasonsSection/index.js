@@ -1,4 +1,1 @@
-export {
-    default
-}
-from './SeasonsSection'
+export { default } from './SeasonsSection';

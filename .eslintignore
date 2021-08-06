@@ -1,0 +1,8 @@
+**/build/
+**/coverage/
+**/lib/
+**/node_modules/
+**/package-lock.json
+**/setupTests.js
+**/packages/*/lib/
+**/packages/*/node_modules/

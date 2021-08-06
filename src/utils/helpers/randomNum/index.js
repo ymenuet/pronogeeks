@@ -1,4 +1,1 @@
-export {
-    default
-}
-from './randomNum'
+export { default } from './randomNum';

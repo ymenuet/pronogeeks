@@ -1,26 +1,26 @@
 class LocalStorage {
-    constructor(key) {
-        this.key = key
-    }
+  constructor(key) {
+    this.key = key;
+  }
 
-    get() {
-        return localStorage.getItem(this.key)
-    }
+  get() {
+    return localStorage.getItem(this.key);
+  }
 
-    set(value) {
-        localStorage.setItem(this.key, value)
-    }
+  set(value) {
+    localStorage.setItem(this.key, value);
+  }
 
-    remove() {
-        localStorage.removeItem(this.key)
-    }
+  remove() {
+    localStorage.removeItem(this.key);
+  }
 }
 
 export const STORAGE_KEYS = {
-    THEME_PREFERENCE: 'Pronogeeks_theme_preference',
-    GEEKLEAGUE_PREFERENCE: 'Pronogeeks_geekleague_preference'
-}
+  THEME_PREFERENCE: 'Pronogeeks_theme_preference',
+  GEEKLEAGUE_PREFERENCE: 'Pronogeeks_geekleague_preference',
+};
 
-export const preferredTheme = new LocalStorage(STORAGE_KEYS.THEME_PREFERENCE)
+export const preferredTheme = new LocalStorage(STORAGE_KEYS.THEME_PREFERENCE);
 
-export const preferredGeekleague = new LocalStorage(STORAGE_KEYS.GEEKLEAGUE_PREFERENCE)
+export const preferredGeekleague = new LocalStorage(STORAGE_KEYS.GEEKLEAGUE_PREFERENCE);

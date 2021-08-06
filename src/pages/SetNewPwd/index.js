@@ -1,4 +1,1 @@
-export {
-    default
-}
-from './SetNewPwd'
+export { default } from './SetNewPwd';

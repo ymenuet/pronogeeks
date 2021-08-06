@@ -1,4 +1,1 @@
-export {
-    default
-}
-from './GeekProno'
+export { default } from './GeekProno';

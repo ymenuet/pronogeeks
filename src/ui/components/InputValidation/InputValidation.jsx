@@ -1,7 +1,7 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 
-import { Validation } from "./InputValidation.styled";
+import { Validation } from './InputValidation.styled';
 
 const InputValidation = ({ validation }) =>
   validation ? <Validation>{`* ${validation}`}</Validation> : null;

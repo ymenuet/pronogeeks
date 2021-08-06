@@ -1,4 +1,1 @@
-export {
-    default
-}
-from './resetMatchweekInput'
+export { default } from './resetMatchweekInput';

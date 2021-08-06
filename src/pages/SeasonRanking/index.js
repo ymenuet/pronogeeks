@@ -1,4 +1,1 @@
-export {
-    default
-}
-from './SeasonRanking'
+export { default } from './SeasonRanking';

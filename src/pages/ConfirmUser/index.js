@@ -1,4 +1,1 @@
-export {
-    default
-}
-from './ConfirmUser'
+export { default } from './ConfirmUser';

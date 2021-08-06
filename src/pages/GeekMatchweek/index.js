@@ -1,4 +1,1 @@
-export {
-    default
-}
-from './GeekMatchweek'
+export { default } from './GeekMatchweek';
