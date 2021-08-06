@@ -86,18 +86,19 @@ const MultipleSelect = ({
       case 'ArrowDown':
         e.preventDefault();
         setPreSelected(getNextOption(filteredOptions, preSelected));
-        return;
+        break;
       case 'ArrowUp':
         e.preventDefault();
         setPreSelected(getPreviousOption(filteredOptions, preSelected));
-        return;
+        break;
       case 'Enter':
         e.preventDefault();
         const currentIndex = getOptionIndex(filteredOptions, preSelected);
         selectOption(preSelected)();
         setPreSelected(filteredOptions[currentIndex]);
-
+        break;
       default:
+        break;
     }
   };
 
