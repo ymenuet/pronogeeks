@@ -17,7 +17,7 @@ import { LOGIN } from '../types/authTypes';
 import { updateMatchweekFixtures, updateMatchweekPronogeeks } from './helpers';
 import { printError, copyReducer } from '../../utils/helpers';
 import { SEASON_REDUCER_KEY, SEASON_MATCHWEEKS_KEY } from '../reducers/keys/season';
-import { RESET_TIMEOUT_IN_MS } from '../../utils/constants.js';
+import { RESET_TIMEOUT_IN_MS } from '../../utils/constants';
 
 const baseURL =
   process.env.NODE_ENV === 'production'
@@ -28,6 +28,21 @@ const apiFootballService = axios.create({
   baseURL,
   withCredentials: true,
 });
+
+function dispatchWarning(message, lang, dispatch) {
+  dispatch({
+    type: WARNING_MESSAGE,
+    payload: message[lang],
+  });
+
+  setTimeout(
+    () =>
+      dispatch({
+        type: RESET_WARNING_MESSAGE,
+      }),
+    RESET_TIMEOUT_IN_MS
+  );
+}
 
 export const updateFixturesStatus = (seasonID, matchweekNumber) => async (dispatch, getState) => {
   dispatch({
@@ -79,7 +94,6 @@ export const updateFixturesStatus = (seasonID, matchweekNumber) => async (dispat
       );
     }
   } catch (error) {
-    console.error('ERROR:', error.message);
     dispatch({
       type: ERROR,
       payload: printError('fr', error, 'Une erreur a eu lieu lors de la mise à jour des scores.'),
@@ -105,14 +119,15 @@ export const updateOdds = (seasonID, matchweekNumber) => async (dispatch, getSta
         `${seasonID}-${matchweekNumber}`
       );
 
-      for (const fixture of fixtures) {
+      fixtures.map((fixture) => {
         newMatchweeks[`${seasonID}-${matchweekNumber}`].fixtures = newMatchweeks[
           `${seasonID}-${matchweekNumber}`
         ].fixtures.map((stateFixture) => {
           if (stateFixture._id.toString() === fixture._id.toString()) return fixture;
           return stateFixture;
         });
-      }
+        return fixture;
+      });
 
       dispatch({
         type: ADD_MATCHWEEK,
@@ -136,7 +151,6 @@ export const updateOdds = (seasonID, matchweekNumber) => async (dispatch, getSta
       );
     }
   } catch (error) {
-    console.error('ERROR:', error.message);
     dispatch({
       type: ERROR,
       payload: printError('fr', error, 'Une erreur a eu lieu lors de la mise à jour des cotes.'),
@@ -166,7 +180,6 @@ export const downloadNewSeason =
         RESET_TIMEOUT_IN_MS
       );
     } catch (error) {
-      console.error('ERROR:', error.message);
       dispatch({
         type: ERROR,
         payload: printError(
@@ -183,18 +196,3 @@ export const resetApiFootballError = () => (dispatch) => {
     type: ERROR_RESET,
   });
 };
-
-function dispatchWarning(message, lang, dispatch) {
-  dispatch({
-    type: WARNING_MESSAGE,
-    payload: message[lang],
-  });
-
-  setTimeout(
-    () =>
-      dispatch({
-        type: RESET_WARNING_MESSAGE,
-      }),
-    RESET_TIMEOUT_IN_MS
-  );
-}

@@ -6,9 +6,10 @@ export default ({ pronogeeks, seasonID, matchweekNumber, dispatch, getState }) =
   const newPronogeeks = copyReducer(getState, PRONOGEEK_REDUCER_KEY, USER_PRONOGEEKS_KEY);
   newPronogeeks[`${seasonID}-${matchweekNumber}`] = {};
 
-  for (const pronogeek of pronogeeks) {
+  pronogeeks.map((pronogeek) => {
     newPronogeeks[`${seasonID}-${matchweekNumber}`][pronogeek.fixture] = pronogeek;
-  }
+    return pronogeek;
+  });
 
   dispatch({
     type: ADD_USER_PRONOGEEKS,

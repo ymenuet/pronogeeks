@@ -18,7 +18,7 @@ import {
   DETAILED_GEEKS_KEY,
 } from '../reducers/keys/geek';
 import { AUTH_REDUCER_KEY, USER_KEY } from '../reducers/keys/auth';
-import { RESET_TIMEOUT_IN_MS } from '../../utils/constants.js';
+import { RESET_TIMEOUT_IN_MS } from '../../utils/constants';
 
 import { printError, copyReducer, rankGeeks } from '../../utils/helpers';
 
@@ -48,14 +48,16 @@ export const getAllGeeks = () => async (dispatch) => {
 
     const geeksObject = {};
 
-    for (const geek of geeks) geeksObject[geek._id] = geek;
+    geeks.map((geek) => {
+      geeksObject[geek._id] = geek;
+      return geek;
+    });
 
     dispatch({
       type: ALL_GEEKS,
       payload: geeksObject,
     });
   } catch (error) {
-    console.error('ERROR:', error.message);
     dispatch({
       type: ALL_GEEKS,
       payload: {
@@ -71,15 +73,15 @@ export const getAllGeeks = () => async (dispatch) => {
 };
 
 export const getSeasonPlayers = (seasonID) => async (dispatch, getState) => {
-  const newRankings = copyReducer(getState, GEEK_REDUCER_KEY, SEASON_GEEKS_RANKING_KEY);
-  newRankings[seasonID] = {
+  const loadingRankings = copyReducer(getState, GEEK_REDUCER_KEY, SEASON_GEEKS_RANKING_KEY);
+  loadingRankings[seasonID] = {
     loading: true,
     error: false,
   };
 
   dispatch({
     type: SEASON_GEEKS,
-    payload: newRankings,
+    payload: loadingRankings,
   });
 
   try {
@@ -97,7 +99,6 @@ export const getSeasonPlayers = (seasonID) => async (dispatch, getState) => {
       payload: newRankings,
     });
   } catch (error) {
-    console.error('ERROR:', error.message);
     const newRankings = copyReducer(getState, GEEK_REDUCER_KEY, SEASON_GEEKS_RANKING_KEY);
     newRankings[seasonID] = {
       loading: false,
@@ -115,16 +116,16 @@ export const getSeasonPlayers = (seasonID) => async (dispatch, getState) => {
 };
 
 export const getDetailsGeek = (geekID) => async (dispatch, getState) => {
-  const newDetailedGeeks = copyReducer(getState, GEEK_REDUCER_KEY, DETAILED_GEEKS_KEY);
+  const loadingDetailedGeeks = copyReducer(getState, GEEK_REDUCER_KEY, DETAILED_GEEKS_KEY);
 
-  newDetailedGeeks[geekID] = {
+  loadingDetailedGeeks[geekID] = {
     loading: true,
     error: false,
   };
 
   dispatch({
     type: DETAILS_GEEK,
-    payload: newDetailedGeeks,
+    payload: loadingDetailedGeeks,
   });
 
   try {
@@ -140,8 +141,6 @@ export const getDetailsGeek = (geekID) => async (dispatch, getState) => {
       payload: newDetailedGeeks,
     });
   } catch (error) {
-    console.error('ERROR:', error.message);
-
     const newDetailedGeeks = copyReducer(getState, GEEK_REDUCER_KEY, DETAILED_GEEKS_KEY);
 
     newDetailedGeeks[geekID] = {
@@ -190,7 +189,6 @@ export const saveFavTeam = (seasonID, teamID) => async (dispatch, getState) => {
       RESET_TIMEOUT_IN_MS
     );
   } catch (error) {
-    console.error('ERROR:', error.message);
     dispatch({
       type: ERROR,
       payload: printError(
@@ -215,8 +213,9 @@ export const saveUserProvRanking = (seasonID, userProvRanking) => async (dispatc
     });
 
     const newUser = copyReducer(getState, AUTH_REDUCER_KEY, USER_KEY);
-    newUser.seasons.map((season) => {
-      if (season.season._id.toString() === seasonID) season.provisionalRanking = userProvRanking;
+    newUser.seasons = newUser.seasons.map((season) => {
+      if (season.season._id.toString() === seasonID)
+        return { ...season, provisionalRanking: userProvRanking };
       return season;
     });
 
@@ -235,7 +234,6 @@ export const saveUserProvRanking = (seasonID, userProvRanking) => async (dispatc
       RESET_TIMEOUT_IN_MS
     );
   } catch (error) {
-    console.error('ERROR:', error.message);
     dispatch({
       type: ERROR,
       payload: printError(

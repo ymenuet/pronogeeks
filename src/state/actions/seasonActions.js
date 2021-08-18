@@ -18,7 +18,7 @@ import {
   NEXT_MATCHWEEKS_KEY,
   LAST_MATCHWEEKS_KEY,
 } from '../reducers/keys/season';
-import { MILLISECONDS_IN_3_HOURS } from '../../utils/constants.js';
+import { MILLISECONDS_IN_3_HOURS } from '../../utils/constants';
 
 const baseURL =
   process.env.NODE_ENV === 'production'
@@ -30,16 +30,31 @@ const seasonService = axios.create({
   withCredentials: true,
 });
 
+export const targetedResetSeasons = (statesToReset, resetValue) => (dispatch) => {
+  targetedResetActionCreator({
+    statesToReset,
+    resetValue,
+    dispatch,
+    type: SEASON_TARGETED_RESET,
+  });
+};
+
+function getLastMatchweek(fixtures) {
+  return fixtures
+    .map((fixture) => fixture.matchweek)
+    .reduce((lastMatchweek, matchweek) => (matchweek > lastMatchweek ? matchweek : lastMatchweek));
+}
+
 export const getSeason = (seasonID) => async (dispatch, getState) => {
-  const newDetailedSeasons = copyReducer(getState, SEASON_REDUCER_KEY, DETAILED_SEASONS_KEY);
-  newDetailedSeasons[seasonID] = {
+  const loadingDetailedSeasons = copyReducer(getState, SEASON_REDUCER_KEY, DETAILED_SEASONS_KEY);
+  loadingDetailedSeasons[seasonID] = {
     loading: true,
     error: false,
   };
 
   dispatch({
     type: ADD_SEASON,
-    payload: newDetailedSeasons,
+    payload: loadingDetailedSeasons,
   });
 
   try {
@@ -55,8 +70,6 @@ export const getSeason = (seasonID) => async (dispatch, getState) => {
       payload: newDetailedSeasons,
     });
   } catch (error) {
-    console.error('ERROR:', error.message);
-
     const newDetailedSeasons = copyReducer(getState, SEASON_REDUCER_KEY, DETAILED_SEASONS_KEY);
     newDetailedSeasons[seasonID] = {
       loading: false,
@@ -160,8 +173,6 @@ export const closeProvRankings = (seasonID) => async (dispatch, getState) => {
       payload: newDetailedSeasons,
     });
   } catch (error) {
-    console.error('ERROR:', error.message);
-
     dispatch({
       type: ERROR,
       payload: printError('fr', error, `Erreur lors de la fermeture du classement de la saison.`),
@@ -184,9 +195,10 @@ export const getUndergoingSeasons = () => async (dispatch) => {
     } = await seasonService.get('/current');
 
     const undergoingSeasons = {};
-    for (const season of seasons) {
+    seasons.map((season) => {
       undergoingSeasons[season._id] = season;
-    }
+      return season;
+    });
 
     if (!seasons.length) undergoingSeasons.empty = true;
 
@@ -195,8 +207,6 @@ export const getUndergoingSeasons = () => async (dispatch) => {
       payload: undergoingSeasons,
     });
   } catch (error) {
-    console.error('ERROR:', error.message);
-
     dispatch({
       type: GET_UNDERGOING_SEASONS,
       payload: {
@@ -226,9 +236,10 @@ export const getUpcomingAndUndergoingSeasons = () => async (dispatch) => {
     } = await seasonService.get('/futureAndCurrent');
 
     const upcomingAndUndergoingSeasons = {};
-    for (const season of seasons) {
+    seasons.map((season) => {
       upcomingAndUndergoingSeasons[season._id] = season;
-    }
+      return season;
+    });
 
     if (!seasons.length) upcomingAndUndergoingSeasons.empty = true;
 
@@ -237,8 +248,6 @@ export const getUpcomingAndUndergoingSeasons = () => async (dispatch) => {
       payload: upcomingAndUndergoingSeasons,
     });
   } catch (error) {
-    console.error('ERROR:', error.message);
-
     dispatch({
       type: GET_SEASONS_FOR_NEW_GEEKLEAGUE,
       payload: {
@@ -266,26 +275,9 @@ export const closeSeason = (seasonID) => async (dispatch) => {
       payload: seasonID,
     });
   } catch (error) {
-    console.error('ERROR:', error.message);
-
     dispatch({
       type: ERROR,
       payload: printError('fr', error, `Erreur lors de la fermeture de la saison.`),
     });
   }
 };
-
-export const targetedResetSeasons = (statesToReset, resetValue) => (dispatch) => {
-  targetedResetActionCreator({
-    statesToReset,
-    resetValue,
-    dispatch,
-    type: SEASON_TARGETED_RESET,
-  });
-};
-
-function getLastMatchweek(fixtures) {
-  return fixtures
-    .map((fixture) => fixture.matchweek)
-    .reduce((lastMatchweek, matchweek) => (matchweek > lastMatchweek ? matchweek : lastMatchweek));
-}

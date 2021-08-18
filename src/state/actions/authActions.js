@@ -24,6 +24,13 @@ const authService = axios.create({
   withCredentials: true,
 });
 
+async function getProfile() {
+  const {
+    data: { user },
+  } = await authService.get('/profile');
+  return user;
+}
+
 export const signup =
   ({ email, username, password, photo }) =>
   async (dispatch) => {
@@ -42,7 +49,6 @@ export const signup =
         type: SIGNUP,
       });
     } catch (error) {
-      console.error('ERROR:', error.message);
       dispatch({
         type: ERROR,
         payload: printError('fr', error, `Erreur lors de la création du compte. Essaye encore.`),
@@ -70,7 +76,6 @@ export const login =
         payload: user,
       });
     } catch (error) {
-      console.error('ERROR:', error.message);
       dispatch({
         type: ERROR,
         payload: printError('fr', error, `Erreur lors de la connexion. Essaye encore.`),
@@ -90,7 +95,6 @@ export const logout = () => async (dispatch) => {
       type: LOGOUT,
     });
   } catch (error) {
-    console.error('ERROR:', error.message);
     dispatch({
       type: ERROR,
       payload: printError('fr', error, `Problème lors de la déconnexion. Rééssaye plus tard.`),
@@ -107,7 +111,6 @@ export const setProfile = () => async (dispatch) => {
       payload: user,
     });
   } catch (error) {
-    console.error('ERROR:', error.message);
     dispatch({
       type: PROFILE_ERROR,
       payload: printError(
@@ -134,7 +137,6 @@ export const confirmEmail = (userID, confirmToken) => async (dispatch) => {
       payload: username,
     });
   } catch (error) {
-    console.error('ERROR:', error.message);
     dispatch({
       type: ERROR,
       payload: printError(
@@ -163,7 +165,6 @@ export const updateUsername = (newUsername) => async (dispatch) => {
       payload: user,
     });
   } catch (error) {
-    console.error('ERROR:', error.message);
     dispatch({
       type: ERROR,
       payload: printError(
@@ -192,7 +193,6 @@ export const updatePhoto = (newPhoto) => async (dispatch) => {
       payload: user,
     });
   } catch (error) {
-    console.error('ERROR:', error.message);
     dispatch({
       type: ERROR,
       payload: printError(
@@ -218,7 +218,6 @@ export const resetPwd = (email) => async (dispatch) => {
       type: RESET_PWD,
     });
   } catch (error) {
-    console.error('ERROR:', error.message);
     dispatch({
       type: ERROR,
       payload: printError(
@@ -244,7 +243,6 @@ export const updatePwd = (userID, renewToken, password) => async (dispatch) => {
       type: UPDATE_PWD,
     });
   } catch (error) {
-    console.error('ERROR:', error.message);
     dispatch({
       type: ERROR,
       payload: printError(
@@ -264,7 +262,6 @@ export const deleteUserAccount = () => async (dispatch) => {
       type: DELETE_ACCOUNT,
     });
   } catch (error) {
-    console.error('ERROR:', error.message);
     dispatch({
       type: ERROR,
       payload: printError(
@@ -281,10 +278,3 @@ export const resetAuthError = () => (dispatch) => {
     type: ERROR_RESET,
   });
 };
-
-async function getProfile() {
-  const {
-    data: { user },
-  } = await authService.get('/profile');
-  return user;
-}

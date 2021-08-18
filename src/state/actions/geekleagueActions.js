@@ -15,7 +15,7 @@ import { LOGIN } from '../types/authTypes';
 import { printError, copyReducer } from '../../utils/helpers';
 import { GEEKLEAGUE_REDUCER_KEY, GEEKLEAGUES_KEY } from '../reducers/keys/geekleague';
 import { AUTH_REDUCER_KEY, USER_KEY } from '../reducers/keys/auth';
-import { RESET_TIMEOUT_IN_MS } from '../../utils/constants.js';
+import { RESET_TIMEOUT_IN_MS } from '../../utils/constants';
 import { preferredGeekleague } from '../../utils/classes/localStorage';
 
 const baseURL =
@@ -27,6 +27,38 @@ const geekleagueService = axios.create({
   baseURL,
   withCredentials: true,
 });
+
+function deleteLeagueFromStore({ dispatch, getState, geekleagueID, type, resetType }) {
+  const filteredArray = Object.values(
+    copyReducer(getState, GEEKLEAGUE_REDUCER_KEY, GEEKLEAGUES_KEY)
+  ).filter((league) => league._id !== geekleagueID);
+  const filteredLeagues = {};
+
+  filteredArray.map((league) => {
+    filteredLeagues[league._id] = league;
+    return league;
+  });
+
+  dispatch({
+    type,
+    payload: filteredLeagues,
+  });
+
+  setTimeout(() => {
+    dispatch({
+      type: resetType,
+    });
+  }, RESET_TIMEOUT_IN_MS);
+
+  const newUser = copyReducer(getState, AUTH_REDUCER_KEY, USER_KEY);
+  newUser.geekLeagues = newUser.geekLeagues.filter((league) => league._id !== geekleagueID);
+  if (`${preferredGeekleague.get()}` === `${geekleagueID}`) preferredGeekleague.remove();
+
+  dispatch({
+    type: LOGIN,
+    payload: newUser,
+  });
+}
 
 export const createLeague =
   ({ name, geeks, season }) =>
@@ -62,8 +94,6 @@ export const createLeague =
         payload: newUser,
       });
     } catch (error) {
-      console.error('ERROR:', error.message);
-
       dispatch({
         type: ERROR,
         payload: printError('fr', error, `Erreur lors de la création de la ligue. Essaye encore.`),
@@ -94,8 +124,6 @@ export const getLeague = (leagueID) => async (dispatch, getState) => {
       payload: newLeagues,
     });
   } catch (error) {
-    console.error('ERROR:', error.message);
-
     const errorLeague = copyReducer(getState, GEEKLEAGUE_REDUCER_KEY, GEEKLEAGUES_KEY, leagueID);
     errorLeague[leagueID].loading = false;
     errorLeague[leagueID].error = printError(
@@ -130,17 +158,16 @@ export const getUserLeagues = () => async (dispatch, getState) => {
 
     if (!userGeekleagues.length) newLeagues.empty = true;
     else
-      for (const league of userGeekleagues) {
+      userGeekleagues.map((league) => {
         newLeagues[league._id] = league;
-      }
+        return league;
+      });
 
     dispatch({
       type: UPDATE_GEEKLEAGUES,
       payload: newLeagues,
     });
   } catch (error) {
-    console.error('ERROR:', error.message);
-
     const errorLeagues = copyReducer(getState, GEEKLEAGUE_REDUCER_KEY, GEEKLEAGUES_KEY);
     errorLeagues.loading = false;
     errorLeagues.error = printError(
@@ -190,7 +217,6 @@ export const editLeague =
         });
       }, RESET_TIMEOUT_IN_MS);
     } catch (error) {
-      console.error('ERROR:', error.message);
       dispatch({
         type: ERROR,
         payload: printError(
@@ -218,7 +244,6 @@ export const deleteLeague = (geekleagueID) => async (dispatch, getState) => {
       resetType: RESET_DELETE_GEEKLEAGUE,
     });
   } catch (error) {
-    console.error('ERROR:', error.message);
     dispatch({
       type: ERROR,
       payload: printError('fr', error, `Erreur lors de la suppression de la ligue. Essaye encore.`),
@@ -242,7 +267,6 @@ export const outLeague = (geekleagueID) => async (dispatch, getState) => {
       resetType: RESET_OUT_GEEKLEAGUE,
     });
   } catch (error) {
-    console.error('ERROR:', error.message);
     dispatch({
       type: ERROR,
       payload: printError('fr', error, `Erreur lors de ta sortie de la ligue. Essaye encore.`),
@@ -255,34 +279,3 @@ export const resetGeekleagueError = () => (dispatch) => {
     type: ERROR_RESET,
   });
 };
-
-function deleteLeagueFromStore({ dispatch, getState, geekleagueID, type, resetType }) {
-  const filteredArray = Object.values(
-    copyReducer(getState, GEEKLEAGUE_REDUCER_KEY, GEEKLEAGUES_KEY)
-  ).filter((league) => league._id !== geekleagueID);
-  const filteredLeagues = {};
-
-  for (const league of filteredArray) {
-    filteredLeagues[league._id] = league;
-  }
-
-  dispatch({
-    type,
-    payload: filteredLeagues,
-  });
-
-  setTimeout(() => {
-    dispatch({
-      type: resetType,
-    });
-  }, RESET_TIMEOUT_IN_MS);
-
-  const newUser = copyReducer(getState, AUTH_REDUCER_KEY, USER_KEY);
-  newUser.geekLeagues = newUser.geekLeagues.filter((league) => league._id !== geekleagueID);
-  if (`${preferredGeekleague.get()}` === `${geekleagueID}`) preferredGeekleague.remove();
-
-  dispatch({
-    type: LOGIN,
-    payload: newUser,
-  });
-}
