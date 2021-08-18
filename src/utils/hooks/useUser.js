@@ -8,8 +8,8 @@ export const useUser = () => {
   const { user } = useSelector(({ authReducer }) => authReducer);
 
   useEffect(() => {
-    const isUserConnected = isConnected(user);
-    setIsUserConnected(isUserConnected);
+    const isGeekConnected = isConnected(user);
+    setIsUserConnected(isGeekConnected);
   }, [user]);
 
   return {

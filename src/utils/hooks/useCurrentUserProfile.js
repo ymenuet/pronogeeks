@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { useUser } from '.';
+import { useUser } from './useUser';
 
 import { setProfile } from '../../state/actions/authActions';
 

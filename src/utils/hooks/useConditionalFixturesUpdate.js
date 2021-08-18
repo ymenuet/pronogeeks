@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { isMatchFinished } from '../helpers';
-import { useUser } from '.';
+import { useUser } from './useUser';
 import {
   MILLISECONDS_IN_30_MINUTES,
   MILLISECONDS_IN_1_DAY,

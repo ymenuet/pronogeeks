@@ -1,5 +1,8 @@
+/* eslint-disable no-param-reassign */
+import fullCopyObject from '../fullCopyObject';
+
 export default (players, seasonID, matchweekNumber = null) => {
-  const geeks = JSON.parse(JSON.stringify(players));
+  const geeks = fullCopyObject(players);
 
   return geeks.sort((a, b) => {
     const creationUserA = a.createdAt;

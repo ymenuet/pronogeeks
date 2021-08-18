@@ -19,4 +19,5 @@ export { default as appendPhoto } from './appendPhoto';
 export { default as sortGeeksByUsername } from './sortGeeksByUsername';
 export { default as determineFixtureWinner } from './determineFixtureWinner';
 export { default as hasMatchStarted } from './hasMatchStarted';
+export { default as fullCopyObject } from './fullCopyObject';
 export { handleStateWithoutId, handleStateWithId, handleStateWith2Ids } from './stateHandlers';

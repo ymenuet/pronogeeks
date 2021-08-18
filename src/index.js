@@ -1,14 +1,15 @@
+/* eslint-disable react/jsx-filename-extension */
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App.jsx';
-import * as serviceWorker from './serviceWorker';
 import 'antd/dist/antd.css';
-
 import { createStore, applyMiddleware, compose } from 'redux';
 import { Provider } from 'react-redux';
 import reduxThunk from 'redux-thunk';
+
+import * as serviceWorker from './serviceWorker';
 import reducers from './state/reducers';
+import './index.css';
+import App from './App';
 
 const store = createStore(
   reducers,

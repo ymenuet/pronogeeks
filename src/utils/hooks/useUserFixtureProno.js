@@ -7,10 +7,10 @@ export const useUserFixtureProno = (fixture) => {
   const [awayScore, setAwayScore] = useState(null);
   const [modified, setModified] = useState(false);
 
-  const userPronogeeks = useSelector(({ pronogeekReducer: { userPronogeeks } }) => userPronogeeks);
+  const { userPronogeeks } = useSelector(({ pronogeekReducer }) => pronogeekReducer);
 
   useEffect(() => {
-    let pronogeek = {
+    let userPronogeek = {
       homeProno: '',
       awayProno: '',
     };
@@ -21,13 +21,13 @@ export const useUserFixtureProno = (fixture) => {
       const userMatchweekPronogeeks = userPronogeeks[`${season}-${matchweek}`];
 
       if (userMatchweekPronogeeks && userMatchweekPronogeeks[_id])
-        pronogeek = userMatchweekPronogeeks[_id];
+        userPronogeek = userMatchweekPronogeeks[_id];
     }
 
-    setPronogeek(pronogeek);
-    setHomeScore(parseInt(pronogeek.homeProno) >= 0 ? pronogeek.homeProno : '');
-    setAwayScore(parseInt(pronogeek.awayProno) >= 0 ? pronogeek.awayProno : '');
-    setModified(!!pronogeek.modified);
+    setPronogeek(userPronogeek);
+    setHomeScore(parseInt(userPronogeek.homeProno) >= 0 ? userPronogeek.homeProno : '');
+    setAwayScore(parseInt(userPronogeek.awayProno) >= 0 ? userPronogeek.awayProno : '');
+    setModified(!!userPronogeek.modified);
   }, [fixture, userPronogeeks]);
 
   return {

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useUser } from '.';
+import { useUser } from './useUser';
 
 export const useSeasonHistory = () => {
   const [seasonFromUserHistory, setSeasonFromUserHistory] = useState(null);

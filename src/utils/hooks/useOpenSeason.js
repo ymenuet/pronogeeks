@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getUserSeasonFromProfile } from '../helpers';
-import { useUser } from '.';
+import { useUser } from './useUser';
 
 import { setNextMatchweek } from '../../state/actions/seasonActions';
 
@@ -23,12 +23,12 @@ export const useOpenSeason = (season) => {
       const userSeason = getUserSeasonFromProfile(user, season._id);
 
       if (!userSeason || !userSeason.favTeam) {
-        const seasonTeams = [...season.rankedTeams];
-        seasonTeams.sort((a, b) => {
+        const teams = [...season.rankedTeams];
+        teams.sort((a, b) => {
           if (a.name > b.name) return 1;
           return -1;
         });
-        setSeasonTeams(seasonTeams);
+        setSeasonTeams(teams);
         setNewSeason(true);
       } else if (!nextMatchweeks[season._id] && !loadingSeason) {
         setNewSeason(false);

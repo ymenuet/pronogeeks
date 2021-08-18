@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { valueRequired } from '../helpers/inputValidations';
+import { fullCopyObject } from '../helpers';
 
 export const useForm = ({
   initialValues = {},
@@ -13,13 +14,13 @@ export const useForm = ({
 
   const createInputsPropsObject = useCallback(() => {
     const inputsProps = {};
-    Object.keys(initialValues).map(
-      (key) =>
-        (inputsProps[key] = {
-          value: initialValues[key],
-          name: key,
-        })
-    );
+    Object.keys(initialValues).map((key) => {
+      inputsProps[key] = {
+        value: initialValues[key],
+        name: key,
+      };
+      return key;
+    });
     return inputsProps;
   }, [initialValues]);
 
@@ -67,7 +68,7 @@ export const useForm = ({
 
   const handleInputChange = useCallback(
     (value, name, event) => {
-      event && event.persist();
+      if (event) event.persist();
       setInputValue(name, value);
       resetValidation(name);
     },
@@ -96,7 +97,10 @@ export const useForm = ({
 
   const getValuesObject = () => {
     const valuesObject = {};
-    Object.keys(inputsProps).map((key) => (valuesObject[key] = inputsProps[key].value));
+    Object.keys(inputsProps).map((key) => {
+      valuesObject[key] = inputsProps[key].value;
+      return key;
+    });
     return valuesObject;
   };
 
@@ -107,17 +111,18 @@ export const useForm = ({
     onSubmit(getValuesObject());
   };
 
-  const inputsPropsWithOnChange = (inputsProps) => {
-    Object.keys(inputsProps).map((key) => {
-      inputsProps[key].onChange = handleInputChange;
+  const inputsPropsWithOnChange = () => {
+    const result = fullCopyObject(inputsProps);
+    Object.keys(result).map((key) => {
+      result[key].onChange = handleInputChange;
       return key;
     });
-    return inputsProps;
+    return result;
   };
 
   return {
     // inputsProps contains name, value, validation and onChange props
-    inputsProps: inputsPropsWithOnChange(inputsProps),
+    inputsProps: inputsPropsWithOnChange(),
     handleSubmit,
   };
 };

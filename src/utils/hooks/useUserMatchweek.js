@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { getUserSeasonFromProfile, getUserMatchweekFromProfile } from '../helpers';
-import { useUser } from '.';
+import { useUser } from './useUser';
 
 export const useUserMatchweek = ({ seasonID, matchweekNumber, history }) => {
   const [matchweekPoints, setMatchweekPoints] = useState(null);

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-export const useGeekMatchweekPoints = (geek, seasonID, matchweekNumber) => {
+export const useGeekMatchweekPoints = (oneGeek, seasonID, matchweekNumber) => {
   const [matchweekPoints, setMatchweekPoints] = useState(null);
   const [matchweekBonus, setMatchweekBonus] = useState(null);
   const [matchweekCorrects, setMatchweekCorrects] = useState(null);
@@ -32,8 +32,8 @@ export const useGeekMatchweekPoints = (geek, seasonID, matchweekNumber) => {
       setMatchweekBonus(matchweekUser.bonusPoints);
       setMatchweekCorrects(matchweekUser.numberCorrects);
     };
-    if (geek) setPoints(geek);
-  }, [matchweekNumber, seasonID, geek]);
+    if (oneGeek) setPoints(oneGeek);
+  }, [matchweekNumber, seasonID, oneGeek]);
 
   return {
     matchweekPoints,

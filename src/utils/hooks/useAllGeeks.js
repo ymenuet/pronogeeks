@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { handleStateWithoutId } from '../helpers/stateHandlers';
 import { sortGeeksByUsername } from '../helpers';
-import { useUser } from '.';
+import { useUser } from './useUser';
 
 import { getAllGeeks } from '../../state/actions/geekActions';
 
@@ -31,8 +31,8 @@ export const useAllGeeks = (geekLeague) => {
       const rawGeeks = Object.values(geeksObject);
 
       if (!geekLeague) {
-        const geeks = sortGeeksByUsername(rawGeeks).filter((geek) => geek._id !== user._id);
-        setGeeks(geeks);
+        const sortedGeeks = sortGeeksByUsername(rawGeeks).filter((geek) => geek._id !== user._id);
+        setGeeks(sortedGeeks);
       } else {
         const filteredGeeks = rawGeeks.filter((geek) => {
           let result = true;
@@ -42,8 +42,8 @@ export const useAllGeeks = (geekLeague) => {
           });
           return result;
         });
-        const geeks = sortGeeksByUsername(filteredGeeks);
-        setGeeks(geeks);
+        const sortedGeeks = sortGeeksByUsername(filteredGeeks);
+        setGeeks(sortedGeeks);
       }
     }
   }, [geeksObject, geekLeague, user._id]);

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useUser } from '.';
+import { useUser } from './useUser';
 import { preferredGeekleague } from '../classes/localStorage';
 
 export const useGeekLeagueHistory = () => {

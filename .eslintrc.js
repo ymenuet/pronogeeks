@@ -26,6 +26,8 @@ module.exports = {
     'react/destructuring-assignment': 'off',
     'no-underscore-dangle': 'off',
     'import/prefer-default-export': 'off',
+    radix: 'off',
+    'consistent-return': 'off',
     'react/jsx-filename-extension': [1, { extensions: ['.jsx'] }],
   },
   settings: {

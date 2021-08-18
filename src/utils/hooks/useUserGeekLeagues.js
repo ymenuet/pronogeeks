@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useUser } from '.';
+import { useUser } from './useUser';
 import { isEmpty } from '../helpers';
 
 import { getUserLeagues } from '../../state/actions/geekleagueActions';

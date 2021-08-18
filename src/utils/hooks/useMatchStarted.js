@@ -5,8 +5,8 @@ export const useMatchStarted = (fixture) => {
   const [matchStarted, setMatchStarted] = useState(true);
 
   useEffect(() => {
-    const matchStarted = hasMatchStarted(fixture);
-    setMatchStarted(matchStarted);
+    const hasMatchBegun = hasMatchStarted(fixture);
+    setMatchStarted(hasMatchBegun);
   }, [fixture]);
 
   return matchStarted;

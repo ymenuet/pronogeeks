@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useUser } from '.';
+import { useUser } from './useUser';
 
 export const useUserProvRanking = (season) => {
   const [userProvRanking, setUserProvRanking] = useState(null);
@@ -14,8 +14,8 @@ export const useUserProvRanking = (season) => {
     if (isUserConnected && season) {
       const seasonUser = user.seasons.filter((userSeason) => userSeason.season._id === season._id);
       if (seasonUser.length) {
-        const userProvRanking = seasonUser[0].provisionalRanking;
-        if (userProvRanking.length) setUserProvRanking(userProvRanking);
+        const currentUserProvRanking = seasonUser[0].provisionalRanking;
+        if (currentUserProvRanking.length) setUserProvRanking(currentUserProvRanking);
         else {
           setUserWithoutRanking(true);
           if (season.provRankingOpen) setUserProvRanking(season.rankedTeams);

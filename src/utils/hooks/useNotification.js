@@ -9,8 +9,7 @@ export const useNotification = (
   useEffect(() => {
     if (condition) {
       openNotification(type, title, message, duration);
-      callback && callback();
+      if (callback) callback();
     }
-    /* eslint-disable-next-line react-hooks/exhaustive-deps */
   }, [condition, type, title, message, duration]);
 };

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { handleStateWithId } from '../helpers/stateHandlers';
-import { useUser } from '.';
+import { useUser } from './useUser';
 
 import { getSeasonPlayers } from '../../state/actions/geekActions';
 

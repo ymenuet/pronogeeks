@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { openNotification } from '../helpers';
-import { useUser } from '.';
+import { useUser } from './useUser';
 
 import {
   getUserMatchweekPronos,
@@ -28,11 +28,11 @@ export const useUserPronogeeks = (seasonID, matchweekNumber) => {
     if (isUserConnected && !pronogeeks)
       dispatch(getUserMatchweekPronos(user._id, seasonID, matchweekNumber));
     else if (pronogeeks && Object.keys(pronogeeks).length) {
-      const modifiedTotal = Object.values(pronogeeks).reduce((total, currentProno) => {
+      const modifiedPronosTotal = Object.values(pronogeeks).reduce((total, currentProno) => {
         if (currentProno.modified) return total + 1;
         return total;
       }, 0);
-      setModifiedTotal(modifiedTotal);
+      setModifiedTotal(modifiedPronosTotal);
 
       if (pronogeeks.saving) setSavingAll(true);
 

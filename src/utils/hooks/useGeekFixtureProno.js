@@ -12,7 +12,7 @@ export const useGeekFixtureProno = (fixture, geek) => {
   );
 
   useEffect(() => {
-    let pronogeek = {
+    let userPronogeek = {
       homeProno: '',
       awayProno: '',
     };
@@ -22,12 +22,12 @@ export const useGeekFixtureProno = (fixture, geek) => {
     if (geekPronogeeks) {
       if (geekPronogeeks.error) setErrorProno(geekPronogeeks.error);
 
-      if (geekPronogeeks[_id]) pronogeek = geekPronogeeks[_id];
+      if (geekPronogeeks[_id]) userPronogeek = geekPronogeeks[_id];
     }
 
-    setPronogeek(pronogeek);
-    setHomeScore(pronogeek.homeProno);
-    setAwayScore(pronogeek.awayProno);
+    setPronogeek(userPronogeek);
+    setHomeScore(userPronogeek.homeProno);
+    setAwayScore(userPronogeek.awayProno);
   }, [fixture, geek, geeksMatchweekPronogeeks]);
 
   return {

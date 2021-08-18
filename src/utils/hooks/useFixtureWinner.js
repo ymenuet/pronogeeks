@@ -6,8 +6,8 @@ export const useFixtureWinner = (fixture) => {
 
   useEffect(() => {
     if (fixture) {
-      const winner = determineFixtureWinner(fixture.goalsHomeTeam, fixture.goalsAwayTeam);
-      setWinner(winner);
+      const winnerToSet = determineFixtureWinner(fixture.goalsHomeTeam, fixture.goalsAwayTeam);
+      setWinner(winnerToSet);
     }
   }, [fixture]);
 

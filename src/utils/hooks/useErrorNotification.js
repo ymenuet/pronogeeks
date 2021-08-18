@@ -7,31 +7,37 @@ import { resetGeekError } from '../../state/actions/geekActions';
 import { resetGeekleagueError } from '../../state/actions/geekleagueActions';
 import { resetApiFootballError } from '../../state/actions/apiFootballActions';
 
+const KEYS = {
+  AUTH: 'auth',
+  GEEK: 'geek',
+  GEEKLEAGUE: 'geekleague',
+  APIFOOTBALL: 'apiFootball',
+};
+
 export const useErrorNotification = () => {
   const dispatch = useDispatch();
 
   const errors = useSelector((state) => ({
-    auth: state.authReducer.error,
-    geek: state.geekReducer.error,
-    geekleague: state.geekleagueReducer.error,
-    apiFootball: state.apiFootballReducer.error,
+    [KEYS.AUTH]: state.authReducer.error,
+    [KEYS.GEEK]: state.geekReducer.error,
+    [KEYS.GEEKLEAGUE]: state.geekleagueReducer.error,
+    [KEYS.APIFOOTBALL]: state.apiFootballReducer.error,
   }));
 
   const resets = {
-    auth: resetAuthError,
-    geek: resetGeekError,
-    geekleague: resetGeekleagueError,
-    apiFootball: resetApiFootballError,
+    [KEYS.AUTH]: resetAuthError,
+    [KEYS.GEEK]: resetGeekError,
+    [KEYS.GEEKLEAGUE]: resetGeekleagueError,
+    [KEYS.APIFOOTBALL]: resetApiFootballError,
   };
 
-  const types = ['auth', 'geek', 'geekleague', 'apiFootball'];
-
   useEffect(() => {
-    for (const type of types) {
-      if (errors[type]) {
-        openNotification('error', 'Erreur', errors[type]);
-        dispatch(resets[type]());
+    Object.values(KEYS).map((key) => {
+      if (errors[key]) {
+        openNotification('error', 'Erreur', errors[key]);
+        dispatch(resets[key]());
       }
-    }
-  }, [errors, resets, types, dispatch]);
+      return key;
+    });
+  }, [errors, resets, dispatch]);
 };

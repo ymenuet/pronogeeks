@@ -1,5 +1,5 @@
-export default (date) => {
-  date = new Date(date);
+export default (someDate) => {
+  const date = new Date(someDate);
   let weekDay = date.getDay();
   const month = date.getMonth() < 9 ? `0${date.getMonth() + 1}` : date.getMonth() + 1;
   const minutes = date.getMinutes() <= 9 ? `0${date.getMinutes()}` : date.getMinutes();
