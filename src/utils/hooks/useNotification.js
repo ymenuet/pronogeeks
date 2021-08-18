@@ -11,5 +11,6 @@ export const useNotification = (
       openNotification(type, title, message, duration);
       if (callback) callback();
     }
+    /* eslint-disable-next-line */
   }, [condition, type, title, message, duration]);
 };
