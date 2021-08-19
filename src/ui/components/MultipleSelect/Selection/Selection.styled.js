@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 
+import { CloseIcon as Icon } from '../../../icons';
 import { themeSelector } from '../../../theme';
 
 export const Container = styled.div`
@@ -19,3 +20,7 @@ export const SelectionInfoWrapper = styled.div`
   display: flex;
   align-items: center;
 `;
+
+export const CloseIcon = styled(Icon).attrs(({ theme }) => ({
+  color: theme.label,
+}))``;

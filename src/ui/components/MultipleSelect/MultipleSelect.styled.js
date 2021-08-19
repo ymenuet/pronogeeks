@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 
+import { SearchIcon as Icon } from '../../icons';
 import { constants, themeSelector } from '../../theme';
 
 export const Container = styled.div`
@@ -61,3 +62,7 @@ export const Option = styled.div`
 export const OptionLabel = styled.span`
   color: ${themeSelector.black};
 `;
+
+export const SearchIcon = styled(Icon).attrs(({ theme }) => ({
+  color: theme.label,
+}))``;

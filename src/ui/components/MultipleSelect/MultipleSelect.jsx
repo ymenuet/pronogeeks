@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 
 import { useRandomInputId } from '../../../utils/hooks';
-import { SearchIcon } from '../../icons';
 import InputShell from '../InputShell';
 import Selection from './Selection';
 import {
@@ -14,6 +13,7 @@ import {
   Option,
   OptionLabel,
   InputWrapper,
+  SearchIcon,
 } from './MultipleSelect.styled';
 
 const OPTIONS_DISPLAY_LIMIT_NUMBER = 5;

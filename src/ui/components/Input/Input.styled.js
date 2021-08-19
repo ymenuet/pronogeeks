@@ -36,7 +36,6 @@ export const StyledInput = styled.input`
 `;
 
 export const IconWrapper = styled.div`
-  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;

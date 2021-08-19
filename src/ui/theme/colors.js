@@ -1,4 +1,4 @@
-export default {
+const colors = {
   white: '#FFF',
   black: '#000',
   lightGrey: '#E1E5ED',
@@ -17,3 +17,7 @@ export default {
   red: '#FD0007',
   yellow: '#FFD900',
 };
+
+export const LIST_OF_ALL_COLOR_NAMES = Object.keys(colors);
+
+export default colors;

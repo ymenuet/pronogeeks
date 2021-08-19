@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { CloseIcon } from '../../../icons';
-import { Container, SelectionInfoWrapper } from './Selection.styled';
+import { Container, SelectionInfoWrapper, CloseIcon } from './Selection.styled';
 
 const Selection = ({ children, onRemove }) => {
   return (

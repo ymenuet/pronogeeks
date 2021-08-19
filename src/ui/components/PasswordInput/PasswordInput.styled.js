@@ -6,6 +6,10 @@ const hoverEffect = ({ isHovered, theme }) => ({
   color: isHovered ? theme.opposite : theme.label,
 });
 
-export const VisibilityOnIcon = styled(EyeIcon).attrs(hoverEffect)``;
+export const VisibilityOnIcon = styled(EyeIcon).attrs(hoverEffect)`
+  cursor: pointer;
+`;
 
-export const VisibilityOffIcon = styled(EyeOffIcon).attrs(hoverEffect)``;
+export const VisibilityOffIcon = styled(EyeOffIcon).attrs(hoverEffect)`
+  cursor: pointer;
+`;
