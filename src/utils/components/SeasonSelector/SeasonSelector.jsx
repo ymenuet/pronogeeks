@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import i18n from '../../../i18n';
 import { SeasonModel } from '../../models/PropTypes';
 import { Select } from '../../../ui/components';
-import { ErrorMessage, Loader } from '../../../components';
+import { ErrorMessage } from '../../../components';
 
 const SeasonSelector = ({
   seasons,
@@ -29,7 +29,7 @@ const SeasonSelector = ({
 
   return error ? (
     <ErrorMessage>{error}</ErrorMessage>
-  ) : options ? (
+  ) : (
     <Select
       name={name}
       placeholder={t('forms.seasonSelector.placeholder')}
@@ -39,14 +39,6 @@ const SeasonSelector = ({
       labelColor={labelColor}
       noOptionMessage={noOptionMessage}
       validation={validation}
-    />
-  ) : (
-    <Loader
-      tip="Chargement des saisons..."
-      size="small"
-      fontSize="2.4rem"
-      tipSize="1rem"
-      container={false}
     />
   );
 };
