@@ -7,6 +7,7 @@ import { ErrorMessage, Loader } from '../../components';
 import { DragIcon, SaveIcon, ListIcon } from '../../components/Icons';
 import { openNotification } from '../../utils/helpers';
 import { useSeason, useUserProvRanking, useProvRankingOpen } from '../../utils/hooks';
+import { PROV_RANKING_MATCHWEEK_LIMIT } from '../../utils/constants';
 import './seasonRanking.css';
 
 import { saveUserProvRanking } from '../../state/actions/geekActions';
@@ -46,8 +47,9 @@ const SeasonRanking = () => {
     if (isProvRankingOpen)
       return (
         <p>
-          Tu as jusqu&apos;avant le début de la <b>journée 7</b> pour modifier ton classement
-          prévisionnel. Il pourra te rapporter des points bonus à la fin de la saison.
+          Tu as jusqu&apos;avant le début de la <b>journée {PROV_RANKING_MATCHWEEK_LIMIT}</b> pour
+          modifier ton classement prévisionnel. Il pourra te rapporter des points bonus à la fin de
+          la saison.
           <br />
           Les équipes bien classées par rapport au classement actuel apparaissent en vert. Mais tout
           le monde sait que le classement peut beaucoup bouger d&apos;ici à la fin de la saison,
@@ -70,7 +72,7 @@ const SeasonRanking = () => {
     return (
       <p>
         Il est trop tard pour faire ton classement prévisionnel... Tu avais jusqu&apos;avant le
-        début de la journée 7.
+        début de la journée {PROV_RANKING_MATCHWEEK_LIMIT}.
         <br />
         RDV la saison prochaine !
       </p>

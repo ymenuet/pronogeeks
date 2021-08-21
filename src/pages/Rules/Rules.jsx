@@ -1,7 +1,9 @@
 import React from 'react';
+
 import './rulesPrivacyPolicy.css';
 import { RulesProno } from '../../components';
 import { CorrectIcon, ExactIcon, FavTeamIcon } from '../../components/Icons';
+import { PROV_RANKING_MATCHWEEK_LIMIT } from '../../utils/constants';
 
 const Rules = () => {
   return (
@@ -25,10 +27,11 @@ const Rules = () => {
 
                 <p>
                   Le classement prévisionnel est modifiable jusqu'
-                  <b>avant le début de la journée 7</b>. Une fois la journée 7 commencée, le
-                  classement prévisionnel ne peut plus être changé. S'il n'a pas été fait avant
-                  cette date, les points bonus éventuellement gagnés grâce au classement
-                  prévisionnel ne pourront pas être cumulés sur cette saison.
+                  <b>avant le début de la journée {PROV_RANKING_MATCHWEEK_LIMIT}</b>. Une fois la
+                  journée {PROV_RANKING_MATCHWEEK_LIMIT} commencée, le classement prévisionnel ne
+                  peut plus être changé. S'il n'a pas été fait avant cette date, les points bonus
+                  éventuellement gagnés grâce au classement prévisionnel ne pourront pas être
+                  cumulés sur cette saison.
                 </p>
 
                 <p className="no-margin-para">
