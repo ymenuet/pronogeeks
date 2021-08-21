@@ -1,18 +1,16 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useParams, useHistory } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import { Form, Input } from 'antd';
+
 import { Loader } from '../../components';
 import { openNotification } from '../../utils/helpers';
-
 import { updatePwd } from '../../state/actions/authActions';
 
-const SetNewPwd = ({
-  match: {
-    params: { userID, renewToken },
-  },
-  history,
-  loadingUser,
-}) => {
+const SetNewPwd = ({ loadingUser }) => {
+  const { userID, renewToken } = useParams();
+  const { push } = useHistory();
   const [form] = Form.useForm();
 
   const { loading, pwdUpdated } = useSelector(({ authReducer }) => authReducer);
@@ -22,9 +20,9 @@ const SetNewPwd = ({
   useEffect(() => {
     if (pwdUpdated) {
       openNotification('success', 'Mot de passe actualisé.');
-      history.push('/login');
+      push('/login');
     }
-  }, [pwdUpdated, history]);
+  }, [pwdUpdated, push]);
 
   const onFinish = async ({ password, passwordCopy }) => {
     if (password !== passwordCopy)
@@ -34,11 +32,13 @@ const SetNewPwd = ({
 
   return (
     <div className="register-pages">
-      {loadingUser ? (
-        <Loader tip="Chargement..." color="rgb(4, 78, 199)" />
-      ) : loading ? (
+      {loadingUser && <Loader tip="Chargement..." color="rgb(4, 78, 199)" />}
+
+      {!loadingUser && loading && (
         <Loader tip="Enregistrement du mot de passe..." color="rgb(4, 78, 199)" />
-      ) : (
+      )}
+
+      {!loadingUser && !loading && (
         <div className="row signup-form">
           <div className="col-10 offset-1 col-sm-8 offset-sm-2 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4">
             <h2>Renouvelle ton mot de passe</h2>
@@ -89,6 +89,14 @@ const SetNewPwd = ({
       )}
     </div>
   );
+};
+
+SetNewPwd.defaultProps = {
+  loadingUser: false,
+};
+
+SetNewPwd.propTypes = {
+  loadingUser: PropTypes.bool,
 };
 
 export default SetNewPwd;
