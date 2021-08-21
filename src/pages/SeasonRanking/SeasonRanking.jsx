@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+
 import { ErrorMessage, Loader } from '../../components';
 import { DragIcon, SaveIcon, ListIcon } from '../../components/Icons';
 import { openNotification } from '../../utils/helpers';
@@ -10,11 +11,9 @@ import './seasonRanking.css';
 
 import { saveUserProvRanking } from '../../state/actions/geekActions';
 
-const SeasonRanking = ({
-  match: {
-    params: { seasonID, matchweekNumber },
-  },
-}) => {
+const SeasonRanking = () => {
+  const { seasonID, matchweekNumber } = useParams();
+
   const { season, errorSeason } = useSeason(seasonID);
 
   const { userProvRanking, userWithoutRanking, setUserProvRanking } = useUserProvRanking(season);
@@ -43,29 +42,35 @@ const SeasonRanking = ({
     dispatch(saveUserProvRanking(seasonID, userProvRanking));
   };
 
-  const infoProvRanking = (provRankingOpen) => {
-    return provRankingOpen ? (
+  const infoProvRanking = (isProvRankingOpen) => {
+    if (isProvRankingOpen)
+      return (
+        <p>
+          Tu as jusqu&apos;avant le début de la <b>journée 7</b> pour modifier ton classement
+          prévisionnel. Il pourra te rapporter des points bonus à la fin de la saison.
+          <br />
+          Les équipes bien classées par rapport au classement actuel apparaissent en vert. Mais tout
+          le monde sait que le classement peut beaucoup bouger d&apos;ici à la fin de la saison,
+          donc réfléchis bien !
+        </p>
+      );
+
+    if (!userWithoutRanking)
+      return (
+        <p>
+          Ton classement prévisionnel n&apos;est plus modifiable. Mais n&apos;hésite pas à le
+          consulter de temps en temps pour voir si tu te rapproches des points bonus ! (Clique{' '}
+          <Link to="/rules#link-to-provisional-ranking">ici</Link> pour plus de détails)
+          <br />
+          Les clubs qui apparaissent sur fond vert sont ceux qui sont bien positionnés par rapport
+          au classement actuel.
+        </p>
+      );
+
+    return (
       <p>
-        Tu as jusqu'avant le début de la <b>journée 7</b> pour modifier ton classement prévisionnel.
-        Il pourra te rapporter des points bonus à la fin de la saison.
-        <br />
-        Les équipes bien classées par rapport au classement actuel apparaissent en vert. Mais tout
-        le monde sait que le classement peut beaucoup bouger d'ici à la fin de la saison, donc
-        réfléchis bien !
-      </p>
-    ) : !userWithoutRanking ? (
-      <p>
-        Ton classement prévisionnel n'est plus modifiable. Mais n'hésite pas à le consulter de temps
-        en temps pour voir si tu te rapproches des points bonus ! (Clique{' '}
-        <Link to="/rules#link-to-provisional-ranking">ici</Link> pour plus de détails)
-        <br />
-        Les clubs qui apparaissent sur fond vert sont ceux qui sont bien positionnés par rapport au
-        classement actuel.
-      </p>
-    ) : (
-      <p>
-        Il est trop tard pour faire ton classement prévisionnel... Tu avais jusqu'avant le début de
-        la journée 7.
+        Il est trop tard pour faire ton classement prévisionnel... Tu avais jusqu&apos;avant le
+        début de la journée 7.
         <br />
         RDV la saison prochaine !
       </p>
@@ -74,9 +79,9 @@ const SeasonRanking = ({
 
   return (
     <div className="pronogeeks-bg offset-for-btn">
-      {errorSeason ? (
-        <ErrorMessage>{errorSeason}</ErrorMessage>
-      ) : season && userProvRanking ? (
+      {errorSeason && <ErrorMessage>{errorSeason}</ErrorMessage>}
+
+      {!errorSeason && season && userProvRanking && (
         <>
           <div className="go-to-ranking">
             <Link
@@ -151,7 +156,11 @@ const SeasonRanking = ({
               {infoProvRanking(provRankingOpen)}
 
               {provRankingOpen && (
-                <button className="btn my-btn save-prono save-ranking-btn" onClick={saveRanking}>
+                <button
+                  className="btn my-btn save-prono save-ranking-btn"
+                  onClick={saveRanking}
+                  type="button"
+                >
                   {loadingGeek ? (
                     <Loader tip="" size="small" fontSize="1.8rem" container={false} />
                   ) : (
@@ -182,11 +191,11 @@ const SeasonRanking = ({
                           index={index}
                           isDragDisabled={!provRankingOpen}
                         >
-                          {(provided) => (
+                          {(prov) => (
                             <li
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              {...provided.dragHandleProps}
+                              ref={prov.innerRef}
+                              {...prov.draggableProps}
+                              {...prov.dragHandleProps}
                               className={index + 1 === team.rank ? 'correct-position' : ''}
                             >
                               <div>
@@ -219,6 +228,7 @@ const SeasonRanking = ({
                 <button
                   className="btn my-btn save-prono save-ranking-btn-bottom"
                   onClick={saveRanking}
+                  type="button"
                 >
                   {loadingGeek ? (
                     <Loader tip="" size="small" fontSize="1.8rem" container={false} />
@@ -231,9 +241,9 @@ const SeasonRanking = ({
             </div>
           </div>
         </>
-      ) : (
-        <Loader color="rgb(4, 78, 199)" />
       )}
+
+      {!errorSeason && (!season || !userProvRanking) && <Loader color="rgb(4, 78, 199)" />}
     </div>
   );
 };
