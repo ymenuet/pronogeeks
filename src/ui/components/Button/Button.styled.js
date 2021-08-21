@@ -1,5 +1,7 @@
 import styled, { css } from 'styled-components';
+
 import buttonThemes from './theme/themes';
+import themeLevels from './theme/levels';
 
 const btnHeight = '3';
 
@@ -33,8 +35,8 @@ const SecondaryButton = styled(PrimaryButton)`
 
 const buttonFactory = (level) => {
   const levels = {
-    primary: PrimaryButton,
-    secondary: SecondaryButton,
+    [themeLevels.primary]: PrimaryButton,
+    [themeLevels.secondary]: SecondaryButton,
   };
 
   return levels[level];

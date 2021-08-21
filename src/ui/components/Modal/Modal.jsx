@@ -1,4 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
 import {
   Filter,
   Container,
@@ -35,6 +37,19 @@ const Modal = ({ isVisible, onClose, title, body, buttons }) => {
       </Filter>
     )
   );
+};
+
+Modal.defaultProps = {
+  title: undefined,
+  body: undefined,
+};
+
+Modal.propTypes = {
+  isVisible: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  title: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+  body: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+  buttons: PropTypes.arrayOf(PropTypes.node).isRequired,
 };
 
 export default Modal;

@@ -21,7 +21,7 @@ const Input = ({
   const id = useRandomInputId({ name, placeholder });
 
   const handleChange = (e) => {
-    !disabled && onChange(e.target.value, e.target.name, e);
+    if (!disabled) onChange(e.target.value, e.target.name, e);
   };
 
   return (

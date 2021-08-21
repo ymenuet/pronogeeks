@@ -50,23 +50,21 @@ const PasswordInput = ({
   );
 };
 
-Input.defaultProps = {
+PasswordInput.defaultProps = {
   value: '',
   label: null,
   labelColor: 'label',
-  placeholder: '',
   validation: undefined,
   disabled: false,
   name: '',
   maxLength: Number.MAX_SAFE_INTEGER,
 };
 
-Input.propTypes = {
+PasswordInput.propTypes = {
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   label: PropTypes.string,
   labelColor: PropTypes.string,
   onChange: PropTypes.func.isRequired,
-  placeholder: PropTypes.string,
   validation: PropTypes.string,
   disabled: PropTypes.bool,
   name: PropTypes.string,

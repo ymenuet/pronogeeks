@@ -1,9 +1,12 @@
+/* eslint-disable camelcase */
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { Form, Input } from 'antd';
 import axios from 'axios';
+import PropTypes from 'prop-types';
+
 import { Loader, SocialLogins } from '../../components';
 import { openNotification, appendPhoto } from '../../utils/helpers';
 import { USERNAME_MAX_LENGTH } from '../../utils/constants';
@@ -11,7 +14,7 @@ import './connectPages.css';
 
 import { signup } from '../../state/actions/authActions';
 
-const Signup = ({ loadingUser }) => {
+const Signup = ({ loadingUser, emailToConfirm }) => {
   const { t } = useTranslation();
   const [form] = Form.useForm();
   const [cloudinaryLoading, setCloudinaryLoading] = useState(false);
@@ -20,7 +23,7 @@ const Signup = ({ loadingUser }) => {
   const [photoUploading, setPhotoUploading] = useState(false);
   const [fileName, setFileName] = useState('Charger une photo');
 
-  const { loading, signedup, emailToConfirm } = useSelector(({ authReducer }) => authReducer);
+  const { loading, signedup } = useSelector(({ authReducer }) => authReducer);
 
   const dispatch = useDispatch();
 
@@ -47,8 +50,7 @@ const Signup = ({ loadingUser }) => {
         setCloudinaryLoading(true);
         const {
           data: { secure_url },
-        } = await axios.post(process.env.REACT_APP_CLOUDINARY_URL, photo).catch((error) => {
-          console.error('ERROR:', error.message);
+        } = await axios.post(process.env.REACT_APP_CLOUDINARY_URL, photo).catch(() => {
           setCloudinaryError(true);
           setCloudinaryLoading(false);
           openNotification(
@@ -68,27 +70,32 @@ const Signup = ({ loadingUser }) => {
   const uploadPhoto = (e) => {
     if (e.target.files.length > 0) {
       setPhotoUploading(true);
-      const photo = appendPhoto(e, setFileName);
-      setPhoto(photo);
+      const picture = appendPhoto(e, setFileName);
+      setPhoto(picture);
       setPhotoUploading(false);
     }
   };
 
   return (
     <div className="register-pages">
-      {loadingUser ? (
-        <Loader tip="Chargement..." color="rgb(4, 78, 199)" />
-      ) : loading || cloudinaryLoading ? (
+      {loadingUser && <Loader tip="Chargement..." color="rgb(4, 78, 199)" />}
+
+      {!loadingUser && (loading || cloudinaryLoading) && (
         <Loader tip="Enregistrement du compte..." color="rgb(4, 78, 199)" />
-      ) : signedup || emailToConfirm ? (
+      )}
+
+      {!loadingUser && !loading && !cloudinaryLoading && (signedup || emailToConfirm) && (
         <div className="row signup-form">
           <div className="col-10 offset-1 col-sm-8 offset-sm-2 col-xl-6 offset-xl-3">
             <h3>
-              Merci pour ton inscription ! Un mail t'a été envoyé pour confirmer ton adresse email.
+              Merci pour ton inscription ! Un mail t&apos;a été envoyé pour confirmer ton adresse
+              email.
             </h3>
           </div>
         </div>
-      ) : (
+      )}
+
+      {!loadingUser && !loading && !cloudinaryLoading && !signedup && !emailToConfirm && (
         <div className="row signup-form">
           <div className="col-10 offset-1 col-sm-8 offset-sm-2 col-xl-6 offset-xl-3">
             <h2>Créer un compte</h2>
@@ -142,6 +149,7 @@ const Signup = ({ loadingUser }) => {
                 <Input.Password placeholder="********" />
               </Form.Item>
 
+              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label
                 className="first-file-label signup-file-label"
                 htmlFor="profile-pic-input-signup"
@@ -189,6 +197,16 @@ const Signup = ({ loadingUser }) => {
       )}
     </div>
   );
+};
+
+Signup.defaultProps = {
+  loadingUser: false,
+  emailToConfirm: false,
+};
+
+Signup.propTypes = {
+  loadingUser: PropTypes.bool,
+  emailToConfirm: PropTypes.bool,
 };
 
 export default Signup;

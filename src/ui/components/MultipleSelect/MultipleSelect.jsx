@@ -74,7 +74,7 @@ const MultipleSelect = ({
 
   const removeSelection = (valueToRemove) => () => {
     inputRef.current.focus();
-    setSelectedOptions(selectedOptions.filter(({ value }) => valueToRemove !== value));
+    setSelectedOptions(selectedOptions.filter((option) => valueToRemove !== option.value));
   };
 
   const onMouseDown = () => {
@@ -93,9 +93,8 @@ const MultipleSelect = ({
         break;
       case 'Enter':
         e.preventDefault();
-        const currentIndex = getOptionIndex(filteredOptions, preSelected);
         selectOption(preSelected)();
-        setPreSelected(filteredOptions[currentIndex]);
+        setPreSelected(filteredOptions[getOptionIndex(filteredOptions, preSelected)]);
         break;
       default:
         break;
@@ -127,9 +126,9 @@ const MultipleSelect = ({
   }, [filteredOptions, preSelected]);
 
   useEffect(() => {
-    !disabled &&
+    if (!disabled)
       onChange(
-        [...selectedOptions].map(({ value }) => value),
+        [...selectedOptions].map((option) => option.value),
         name
       );
   }, [selectedOptions, onChange, name, disabled]);
@@ -197,15 +196,23 @@ MultipleSelect.defaultProps = {
   label: null,
   labelColor: 'label',
   disabled: false,
+  validation: undefined,
+  placeholder: '',
+  selectionComponent: undefined,
+  optionComponent: undefined,
 };
 
 MultipleSelect.propTypes = {
-  value: PropTypes.array.isRequired,
+  value: PropTypes.arrayOf(PropTypes.any).isRequired,
   name: PropTypes.string.isRequired,
+  validation: PropTypes.string,
   onChange: PropTypes.func.isRequired,
+  placeholder: PropTypes.string,
   label: PropTypes.string,
   labelColor: PropTypes.string,
   disabled: PropTypes.bool,
+  selectionComponent: PropTypes.func,
+  optionComponent: PropTypes.func,
   options: PropTypes.arrayOf(
     PropTypes.shape({
       value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),

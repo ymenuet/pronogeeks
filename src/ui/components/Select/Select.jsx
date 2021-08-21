@@ -23,7 +23,7 @@ const Select = ({
 
   const handleChange = (e) => {
     setIsSelected(true);
-    !disabled && onChange(e.target.value, e.target.name, e);
+    if (!disabled) onChange(e.target.value, e.target.name, e);
   };
 
   return (
@@ -47,9 +47,9 @@ const Select = ({
           )}
 
           {options &&
-            options.map(({ value, label }) => (
-              <Option key={value} value={value}>
-                {label}
+            options.map((option) => (
+              <Option key={option.value} value={option.value}>
+                {option.label}
               </Option>
             ))}
         </SelectInput>
