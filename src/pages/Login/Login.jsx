@@ -2,10 +2,11 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Form, Input } from 'antd';
-import './connectPages.css';
-import { SocialLogins, Loader } from '../../components';
+import PropTypes from 'prop-types';
 
+import { SocialLogins, Loader } from '../../components';
 import { login } from '../../state/actions/authActions';
+import './connectPages.css';
 
 const Login = ({ loadingUser }) => {
   const [form] = Form.useForm();
@@ -81,6 +82,14 @@ const Login = ({ loadingUser }) => {
       )}
     </div>
   );
+};
+
+Login.defaultProps = {
+  loadingUser: false,
+};
+
+Login.propTypes = {
+  loadingUser: PropTypes.bool,
 };
 
 export default Login;

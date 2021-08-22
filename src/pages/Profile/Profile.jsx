@@ -1,7 +1,10 @@
+/* eslint-disable camelcase */
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+import PropTypes from 'prop-types';
 import axios from 'axios';
+
 import { Loader, RankGeeks, ErrorMessage } from '../../components';
 import { openNotification, appendPhoto } from '../../utils/helpers';
 import { useSeasonPlayersRanking, useUser, useSeasonHistory } from '../../utils/hooks';
@@ -34,8 +37,8 @@ const Profile = ({ loading }) => {
   const seasonFromUserHistory = useSeasonHistory();
   useEffect(() => {
     if (seasonFromUserHistory) {
-      const { season } = seasonFromUserHistory;
-      setSeason(season);
+      const { season: historySeason } = seasonFromUserHistory;
+      setSeason(historySeason);
     } else setSeasonRanking([]);
   }, [seasonFromUserHistory, setSeasonRanking]);
 
@@ -86,9 +89,9 @@ const Profile = ({ loading }) => {
     return `${num}ème`;
   };
 
-  const defineUserRank = (seasonRanking, geekLeague) => {
+  const defineUserRank = (ranking, geekLeague) => {
     return (
-      seasonRanking
+      ranking
         .filter(({ _id }) => geekLeague.geeks.includes(_id))
         .map((player) => player._id)
         .indexOf(user._id) + 1
@@ -99,7 +102,7 @@ const Profile = ({ loading }) => {
     loadingUsername ? (
       <Loader container={false} tip="" fontSize="2.5rem" />
     ) : (
-      <button onClick={() => setShowModal(!showModal)}>
+      <button onClick={() => setShowModal(!showModal)} type="button">
         <EditIcon />
       </button>
     );
@@ -134,6 +137,7 @@ const Profile = ({ loading }) => {
                 </div>
               )}
 
+              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label className="first-file-label" htmlFor="profile-pic-input">
                 Changer de photo de profil :
               </label>
@@ -178,13 +182,15 @@ const Profile = ({ loading }) => {
 
           {user.geekLeagues.length > 0 && (
             <ul className="list-group list-group-flush geekleagues-list-profile mt-4">
-              {errorRanking ? (
-                <ErrorMessage>{errorRanking}</ErrorMessage>
-              ) : !seasonRanking ? (
+              {errorRanking && <ErrorMessage>{errorRanking}</ErrorMessage>}
+
+              {!errorRanking && !seasonRanking && (
                 <div className="pt-4">
                   <Loader tip="Chargement des ligues..." container={false} />
                 </div>
-              ) : (
+              )}
+
+              {!errorRanking && seasonRanking && (
                 <>
                   <li className="list-group-item d-flex justify-content-between align-items-center mb-2">
                     <span className="username-ranking">
@@ -226,11 +232,13 @@ const Profile = ({ loading }) => {
               Classement général
             </h2>
 
-            {errorRanking ? (
-              <ErrorMessage>{errorRanking}</ErrorMessage>
-            ) : !seasonRanking.length ? (
+            {errorRanking && <ErrorMessage>{errorRanking}</ErrorMessage>}
+
+            {!errorRanking && !seasonRanking?.length && (
               <Loader tip="Chargement du classement..." container={false} />
-            ) : (
+            )}
+
+            {!errorRanking && !!seasonRanking?.length && (
               <RankGeeks players={seasonRanking} seasonID={season._id} generalRanking />
             )}
           </section>
@@ -240,6 +248,7 @@ const Profile = ({ loading }) => {
           <button
             onClick={() => setDeleteAccount(!deleteAccount)}
             className="btn my-btn delete-account-btn"
+            type="button"
           >
             Supprimer compte
           </button>
@@ -336,6 +345,14 @@ const Profile = ({ loading }) => {
       )}
     </div>
   );
+};
+
+Profile.defaultProps = {
+  loading: false,
+};
+
+Profile.propTypes = {
+  loading: PropTypes.bool,
 };
 
 export default Profile;

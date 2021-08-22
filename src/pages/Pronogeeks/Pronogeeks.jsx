@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useHistory, useParams } from 'react-router-dom';
+import PropTypes from 'prop-types';
+
 import {
   Fixture,
   Loader,
@@ -20,17 +22,13 @@ import {
 } from '../../utils/hooks';
 import { resetMatchweekInput } from '../../utils/helpers';
 import { QuestionIcon, SaveIcon, RankingIcon, ValidateIcon } from '../../components/Icons';
+import { saveAllPronogeeks } from '../../state/actions/pronogeekActions';
 import './pronogeeks.css';
 
-import { saveAllPronogeeks } from '../../state/actions/pronogeekActions';
+const Pronogeeks = ({ loading }) => {
+  const { matchweekNumber, seasonID } = useParams();
+  const history = useHistory();
 
-const Pronogeeks = ({
-  match: {
-    params: { matchweekNumber, seasonID },
-  },
-  history,
-  loading,
-}) => {
   const [showRules, setShowRules] = useState(false);
   const [showLeaguePronos, setShowLeaguePronos] = useState(false);
   const [matchweekFromInput, setMatchweekFromInput] = useState(matchweekNumber);
@@ -73,17 +71,24 @@ const Pronogeeks = ({
     changeMatchweek(parseInt(matchweekNumber) + 1);
   };
 
-  return errorSeason ? (
-    <div className="pronogeeks-bg">
-      <ErrorMessage>{errorSeason}</ErrorMessage>
-    </div>
-  ) : !fixtures || !season || loading || newSeason ? (
-    <div className="pronogeeks-bg">
-      <Loader color="rgb(4, 78, 199)" />
-    </div>
-  ) : (
+  if (errorSeason)
+    return (
+      <div className="pronogeeks-bg">
+        <ErrorMessage>{errorSeason}</ErrorMessage>
+      </div>
+    );
+
+  if (!fixtures || !season || loading || newSeason)
+    return (
+      <div className="pronogeeks-bg">
+        <Loader color="rgb(4, 78, 199)" />
+      </div>
+    );
+
+  return (
     <div
       className="pronogeeks-bg matchweek-page offset-for-btn"
+      aria-hidden="true"
       onClick={(e) =>
         resetMatchweekInput(e, matchweekFromInput, matchweekNumber, setMatchweekFromInput)
       }
@@ -117,21 +122,22 @@ const Pronogeeks = ({
           onClick={() => dispatch(saveAllPronogeeks(seasonID, matchweekNumber, fixtures))}
           className={`btn my-btn save-all-btn ${saveAllSuccess ? 'all-saved' : ''}`}
           disabled={savingAll}
+          type="button"
         >
           {modifiedTotal > 0 && (
             <small className="pronos-to-save large-screen-icon">{modifiedTotal}</small>
           )}
-          {savingAll ? (
+          {savingAll && (
             <Loader tip="" fontSize="2.2rem" container={false} className="saving-all-loader" />
-          ) : saveAllSuccess ? (
-            <ValidateIcon size="40px" />
-          ) : (
-            <SaveIcon size="40px" />
           )}
+          {saveAllSuccess && <ValidateIcon size="40px" />}
+          {!savingAll && !saveAllSuccess && <SaveIcon size="40px" />}
           &nbsp;
           <span>
             {modifiedTotal > 0 && <small className="pronos-to-save">{modifiedTotal}</small>}
-            {savingAll ? 'Enregistrement...' : saveAllSuccess ? 'Enregistré' : 'Enregistrer tout'}
+            {savingAll && 'Enregistrement...'}
+            {saveAllSuccess && 'Enregistré'}
+            {!savingAll && !saveAllSuccess && 'Enregistrer tout'}
           </span>
         </button>
 
@@ -159,6 +165,7 @@ const Pronogeeks = ({
 
       <ul
         onClick={() => setShowRules(false)}
+        aria-hidden="true"
         className="list-group list-group-flush list-fixtures col-10 offset-1 col-md-8 offset-md-2 col-xl-6 offset-xl-3"
       >
         <MatchweekNavigation
@@ -216,6 +223,14 @@ const Pronogeeks = ({
       )}
     </div>
   );
+};
+
+Pronogeeks.defaultProps = {
+  loading: false,
+};
+
+Pronogeeks.propTypes = {
+  loading: PropTypes.bool,
 };
 
 export default Pronogeeks;

@@ -1,7 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './home.css';
+import PropTypes from 'prop-types';
+
 import { SocialLogins, Loader } from '../../components';
+import './home.css';
 
 const Home = ({ loadingUser }) => {
   return (
@@ -42,6 +44,14 @@ const Home = ({ loadingUser }) => {
       )}
     </div>
   );
+};
+
+Home.defaultProps = {
+  loadingUser: false,
+};
+
+Home.propTypes = {
+  loadingUser: PropTypes.bool,
 };
 
 export default Home;
