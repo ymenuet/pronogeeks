@@ -1,20 +1,18 @@
 import React, { useEffect } from 'react';
-import { Redirect } from 'react-router-dom';
+import { Redirect, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+import PropTypes from 'prop-types';
+
 import { ErrorMessage, Loader } from '../../components';
 import { openNotification } from '../../utils/helpers';
 import { useInput, useSeason, useOpenSeason } from '../../utils/hooks';
 import { WarningIcon } from '../../components/Icons';
+import { saveFavTeam } from '../../state/actions/geekActions';
 import './pronogeeks.css';
 
-import { saveFavTeam } from '../../state/actions/geekActions';
+const PronogeeksSeason = ({ loading }) => {
+  const { seasonID } = useParams();
 
-const PronogeeksSeason = ({
-  match: {
-    params: { seasonID },
-  },
-  loading,
-}) => {
   const favTeam = useInput('');
 
   const { season, errorSeason } = useSeason(seasonID);
@@ -45,12 +43,12 @@ const PronogeeksSeason = ({
 
   return (
     <div className="pronogeeks-bg">
-      {errorSeason ? (
-        <ErrorMessage>{errorSeason}</ErrorMessage>
-      ) : newSeason && seasonTeams ? (
+      {errorSeason && <ErrorMessage>{errorSeason}</ErrorMessage>}
+
+      {!errorSeason && newSeason && seasonTeams && !loading && !loadingGeek && !loadingSeason && (
         <div>
           <div className="choose-favteam">
-            <label htmlFor="favteam-select">
+            <div>
               Choisis une équipe de coeur pour cette saison.
               <br />
               NB : Chaque bon prono sur un match de ton équipe de coeur te rapporte un bonus de 30
@@ -58,7 +56,7 @@ const PronogeeksSeason = ({
               <br />
               <WarningIcon />
               &nbsp; Réfléchis bien, tu ne pourras plus changer ensuite...
-            </label>
+            </div>
 
             <br />
 
@@ -75,18 +73,31 @@ const PronogeeksSeason = ({
 
             <br />
 
-            <button className="btn my-btn save-favteam-btn" onClick={saveNewFavTeam}>
+            <button className="btn my-btn save-favteam-btn" onClick={saveNewFavTeam} type="button">
               Confirmer
             </button>
           </div>
         </div>
-      ) : loading || loadingGeek || loadingSeason || !matchweek || newSeason === null ? (
-        <Loader color="rgb(4, 78, 199)" />
-      ) : (
+      )}
+
+      {!errorSeason &&
+        (!seasonTeams || loading || loadingGeek || loadingSeason || (!matchweek && !newSeason)) && (
+          <Loader color="rgb(4, 78, 199)" />
+        )}
+
+      {newSeason === false && matchweek && (
         <Redirect to={`/pronogeeks/${seasonID}/matchweek/${matchweek}`} />
       )}
     </div>
   );
+};
+
+PronogeeksSeason.defaultProps = {
+  loading: false,
+};
+
+PronogeeksSeason.propTypes = {
+  loading: PropTypes.bool,
 };
 
 export default PronogeeksSeason;

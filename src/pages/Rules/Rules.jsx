@@ -26,12 +26,12 @@ const Rules = () => {
                 <h4>Classement prévisionnel</h4>
 
                 <p>
-                  Le classement prévisionnel est modifiable jusqu'
+                  Le classement prévisionnel est modifiable jusqu&apos;
                   <b>avant le début de la journée {PROV_RANKING_MATCHWEEK_LIMIT}</b>. Une fois la
                   journée {PROV_RANKING_MATCHWEEK_LIMIT} commencée, le classement prévisionnel ne
-                  peut plus être changé. S'il n'a pas été fait avant cette date, les points bonus
-                  éventuellement gagnés grâce au classement prévisionnel ne pourront pas être
-                  cumulés sur cette saison.
+                  peut plus être changé. S&apos;il n&apos;a pas été fait avant cette date, les
+                  points bonus éventuellement gagnés grâce au classement prévisionnel ne pourront
+                  pas être cumulés sur cette saison.
                 </p>
 
                 <p className="no-margin-para">
@@ -54,8 +54,8 @@ const Rules = () => {
                 </ul>
 
                 <p className="no-margin-para">
-                  Un système de bonus combo s'applique de la manière suivante, en fonction du nombre
-                  de clubs bien situés dans le classement prévisionnel :
+                  Un système de bonus combo s&apos;applique de la manière suivante, en fonction du
+                  nombre de clubs bien situés dans le classement prévisionnel :
                 </p>
 
                 <ul>
@@ -67,8 +67,8 @@ const Rules = () => {
                 </ul>
 
                 <p>
-                  Si le classement de l'équipe de coeur <FavTeamIcon /> a été bien pronogeeké, 100
-                  points bonus seront aussi ajoutés au total des points.
+                  Si le classement de l&apos;équipe de coeur <FavTeamIcon /> a été bien pronogeeké,
+                  100 points bonus seront aussi ajoutés au total des points.
                 </p>
 
                 <p className="no-margin-para">
@@ -79,7 +79,7 @@ const Rules = () => {
                 <ul>
                   <li>1600pts sur le classement en lui-même (300 + 200 + 100 + 14*50 + 3*100)</li>
                   <li>1000pts bonus pour un combo perfect 20/20</li>
-                  <li>100pts bonus pour le bon prono sur l'équipe de coeur</li>
+                  <li>100pts bonus pour le bon prono sur l&apos;équipe de coeur</li>
                 </ul>
               </section>
 
@@ -94,8 +94,8 @@ const Rules = () => {
                 </p>
 
                 <p>
-                  En cas d'égalité au total de points, le départage se fait selon l'ordre
-                  d'importance suivant :
+                  En cas d&apos;égalité au total de points, le départage se fait selon l&apos;ordre
+                  d&apos;importance suivant :
                 </p>
 
                 <ol>
@@ -111,10 +111,11 @@ const Rules = () => {
                 </ol>
 
                 <p>
-                  Si deux geeks ont le même nombre de points, l'avantage sera donc donné à celui qui
-                  a le plus grand nombre de pronogeeks corrects. S'ils sont encore à égalité, on
-                  regardera le nombre de pronogeeks exacts. Enfin, en cas d'égalité encore au niveau
-                  des pronogeeks exacts, le bonus équipe de coeur aura le dernier mot.
+                  Si deux geeks ont le même nombre de points, l&apos;avantage sera donc donné à
+                  celui qui a le plus grand nombre de pronogeeks corrects. S&apos;ils sont encore à
+                  égalité, on regardera le nombre de pronogeeks exacts. Enfin, en cas d&apos;égalité
+                  encore au niveau des pronogeeks exacts, le bonus équipe de coeur aura le dernier
+                  mot.
                 </p>
               </section>
             </div>

@@ -1,330 +1,332 @@
 .pronogeeks-bg::before {
-    content: '';
-    position: fixed;
-    top: var(--navbar-height);
-    left: 0;
-    width: 100vw;
-    height: calc(100vh - var(--navbar-height));
-    opacity: 0.55;
-    z-index: -1;
-    background: url('/images/bg-gb-mirror.jpg') center/contain repeat border-box;
+  content: '';
+  position: fixed;
+  top: var(--navbar-height);
+  left: 0;
+  width: 100vw;
+  height: calc(100vh - var(--navbar-height));
+  opacity: 0.55;
+  z-index: -1;
+  background: url('/images/bg-gb-mirror.jpg') center/contain repeat border-box;
 }
 
 .pronogeeks-bg {
-    min-height: calc(100vh - var(--navbar-height));
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding-bottom: 50px;
+  min-height: calc(100vh - var(--navbar-height));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 50px;
 }
 
 .pronogeeks-bg h2 {
-    color: var(--color-dark-blue-bp) !important;
-    margin: 10px 20px 0 20px;
-    font-family: 'Audiowide';
+  color: var(--color-dark-blue-bp) !important;
+  margin: 10px 20px 0 20px;
+  font-family: 'Audiowide';
 }
 
 .choose-favteam {
-    background-color: rgb(240, 247, 244, 0.8);
-    padding: 40px;
-    border-radius: 10px;
-    margin: 20px;
-    max-width: 540px;
+  background-color: rgb(240, 247, 244, 0.8);
+  padding: 40px;
+  border-radius: 10px;
+  margin: 20px;
+  max-width: 540px;
 }
 
-.choose-favteam label {
-    color: var(--color-dark-blue-bp) !important;
-    margin-bottom: 20px;
-    font-size: 1.2rem;
+.choose-favteam > div {
+  color: var(--color-dark-blue-bp) !important;
+  margin-bottom: 20px;
+  font-size: 1.2rem;
 }
 
 .choose-favteam label svg {
-    position: relative;
-    bottom: 2px;
+  position: relative;
+  bottom: 2px;
 }
 
 .choose-favteam select {
-    height: 30px;
-    padding: 0 15px;
-    border-radius: 15px;
-    outline: none;
+  height: 30px;
+  padding: 0 15px;
+  border-radius: 15px;
+  outline: none;
 }
 
 .save-favteam-btn {
-    background: none;
-    color: var(--color-dark-blue-bp);
-    border: 3px solid var(--color-dark-blue-bp);
-    line-height: 100%;
-    margin-top: 20px;
+  background: none;
+  color: var(--color-dark-blue-bp);
+  border: 3px solid var(--color-dark-blue-bp);
+  line-height: 100%;
+  margin-top: 20px;
 }
 
 .save-favteam-btn:hover {
-    background-color: var(--color-dark-blue-bp);
-    color: var(--color-white-cream);
-    transform: none;
+  background-color: var(--color-dark-blue-bp);
+  color: var(--color-white-cream);
+  transform: none;
 }
 
 .save-all {
-    position: fixed;
-    top: calc(var(--navbar-height) + 20px);
-    right: 20px;
-    z-index: 2;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
+  position: fixed;
+  top: calc(var(--navbar-height) + 20px);
+  right: 20px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
 }
 
 .go-to-ranking {
-    position: fixed;
-    top: calc(var(--navbar-height) + 20px);
-    left: 20px;
-    z-index: 2;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+  position: fixed;
+  top: calc(var(--navbar-height) + 20px);
+  left: 20px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 .save-all-btn {
-    font-size: 1rem;
-    background-color: var(--color-dark-blue-bp);
-    margin: 0;
-    padding: 0;
-    width: 68px;
-    height: 68px;
-    border-radius: 50%;
-    outline: none;
-    border: 1px solid var(--color-white-cream);
-    position: relative;
+  font-size: 1rem;
+  background-color: var(--color-dark-blue-bp);
+  margin: 0;
+  padding: 0;
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  outline: none;
+  border: 1px solid var(--color-white-cream);
+  position: relative;
 }
 
 .save-all-btn.all-saved {
-    background-color: var(--color-light-green-gb);
+  background-color: var(--color-light-green-gb);
 }
 
 .save-all-btn.all-saved:hover {
-    background-color: rgb(96, 224, 57);
+  background-color: rgb(96, 224, 57);
 }
 
 .go-to-ranking-btn {
-    font-size: 1rem;
-    background-color: var(--color-dark-blue-bp);
-    margin: 0;
-    padding: 0;
-    width: 68px;
-    height: 68px;
-    border-radius: 50%;
-    outline: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid var(--color-white-cream);
+  font-size: 1rem;
+  background-color: var(--color-dark-blue-bp);
+  margin: 0;
+  padding: 0;
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  outline: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--color-white-cream);
 }
 
 .save-all-btn:hover,
 .go-to-ranking-btn:hover {
-    transform: none;
-    background-color: var(--color-light-blue-bp);
+  transform: none;
+  background-color: var(--color-light-blue-bp);
 }
 
 .save-all-btn svg,
 .go-to-ranking-btn svg {
-    position: relative;
-    bottom: 2px;
-    left: 2px;
+  position: relative;
+  bottom: 2px;
+  left: 2px;
 }
 
-.save-all-btn>span,
+.save-all-btn > span,
 .go-to-ranking-btn span {
-    display: none;
-    font-size: 1.2rem;
+  display: none;
+  font-size: 1.2rem;
 }
 
 .saving-all-loader {
-    position: relative;
-    top: 16px;
-    right: 2px;
+  position: relative;
+  top: 16px;
+  right: 2px;
 }
 
 .save-all-info,
 .go-to-ranking-info {
-    display: none;
-    width: 160px;
-    margin-top: 10px;
-    background-color: var(--color-white-cream);
-    padding: 10px 5px;
-    border-radius: 5px;
+  display: none;
+  width: 160px;
+  margin-top: 10px;
+  background-color: var(--color-white-cream);
+  padding: 10px 5px;
+  border-radius: 5px;
 }
 
-.save-all-btn:hover+.save-all-info {
-    display: block;
+.save-all-btn:hover + .save-all-info {
+  display: block;
 }
 
-.go-to-ranking-btn:hover+.go-to-ranking-info {
-    display: block;
-    float: right;
+.go-to-ranking-btn:hover + .go-to-ranking-info {
+  display: block;
+  float: right;
 }
 
 .save-all-info p,
 .go-to-ranking-info p {
-    margin: 0;
+  margin: 0;
 }
 
 .pronos-to-save {
-    font-size: 0.9rem;
-    width: 22px;
-    height: 22px;
-    line-height: 22px;
-    position: absolute;
-    background-color: var(--color-red-rp);
-    border-radius: 50%;
-    top: -1px;
-    right: -1px;
-    padding: 0;
+  font-size: 0.9rem;
+  width: 22px;
+  height: 22px;
+  line-height: 22px;
+  position: absolute;
+  background-color: var(--color-red-rp);
+  border-radius: 50%;
+  top: -1px;
+  right: -1px;
+  padding: 0;
 }
 
 @media (max-width: 768px) {
-    .go-to-ranking {
-        top: var(--navbar-height);
-        left: 0;
-        width: 100vw;
-        height: 60px;
-        border-top: 1px solid var(--color-white-cream);
-    }
-    .save-all {
-        width: 100vw;
-        bottom: 0;
-        top: unset;
-        right: unset;
-        height: 60px;
-    }
-    .save-all-btn,
-    .go-to-ranking-btn {
-        border: none;
-        height: 100%;
-        width: 100%;
-        border-radius: 0;
-        background: var(--color-dark-blue-bp);
-        transition: background 0.8s;
-    }
-    .save-all-btn:hover,
-    .go-to-ranking-btn:hover {
-        background: var(--color-dark-blue-bp) radial-gradient(circle, transparent 1%, var(--color-light-blue-bp) 1%) center/15000%;
-    }
-    .save-all-btn:active,
-    .go-to-ranking-btn:active {
-        background-color: var(--color-dark-blue-bp);
-        background-size: 100%;
-        transition: background 0s;
-    }
-    .save-all-btn.all-saved:hover {
-        background: var(--color-light-green-gb) radial-gradient(circle, transparent 1%, rgb(96, 224, 57) 1%) center/15000%;
-    }
-    .save-all-btn.all-saved:active {
-        background-color: var(--color-light-green-gb);
-        background-size: 100%;
-        transition: background 0s;
-    }
-    .save-all-btn>span,
-    .go-to-ranking-btn span {
-        display: inline;
-        transition: all 0.3s;
-        position: relative;
-    }
-    .save-all-btn svg,
-    .go-to-ranking-btn svg {
-        transition: all 0.3s;
-    }
-    .save-all-btn:hover+.save-all-info,
-    .go-to-ranking-btn:hover+.go-to-ranking-info {
-        display: none;
-    }
-    .offset-for-btn {
-        margin-top: 60px;
-    }
-    .pronos-to-save {
-        display: inline-block;
-        right: unset;
-        top: -8px;
-        left: -44px;
-        width: 18px;
-        height: 18px;
-        line-height: 18px;
-    }
-    .pronos-to-save.large-screen-icon {
-        display: none;
-    }
-    .saving-all-loader {
-        top: 2px;
-        right: 8px;
-        display: inline;
-    }
+  .go-to-ranking {
+    top: var(--navbar-height);
+    left: 0;
+    width: 100vw;
+    height: 60px;
+    border-top: 1px solid var(--color-white-cream);
+  }
+  .save-all {
+    width: 100vw;
+    bottom: 0;
+    top: unset;
+    right: unset;
+    height: 60px;
+  }
+  .save-all-btn,
+  .go-to-ranking-btn {
+    border: none;
+    height: 100%;
+    width: 100%;
+    border-radius: 0;
+    background: var(--color-dark-blue-bp);
+    transition: background 0.8s;
+  }
+  .save-all-btn:hover,
+  .go-to-ranking-btn:hover {
+    background: var(--color-dark-blue-bp)
+      radial-gradient(circle, transparent 1%, var(--color-light-blue-bp) 1%) center/15000%;
+  }
+  .save-all-btn:active,
+  .go-to-ranking-btn:active {
+    background-color: var(--color-dark-blue-bp);
+    background-size: 100%;
+    transition: background 0s;
+  }
+  .save-all-btn.all-saved:hover {
+    background: var(--color-light-green-gb)
+      radial-gradient(circle, transparent 1%, rgb(96, 224, 57) 1%) center/15000%;
+  }
+  .save-all-btn.all-saved:active {
+    background-color: var(--color-light-green-gb);
+    background-size: 100%;
+    transition: background 0s;
+  }
+  .save-all-btn > span,
+  .go-to-ranking-btn span {
+    display: inline;
+    transition: all 0.3s;
+    position: relative;
+  }
+  .save-all-btn svg,
+  .go-to-ranking-btn svg {
+    transition: all 0.3s;
+  }
+  .save-all-btn:hover + .save-all-info,
+  .go-to-ranking-btn:hover + .go-to-ranking-info {
+    display: none;
+  }
+  .offset-for-btn {
+    margin-top: 60px;
+  }
+  .pronos-to-save {
+    display: inline-block;
+    right: unset;
+    top: -8px;
+    left: -44px;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+  }
+  .pronos-to-save.large-screen-icon {
+    display: none;
+  }
+  .saving-all-loader {
+    top: 2px;
+    right: 8px;
+    display: inline;
+  }
 }
 
 .pronogeeks-bg h2 svg {
-    position: relative;
-    bottom: 4px;
-    right: 5px;
-    transition: all 0.3s;
-    cursor: pointer;
+  position: relative;
+  bottom: 4px;
+  right: 5px;
+  transition: all 0.3s;
+  cursor: pointer;
 }
 
 .pronogeeks-bg h2 svg:hover {
-    transform: scale(1.1);
+  transform: scale(1.1);
 }
 
 .list-fixtures {
-    margin: 0;
-    color: var(--color-white-cream);
-    border-radius: 10px;
-    padding: 0;
+  margin: 0;
+  color: var(--color-white-cream);
+  border-radius: 10px;
+  padding: 0;
 }
 
 .list-fixtures-header {
-    display: flex;
-    justify-content: space-between;
-    border-top-right-radius: 10px;
-    border-top-left-radius: 10px;
-    height: 50px;
-    margin-bottom: 16px;
-    background-color: rgba(2, 88, 211, 0.8) !important;
-    border: 2px solid var(--color-white-cream) !important;
+  display: flex;
+  justify-content: space-between;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+  height: 50px;
+  margin-bottom: 16px;
+  background-color: rgba(2, 88, 211, 0.8) !important;
+  border: 2px solid var(--color-white-cream) !important;
 }
 
 .list-fixtures-header div {
-    width: calc(100% / 3);
-    padding-top: 7px;
-    font-size: 1.4rem;
-    font-family: 'Audiowide' !important;
+  width: calc(100% / 3);
+  padding-top: 7px;
+  font-size: 1.4rem;
+  font-family: 'Audiowide' !important;
 }
 
 .list-fixtures-header div:first-child {
-    width: 49%;
+  width: 49%;
 }
 
 .list-fixtures-header div:nth-child(2) {
-    width: 2%;
+  width: 2%;
 }
 
 .list-fixtures-header div:nth-child(3) {
-    width: 49%;
+  width: 49%;
 }
 
-.list-fixtures>li {
-    margin-bottom: 16px;
-    background-color: rgba(2, 88, 211, 0.8) !important;
-    border: 2px solid var(--color-white-cream) !important;
+.list-fixtures > li {
+  margin-bottom: 16px;
+  background-color: rgba(2, 88, 211, 0.8) !important;
+  border: 2px solid var(--color-white-cream) !important;
 }
 
 h4.not-accessible {
-    color: var(--color-light-blue-gb);
-    font-family: 'Audiowide';
-    margin-right: 20px;
-    margin-left: 20px;
+  color: var(--color-light-blue-gb);
+  font-family: 'Audiowide';
+  margin-right: 20px;
+  margin-left: 20px;
 }
 
 @media (max-width: 576px) {
-    .list-fixtures-header div {
-        font-size: 1.2rem;
-    }
+  .list-fixtures-header div {
+    font-size: 1.2rem;
+  }
 }

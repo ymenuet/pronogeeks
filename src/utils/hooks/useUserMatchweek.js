@@ -23,6 +23,10 @@ export const useUserMatchweek = ({ seasonID, matchweekNumber, history }) => {
           setMatchweekPoints(userMatchweek.totalPoints);
           setMatchweekBonus(userMatchweek.bonusPoints);
           setMatchweekCorrects(userMatchweek.numberCorrects);
+        } else {
+          setMatchweekPoints(0);
+          setMatchweekBonus(0);
+          setMatchweekCorrects(0);
         }
       }
     }
