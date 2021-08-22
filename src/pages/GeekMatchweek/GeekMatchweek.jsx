@@ -1,4 +1,7 @@
 import React from 'react';
+import { useParams, useHistory } from 'react-router-dom';
+import PropTypes from 'prop-types';
+
 import { ErrorMessage, GeekFixture, Loader, MatchweekNavigation } from '../../components';
 import {
   useSeason,
@@ -9,13 +12,10 @@ import {
 } from '../../utils/hooks';
 import './pronogeeks.css';
 
-const GeekMatchweek = ({
-  match: {
-    params: { matchweekNumber, seasonID, geekID },
-  },
-  history,
-  loading,
-}) => {
+const GeekMatchweek = ({ loading }) => {
+  const { matchweekNumber, seasonID, geekID } = useParams();
+  const { push } = useHistory();
+
   const { season, errorSeason } = useSeason(seasonID);
 
   const { fixtures, matchweekStarted, gamesFinished } = useMatchweekFixtures(
@@ -31,15 +31,11 @@ const GeekMatchweek = ({
   useGeekMatchweekPronos(geekID, seasonID, matchweekNumber);
 
   const previousPage = () => {
-    history.push(
-      `/geek/${geekID}/pronogeeks/${seasonID}/matchweek/${parseInt(matchweekNumber) - 1}`
-    );
+    push(`/geek/${geekID}/pronogeeks/${seasonID}/matchweek/${parseInt(matchweekNumber) - 1}`);
   };
 
   const nextPage = () => {
-    history.push(
-      `/geek/${geekID}/pronogeeks/${seasonID}/matchweek/${parseInt(matchweekNumber) + 1}`
-    );
+    push(`/geek/${geekID}/pronogeeks/${seasonID}/matchweek/${parseInt(matchweekNumber) + 1}`);
   };
 
   return loading || !season || !fixtures || !geek ? (
@@ -109,6 +105,14 @@ const GeekMatchweek = ({
       )}
     </div>
   );
+};
+
+GeekMatchweek.defaultProps = {
+  loading: false,
+};
+
+GeekMatchweek.propTypes = {
+  loading: PropTypes.bool,
 };
 
 export default GeekMatchweek;

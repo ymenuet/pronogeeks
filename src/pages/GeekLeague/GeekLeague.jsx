@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useParams, useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import PropTypes from 'prop-types';
 
 import { useGeekLeague, useUser, useNotification, useForm } from '../../utils/hooks';
 import { valueRequired } from '../../utils/helpers/inputValidations';
@@ -9,23 +10,19 @@ import { Input } from '../../ui/components';
 import { Loader, RankGeeks, ErrorMessage, GeekSelector } from '../../components';
 import { EditIcon, DeleteIcon, RemoveIcon, WarningIcon } from '../../components/Icons';
 import { InputWrapper } from './GeekLeague.styled';
-import './detailGeekleague.css';
-
 import { editLeague, deleteLeague, outLeague } from '../../state/actions/geekleagueActions';
+import './detailGeekleague.css';
 
 const formNames = {
   name: 'name',
   geeks: 'geeks',
 };
 
-const GeekLeague = ({
-  match: {
-    params: { geekLeagueID },
-  },
-  history,
-  loading,
-}) => {
+const GeekLeague = ({ loading }) => {
   const { t } = useTranslation();
+
+  const { geekLeagueID } = useParams();
+  const { push } = useHistory();
 
   const [showModal, setShowModal] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
@@ -63,7 +60,7 @@ const GeekLeague = ({
 
   useNotification(geekleagueDeleted, { title: 'Ligue supprimée' }, () => {
     setShowDelete(false);
-    history.push('/myGeekLeagues');
+    push('/myGeekLeagues');
   });
 
   useNotification(
@@ -71,23 +68,24 @@ const GeekLeague = ({
     { title: `Tu as bien quitté la ligue "${geekLeague?.name}"` },
     () => {
       setShowOut(false);
-      history.push('/myGeekLeagues');
+      push('/myGeekLeagues');
     }
   );
 
   return (
     <div className="geekleague-bg geekleague-details">
-      {errorGeekLeague ? (
-        <ErrorMessage>{errorGeekLeague}</ErrorMessage>
-      ) : !geekLeague || loading || loadingGeekleague ? (
-        <Loader />
-      ) : (
+      {errorGeekLeague && <ErrorMessage>{errorGeekLeague}</ErrorMessage>}
+
+      {!errorGeekLeague && (!geekLeague || loading || loadingGeekleague) && <Loader />}
+
+      {!errorGeekLeague && geekLeague && !loading && !loadingGeekleague && (
         <div className="geekleague-page container">
           <h2>
-            Ligue "{geekLeague.name}"
+            Ligue &quot;{geekLeague.name}&quot;
             {geekLeague.creator._id.toString() === user._id.toString() && (
               <>
                 <button
+                  type="button"
                   onClick={() => {
                     setShowModal(!showModal);
                     setShowDelete(false);
@@ -97,6 +95,7 @@ const GeekLeague = ({
                 </button>
 
                 <button
+                  type="button"
                   onClick={() => {
                     setShowDelete(!showDelete);
                     setShowModal(false);
@@ -108,7 +107,7 @@ const GeekLeague = ({
             )}
             {geekLeague.creator._id.toString() !== user._id.toString() &&
               geekLeague.geeks.map(({ _id }) => _id).includes(user._id.toString()) && (
-                <button onClick={() => setShowOut(!showOut)}>
+                <button type="button" onClick={() => setShowOut(!showOut)}>
                   <RemoveIcon />
                 </button>
               )}
@@ -116,6 +115,7 @@ const GeekLeague = ({
 
           <div
             className="row geekleague-seasons"
+            aria-hidden="true"
             onClick={() => {
               setShowModal(false);
               setShowDelete(false);
@@ -131,13 +131,17 @@ const GeekLeague = ({
                 </h4>
 
                 <Link to={`/myGeekLeagues/${geekLeagueID}/season/${geekLeague.season._id}`}>
-                  <button className="btn my-btn see-more-btn">Détails par journée</button>
+                  <button type="button" className="btn my-btn see-more-btn">
+                    Détails par journée
+                  </button>
                 </Link>
 
                 <RankGeeks players={geekLeague.geeks} seasonID={geekLeague.season._id} />
 
                 <Link to={`/myGeekLeagues/${geekLeagueID}/season/${geekLeague.season._id}`}>
-                  <button className="btn my-btn see-more-btn">Détails par journée</button>
+                  <button type="button" className="btn my-btn see-more-btn">
+                    Détails par journée
+                  </button>
                 </Link>
               </div>
             </div>
@@ -146,11 +150,15 @@ const GeekLeague = ({
           {showModal && (
             <div className="my-modal-edit-geekleague">
               <div className="my-modal-body">
-                <span className="close-edit-modal" onClick={() => setShowModal(false)}>
+                <span
+                  aria-hidden="true"
+                  className="close-edit-modal"
+                  onClick={() => setShowModal(false)}
+                >
                   X
                 </span>
 
-                <h5 className="modal-title">Modifier "{geekLeague.name}" :</h5>
+                <h5 className="modal-title">Modifier &quot;{geekLeague.name}&quot; :</h5>
 
                 <hr />
 
@@ -178,13 +186,17 @@ const GeekLeague = ({
           {showDelete && (
             <div className="my-modal-delete-geekleague">
               <div className="my-modal-body">
-                <span className="close-delete-modal" onClick={() => setShowDelete(false)}>
+                <span
+                  aria-hidden="true"
+                  className="close-delete-modal"
+                  onClick={() => setShowDelete(false)}
+                >
                   X
                 </span>
 
                 <h5 className="modal-title">
                   <WarningIcon />
-                  &nbsp; Es-tu sûr de vouloir supprimer "{geekLeague.name}" ?
+                  &nbsp; Es-tu sûr de vouloir supprimer &quot;{geekLeague.name}&quot; ?
                 </h5>
 
                 <hr />
@@ -212,13 +224,17 @@ const GeekLeague = ({
           {showOut && (
             <div className="my-modal-delete-geekleague">
               <div className="my-modal-body">
-                <span className="close-delete-modal" onClick={() => setShowOut(false)}>
+                <span
+                  aria-hidden="true"
+                  className="close-delete-modal"
+                  onClick={() => setShowOut(false)}
+                >
                   X
                 </span>
 
                 <h5 className="modal-title">
                   <WarningIcon />
-                  &nbsp; Es-tu sûr de vouloir sortir de "{geekLeague.name}" ?
+                  &nbsp; Es-tu sûr de vouloir sortir de &quot;{geekLeague.name}&quot; ?
                 </h5>
 
                 <hr />
@@ -242,6 +258,14 @@ const GeekLeague = ({
       )}
     </div>
   );
+};
+
+GeekLeague.defaultProps = {
+  loading: false,
+};
+
+GeekLeague.propTypes = {
+  loading: PropTypes.bool,
 };
 
 export default GeekLeague;
