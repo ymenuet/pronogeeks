@@ -1,5 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import PropTypes from 'prop-types';
+
 import { Loader } from '../../components';
 import { Background, Container, PageTitle } from './Admin.styled';
 import SeasonsSection from './SeasonsSection';
@@ -22,6 +24,14 @@ const Admin = ({ loading }) => {
       </Background>
     </>
   );
+};
+
+Admin.defaultProps = {
+  loading: false,
+};
+
+Admin.propTypes = {
+  loading: PropTypes.bool,
 };
 
 export default Admin;

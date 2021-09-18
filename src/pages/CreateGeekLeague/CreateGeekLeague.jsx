@@ -1,6 +1,8 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
+import PropTypes from 'prop-types';
+
 import { Loader, GeekSelector } from '../../components';
 import { Input } from '../../ui/components';
 import { SeasonSelector } from '../../utils/components';
@@ -101,6 +103,14 @@ const CreateGeekLeague = ({ loading }) => {
       )}
     </div>
   );
+};
+
+CreateGeekLeague.defaultProps = {
+  loading: false,
+};
+
+CreateGeekLeague.propTypes = {
+  loading: PropTypes.bool,
 };
 
 export default CreateGeekLeague;

@@ -30,7 +30,7 @@ import './i18n';
 
 const NotFound = () => (
   <h2 className="page-404-heading">
-    Cette page n'existe pas...
+    Cette page n&apos;existe pas...
     <br />
     Retourne faire tes pronos au lieu de papilloner !
   </h2>

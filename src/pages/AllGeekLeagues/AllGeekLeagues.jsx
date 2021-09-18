@@ -1,5 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
+
 import { ErrorMessage, Loader } from '../../components';
 import { useUserGeekLeagues } from '../../utils/hooks';
 import './geekleagues.css';
@@ -55,6 +57,14 @@ const AllGeekLeagues = ({ loading }) => {
       )}
     </div>
   );
+};
+
+AllGeekLeagues.defaultProps = {
+  loading: false,
+};
+
+AllGeekLeagues.propTypes = {
+  loading: PropTypes.bool,
 };
 
 export default AllGeekLeagues;

@@ -1,15 +1,13 @@
 import React, { useEffect } from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { Link, Redirect, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { Loader } from '../../components';
 
+import { Loader } from '../../components';
 import { confirmEmail } from '../../state/actions/authActions';
 
-const ConfirmUser = ({
-  match: {
-    params: { userID, confirmToken },
-  },
-}) => {
+const ConfirmUser = () => {
+  const { userID, confirmToken } = useParams();
+
   const { user, usernameConfirmed, loading, error } = useSelector(({ authReducer }) => authReducer);
 
   const dispatch = useDispatch();
@@ -23,11 +21,13 @@ const ConfirmUser = ({
       className="my-content-homepage"
       style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
     >
-      {error || user?.confirmed ? (
-        <Redirect to="/" />
-      ) : loading || !usernameConfirmed ? (
+      {(error || user?.confirmed) && <Redirect to="/" />}
+
+      {!error && !user?.confirmed && (loading || !usernameConfirmed) && (
         <Loader tip="Enregistrement du compte..." color="rgb(4, 78, 199)" />
-      ) : (
+      )}
+
+      {!error && !user?.confirmed && !loading && usernameConfirmed && (
         <div
           style={{
             padding: 30,
