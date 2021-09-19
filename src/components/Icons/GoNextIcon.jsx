@@ -1,6 +1,7 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-const GoNextIcon = ({ className = null, color = 'white', size = '24px' }) => {
+const GoNextIcon = ({ className, color, size }) => {
   return (
     <svg
       className={className}
@@ -14,6 +15,18 @@ const GoNextIcon = ({ className = null, color = 'white', size = '24px' }) => {
       <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z" />
     </svg>
   );
+};
+
+GoNextIcon.defaultProps = {
+  size: '24px',
+  color: 'white',
+  className: undefined,
+};
+
+GoNextIcon.propTypes = {
+  size: PropTypes.string,
+  color: PropTypes.string,
+  className: PropTypes.string,
 };
 
 export default GoNextIcon;

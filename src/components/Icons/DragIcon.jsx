@@ -1,6 +1,7 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-const DragIcon = ({ size = '20px', color, className }) => {
+const DragIcon = ({ size, color, className }) => {
   return (
     <svg
       className={className}
@@ -23,6 +24,18 @@ const DragIcon = ({ size = '20px', color, className }) => {
       </g>
     </svg>
   );
+};
+
+DragIcon.defaultProps = {
+  size: '20px',
+  color: 'white',
+  className: undefined,
+};
+
+DragIcon.propTypes = {
+  size: PropTypes.string,
+  color: PropTypes.string,
+  className: PropTypes.string,
 };
 
 export default DragIcon;

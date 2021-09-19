@@ -1,4 +1,6 @@
 import React, { useEffect } from 'react';
+import PropTypes from 'prop-types';
+
 import './inputMatchweek.css';
 
 const InputMatchweek = ({
@@ -42,6 +44,22 @@ const InputMatchweek = ({
       </button>
     </form>
   ) : null;
+};
+
+InputMatchweek.defaultProps = {
+  lastMatchweek: undefined,
+  backgroundColor: undefined,
+  fontSize: undefined,
+};
+
+InputMatchweek.propTypes = {
+  matchweekInit: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+  matchweekFromInput: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+  setMatchweekFromInput: PropTypes.func.isRequired,
+  changeMatchweek: PropTypes.func.isRequired,
+  lastMatchweek: PropTypes.number,
+  backgroundColor: PropTypes.string,
+  fontSize: PropTypes.string,
 };
 
 export default InputMatchweek;

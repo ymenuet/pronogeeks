@@ -1,6 +1,7 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-const CorrectIcon = ({ size = '22px', color = '#28a745', className }) => {
+const CorrectIcon = ({ size, color, className }) => {
   return (
     <svg
       className={className}
@@ -26,6 +27,18 @@ const CorrectIcon = ({ size = '22px', color = '#28a745', className }) => {
       </g>
     </svg>
   );
+};
+
+CorrectIcon.defaultProps = {
+  size: '22px',
+  color: '#28a745',
+  className: undefined,
+};
+
+CorrectIcon.propTypes = {
+  size: PropTypes.string,
+  color: PropTypes.string,
+  className: PropTypes.string,
 };
 
 export default CorrectIcon;

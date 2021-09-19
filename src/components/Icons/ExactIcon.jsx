@@ -1,6 +1,7 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-const ExactIcon = ({ color = '#0041aa', size = '22px', className }) => {
+const ExactIcon = ({ color, size, className }) => {
   return (
     <svg
       className={className}
@@ -22,6 +23,18 @@ const ExactIcon = ({ color = '#0041aa', size = '22px', className }) => {
       </g>
     </svg>
   );
+};
+
+ExactIcon.defaultProps = {
+  size: '22px',
+  color: '#0041aa',
+  className: undefined,
+};
+
+ExactIcon.propTypes = {
+  size: PropTypes.string,
+  color: PropTypes.string,
+  className: PropTypes.string,
 };
 
 export default ExactIcon;

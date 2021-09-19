@@ -55,11 +55,11 @@ const RankingOneGeek = ({ user, geek, rank, seasonID, matchweek, header }) => {
   const giveMedal = () => {
     switch (rank) {
       case 1:
-        return <FirstIcon className="medal-icons-ranking" size="28px" color="#FFA500" />;
+        return <FirstIcon className="medal-icons-ranking" size="28px" />;
       case 2:
-        return <SecondIcon className="medal-icons-ranking" size="28px" color="#616060" />;
+        return <SecondIcon className="medal-icons-ranking" size="28px" />;
       case 3:
-        return <ThirdIcon className="medal-icons-ranking" size="28px" color="#6A3805" />;
+        return <ThirdIcon className="medal-icons-ranking" size="28px" />;
       default:
         return ` ${rank} - `;
     }

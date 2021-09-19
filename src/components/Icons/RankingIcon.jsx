@@ -1,6 +1,7 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-const RankingIcon = ({ size, color = '#F0F7F4', className }) => {
+const RankingIcon = ({ size, color, className }) => {
   return (
     <svg
       className={className}
@@ -17,6 +18,18 @@ const RankingIcon = ({ size, color = '#F0F7F4', className }) => {
       </g>
     </svg>
   );
+};
+
+RankingIcon.defaultProps = {
+  size: '24px',
+  color: '#F0F7F4',
+  className: undefined,
+};
+
+RankingIcon.propTypes = {
+  size: PropTypes.string,
+  color: PropTypes.string,
+  className: PropTypes.string,
 };
 
 export default RankingIcon;

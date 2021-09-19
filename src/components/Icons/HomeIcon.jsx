@@ -1,6 +1,7 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-const HomeIcon = ({ size = '1.6em', color = 'currentColor', className = null }) => {
+const HomeIcon = ({ size, color, className }) => {
   return (
     <svg
       className={className}
@@ -20,6 +21,18 @@ const HomeIcon = ({ size = '1.6em', color = 'currentColor', className = null }) 
       />
     </svg>
   );
+};
+
+HomeIcon.defaultProps = {
+  size: '1.6em',
+  color: 'currentColor',
+  className: undefined,
+};
+
+HomeIcon.propTypes = {
+  size: PropTypes.string,
+  color: PropTypes.string,
+  className: PropTypes.string,
 };
 
 export default HomeIcon;

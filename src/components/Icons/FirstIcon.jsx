@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const FirstIcon = ({ size, color, className }) => {
   return (
@@ -22,6 +23,18 @@ const FirstIcon = ({ size, color, className }) => {
       </g>
     </svg>
   );
+};
+
+FirstIcon.defaultProps = {
+  size: '24px',
+  color: '#FFA500',
+  className: undefined,
+};
+
+FirstIcon.propTypes = {
+  size: PropTypes.string,
+  color: PropTypes.string,
+  className: PropTypes.string,
 };
 
 export default FirstIcon;
