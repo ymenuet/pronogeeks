@@ -279,7 +279,7 @@ const Profile = ({ loading }) => {
               </div>
 
               <div className="modal-body">
-                <UsernameInput value={usernameInput} onChange={setUsernameInput} />
+                <UsernameInput value={usernameInput} onChange={setUsernameInput} name="username" />
               </div>
 
               <div className="modal-footer">
