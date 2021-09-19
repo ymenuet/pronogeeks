@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import UserModel from './UserModel';
 
 export default PropTypes.shape({
+  _id: PropTypes.string,
   geek: PropTypes.oneOfType([UserModel, PropTypes.string]),
   matchweek: PropTypes.number,
   season: PropTypes.string,

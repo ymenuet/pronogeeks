@@ -7,6 +7,7 @@ import {
 import TeamModel from './TeamModel';
 
 export default PropTypes.shape({
+  _id: PropTypes.string,
   season: PropTypes.string,
   matchweek: PropTypes.number,
   date: PropTypes.string,
