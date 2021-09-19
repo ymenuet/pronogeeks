@@ -189,7 +189,7 @@ RankingOneGeek.propTypes = {
   user: UserModel.isRequired,
   geek: UserModel.isRequired,
   rank: PropTypes.number.isRequired,
-  seasonID: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+  seasonID: PropTypes.string.isRequired,
   matchweek: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   header: PropTypes.bool,
 };

@@ -1,4 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
 import { GoBackIcon, GoNextIcon } from '../Icons';
 import './matchweekNavigation.css';
 
@@ -17,7 +19,7 @@ const MatchweekNavigation = ({
     <div className="previous-next-btns">
       {parseInt(matchweekNumber) !== 1 && (
         <div>
-          <button className="btn my-btn" onClick={previousPage}>
+          <button className="btn my-btn" onClick={previousPage} type="button">
             <GoBackIcon />
           </button>
         </div>
@@ -49,13 +51,34 @@ const MatchweekNavigation = ({
 
       {parseInt(matchweekNumber) !== 38 && (
         <div>
-          <button className="btn my-btn" onClick={nextPage}>
+          <button className="btn my-btn" onClick={nextPage} type="button">
             <GoNextIcon />
           </button>
         </div>
       )}
     </div>
   );
+};
+
+MatchweekNavigation.defaultProps = {
+  matchweekPoints: 0,
+  matchweekCorrects: 0,
+  gamesFinished: 0,
+  matchweekBonus: undefined,
+  myClassName: '',
+  noPronos: false,
+};
+
+MatchweekNavigation.propTypes = {
+  matchweekNumber: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  matchweekPoints: PropTypes.number,
+  matchweekCorrects: PropTypes.number,
+  gamesFinished: PropTypes.number,
+  matchweekBonus: PropTypes.number,
+  previousPage: PropTypes.func.isRequired,
+  nextPage: PropTypes.func.isRequired,
+  myClassName: PropTypes.string,
+  noPronos: PropTypes.bool,
 };
 
 export default MatchweekNavigation;

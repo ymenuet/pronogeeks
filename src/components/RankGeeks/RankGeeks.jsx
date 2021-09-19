@@ -79,7 +79,7 @@ RankGeeks.defaultProps = {
 
 RankGeeks.propTypes = {
   players: PropTypes.arrayOf(UserModel).isRequired,
-  seasonID: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+  seasonID: PropTypes.string.isRequired,
   generalRanking: PropTypes.bool,
   matchweek: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
