@@ -1,4 +1,4 @@
-import matchStatuses from '../../models/matchStatuses';
+import matchStatuses from '../../constants/matchStatuses';
 import { isMatchFinished } from '..';
 
 export default (statusShort, minutes) => {

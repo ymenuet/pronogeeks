@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 
 import { Loader, SocialLogins } from '../../components';
 import { openNotification, appendPhoto } from '../../utils/helpers';
-import { USERNAME_MAX_LENGTH } from '../../utils/constants';
+import { USERNAME_MAX_LENGTH } from '../../utils/constants/general';
 import './connectPages.css';
 
 import { signup } from '../../state/actions/authActions';

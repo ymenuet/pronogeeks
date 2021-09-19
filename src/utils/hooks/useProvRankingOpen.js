@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { PROV_RANKING_MATCHWEEK_LIMIT } from '../constants';
+import { PROV_RANKING_MATCHWEEK_LIMIT } from '../constants/general';
 
 import { closeProvRankings } from '../../state/actions/seasonActions';
 

@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+
+import userRoles from '../constants/userRoles';
 import { isMatchFinished } from '../helpers';
 import { useUser } from './useUser';
 import {
   MILLISECONDS_IN_30_MINUTES,
   MILLISECONDS_IN_1_DAY,
   MILLISECONDS_IN_1_WEEK,
-} from '../constants';
+} from '../constants/general';
 
 import { updateFixturesStatus, updateOdds } from '../../state/actions/apiFootballActions';
 
@@ -45,7 +47,7 @@ export const useConditionalFixturesUpdate = ({
       setLastOddsUpdated(lastOddsUpdate);
 
       if (
-        (user.role === 'SUPER GEEK' || user.role === 'GEEK ADMIN') &&
+        (user.role === userRoles.SUPER_GEEK || user.role === userRoles.GEEK_ADMIN) &&
         fixturesInLessThanOneWeek &&
         !loadingApi
       ) {

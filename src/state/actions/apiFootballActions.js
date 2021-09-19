@@ -17,7 +17,7 @@ import { LOGIN } from '../types/authTypes';
 import { updateMatchweekFixtures, updateMatchweekPronogeeks } from './helpers';
 import { printError, copyReducer } from '../../utils/helpers';
 import { SEASON_REDUCER_KEY, SEASON_MATCHWEEKS_KEY } from '../reducers/keys/season';
-import { RESET_TIMEOUT_IN_MS } from '../../utils/constants';
+import { RESET_TIMEOUT_IN_MS } from '../../utils/constants/general';
 
 const baseURL =
   process.env.NODE_ENV === 'production'

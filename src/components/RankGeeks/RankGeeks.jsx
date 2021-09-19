@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { RankingOneGeek } from '..';
 import { rankGeeks } from '../../utils/helpers';
 import { useUser } from '../../utils/hooks';
-import { SIZE_GENERAL_RANKING } from '../../utils/constants';
+import { SIZE_GENERAL_RANKING } from '../../utils/constants/general';
 
 const RankGeeks = ({ players, seasonID, generalRanking, matchweek }) => {
   const [ranking, setRanking] = useState(null);

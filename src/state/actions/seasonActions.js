@@ -18,7 +18,7 @@ import {
   NEXT_MATCHWEEKS_KEY,
   LAST_MATCHWEEKS_KEY,
 } from '../reducers/keys/season';
-import { MILLISECONDS_IN_3_HOURS } from '../../utils/constants';
+import { MILLISECONDS_IN_3_HOURS } from '../../utils/constants/general';
 
 const baseURL =
   process.env.NODE_ENV === 'production'

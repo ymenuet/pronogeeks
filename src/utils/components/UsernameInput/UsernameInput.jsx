@@ -4,7 +4,10 @@ import PropTypes from 'prop-types';
 
 import i18n from '../../../i18n';
 import Input from '../../../ui/components/Input';
-import { USERNAME_MAX_LENGTH, NOTIFICATION_DEFAULT_DURATION_SECONDS } from '../../constants';
+import {
+  USERNAME_MAX_LENGTH,
+  NOTIFICATION_DEFAULT_DURATION_SECONDS,
+} from '../../constants/general';
 import { openNotification } from '../../helpers';
 
 const UsernameInput = ({ name, value, onChange, disabled, label }) => {

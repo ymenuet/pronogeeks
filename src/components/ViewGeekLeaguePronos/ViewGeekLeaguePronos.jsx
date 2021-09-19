@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
+
 import { Loader, ErrorMessage, GeekProno } from '..';
 import { printFixtureStatus } from '../../utils/helpers';
 import {
@@ -11,6 +13,7 @@ import {
 import { CloseIcon } from '../Icons';
 import { preferredGeekleague } from '../../utils/classes/localStorage';
 import './viewGeekLeaguePronos.css';
+import { FixtureModel } from '../../utils/models';
 
 const applyWinnerClass = (winner, row) => (winner === row ? 'right-prono exact-prono' : '');
 
@@ -28,15 +31,16 @@ const ViewGeekLeaguePronos = ({ fixture, setShowLeagues }) => {
   const winner = useFixtureWinner(fixture);
 
   const changeLeague = async (e) => {
-    const geekLeagueID = e.target.value;
+    const newGeekLeagueID = e.target.value;
     setGeeksPronos(null);
-    setGeekLeagueID(geekLeagueID);
-    preferredGeekleague.set(geekLeagueID);
+    setGeekLeagueID(newGeekLeagueID);
+    preferredGeekleague.set(newGeekLeagueID);
   };
 
   return (
     <div className="view-pronos">
       <div className="view-pronos-header row">
+        {/* eslint-disable-next-line */}
         <span onClick={() => setShowLeagues(false)}>
           <CloseIcon color="rgb(4, 78, 199)" size="30px" />
         </span>
@@ -108,11 +112,15 @@ const ViewGeekLeaguePronos = ({ fixture, setShowLeagues }) => {
           !geeksPronos || errorGeekLeague || errorPronos ? 'align-items-center' : ''
         } view-pronos-body`}
       >
-        {errorGeekLeague || errorPronos ? (
+        {(errorGeekLeague || errorPronos) && (
           <ErrorMessage>{errorGeekLeague || errorPronos}</ErrorMessage>
-        ) : !geeksPronos ? (
+        )}
+
+        {!errorGeekLeague && !errorPronos && !geeksPronos && (
           <Loader size="small" tip="Chargement des pronos..." fontSize="2.4rem" container={false} />
-        ) : (
+        )}
+
+        {!errorGeekLeague && !errorPronos && geeksPronos && (
           <ul>
             {geeksPronos.map((prono) => (
               <GeekProno key={prono._id} pronogeek={prono} fixture={fixture} winner={winner} />
@@ -122,6 +130,11 @@ const ViewGeekLeaguePronos = ({ fixture, setShowLeagues }) => {
       </div>
     </div>
   );
+};
+
+ViewGeekLeaguePronos.propTypes = {
+  fixture: FixtureModel.isRequired,
+  setShowLeagues: PropTypes.func.isRequired,
 };
 
 export default ViewGeekLeaguePronos;

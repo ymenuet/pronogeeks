@@ -18,7 +18,7 @@ import {
   DETAILED_GEEKS_KEY,
 } from '../reducers/keys/geek';
 import { AUTH_REDUCER_KEY, USER_KEY } from '../reducers/keys/auth';
-import { RESET_TIMEOUT_IN_MS } from '../../utils/constants';
+import { RESET_TIMEOUT_IN_MS } from '../../utils/constants/general';
 
 import { printError, copyReducer, rankGeeks } from '../../utils/helpers';
 

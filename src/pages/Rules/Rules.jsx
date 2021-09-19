@@ -3,7 +3,7 @@ import React from 'react';
 import './rulesPrivacyPolicy.css';
 import { RulesProno } from '../../components';
 import { CorrectIcon, ExactIcon, FavTeamIcon } from '../../components/Icons';
-import { PROV_RANKING_MATCHWEEK_LIMIT } from '../../utils/constants';
+import { PROV_RANKING_MATCHWEEK_LIMIT } from '../../utils/constants/general';
 
 const Rules = () => {
   return (

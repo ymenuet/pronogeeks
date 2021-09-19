@@ -15,7 +15,7 @@ import { LOGIN } from '../types/authTypes';
 import { printError, copyReducer } from '../../utils/helpers';
 import { GEEKLEAGUE_REDUCER_KEY, GEEKLEAGUES_KEY } from '../reducers/keys/geekleague';
 import { AUTH_REDUCER_KEY, USER_KEY } from '../reducers/keys/auth';
-import { RESET_TIMEOUT_IN_MS } from '../../utils/constants';
+import { RESET_TIMEOUT_IN_MS } from '../../utils/constants/general';
 import { preferredGeekleague } from '../../utils/classes/localStorage';
 
 const baseURL =

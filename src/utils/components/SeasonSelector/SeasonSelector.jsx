@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 
 import i18n from '../../../i18n';
-import { SeasonModel } from '../../models/PropTypes';
+import { SeasonModel } from '../../models';
 import { Select } from '../../../ui/components';
 import { ErrorMessage } from '../../../components';
 

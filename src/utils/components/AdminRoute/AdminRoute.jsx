@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { Redirect, Route, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-import USER_ROLES from '../../models/userRoles';
+import userRoles from '../../constants/userRoles';
 import { useUser } from '../../hooks';
 
 const AdminRoute = ({ component: Component, ...rest }) => {
@@ -17,7 +17,7 @@ const AdminRoute = ({ component: Component, ...rest }) => {
       {...rest}
       render={(props) => {
         if (isUserConnected === 0 && !profileError) return <Component {...props} loading />;
-        if (isUserConnected && user.role === USER_ROLES.GEEK_ADMIN) return <Component {...props} />;
+        if (isUserConnected && user.role === userRoles.GEEK_ADMIN) return <Component {...props} />;
         return (
           <Redirect
             to={{

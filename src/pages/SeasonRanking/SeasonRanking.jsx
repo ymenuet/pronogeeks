@@ -7,7 +7,7 @@ import { ErrorMessage, Loader } from '../../components';
 import { DragIcon, SaveIcon, ListIcon } from '../../components/Icons';
 import { openNotification } from '../../utils/helpers';
 import { useSeason, useUserProvRanking, useProvRankingOpen } from '../../utils/hooks';
-import { PROV_RANKING_MATCHWEEK_LIMIT } from '../../utils/constants';
+import { PROV_RANKING_MATCHWEEK_LIMIT } from '../../utils/constants/general';
 import './seasonRanking.css';
 
 import { saveUserProvRanking } from '../../state/actions/geekActions';

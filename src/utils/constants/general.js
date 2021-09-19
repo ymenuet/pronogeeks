@@ -1,0 +1,9 @@
+export const RESET_TIMEOUT_IN_MS = 100;
+export const MILLISECONDS_IN_30_MINUTES = 1000 * 60 * 30;
+export const MILLISECONDS_IN_3_HOURS = 1000 * 60 * 60 * 3;
+export const MILLISECONDS_IN_1_DAY = 1000 * 60 * 60 * 24;
+export const MILLISECONDS_IN_1_WEEK = 1000 * 60 * 60 * 24 * 7;
+export const PROV_RANKING_MATCHWEEK_LIMIT = 7;
+export const SIZE_GENERAL_RANKING = 20;
+export const NOTIFICATION_DEFAULT_DURATION_SECONDS = 6;
+export const USERNAME_MAX_LENGTH = 16;

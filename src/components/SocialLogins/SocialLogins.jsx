@@ -1,5 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
+
 import './socialLogins.css';
 
 const SocialLogins = ({ login, home }) => {
@@ -42,6 +44,16 @@ const SocialLogins = ({ login, home }) => {
       )}
     </>
   );
+};
+
+SocialLogins.defaultProps = {
+  login: false,
+  home: false,
+};
+
+SocialLogins.propTypes = {
+  login: PropTypes.bool,
+  home: PropTypes.bool,
 };
 
 export default SocialLogins;
