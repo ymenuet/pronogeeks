@@ -7,6 +7,7 @@ import { useAllGeeks } from '../../utils/hooks';
 import { Avatar, MultipleSelect } from '../../ui/components';
 
 import { OptionContainer, Username } from './GeekSelector.styled';
+import { GeekLeagueModel } from '../../utils/models';
 
 const Option = ({ username, photo, onMouseDown, onMouseEnter, onClick, preSelected }) => {
   return (
@@ -22,20 +23,38 @@ const Option = ({ username, photo, onMouseDown, onMouseEnter, onClick, preSelect
   );
 };
 
+Option.defaultProps = {
+  username: undefined,
+  photo: undefined,
+  preSelected: false,
+};
+
+Option.propTypes = {
+  username: PropTypes.string,
+  photo: PropTypes.string,
+  onMouseDown: PropTypes.func.isRequired,
+  onMouseEnter: PropTypes.func.isRequired,
+  onClick: PropTypes.func.isRequired,
+  preSelected: PropTypes.bool,
+};
+
 const GeekSelector = ({ geekLeague, name, onChange, validation, label, labelColor, value }) => {
   const { geeks, loadingGeeks, errorGeeks } = useAllGeeks(geekLeague);
 
-  return errorGeeks ? (
-    <ErrorMessage>{errorGeeks}</ErrorMessage>
-  ) : loadingGeeks ? (
-    <Loader
-      tip="Chargement des joueurs..."
-      size="small"
-      fontSize="2.4rem"
-      tipSize="1rem"
-      container={false}
-    />
-  ) : (
+  if (errorGeeks) return <ErrorMessage>{errorGeeks}</ErrorMessage>;
+
+  if (loadingGeeks)
+    return (
+      <Loader
+        tip="Chargement des joueurs..."
+        size="small"
+        fontSize="2.4rem"
+        tipSize="1rem"
+        container={false}
+      />
+    );
+
+  return (
     <MultipleSelect
       onChange={onChange}
       name={name}
@@ -62,11 +81,11 @@ GeekSelector.defaultProps = {
 
 GeekSelector.propTypes = {
   name: PropTypes.string.isRequired,
-  value: PropTypes.array.isRequired,
+  value: PropTypes.arrayOf(PropTypes.string).isRequired,
   label: PropTypes.string,
   labelColor: PropTypes.string,
   validation: PropTypes.string,
-  geekLeague: PropTypes.shape({}), // TODO: create GeekLeagueModel
+  geekLeague: GeekLeagueModel,
   onChange: PropTypes.func.isRequired,
 };
 

@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
+
 import { determineFixtureWinner } from '../../utils/helpers';
+import { FixtureModel, PronogeekModel } from '../../utils/models';
+import fixtureWinners, { LIST_OF_ALL_FIXTURE_WINNERS } from '../../utils/constants/fixtureWinners';
 import './geekProno.css';
 
 const GeekProno = ({ pronogeek, fixture, winner }) => {
@@ -12,8 +16,8 @@ const GeekProno = ({ pronogeek, fixture, winner }) => {
       if ((homeProno || homeProno === 0) && (awayProno || awayProno === 0)) {
         const prono = determineFixtureWinner(homeProno, awayProno);
         if (winner === prono) setCorrect(true);
-        const exact = fixture.goalsHomeTeam === homeProno && fixture.goalsAwayTeam === awayProno;
-        if (exact) setExact(true);
+        const isExact = fixture.goalsHomeTeam === homeProno && fixture.goalsAwayTeam === awayProno;
+        if (isExact) setExact(true);
       }
     }
   }, [pronogeek, fixture, winner]);
@@ -43,6 +47,16 @@ const GeekProno = ({ pronogeek, fixture, winner }) => {
       </div>
     </li>
   );
+};
+
+GeekProno.defaultProps = {
+  winner: fixtureWinners.DRAW,
+};
+
+GeekProno.propTypes = {
+  pronogeek: PronogeekModel.isRequired,
+  fixture: FixtureModel.isRequired,
+  winner: PropTypes.oneOf(LIST_OF_ALL_FIXTURE_WINNERS),
 };
 
 export default GeekProno;

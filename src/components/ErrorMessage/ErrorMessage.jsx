@@ -1,4 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
 import { WarningIcon } from '../Icons';
 import './errorMessage.css';
 
@@ -9,6 +11,10 @@ const ErrorMessage = ({ children, ...rest }) => {
       &nbsp;{children}
     </p>
   );
+};
+
+ErrorMessage.propTypes = {
+  children: PropTypes.node.isRequired,
 };
 
 export default ErrorMessage;

@@ -1,10 +1,12 @@
 import React from 'react';
 import { Skeleton } from 'antd';
+
 import { printFixtureDate, printFixtureStatus } from '../../utils/helpers';
 import { useMatchStarted, useGeekFixtureProno } from '../../utils/hooks';
 import { FavTeamIcon } from '../Icons';
 import { ErrorMessage } from '..';
 import './fixture.css';
+import { FixtureModel, UserModel } from '../../utils/models';
 
 const GeekFixture = ({ fixture, geek }) => {
   const matchStarted = useMatchStarted(fixture);
@@ -75,6 +77,7 @@ const GeekFixture = ({ fixture, geek }) => {
               ) : (
                 <>
                   <td className="prono-input-col">
+                    {/* eslint-disable-next-line */}
                     <label>Buts domicile :</label>
                     <input
                       className="prono-input"
@@ -112,6 +115,7 @@ const GeekFixture = ({ fixture, geek }) => {
                   </td>
 
                   <td className="prono-input-col">
+                    {/* eslint-disable-next-line */}
                     <label>Buts extérieur :</label>
                     <input
                       className="prono-input"
@@ -138,6 +142,11 @@ const GeekFixture = ({ fixture, geek }) => {
       </table>
     </div>
   );
+};
+
+GeekFixture.propTypes = {
+  fixture: FixtureModel.isRequired,
+  geek: UserModel.isRequired,
 };
 
 export default GeekFixture;

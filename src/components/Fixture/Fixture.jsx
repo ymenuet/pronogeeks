@@ -1,6 +1,8 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Skeleton } from 'antd';
+import PropTypes from 'prop-types';
+
 import { printFixtureDate, printFixtureStatus } from '../../utils/helpers';
 import { useUserFixtureProno, useMatchStarted, useShowLeaguesPronos } from '../../utils/hooks';
 import { SavePronoButton, ViewGeekLeaguePronos, ErrorMessage } from '..';
@@ -8,6 +10,7 @@ import { FavTeamIcon } from '../Icons';
 import './fixture.css';
 
 import { handleInputHomeProno, handleInputAwayProno } from '../../state/actions/pronogeekActions';
+import { FixtureModel } from '../../utils/models';
 
 const Fixture = ({ fixture, showLeaguePronos, setShowLeaguePronos, errorProno, savingAll }) => {
   const { pronogeek, homeScore, awayScore, modified } = useUserFixtureProno(fixture);
@@ -85,6 +88,7 @@ const Fixture = ({ fixture, showLeaguePronos, setShowLeaguePronos, errorProno, s
           ) : (
             <tr className="prono-section">
               <td className="prono-input-col">
+                {/* eslint-disable-next-line */}
                 <label>Buts domicile :</label>
                 <input
                   className="prono-input"
@@ -112,6 +116,7 @@ const Fixture = ({ fixture, showLeaguePronos, setShowLeaguePronos, errorProno, s
               </td>
 
               <td className="prono-input-col">
+                {/* eslint-disable-next-line */}
                 <label>Buts extérieur :</label>
                 <input
                   className="prono-input"
@@ -154,6 +159,21 @@ const Fixture = ({ fixture, showLeaguePronos, setShowLeaguePronos, errorProno, s
       {showLeagues && <ViewGeekLeaguePronos fixture={fixture} setShowLeagues={setShowLeagues} />}
     </div>
   );
+};
+
+Fixture.defaultProps = {
+  fixture: undefined,
+  showLeaguePronos: false,
+  errorProno: undefined,
+  savingAll: false,
+};
+
+Fixture.propTypes = {
+  fixture: FixtureModel,
+  showLeaguePronos: PropTypes.bool,
+  setShowLeaguePronos: PropTypes.func.isRequired,
+  errorProno: PropTypes.string,
+  savingAll: PropTypes.bool,
 };
 
 export default Fixture;
