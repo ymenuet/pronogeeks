@@ -1,14 +1,17 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import { fullDateFormatter } from '../../utils/helpers';
 import { CorrectIcon, ExactIcon, FavTeamIcon } from '../Icons';
 import './rulesProno.css';
+import { SeasonModel } from '../../utils/models';
 
 const RulesProno = ({ setShowRules, lastScoresUpdated, lastOddsUpdated, season }) => {
   return (
     <>
       {setShowRules && (
         <>
+          {/* eslint-disable-next-line */}
           <span onClick={() => setShowRules(false)}>X</span>
           <h4>Règles des pronogeeks :</h4>
           <hr />
@@ -22,10 +25,11 @@ const RulesProno = ({ setShowRules, lastScoresUpdated, lastOddsUpdated, season }
         </li>
         <li>
           Les cotes sont actualisées une fois par jour (à partir de 7 jours avant le début de la
-          journée). À partir de 30 minutes avant le début d'un match, ses cotes ne changent plus.{' '}
+          journée). À partir de 30 minutes avant le début d&apos;un match, ses cotes ne changent
+          plus.{' '}
           {lastOddsUpdated && `(dernière mise à jour le ${fullDateFormatter(lastOddsUpdated)})`}
         </li>
-        <li>Il n'est plus possible de changer son pronogeek après le coup d'envoi.</li>
+        <li>Il n&apos;est plus possible de changer son pronogeek après le coup d&apos;envoi.</li>
         <li>
           Un pronogeek <b>correct</b> (bon vainqueur ou match nul) rapporte le nombre de points
           indiqués dans les cotes de la rencontre.
@@ -35,10 +39,10 @@ const RulesProno = ({ setShowRules, lastScoresUpdated, lastOddsUpdated, season }
           correspondante.
         </li>
         <li>
-          Un pronogeek correct sur un match de son <b>équipe de coeur</b> <FavTeamIcon /> (qu'elle
-          soit gagnante ou perdante) rapporte 30 points bonus. L'équipe de coeur est choisie avant
-          de commencer à pronogeeker une saison, et ne peut plus être changée pendant toute la durée
-          de cette dernière.
+          Un pronogeek correct sur un match de son <b>équipe de coeur</b> <FavTeamIcon />{' '}
+          (qu&apos;elle soit gagnante ou perdante) rapporte 30 points bonus. L&apos;équipe de coeur
+          est choisie avant de commencer à pronogeeker une saison, et ne peut plus être changée
+          pendant toute la durée de cette dernière.
         </li>
         <li className="bonus-details-list-item">
           Détail des bonus par journée {season && `de ${season.leagueName}`}:
@@ -115,6 +119,19 @@ const RulesProno = ({ setShowRules, lastScoresUpdated, lastOddsUpdated, season }
       </ul>
     </>
   );
+};
+
+RulesProno.defaultProps = {
+  setShowRules: undefined,
+  lastScoresUpdated: new Date(),
+  lastOddsUpdated: new Date(),
+};
+
+RulesProno.propTypes = {
+  setShowRules: PropTypes.func,
+  lastScoresUpdated: PropTypes.string,
+  lastOddsUpdated: PropTypes.string,
+  season: SeasonModel.isRequired,
 };
 
 export default RulesProno;

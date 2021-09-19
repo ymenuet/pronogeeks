@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
+
 import { RankingOneGeek } from '..';
 import { rankGeeks } from '../../utils/helpers';
 import { useUser } from '../../utils/hooks';
 import { SIZE_GENERAL_RANKING } from '../../utils/constants/general';
+import { UserModel } from '../../utils/models';
 
 const RankGeeks = ({ players, seasonID, generalRanking, matchweek }) => {
   const [ranking, setRanking] = useState(null);
@@ -13,16 +16,16 @@ const RankGeeks = ({ players, seasonID, generalRanking, matchweek }) => {
   useEffect(() => {
     if (players) {
       if (!generalRanking) {
-        const ranking = rankGeeks(players, seasonID, matchweek);
-        setRanking(ranking);
+        const rankingToSet = rankGeeks(players, seasonID, matchweek);
+        setRanking(rankingToSet);
       } else setRanking(players.slice(0, SIZE_GENERAL_RANKING));
     }
   }, [players, seasonID, matchweek, setRanking, generalRanking]);
 
   useEffect(() => {
-    const setUserRanking = (user, ranking) => {
-      let indexUser = ranking.map((player) => player._id).indexOf(user._id);
-      while (ranking[indexUser].tied) indexUser--;
+    const setUserRanking = (geek, oneRanking) => {
+      let indexUser = oneRanking.map((player) => player._id).indexOf(geek._id);
+      while (oneRanking[indexUser].tied) indexUser -= 1;
       setUserRank(indexUser + 1);
     };
 
@@ -34,7 +37,7 @@ const RankGeeks = ({ players, seasonID, generalRanking, matchweek }) => {
 
   const getRank = (geeks, index) => {
     let i = index;
-    while (geeks[i].tied) i--;
+    while (geeks[i].tied) i -= 1;
     return i + 1;
   };
 
@@ -67,6 +70,18 @@ const RankGeeks = ({ players, seasonID, generalRanking, matchweek }) => {
       ))}
     </ul>
   ) : null;
+};
+
+RankGeeks.defaultProps = {
+  generalRanking: false,
+  matchweek: undefined,
+};
+
+RankGeeks.propTypes = {
+  players: PropTypes.arrayOf(UserModel).isRequired,
+  seasonID: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+  generalRanking: PropTypes.bool,
+  matchweek: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 
 export default RankGeeks;

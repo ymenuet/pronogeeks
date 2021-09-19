@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
+
 import {
   CorrectIcon,
   ExactIcon,
@@ -11,6 +13,7 @@ import {
 } from '../Icons';
 import { getUserSeasonFromProfile, getUserMatchweekFromProfile } from '../../utils/helpers';
 import './rankingOneGeek.css';
+import { UserModel } from '../../utils/models';
 
 const iconSize = '20px';
 
@@ -175,6 +178,20 @@ const RankingOneGeek = ({ user, geek, rank, seasonID, matchweek, header }) => {
       </div>
     </li>
   );
+};
+
+RankingOneGeek.defaultProps = {
+  header: false,
+  matchweek: undefined,
+};
+
+RankingOneGeek.propTypes = {
+  user: UserModel.isRequired,
+  geek: UserModel.isRequired,
+  rank: PropTypes.number.isRequired,
+  seasonID: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+  matchweek: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  header: PropTypes.bool,
 };
 
 export default RankingOneGeek;
