@@ -27,6 +27,14 @@ const RankingOneGeek = ({ user, geek, rank, seasonID, matchweek, header }) => {
   useEffect(() => {
     const geekSeason = getUserSeasonFromProfile(geek, seasonID);
 
+    const setToZeros = () => {
+      setTotalPoints(0);
+      setCorrectPronos(0);
+      setExactPronos(0);
+      setFavTeamBonus(false);
+      setFavTeam(null);
+    };
+
     if (geekSeason) {
       setFavTeam(geekSeason.favTeam);
 
@@ -37,19 +45,14 @@ const RankingOneGeek = ({ user, geek, rank, seasonID, matchweek, header }) => {
         setCorrectPronos(geekMatchweek.numberCorrects);
         setExactPronos(geekMatchweek.numberExacts);
         setFavTeamBonus(geekMatchweek.bonusFavTeam);
-      } else {
+      } else if (matchweek) setToZeros();
+      else {
         setTotalPoints(geekSeason.totalPoints || geekSeason.initialPoints);
         setCorrectPronos(geekSeason.numberCorrects || geekSeason.initialNumberCorrects);
         setExactPronos(geekSeason.numberExacts || geekSeason.initialNumberExacts);
         setFavTeamBonus(geekSeason.bonusFavTeam || geekSeason.initialBonusFavTeam);
       }
-    } else {
-      setTotalPoints(0);
-      setCorrectPronos(0);
-      setExactPronos(0);
-      setFavTeamBonus(false);
-      setFavTeam(null);
-    }
+    } else setToZeros();
   }, [geek, matchweek, seasonID]);
 
   const giveMedal = () => {
@@ -68,7 +71,7 @@ const RankingOneGeek = ({ user, geek, rank, seasonID, matchweek, header }) => {
   const favTeamInfo = () => {
     if (matchweek)
       return (
-        favTeamBonus && (
+        favTeamBonus > 0 && (
           <span className="ranking-icon">
             <FavTeamIcon size={iconSize} />
             <div className="ranking-icon-details ranking-icon-details-right">

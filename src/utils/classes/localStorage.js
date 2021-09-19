@@ -3,16 +3,20 @@ class LocalStorage {
     this.key = key;
   }
 
-  get() {
-    return localStorage.getItem(this.key);
+  getKey(id) {
+    return id ? `${this.key}_${id}` : this.key;
   }
 
-  set(value) {
-    localStorage.setItem(this.key, value);
+  get(id) {
+    return localStorage.getItem(this.getKey(id));
   }
 
-  remove() {
-    localStorage.removeItem(this.key);
+  set(value, id) {
+    localStorage.setItem(this.getKey(id), value);
+  }
+
+  remove(id) {
+    localStorage.removeItem(this.getKey(id));
   }
 }
 
@@ -23,4 +27,4 @@ export const STORAGE_KEYS = {
 
 export const preferredTheme = new LocalStorage(STORAGE_KEYS.THEME_PREFERENCE);
 
-export const preferredGeekleague = new LocalStorage(STORAGE_KEYS.GEEKLEAGUE_PREFERENCE);
+export const preferredSeasonGeekleague = new LocalStorage(STORAGE_KEYS.GEEKLEAGUE_PREFERENCE);

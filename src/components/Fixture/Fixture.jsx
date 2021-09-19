@@ -164,7 +164,7 @@ const Fixture = ({ fixture, showLeaguePronos, setShowLeaguePronos, errorProno, s
 Fixture.defaultProps = {
   fixture: undefined,
   showLeaguePronos: false,
-  errorProno: undefined,
+  errorProno: false,
   savingAll: false,
 };
 
@@ -172,7 +172,7 @@ Fixture.propTypes = {
   fixture: FixtureModel,
   showLeaguePronos: PropTypes.bool,
   setShowLeaguePronos: PropTypes.func.isRequired,
-  errorProno: PropTypes.string,
+  errorProno: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   savingAll: PropTypes.bool,
 };
 

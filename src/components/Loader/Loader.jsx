@@ -40,7 +40,7 @@ Loader.propTypes = {
   fontSize: PropTypes.string,
   container: PropTypes.bool,
   className: PropTypes.string,
-  style: PropTypes.objectOf(PropTypes.oneOf([PropTypes.string, PropTypes.number])),
+  style: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number])),
 };
 
 export default Loader;

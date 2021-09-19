@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import { Loader, ErrorMessage, GeekProno } from '..';
+import fixtureWinners from '../../utils/constants/fixtureWinners';
 import { printFixtureStatus } from '../../utils/helpers';
 import {
   useGeekLeague,
@@ -11,14 +12,14 @@ import {
   useFixtureWinner,
 } from '../../utils/hooks';
 import { CloseIcon } from '../Icons';
-import { preferredGeekleague } from '../../utils/classes/localStorage';
+import { preferredSeasonGeekleague } from '../../utils/classes/localStorage';
 import './viewGeekLeaguePronos.css';
 import { FixtureModel } from '../../utils/models';
 
 const applyWinnerClass = (winner, row) => (winner === row ? 'right-prono exact-prono' : '');
 
 const ViewGeekLeaguePronos = ({ fixture, setShowLeagues }) => {
-  const { geekLeagueHistoryID, user } = useGeekLeagueHistory();
+  const { geekLeagueHistoryID, user } = useGeekLeagueHistory(fixture.season);
   const [geekLeagueID, setGeekLeagueID] = useState(geekLeagueHistoryID);
   useEffect(() => {
     setGeekLeagueID(geekLeagueHistoryID);
@@ -34,7 +35,7 @@ const ViewGeekLeaguePronos = ({ fixture, setShowLeagues }) => {
     const newGeekLeagueID = e.target.value;
     setGeeksPronos(null);
     setGeekLeagueID(newGeekLeagueID);
-    preferredGeekleague.set(newGeekLeagueID);
+    preferredSeasonGeekleague.set(newGeekLeagueID, fixture.season);
   };
 
   return (
@@ -54,11 +55,15 @@ const ViewGeekLeaguePronos = ({ fixture, setShowLeagues }) => {
               onChange={changeLeague}
               value={geekLeague?._id}
             >
-              {user.geekLeagues.map((oneGeekleague) => (
-                <option key={oneGeekleague._id} value={oneGeekleague._id}>
-                  {oneGeekleague.name}
-                </option>
-              ))}
+              {user.geekLeagues.map((oneGeekleague) => {
+                if (oneGeekleague.season === fixture.season)
+                  return (
+                    <option key={oneGeekleague._id} value={oneGeekleague._id}>
+                      {oneGeekleague.name}
+                    </option>
+                  );
+                return null;
+              })}
             </select>
 
             <p className="link-to-ranking-matchweek">
@@ -98,9 +103,15 @@ const ViewGeekLeaguePronos = ({ fixture, setShowLeagues }) => {
               </tr>
 
               <tr>
-                <td className={applyWinnerClass(winner, 'Home')}>{fixture.oddsWinHome}</td>
-                <td className={applyWinnerClass(winner, 'Draw')}>{fixture.oddsDraw}</td>
-                <td className={applyWinnerClass(winner, 'Away')}>{fixture.oddsWinAway}</td>
+                <td className={applyWinnerClass(winner, fixtureWinners.HOME)}>
+                  {fixture.oddsWinHome}
+                </td>
+                <td className={applyWinnerClass(winner, fixtureWinners.DRAW)}>
+                  {fixture.oddsDraw}
+                </td>
+                <td className={applyWinnerClass(winner, fixtureWinners.AWAY)}>
+                  {fixture.oddsWinAway}
+                </td>
               </tr>
             </tbody>
           </table>

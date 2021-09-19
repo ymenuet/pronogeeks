@@ -16,7 +16,7 @@ import { printError, copyReducer } from '../../utils/helpers';
 import { GEEKLEAGUE_REDUCER_KEY, GEEKLEAGUES_KEY } from '../reducers/keys/geekleague';
 import { AUTH_REDUCER_KEY, USER_KEY } from '../reducers/keys/auth';
 import { RESET_TIMEOUT_IN_MS } from '../../utils/constants/general';
-import { preferredGeekleague } from '../../utils/classes/localStorage';
+import { preferredSeasonGeekleague } from '../../utils/classes/localStorage';
 
 const baseURL =
   process.env.NODE_ENV === 'production'
@@ -29,9 +29,14 @@ const geekleagueService = axios.create({
 });
 
 function deleteLeagueFromStore({ dispatch, getState, geekleagueID, type, resetType }) {
+  let seasonID;
   const filteredArray = Object.values(
     copyReducer(getState, GEEKLEAGUE_REDUCER_KEY, GEEKLEAGUES_KEY)
-  ).filter((league) => league._id !== geekleagueID);
+  ).filter((league) => {
+    if (league._id !== geekleagueID) return true;
+    seasonID = league.season._id || league.season;
+    return false;
+  });
   const filteredLeagues = {};
 
   filteredArray.map((league) => {
@@ -52,7 +57,8 @@ function deleteLeagueFromStore({ dispatch, getState, geekleagueID, type, resetTy
 
   const newUser = copyReducer(getState, AUTH_REDUCER_KEY, USER_KEY);
   newUser.geekLeagues = newUser.geekLeagues.filter((league) => league._id !== geekleagueID);
-  if (`${preferredGeekleague.get()}` === `${geekleagueID}`) preferredGeekleague.remove();
+  if (`${preferredSeasonGeekleague.get(seasonID)}` === `${geekleagueID}`)
+    preferredSeasonGeekleague.remove(seasonID);
 
   dispatch({
     type: LOGIN,

@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import { useUser } from '../../utils/hooks';
+import userRoles from '../../utils/constants/userRoles';
 import './pronosAdminButtons.css';
 
 import { updateFixturesStatus, updateOdds } from '../../state/actions/apiFootballActions';
@@ -15,7 +16,7 @@ const PronosAdminButtons = ({ seasonID, matchweekNumber }) => {
   const dispatch = useDispatch();
 
   return (
-    user.role === 'GEEK ADMIN' && (
+    user.role === userRoles.GEEK_ADMIN && (
       <div>
         <button
           className="btn my-btn admin-btn top"

@@ -47,6 +47,7 @@ const InputMatchweek = ({
 };
 
 InputMatchweek.defaultProps = {
+  matchweekFromInput: undefined,
   lastMatchweek: undefined,
   backgroundColor: undefined,
   fontSize: undefined,
@@ -54,7 +55,7 @@ InputMatchweek.defaultProps = {
 
 InputMatchweek.propTypes = {
   matchweekInit: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
-  matchweekFromInput: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+  matchweekFromInput: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   setMatchweekFromInput: PropTypes.func.isRequired,
   changeMatchweek: PropTypes.func.isRequired,
   lastMatchweek: PropTypes.number,
