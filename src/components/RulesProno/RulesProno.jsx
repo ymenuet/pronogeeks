@@ -123,15 +123,16 @@ const RulesProno = ({ setShowRules, lastScoresUpdated, lastOddsUpdated, season }
 
 RulesProno.defaultProps = {
   setShowRules: undefined,
-  lastScoresUpdated: new Date(),
-  lastOddsUpdated: new Date(),
+  lastScoresUpdated: undefined,
+  lastOddsUpdated: undefined,
+  season: undefined,
 };
 
 RulesProno.propTypes = {
   setShowRules: PropTypes.func,
-  lastScoresUpdated: PropTypes.string,
-  lastOddsUpdated: PropTypes.string,
-  season: SeasonModel.isRequired,
+  lastScoresUpdated: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  lastOddsUpdated: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  season: SeasonModel,
 };
 
 export default RulesProno;
