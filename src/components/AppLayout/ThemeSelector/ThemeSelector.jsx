@@ -18,8 +18,8 @@ const ThemeSelector = () => {
   const theme = useThemePreference();
 
   const handleThemeChange = (checked) => {
-    const theme = checked ? checkedTheme : uncheckedTheme;
-    dispatch(changeTheme(theme));
+    const newTheme = checked ? checkedTheme : uncheckedTheme;
+    dispatch(changeTheme(newTheme));
   };
   return (
     <Container>

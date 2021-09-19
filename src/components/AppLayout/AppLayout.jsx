@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import PropTypes from 'prop-types';
+
 import { HomeIcon } from '../Icons';
 import { useCurrentUserProfile, useAccountDeleted } from '../../utils/hooks';
 import './appLayout.css';
@@ -38,7 +40,11 @@ const AppLayout = ({ children }) => {
             {isUserConnected ? (
               <>
                 <li className="nav-item  mobile-list-item">
-                  <button className="nav-link navbar-btns" onClick={() => dispatch(logout())}>
+                  <button
+                    className="nav-link navbar-btns"
+                    type="button"
+                    onClick={() => dispatch(logout())}
+                  >
                     Déconnexion
                   </button>
                 </li>
@@ -76,7 +82,11 @@ const AppLayout = ({ children }) => {
                         </Link>
                       </li>
                       <li className="nav-item">
-                        <button className="nav-link navbar-btns" onClick={() => dispatch(logout())}>
+                        <button
+                          className="nav-link navbar-btns"
+                          type="button"
+                          onClick={() => dispatch(logout())}
+                        >
                           Déconnexion
                         </button>
                       </li>
@@ -118,6 +128,10 @@ const AppLayout = ({ children }) => {
       })}
     </>
   );
+};
+
+AppLayout.propTypes = {
+  children: PropTypes.node.isRequired,
 };
 
 export default AppLayout;
