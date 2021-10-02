@@ -32,6 +32,11 @@ export const StyledInput = styled.input`
   &::placeholder {
     color: ${({ theme }) => theme.disabled};
   }
+
+  &:-webkit-autofill {
+    box-shadow: 0 0 1000px 0 ${themeSelector.background} inset;
+    -webkit-box-shadow: 0 0 1000px 0 ${themeSelector.background} inset;
+  }
 `;
 
 export const IconWrapper = styled.div`

@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { Form } from 'antd';
 import PropTypes from 'prop-types';
 
 import { SocialLogins, Loader } from '../../components';
@@ -17,8 +16,6 @@ const formNames = {
 };
 
 const Login = ({ loadingUser }) => {
-  const [form] = Form.useForm();
-
   const dispatch = useDispatch();
   const handleLogin = ({ email, password }) => dispatch(login({ email, password }));
   const { inputsProps, handleSubmit } = useForm({
