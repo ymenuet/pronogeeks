@@ -43,11 +43,21 @@ const Login = ({ loadingUser }) => {
 
             <form onSubmit={handleSubmit}>
               <InputWrapper>
-                <Input placeholder="roi.geek@pronogeeks.fr" {...inputsProps[formNames.email]} />
+                <Input
+                  placeholder="roi.geek@pronogeeks.fr"
+                  label="Email :"
+                  labelColor="white"
+                  {...inputsProps[formNames.email]}
+                />
               </InputWrapper>
 
               <InputWrapper>
-                <PasswordInput placeholder="********" {...inputsProps[formNames.password]} />
+                <PasswordInput
+                  placeholder="********"
+                  label="Mot de passe :"
+                  labelColor="white"
+                  {...inputsProps[formNames.password]}
+                />
               </InputWrapper>
 
               <div style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
