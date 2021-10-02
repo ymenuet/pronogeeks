@@ -1,19 +1,39 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { Form, Input } from 'antd';
+import { Form } from 'antd';
 import PropTypes from 'prop-types';
 
 import { SocialLogins, Loader } from '../../components';
+import { Input, PasswordInput } from '../../ui/components';
+import { useForm } from '../../utils/hooks';
 import { login } from '../../state/actions/authActions';
+import { InputWrapper } from './Login.styled';
 import './connectPages.css';
+
+const formNames = {
+  email: 'email',
+  password: 'password',
+};
 
 const Login = ({ loadingUser }) => {
   const [form] = Form.useForm();
 
-  const { loading } = useSelector(({ authReducer }) => authReducer);
-
   const dispatch = useDispatch();
+  const handleLogin = ({ email, password }) => dispatch(login({ email, password }));
+  const { inputsProps, handleSubmit } = useForm({
+    initialValues: {
+      [formNames.email]: '',
+      [formNames.password]: '',
+    },
+    onSubmit: handleLogin,
+    validations: {
+      [formNames.email]: {},
+      [formNames.password]: {},
+    },
+  });
+
+  const { loading } = useSelector(({ authReducer }) => authReducer);
 
   return (
     <div className="register-pages">
@@ -24,41 +44,14 @@ const Login = ({ loadingUser }) => {
           <div className="col-10 offset-1 col-sm-8 offset-sm-2 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4">
             <h2>Se connecter</h2>
 
-            <Form
-              form={form}
-              onFinish={({ email, password }) => dispatch(login({ email, password }))}
-              layout="vertical"
-              name="basic"
-              initialValues={{
-                remember: true,
-              }}
-            >
-              <Form.Item
-                type="email"
-                label="Email :"
-                name="email"
-                rules={[
-                  {
-                    required: true,
-                    message: `L'email est nécessaire pour te connecter à ton compte`,
-                  },
-                ]}
-              >
-                <Input placeholder="roi.geek@pronogeeks.fr" />
-              </Form.Item>
+            <form onSubmit={handleSubmit}>
+              <InputWrapper>
+                <Input placeholder="roi.geek@pronogeeks.fr" {...inputsProps[formNames.email]} />
+              </InputWrapper>
 
-              <Form.Item
-                label="Mot de passe :"
-                name="password"
-                rules={[
-                  {
-                    required: true,
-                    message: `N'oublie pas ton mot de passe !`,
-                  },
-                ]}
-              >
-                <Input.Password placeholder="********" />
-              </Form.Item>
+              <InputWrapper>
+                <PasswordInput placeholder="********" {...inputsProps[formNames.password]} />
+              </InputWrapper>
 
               <div style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
                 <button type="submit" className="btn register-btn my-btn submit-btn">
@@ -70,7 +63,7 @@ const Login = ({ loadingUser }) => {
                   Clique <Link to="/reset-pwd">ici</Link> pour le renouveler.
                 </p>
               </div>
-            </Form>
+            </form>
 
             <SocialLogins login />
           </div>

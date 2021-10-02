@@ -49,6 +49,11 @@
         "name": "Ta ligue a besoin d'un nom."
       }
     },
+    "profile": {
+      "formValidations": {
+        "username": "Ton pseudo ne peut pas être vide"
+      }
+    },
     "notifications": {
       "formValidations": {
         "usernameTooLong": {

@@ -9,14 +9,19 @@ const Button = ({ label, type, disabled, onClick, level, kind }) => {
   const Btn = buttonFactory(level);
 
   return (
-    <Btn type={type} disabled={disabled} onClick={onClick} kind={disabled ? kinds.disabled : kind}>
+    <Btn
+      type={type}
+      disabled={disabled}
+      onClick={onClick}
+      kind={disabled ? kinds.disabled : kinds[kind]}
+    >
       {label}
     </Btn>
   );
 };
 
 Button.defaultProps = {
-  kind: kinds.base,
+  kind: 'base',
   level: levels.primary,
   disabled: false,
   type: 'button',

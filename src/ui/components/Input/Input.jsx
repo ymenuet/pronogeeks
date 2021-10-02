@@ -37,6 +37,7 @@ const Input = ({
             type={type}
             name={name}
             maxLength={maxLength}
+            autoComplete="on"
           />
           {icon && <IconWrapper>{icon}</IconWrapper>}
         </InputContainer>
