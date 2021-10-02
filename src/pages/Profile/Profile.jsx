@@ -2,12 +2,13 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
 import { Loader, RankGeeks, ErrorMessage } from '../../components';
 import { openNotification, appendPhoto } from '../../utils/helpers';
-import { useSeasonPlayersRanking, useUser, useSeasonHistory } from '../../utils/hooks';
+import { useSeasonPlayersRanking, useUser, useSeasonHistory, useForm } from '../../utils/hooks';
 import { UsernameInput } from '../../utils/components';
 import { EditIcon, WarningIcon } from '../../components/Icons';
 import './profile.css';
@@ -20,6 +21,7 @@ import {
 } from '../../state/actions/authActions';
 
 const Profile = ({ loading }) => {
+  const { t } = useTranslation();
   const [cloudinaryLoading, setCloudinaryLoading] = useState(false);
   const [cloudinaryError, setCloudinaryError] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -42,13 +44,22 @@ const Profile = ({ loading }) => {
     } else setSeasonRanking([]);
   }, [seasonFromUserHistory, setSeasonRanking]);
 
-  // TODO: Implement useForm
-  const [usernameInput, setUsernameInput] = useState('');
-  useEffect(() => {
-    if (isUserConnected) {
-      setUsernameInput(user.username);
-    }
-  }, [user, isUserConnected]);
+  const saveUsername = ({ username }) => {
+    setShowModal(false);
+    dispatch(updateUsername(username));
+  };
+  const { inputsProps, handleSubmit } = useForm({
+    initialValues: {
+      username: user?.username,
+    },
+    onSubmit: saveUsername,
+    validations: {
+      username: {
+        message: t('profile.formValidations.username'),
+      },
+    },
+    resetCondition: isUserConnected,
+  });
 
   const photoLoader = loadingPhoto || cloudinaryLoading;
 
@@ -71,11 +82,6 @@ const Profile = ({ loading }) => {
         setCloudinaryLoading(false);
       }
     }
-  };
-
-  const saveUsername = () => {
-    setShowModal(false);
-    dispatch(updateUsername(usernameInput));
   };
 
   const removeAccount = () => {
@@ -201,18 +207,21 @@ const Profile = ({ loading }) => {
                     </span>
                   </li>
 
-                  {user.geekLeagues.reverse().map((league) => (
-                    <Link to={`/myGeekLeagues/${league._id}`} key={league._id}>
-                      <li className="list-group-item d-flex justify-content-between align-items-center">
-                        <span className="username-ranking" style={{ color: 'rgb(4, 78, 199)' }}>
-                          {league.name}
-                        </span>
-                        <span className="badge badge-success badge-pill my-badge my-badge-ranking my-badge-ranking-header">
-                          {setRank(defineUserRank(seasonRanking, league))} / {league.geeks.length}
-                        </span>
-                      </li>
-                    </Link>
-                  ))}
+                  {user.geekLeagues
+                    ?.filter((league) => league.season === seasonFromUserHistory?.season._id)
+                    ?.reverse()
+                    .map((league) => (
+                      <Link to={`/myGeekLeagues/${league._id}`} key={league._id}>
+                        <li className="list-group-item d-flex justify-content-between align-items-center">
+                          <span className="username-ranking" style={{ color: 'rgb(4, 78, 199)' }}>
+                            {league.name}
+                          </span>
+                          <span className="badge badge-success badge-pill my-badge my-badge-ranking my-badge-ranking-header">
+                            {setRank(defineUserRank(seasonRanking, league))} / {league.geeks.length}
+                          </span>
+                        </li>
+                      </Link>
+                    ))}
                 </>
               )}
             </ul>
@@ -279,7 +288,7 @@ const Profile = ({ loading }) => {
               </div>
 
               <div className="modal-body">
-                <UsernameInput value={usernameInput} onChange={setUsernameInput} name="username" />
+                <UsernameInput {...inputsProps.username} />
               </div>
 
               <div className="modal-footer">
@@ -287,7 +296,7 @@ const Profile = ({ loading }) => {
                   Fermer
                 </button>
 
-                <button type="button" className="my-btn save" onClick={saveUsername}>
+                <button type="button" className="my-btn save" onClick={handleSubmit}>
                   Enregistrer
                 </button>
               </div>

@@ -10,12 +10,12 @@ import {
 } from '../../constants/general';
 import { openNotification } from '../../helpers';
 
-const UsernameInput = ({ name, value, onChange, disabled, label }) => {
+const UsernameInput = ({ name, value, onChange, disabled, label, validation }) => {
   const { t } = useTranslation();
 
   const notifMoment = useRef();
 
-  const handleChange = (val) => {
+  const handleChange = (val, inputName, event) => {
     const notifDuration = NOTIFICATION_DEFAULT_DURATION_SECONDS * 1000;
     if (val.length > USERNAME_MAX_LENGTH) {
       if (!notifMoment.current || Date.now() - notifMoment.current > notifDuration) {
@@ -30,7 +30,7 @@ const UsernameInput = ({ name, value, onChange, disabled, label }) => {
       return;
     }
 
-    onChange(val);
+    onChange(val, inputName, event);
   };
 
   return (
@@ -42,6 +42,7 @@ const UsernameInput = ({ name, value, onChange, disabled, label }) => {
       disabled={disabled}
       maxLength={USERNAME_MAX_LENGTH}
       label={label}
+      validation={validation}
     />
   );
 };
@@ -52,6 +53,7 @@ UsernameInput.defaultProps = {
   }),
   value: '',
   disabled: false,
+  validation: undefined,
 };
 
 UsernameInput.propTypes = {
@@ -60,6 +62,7 @@ UsernameInput.propTypes = {
   value: PropTypes.string,
   disabled: PropTypes.bool,
   onChange: PropTypes.func.isRequired,
+  validation: PropTypes.string,
 };
 
 export default UsernameInput;

@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import { rgba } from 'polished';
 
 import { constants, themeSelector } from '../../theme';
-import { roundBorder } from '../../../utils/helpers';
 
 export const Container = styled.div`
   display: flex;
@@ -16,7 +15,7 @@ export const InputContainer = styled.div`
   display: flex;
   align-items: center;
   background-color: ${themeSelector.background};
-  border-radius: ${roundBorder(constants.inputHeightInRems)};
+  border-radius: ${constants.inputHeightInRems}rem;
   border: 1px solid ${({ theme }) => rgba(theme.opposite, 0.5)};
   overflow: hidden;
   padding: 0 ${constants.inputPaddingInRems}rem;
@@ -28,7 +27,7 @@ export const StyledInput = styled.input`
   height: ${constants.inputHeightInRems}rem;
   width: 100%;
   outline: none;
-  border: none;
+  border: none !important;
 
   &::placeholder {
     color: ${({ theme }) => theme.disabled};
