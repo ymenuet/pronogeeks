@@ -111,7 +111,7 @@ const Signup = ({ loadingUser, emailToConfirm }) => {
                 <button
                   type="submit"
                   className="btn my-btn submit-btn register-btn"
-                  style={{ marginTop: 10 }}
+                  style={{ marginTop: 30 }}
                   disabled={signupLoading}
                 >
                   Créer mon compte

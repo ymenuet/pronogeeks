@@ -2,24 +2,41 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { Form, Input } from 'antd';
+import { useTranslation } from 'react-i18next';
 
 import { Loader } from '../../components';
-import { useNotification } from '../../utils/hooks';
+import { useNotification, useForm } from '../../utils/hooks';
+import { Input } from '../../ui/components';
+import { isEmail } from '../../utils/helpers/inputValidations';
 import { resetPwd } from '../../state/actions/authActions';
+import { InputWrapper } from './RequestPwdReset.styled';
+
+const formNames = {
+  email: 'email',
+};
 
 const RequestPwdReset = ({ loadingUser }) => {
   const { push } = useHistory();
-
-  const [form] = Form.useForm();
-
-  const { loading, pwdToReset } = useSelector(({ authReducer }) => authReducer);
+  const { t } = useTranslation();
 
   const dispatch = useDispatch();
-
-  const onFinish = ({ email }) => {
+  const onSubmit = ({ email }) => {
     dispatch(resetPwd(email));
   };
+  const { inputsProps, handleSubmit } = useForm({
+    initialValues: {
+      [formNames.email]: '',
+    },
+    onSubmit,
+    validations: {
+      [formNames.email]: {
+        validation: isEmail,
+        message: t('formValidations.invalidEmail'),
+      },
+    },
+  });
+
+  const { loading, pwdToReset } = useSelector(({ authReducer }) => authReducer);
 
   useNotification(
     pwdToReset,
@@ -42,35 +59,22 @@ const RequestPwdReset = ({ loadingUser }) => {
           <div className="col-10 offset-1 col-sm-8 offset-sm-2 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4">
             <h2>Renouvelle ton mot de passe</h2>
 
-            <Form
-              form={form}
-              layout="vertical"
-              name="basic"
-              onFinish={onFinish}
-              initialValues={{
-                remember: true,
-              }}
-            >
-              <Form.Item
-                type="email"
-                label="Email :"
-                name="email"
-                rules={[
-                  {
-                    required: true,
-                    message: `L'email est nécessaire pour te connecter à ton compte`,
-                  },
-                ]}
-              >
-                <Input style={{ borderRadius: 15.8 }} placeholder="roi.geek@pronogeeks.fr" />
-              </Form.Item>
+            <form onSubmit={handleSubmit}>
+              <InputWrapper>
+                <Input
+                  placeholder="roi.geek@pronogeeks.fr"
+                  label="Email :"
+                  labelColor="white"
+                  {...inputsProps}
+                />
+              </InputWrapper>
 
               <div style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
                 <button type="submit" className="btn register-btn my-btn submit-btn">
                   Renouveler
                 </button>
               </div>
-            </Form>
+            </form>
           </div>
         </div>
       )}

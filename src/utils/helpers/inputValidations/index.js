@@ -1,1 +1,1 @@
-export { valueRequired, arrayNotEmpty, isEmail } from './inputValidations';
+export { valueRequired, arrayNotEmpty, isEmail, arePasswordsMatching } from './inputValidations';

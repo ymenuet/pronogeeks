@@ -77,7 +77,9 @@
       }
     },
     "formValidations": {
-      "defaultValidationMessage": "Ce champs est requis."
+      "defaultValidationMessage": "Ce champs est requis.",
+      "invalidEmail": "Email non valide...",
+      "notMatchingPasswords": "Les mots de passe ne correspondent pas."
     },
     "ui": {
       "components": {
