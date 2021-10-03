@@ -10,7 +10,7 @@ import {
 } from '../../constants/general';
 import { openNotification } from '../../helpers';
 
-const UsernameInput = ({ name, value, onChange, disabled, label, validation }) => {
+const UsernameInput = ({ name, value, onChange, disabled, label, validation, ...props }) => {
   const { t } = useTranslation();
 
   const notifMoment = useRef();
@@ -43,6 +43,7 @@ const UsernameInput = ({ name, value, onChange, disabled, label, validation }) =
       maxLength={USERNAME_MAX_LENGTH}
       label={label}
       validation={validation}
+      {...props}
     />
   );
 };

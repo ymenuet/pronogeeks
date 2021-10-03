@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { openNotification, uploadFile } from '../helpers';
 import { valueRequired } from '../helpers/inputValidations';
-import { fullCopyObject } from '../helpers';
 
 export const useForm = ({
   initialValues = {},
@@ -95,24 +95,35 @@ export const useForm = ({
     return error;
   };
 
-  const getValuesObject = () => {
+  const getValuesObject = async () => {
     const valuesObject = {};
-    Object.keys(inputsProps).map((key) => {
-      valuesObject[key] = inputsProps[key].value;
-      return key;
-    });
+    try {
+      await Promise.all(
+        Object.keys(inputsProps).map(async (key) => {
+          const { value } = inputsProps[key];
+          if (value instanceof File) valuesObject[key] = await uploadFile(value);
+          else valuesObject[key] = value;
+          return key;
+        })
+      );
+    } catch (error) {
+      openNotification('error', error);
+    }
     return valuesObject;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e, setLoading) => {
     e.preventDefault();
     const validationError = checkValidation();
     if (validationError) return;
-    onSubmit(getValuesObject());
+    if (setLoading) setLoading(true);
+    const values = await getValuesObject();
+    if (Object.keys(values).length) onSubmit(values);
+    if (setLoading) setLoading(false);
   };
 
   const inputsPropsWithOnChange = () => {
-    const result = fullCopyObject(inputsProps);
+    const result = { ...inputsProps };
     Object.keys(result).map((key) => {
       result[key].onChange = handleInputChange;
       return key;

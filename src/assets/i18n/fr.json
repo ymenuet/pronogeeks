@@ -84,6 +84,10 @@
         "select": {
           "defaultPlaceholder": "Choisir une option",
           "noOptions": "Aucune option"
+        },
+        "fileInput": {
+          "placeholder": "Aucun fichier sélectionné",
+          "selectFile": "Choisir fichier"
         }
       }
     }

@@ -28,6 +28,7 @@ export const StyledInput = styled.input`
   width: 100%;
   outline: none;
   border: none !important;
+  cursor: ${({ cursor }) => cursor};
 
   &::placeholder {
     color: ${({ theme }) => theme.disabled};

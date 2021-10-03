@@ -1,1 +1,1 @@
-export { valueRequired, arrayNotEmpty } from './inputValidations';
+export { valueRequired, arrayNotEmpty, isEmail } from './inputValidations';
