@@ -37,3 +37,4 @@ export { useProvRankingOpen } from "./useProvRankingOpen";
 export { useNotification } from "./useNotification";
 export { useThemePreference } from "./useThemePreference";
 export { useRandomInputId } from "./useRandomInputId";
+export { useSeasonMenuItem } from "./useSeasonMenuItem";

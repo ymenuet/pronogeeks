@@ -2,6 +2,7 @@ import axios from 'axios'
 import {
     GET_UNDERGOING_SEASONS,
     GET_SEASONS_FOR_NEW_GEEKLEAGUE,
+    GET_SEASON_MENU_ITEM,
     ADD_SEASON,
     SET_NEXT_MATCHWEEK,
     SET_LAST_MATCHWEEK,
@@ -77,6 +78,23 @@ export const getSeason = seasonID => async(dispatch, getState) => {
             type: ADD_SEASON,
             payload: newDetailedSeasons
         })
+    }
+}
+
+export const getSeasonMenuItem = () => async(dispatch) => {
+    try {
+        const {
+            data: {
+                seasonMenuItem
+            }
+        } = await seasonService.get(`/menuItem`)
+
+        dispatch({
+            type: GET_SEASON_MENU_ITEM,
+            payload: seasonMenuItem
+        })
+    } catch (error) {
+        console.error('ERROR:', error.message)
     }
 }
 

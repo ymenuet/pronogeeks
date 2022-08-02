@@ -2,13 +2,15 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { HomeIcon } from "../Icons";
-import { useCurrentUserProfile, useAccountDeleted } from "../../utils/hooks";
+import { useCurrentUserProfile, useAccountDeleted, useSeasonMenuItem } from "../../utils/hooks";
 import "./appLayout.css";
 
 import { logout } from "../../state/actions/authActions";
 
 const AppLayout = ({ children }) => {
   const { isUserConnected, user } = useCurrentUserProfile();
+
+  const seasonMenuItem = useSeasonMenuItem();
 
   useAccountDeleted();
 
@@ -58,14 +60,14 @@ const AppLayout = ({ children }) => {
                   </Link>
                 </li>
 
-                <li className="nav-item">
+                {seasonMenuItem && <li className="nav-item">
                   <Link
                     className="nav-link"
-                    to="/pronogeeks/6106e0216c1986102d71752a"
+                    to={`/pronogeeks/${seasonMenuItem}`}
                   >
                     Pronogeeks
                   </Link>
-                </li>
+                </li>}
 
                 <li className="nav-item profile-pic-navbar-list-item">
                   <Link

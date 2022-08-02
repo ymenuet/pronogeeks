@@ -1,5 +1,6 @@
 import {
     GET_UNDERGOING_SEASONS,
+    GET_SEASON_MENU_ITEM,
     GET_SEASONS_FOR_NEW_GEEKLEAGUE,
     ADD_SEASON,
     ADD_MATCHWEEK,
@@ -22,6 +23,7 @@ const done = {
 
 const INITIAL_STATE = {
     undergoingSeasons: {},
+    seasonMenuItem: undefined,
     upcomingAndUndergoingSeasons: {},
     detailedSeasons: {},
     seasonMatchweeks: {},
@@ -38,6 +40,12 @@ const seasonReducer = (state = INITIAL_STATE, action) => {
                 ...state,
                 undergoingSeasons: action.payload,
                 ...done
+            }
+        case GET_SEASON_MENU_ITEM:
+            return {
+                ...state,
+                seasonMenuItem: action.payload,
+                ...done,
             }
         case GET_SEASONS_FOR_NEW_GEEKLEAGUE:
             return {

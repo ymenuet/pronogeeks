@@ -1,4 +1,5 @@
 export const GET_UNDERGOING_SEASONS = 'season_get_all'
+export const GET_SEASON_MENU_ITEM = 'season_menu_item'
 export const GET_SEASONS_FOR_NEW_GEEKLEAGUE = 'season_get_for_new_geekleague'
 export const ADD_SEASON = 'season_detailed_season'
 export const ADD_MATCHWEEK = 'season_detailed_matchweek'
