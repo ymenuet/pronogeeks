@@ -191,13 +191,13 @@ const Profile = ({ loading }) => {
         </section>
 
         <section className="geekleagues-section">
-          <h2>Ligues Geek</h2>
+          <h2>Tes ligues cette saison</h2>
 
           <Link to="/myGeekLeagues/new" className="btn my-btn new-league">
             Nouvelle ligue
           </Link>
 
-          {user.geekLeagues.length > 0 && (
+          {user.geekLeagues.length > 0 && season && (
             <ul className="list-group list-group-flush geekleagues-list-profile mt-4">
               {errorRanking ? (
                 <ErrorMessage>{errorRanking}</ErrorMessage>
@@ -216,7 +216,7 @@ const Profile = ({ loading }) => {
                     </span>
                   </li>
 
-                  {user.geekLeagues.reverse().map((league) => (
+                  {user.geekLeagues.filter(({ season: leagueSeason }) => leagueSeason === season._id)?.reverse().map((league) => (
                     <Link to={`/myGeekLeagues/${league._id}`} key={league._id}>
                       <li className="list-group-item d-flex justify-content-between align-items-center">
                         <span

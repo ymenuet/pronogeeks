@@ -22,7 +22,7 @@ const RulesProno = ({ setShowRules, lastScoresUpdated, lastOddsUpdated, season }
                 <li>Un pronogeek <b>exact</b> (score exact bien pronogeeké) rapporte le double de la cote correspondante.</li>
                 <li>Un pronogeek correct sur un match de son <b>équipe de coeur</b> <FavTeamIcon /> (qu'elle soit gagnante ou perdante) rapporte 30 points bonus. L'équipe de coeur est choisie avant de commencer à pronogeeker une saison, et ne peut plus être changée pendant toute la durée de cette dernière.</li>
                 <li className="bonus-details-list-item">Détail des bonus par journée {season && `de ${season.leagueName}`}:
-                <center>
+                    <center>
                         <table className='bonus-table'>
                             <thead>
                                 <tr>
@@ -30,12 +30,12 @@ const RulesProno = ({ setShowRules, lastScoresUpdated, lastOddsUpdated, season }
                                     <th>
                                         <CorrectIcon className='rules-icon' />
                                         <br />
-                                    Pronos corrects
+                                        Pronos corrects
                                     </th>
                                     <th>
                                         <ExactIcon className='rules-icon' />
                                         <br />
-                                    Pronos exacts
+                                        Pronos exacts
                                     </th>
                                 </tr>
                             </thead>
@@ -57,38 +57,33 @@ const RulesProno = ({ setShowRules, lastScoresUpdated, lastOddsUpdated, season }
                                 </tr>
                                 <tr>
                                     <td>5</td>
-                                    <td>+50pts</td>
+                                    <td>+80pts</td>
                                     <td>+200pts</td>
                                 </tr>
                                 <tr>
                                     <td>6</td>
-                                    <td>+100pts</td>
+                                    <td>+180pts</td>
                                     <td>+300pts</td>
                                 </tr>
                                 <tr>
                                     <td>7</td>
-                                    <td>+200pts</td>
+                                    <td>+300pts</td>
                                     <td>+500pts</td>
                                 </tr>
                                 <tr>
                                     <td>8</td>
-                                    <td>+300pts</td>
+                                    <td>+450pts</td>
                                     <td>+700pts</td>
                                 </tr>
                                 <tr>
                                     <td>9</td>
-                                    <td>+500pts</td>
-                                    <td>+1000pts</td>
-                                </tr>
-                                <tr>
-                                    <td>10</td>
                                     <td>+700pts</td>
-                                    <td>+1500pts</td>
+                                    <td>+1000pts</td>
                                 </tr>
                             </tbody>
                         </table>
                     </center>
-                            Exemple : Si un(e) geek a 7 pronos corrects (+200pts) dont 4 pronos exacts (+100pts) sur une même journée, il ou elle prend 300 points bonus sur cette journée. 10 pronos exacts sur la même journée rapportent donc 2200 points bonus !!!
+                    Exemple : Si un(e) geek a 7 pronos corrects (+200pts) dont 4 pronos exacts (+100pts) sur une même journée, il ou elle prend 300 points bonus sur cette journée. 9 pronos exacts sur la même journée rapportent donc 1700 points bonus !!!
                 </li>
             </ul>
 
